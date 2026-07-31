@@ -1,0 +1,43 @@
+{
+  "scheduleMinutes": 60,
+  "maxResultsPerQuery": 25,
+  "comment": "Radar subscriptions = user timelines (efficient). queries = topic search. Both feed Canopy live layer.",
+  "subscriptions": [
+    {
+      "id": "radar-acornsoftai",
+      "username": "acornsoftai",
+      "actor": "acornsoft",
+      "kind": "feednote",
+      "maxResults": 40,
+      "label": "Acornsoft Radar",
+      "standout": true,
+      "note": "Primary Radar subscription — every @acornsoftai post (Climb Notes, research) lands on Canopy."
+    }
+  ],
+  "queries": [
+    {
+      "id": "xai-official",
+      "actor": "xai",
+      "kind": "feednote",
+      "query": "(from:elonmusk OR from:xai OR from:SpaceXAI) (Grok OR Imagine OR Voice OR Build OR xAI OR SpaceXAI)"
+    },
+    {
+      "id": "grok-build-changelog",
+      "actor": "build",
+      "kind": "changelog",
+      "query": "(\"Grok Build\" OR GrokBuild) (changelog OR release OR update OR v0.) (from:XFreeze OR from:elonmusk OR from:xai)"
+    },
+    {
+      "id": "spacex",
+      "actor": "spacex",
+      "kind": "feednote",
+      "query": "(from:SpaceX OR from:elonmusk) (Starship OR Falcon OR Starlink OR launch OR recover)"
+    },
+    {
+      "id": "tesla",
+      "actor": "tesla",
+      "kind": "feednote",
+      "query": "(from:Tesla OR from:elonmusk) (Optimus OR Tesla OR Supercharger OR FSD OR robotaxi)"
+    }
+  ]
+}

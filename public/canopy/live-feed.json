@@ -1,0 +1,8 @@
+{
+  "updatedAt": "2026-07-31T14:40:23.044Z",
+  "source": "empty",
+  "scheduleMinutes": 60,
+  "entryCount": 0,
+  "error": "Missing X_BEARER_TOKEN. Add an X API App-only Bearer token to enable scheduled live pull.",
+  "entries": []
+}

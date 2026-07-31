@@ -1,0 +1,13 @@
+/* Minimal app layer — Baristra template CSS is loaded from /baristra/css/* in __root.
+   Avoid full Tailwind preflight so Bootstrap 3 + style1.css layout is not broken. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button:not(:disabled),
+[role="button"]:not(:disabled) {
+  cursor: pointer;
+}
