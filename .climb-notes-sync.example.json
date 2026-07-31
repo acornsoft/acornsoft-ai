@@ -1,0 +1,4 @@
+{
+  "vault": "/absolute/path/to/your/Obsidian/vault/Climb Notes",
+  "comment": "Copy to .climb-notes-sync.json and set vault. Or export CLIMB_NOTES_VAULT."
+}

@@ -1,0 +1,733 @@
+/* Acornsoft branding — maroon + gold (NO pink)
+   Maroon #502000 (primary highlight)  |  Gold #FF9900 (secondary) */
+
+:root {
+  --ac-maroon: #502000;
+  --ac-gold: #ff9900;
+  --ac-maroon-deep: #381800;
+  --ac-ink: #0a0a0c;
+  /* Responsive logo height: scales with viewport */
+  --ac-logo-h: clamp(28px, 4.2vw + 12px, 60px);
+  --ac-nav-h: clamp(56px, 5vw + 36px, 75px);
+  --ac-logo-pad-x: clamp(10px, 1.5vw, 16px);
+  --ac-nav-pad-left: clamp(140px, 22vw, 300px);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* ========== Logo — upper-left, fluid scale ========== */
+.navbar-default {
+  overflow: visible !important;
+  height: var(--ac-nav-h) !important;
+  min-height: var(--ac-nav-h);
+}
+
+.navbar-fixed-top {
+  min-height: var(--ac-nav-h);
+}
+
+.site-title.acornsoft-logo-corner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  display: flex;
+  align-items: center;
+  height: var(--ac-nav-h);
+  max-width: min(70vw, 340px);
+  margin: 0;
+  padding: 0 0 0 var(--ac-logo-pad-x);
+  pointer-events: auto;
+  box-sizing: border-box;
+}
+
+.site-title.acornsoft-logo-corner a {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  text-decoration: none;
+  line-height: 0;
+}
+
+.site-title .acornsoft-logo {
+  display: block !important;
+  height: var(--ac-logo-h) !important;
+  width: auto !important;
+  max-width: 100%;
+  max-height: calc(var(--ac-nav-h) - 12px);
+  object-fit: contain;
+  object-position: left center;
+}
+
+.navbar-default:not(.small) .site-title .acornsoft-logo {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45));
+}
+
+.navbar-default.small .site-title .acornsoft-logo {
+  filter: none;
+}
+
+/* Keep nav links clear of the fluid logo */
+@media (min-width: 768px) {
+  .navbar-default .container {
+    padding-left: var(--ac-nav-pad-left);
+  }
+
+  .navbar-nav {
+    margin-top: calc((var(--ac-nav-h) - 44px) / 2) !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+/* ========== Highlights → maroon ========== */
+
+.navbar-default:not(.small) .navbar-nav > li > a:hover,
+.navbar-default:not(.small) .navbar-nav > .active > a,
+.navbar-default:not(.small) .navbar-nav > .active > a:focus,
+.navbar-default:not(.small) .navbar-nav > .active > a:hover {
+  color: var(--ac-gold) !important;
+  border-bottom-color: var(--ac-gold) !important;
+}
+
+.navbar-default.small .navbar-nav > li > a:hover,
+.navbar-default.small .navbar-nav > .active > a,
+.navbar-default.small .navbar-nav > .active > a:focus,
+.navbar-default.small .navbar-nav > .active > a:hover {
+  color: var(--ac-maroon) !important;
+  border-bottom-color: var(--ac-maroon) !important;
+}
+
+.underline1 {
+  background-color: var(--ac-maroon) !important;
+}
+.underline2 {
+  background-color: var(--ac-gold) !important;
+}
+.underline1.white {
+  background-color: #fff !important;
+}
+.underline2.white {
+  background-color: rgba(255, 255, 255, 0.55) !important;
+}
+
+.about-link-1,
+.price-btn,
+.btn-send,
+.blog-link {
+  background-color: var(--ac-maroon) !important;
+  border-color: var(--ac-maroon) !important;
+  color: #fff !important;
+}
+
+.about-link-1:hover,
+.price-btn:hover,
+.btn-send:hover,
+.blog-link:hover {
+  background-color: var(--ac-gold) !important;
+  border-color: var(--ac-gold) !important;
+  color: var(--ac-maroon-deep) !important;
+}
+
+.about-social li a {
+  border-color: var(--ac-gold) !important;
+  color: var(--ac-gold) !important;
+}
+.about-social li a:hover {
+  background-color: var(--ac-maroon) !important;
+  border-color: var(--ac-maroon) !important;
+  color: #fff !important;
+}
+
+.skill-details .expand {
+  display: block;
+  height: 6px;
+  background: linear-gradient(90deg, var(--ac-maroon), var(--ac-gold));
+  border-radius: 3px;
+  margin-top: 8px;
+  max-width: 100%;
+}
+
+#filters li span.filter.active,
+#filters li span.filter:hover {
+  background-color: var(--ac-maroon) !important;
+  color: #fff !important;
+  border-color: var(--ac-maroon) !important;
+}
+
+.service-icon i,
+.love-details .love-icon {
+  color: var(--ac-maroon) !important;
+}
+
+.work-counter,
+#counter {
+  background-color: var(--ac-maroon) !important;
+}
+
+.love-grid,
+.love-details {
+  background-color: var(--ac-maroon) !important;
+}
+
+.pricing-head {
+  background: linear-gradient(
+    135deg,
+    var(--ac-maroon) 0%,
+    var(--ac-maroon-deep) 100%
+  ) !important;
+}
+.pricing-head h3 {
+  color: var(--ac-gold) !important;
+}
+
+.panel-default > .panel-heading {
+  background-color: #faf6f0 !important;
+}
+.panel-title a {
+  color: var(--ac-maroon) !important;
+}
+
+.port-over,
+.overlay-main .work-icon {
+  color: var(--ac-gold) !important;
+}
+
+/* ========== Hero ========== */
+#particles-js {
+  background-color: var(--ac-ink) !important;
+}
+
+#particles-js::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 12, 0.42) 0%,
+    rgba(80, 32, 0, 0.28) 55%,
+    rgba(10, 10, 12, 0.78) 100%
+  );
+  pointer-events: none;
+}
+
+.home-content-main {
+  position: relative;
+  z-index: 2;
+}
+
+.home-text h1.cd-headline {
+  font-size: clamp(18px, 1.4vw + 10px, 28px);
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  margin-bottom: 10px;
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+.home-text .hero-sub {
+  font-size: clamp(15px, 1.2vw + 10px, 22px);
+  letter-spacing: 1px;
+  font-weight: 400;
+  color: var(--ac-gold);
+}
+
+.cd-words-wrapper {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  vertical-align: top;
+  min-width: 7.5em;
+}
+
+.cd-words-wrapper b {
+  display: inline-block;
+  position: absolute;
+  white-space: nowrap;
+  left: 0;
+  top: 0;
+  font-weight: 900;
+  opacity: 0;
+  visibility: hidden;
+  color: var(--ac-gold);
+}
+
+.cd-words-wrapper b.is-visible {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+}
+
+.skill-details li h3 {
+  margin-bottom: 4px;
+}
+
+#filters li span {
+  cursor: pointer;
+}
+
+#portfoliolist .portfolio {
+  display: block !important;
+}
+
+#portfoliolist::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.contact-form .btn-send:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.navbar-collapse.ac-open {
+  display: block !important;
+  height: auto !important;
+  padding-bottom: 16px;
+  background: #fff;
+  overflow: visible !important;
+  box-shadow: 0 8px 18px rgba(80, 32, 0, 0.12);
+}
+
+/* ========== Mobile / small tablet ========== */
+@media (max-width: 991px) {
+  :root {
+    --ac-logo-h: clamp(30px, 7vw, 48px);
+    --ac-nav-h: 64px;
+  }
+
+  .site-title.acornsoft-logo-corner {
+    max-width: min(62vw, 280px);
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --ac-logo-h: clamp(26px, 8.5vw, 40px);
+    --ac-nav-h: 56px;
+    --ac-logo-pad-x: 10px;
+  }
+
+  .site-title.acornsoft-logo-corner {
+    max-width: calc(100vw - 72px); /* room for hamburger */
+  }
+
+  .navbar-toggle {
+    margin-top: 10px !important;
+    margin-right: 10px !important;
+    z-index: 1050;
+  }
+
+  .navbar-default .navbar-toggle .icon-bar,
+  .navbar-default.small .navbar-toggle .icon-bar {
+    background-color: var(--ac-maroon) !important;
+  }
+
+  .navbar-default:not(.small) .navbar-toggle .icon-bar {
+    background-color: var(--ac-gold) !important;
+  }
+
+  #portfoliolist .portfolio {
+    width: 49% !important;
+  }
+
+  #filters {
+    width: 100% !important;
+    text-align: center;
+  }
+
+  #filters li {
+    float: none;
+    display: inline-block;
+  }
+}
+
+@media (max-width: 380px) {
+  :root {
+    --ac-logo-h: 24px;
+    --ac-nav-h: 52px;
+  }
+
+  .site-title.acornsoft-logo-corner {
+    max-width: calc(100vw - 64px);
+  }
+}
+
+
+/* ========== Hero gold fade + slide words ========== */
+.home-text h1.cd-headline {
+  font-size: clamp(18px, 1.4vw + 10px, 28px);
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  margin-bottom: 10px;
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+.home-text .hero-sub {
+  font-size: clamp(14px, 1vw + 8px, 18px);
+  letter-spacing: 0.12em;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: lowercase;
+}
+
+.cd-words-wrapper.hero-slide {
+  display: inline-block;
+  position: relative;
+  vertical-align: bottom;
+  text-align: left;
+  min-width: 12.5em;
+  overflow: hidden;
+  padding-bottom: 6px;
+  /* Prominent gold animated line */
+  font-size: clamp(32px, 5.2vw + 14px, 64px);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.cd-words-wrapper.hero-slide b {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: inherit;
+  text-transform: uppercase;
+  letter-spacing: inherit;
+  color: var(--ac-gold) !important;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(40%);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.45s;
+}
+
+.cd-words-wrapper.hero-slide b.is-visible {
+  position: relative;
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s;
+  animation: ac-fade-slide-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Leaving word fades out (absolute siblings that lost is-visible) */
+.cd-words-wrapper.hero-slide b.is-hidden {
+  opacity: 0;
+  transform: translateY(-30%);
+}
+
+@keyframes ac-fade-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateY(28%);
+    filter: blur(2px);
+  }
+  55% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Soft gold underline pulse under active word — subtle, not flashy */
+.cd-words-wrapper.hero-slide::after {
+  content: "";
+  display: block;
+  height: 3px;
+  width: 42%;
+  margin-top: 6px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--ac-gold), transparent);
+  opacity: 0.85;
+  animation: ac-gold-bar 2.6s ease-in-out infinite;
+}
+
+@keyframes ac-gold-bar {
+  0%, 100% { width: 28%; opacity: 0.55; }
+  40% { width: 55%; opacity: 0.95; }
+  70% { width: 40%; opacity: 0.75; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-words-wrapper.hero-slide b,
+  .cd-words-wrapper.hero-slide b.is-visible {
+    animation: none;
+    transition: opacity 0.2s ease;
+    transform: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .cd-words-wrapper.hero-slide {
+    min-width: 10em;
+    display: block;
+    margin: 10px auto 0;
+    text-align: center;
+    font-size: clamp(28px, 8.5vw, 42px);
+  }
+  .cd-words-wrapper.hero-slide::after {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cd-words-wrapper.hero-slide b {
+    left: 50%;
+    transform: translate(-50%, 40%);
+  }
+  .cd-words-wrapper.hero-slide b.is-visible {
+    left: 0;
+    transform: none;
+    width: 100%;
+    text-align: center;
+  }
+  .cd-words-wrapper.hero-slide b.is-hidden {
+    transform: translate(-50%, -30%);
+  }
+}
+
+/* ========== Contact (no form) — maroon + gold only ========== */
+.contact-cards {
+  margin-top: 20px;
+}
+
+.contact-info {
+  padding: 28px 16px;
+  margin-bottom: 16px;
+}
+
+.contact-info i {
+  font-size: 28px;
+  color: var(--ac-maroon) !important;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.contact-info h4 {
+  color: var(--ac-maroon);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.contact-info a {
+  color: var(--ac-maroon);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ac-gold);
+}
+
+.contact-info a:hover {
+  color: var(--ac-gold);
+  border-bottom-color: var(--ac-maroon);
+}
+
+/* Kill any leftover pink from template plugins / progress bars */
+.progress-bar,
+.skill .progress-bar,
+.label-danger,
+.bg-danger {
+  background-color: var(--ac-maroon) !important;
+}
+
+a,
+a:focus {
+  outline-color: var(--ac-gold);
+}
+
+/* Force text selection brand-ish */
+::selection {
+  background: var(--ac-maroon);
+  color: #fff;
+}
+::-moz-selection {
+  background: var(--ac-maroon);
+  color: #fff;
+}
+
+/* ========== Hero type hierarchy (final) ========== */
+/* Preferred motion: A+E — soft fade/rise + gold glow (not flashy) */
+
+.home-text h1.cd-headline,
+.home-text h1.hero-title {
+  font-size: clamp(17px, 1.2vw + 10px, 26px) !important;
+  letter-spacing: 0.06em !important;
+  line-height: 1.4 !important;
+  margin-bottom: 12px !important;
+  font-weight: 600 !important;
+  opacity: 0.9;
+  max-width: 42em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-text .hero-sub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(13px, 0.8vw + 8px, 16px) !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 400 !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-transform: none !important;
+}
+
+.home-text .hero-with {
+  font-size: inherit;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.cd-words-wrapper.hero-slide {
+  display: inline-block !important;
+  position: relative;
+  min-width: 13em;
+  overflow: visible;
+  padding: 4px 8px 10px;
+  font-size: clamp(34px, 5.5vw + 16px, 68px) !important;
+  line-height: 1.08 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 700 !important;
+  color: var(--ac-gold) !important;
+}
+
+.cd-words-wrapper.hero-slide b {
+  display: inline-block;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  white-space: nowrap;
+  font-size: inherit !important;
+  font-weight: 700 !important;
+  color: var(--ac-gold) !important;
+  text-transform: uppercase !important;
+  letter-spacing: inherit;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 18%);
+  filter: blur(0);
+  text-shadow: none;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    text-shadow 0.5s ease,
+    visibility 0s linear 0.5s;
+}
+
+.cd-words-wrapper.hero-slide b.is-visible {
+  position: relative;
+  left: auto;
+  visibility: visible;
+  opacity: 1;
+  transform: translate(0, 0);
+  transition:
+    opacity 0.65s ease,
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    text-shadow 0.65s ease,
+    visibility 0s linear 0s;
+  animation: ac-word-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both,
+             ac-gold-glow 3.2s ease-in-out infinite;
+}
+
+.cd-words-wrapper.hero-slide b.is-hidden {
+  opacity: 0;
+  transform: translate(-50%, -12%);
+}
+
+/* Soft gold underline under active word */
+.cd-words-wrapper.hero-slide::after {
+  content: "";
+  display: block;
+  height: 2px;
+  width: 36%;
+  margin: 10px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--ac-gold), transparent);
+  opacity: 0.75;
+  animation: ac-gold-bar 3.2s ease-in-out infinite;
+}
+
+@keyframes ac-word-in {
+  0% {
+    opacity: 0;
+    transform: translateY(16%);
+    filter: blur(1px);
+  }
+  55% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Gentle gold glow — brand-forward, not neon */
+@keyframes ac-gold-glow {
+  0%, 100% {
+    text-shadow:
+      0 0 0 transparent,
+      0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+  50% {
+    text-shadow:
+      0 0 14px rgba(255, 153, 0, 0.45),
+      0 0 28px rgba(255, 153, 0, 0.18),
+      0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+}
+
+@keyframes ac-gold-bar {
+  0%, 100% { width: 22%; opacity: 0.4; }
+  45% { width: 52%; opacity: 0.9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-words-wrapper.hero-slide b,
+  .cd-words-wrapper.hero-slide b.is-visible {
+    animation: none !important;
+    transition: opacity 0.2s ease !important;
+    transform: none !important;
+    filter: none !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+  .cd-words-wrapper.hero-slide::after {
+    animation: none;
+    width: 40%;
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 767px) {
+  .home-text h1.cd-headline,
+  .home-text h1.hero-title {
+    font-size: clamp(15px, 3.6vw, 20px) !important;
+    padding: 0 12px;
+  }
+  .cd-words-wrapper.hero-slide {
+    min-width: 10em;
+    font-size: clamp(30px, 9vw, 44px) !important;
+  }
+}
