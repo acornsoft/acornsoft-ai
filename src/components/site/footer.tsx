@@ -39,7 +39,8 @@ export function Footer() {
           <p className="text-xs text-subtle">
             © {year} Acornsoft. All rights reserved.
           </p>
-          <p className="text-xs text-subtle">New York · Built for clarity</p>
+          <p className="text-xs text-subtle">New York · AI-first organization</p>
+
         </div>
       </div>
     </footer>

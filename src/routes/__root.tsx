@@ -5,6 +5,8 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { Toaster } from "sonner";
+import { AuthProvider } from "@/lib/auth/provider";
+import { ScrollToTop } from "@/components/site/scroll-to-top";
 import appCss from "../styles.css?url";
 
 const inbioCss = [
@@ -14,7 +16,7 @@ const inbioCss = [
   "/inbio/assets/css/vendor/aos.css",
   "/inbio/assets/css/plugins/feature.css",
   "/inbio/assets/css/style.css",
-  "/inbio/acornsoft-overrides.css",
+  "/inbio/acornsoft-overrides.css?v=service-metaphor-assist-1",
 ] as const;
 
 export const Route = createRootRouteWithContext()({
@@ -32,14 +34,16 @@ export const Route = createRootRouteWithContext()({
       {
         name: "description",
         content:
-          "Acornsoft: Building Production AI Solutions via Climb Notes—on Grok Build, Imagine, Voice, Agents, Skills, and Connectors.",
+          "Acornsoft is a New York–based AI-first organization. Building Production AI Solutions via Climb Notes—on Grok Build, Imagine, Voice, Agents, Skills, and Connectors.",
       },
+
       { name: "theme-color", content: "#502000" },
       { property: "og:title", content: "Acornsoft" },
       {
         property: "og:description",
         content:
-          "Building Production AI Solutions via Climb Notes.",
+          "New York–based AI-first organization. Building Production AI Solutions via Climb Notes.",
+
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -59,7 +63,12 @@ export const Route = createRootRouteWithContext()({
 });
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <AuthProvider>
+      <Outlet />
+      <ScrollToTop />
+    </AuthProvider>
+  );
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -68,7 +77,45 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="template-color-1 spybody">
+      <body className="template-color-1 spybody ac-has-global-hero">
+        {/* Single shared hero stage — same image + animation phase on every route */}
+        <div className="ac-global-hero" aria-hidden="true">
+          <div className="ac-global-hero-photo" />
+          <div className="ac-global-hero-wash" />
+        </div>
+        {/*
+          Hero breathe runs sitewide (root layer). Pause when motion is reduced,
+          Save-Data is on, or the network is slow / high-latency.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{
+  var b=document.body;
+  if(!b)return;
+  function pause(reason){
+    b.classList.add("ac-hero-static");
+    if(reason)b.setAttribute("data-hero-static",reason);
+  }
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    pause("reduced-motion");return;
+  }
+  if(window.matchMedia("(prefers-reduced-data: reduce)").matches){
+    pause("reduced-data");return;
+  }
+  var c=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+  if(c){
+    if(c.saveData){pause("save-data");return;}
+    var t=String(c.effectiveType||"");
+    if(t==="slow-2g"||t==="2g"){pause("slow-network");return;}
+    if(typeof c.downlink==="number"&&c.downlink>0&&c.downlink<1.5){
+      pause("low-bandwidth");return;
+    }
+    /* High RTT = high latency — skip animation to keep the main thread free */
+    if(typeof c.rtt==="number"&&c.rtt>=400){pause("high-latency");return;}
+  }
+}catch(e){}})();`,
+          }}
+        />
         {children}
         <Toaster position="top-center" richColors />
         <Scripts />

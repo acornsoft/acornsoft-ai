@@ -1,22 +1,27 @@
-import { Link } from "@tanstack/react-router";
 import {
   useEffect,
   useMemo,
   useRef,
   useState,
   type CSSProperties,
+  type MouseEvent,
 } from "react";
-import { Logo } from "./logo";
-import { ClimbNotesMark } from "./climb-notes-mark";
+import { SiteHeader } from "./site-chrome";
 import {
   buildRadarTimeline,
+  withInferredSurface,
   type TimelineActor,
   type TimelineEntry,
   type TimelineKind,
+  type TimelineSurface,
 } from "./timeline-data";
 import type { LiveFeedEntry, LiveFeedFile } from "@/lib/canopy/types";
-
-const VOICE_URL = "https://grok.x.ai/";
+import {
+  climbNotes as staticClimbNotes,
+  isPublicClimbNoteStatus,
+  type ClimbNote,
+} from "./climb-notes-data";
+import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
 
 
 const kindLabel: Record<TimelineKind, string> = {
@@ -36,14 +41,23 @@ const actorLabel: Record<TimelineActor, string> = {
   research: "Advanced Development",
 };
 
-type FilterKey = "all" | `kind:${TimelineKind}` | `actor:${TimelineActor}`;
+type FilterKey =
+  | "all"
+  | `kind:${TimelineKind}`
+  | `actor:${TimelineActor}`
+  | `surface:${TimelineSurface}`
+  | "lane:climb-notes";
 
 type FilterOption = {
   key: FilterKey;
   label: string;
   count: number;
-  tone: "default" | "build" | "acornsoft" | "xai";
+  tone: "default" | "build" | "acornsoft" | "xai" | "grok" | "imagine" | "voice";
+  group: "stack" | "org" | "all";
 };
+
+/** Default: all radar signals. */
+const DEFAULT_FILTERS: FilterKey[] = ["all"];
 
 function kindClass(kind: TimelineKind) {
   return `cn-kind cn-kind-${kind}`;
@@ -117,67 +131,89 @@ function matchesFilter(entry: TimelineEntry, filter: FilterKey): boolean {
   if (filter.startsWith("actor:")) {
     return entry.actor === (filter.slice(6) as TimelineActor);
   }
+  if (filter.startsWith("surface:")) {
+    const surface = filter.slice(8) as TimelineSurface;
+    return (entry.surface ?? "other") === surface;
+  }
+  if (filter === "lane:climb-notes") {
+    return entry.lane === "climb-notes";
+  }
   return true;
 }
 
-/**
- * Single pill set (not 3 nested groups):
- * All · Our Work · Build notes · xAI
- */
+function matchesAnyFilter(entry: TimelineEntry, filters: FilterKey[]): boolean {
+  if (filters.length === 0 || filters.includes("all")) return true;
+  return filters.some((f) => matchesFilter(entry, f));
+}
+
+function journalToTimeline(notes: ClimbNote[]): TimelineEntry[] {
+  return notes
+    .filter((n) => isPublicClimbNoteStatus(n.status))
+    .map((n) => {
+      const body = [n.problem, n.measure, n.slice, n.lesson]
+        .filter(Boolean)
+        .join(" ")
+        .replace(/\s+/g, " ")
+        .trim();
+      return withInferredSurface({
+        id: `climb-note-${n.id}`,
+        date: n.date,
+        sortKey: (n.publishedAt || n.date || "1970-01-01").slice(0, 19),
+        title: `Climb Note ${n.number} · ${n.title}`,
+        body: body.length > 420 ? `${body.slice(0, 417)}…` : body,
+        kind: "product",
+        actor: "acornsoft",
+        lane: "climb-notes",
+        source: "Climb Notes",
+        href: n.xUrl || "/climb-notes",
+      });
+    });
+}
+
 function buildFilterOptions(items: TimelineEntry[]): FilterOption[] {
   const actorCounts = new Map<TimelineActor, number>();
+  const surfaceCounts = new Map<string, number>();
   let changelog = 0;
+  let climbLane = 0;
   for (const item of items) {
     actorCounts.set(item.actor, (actorCounts.get(item.actor) ?? 0) + 1);
     if (item.kind === "changelog") changelog += 1;
+    if (item.lane === "climb-notes") climbLane += 1;
+    const surface = item.surface ?? "other";
+    surfaceCounts.set(surface, (surfaceCounts.get(surface) ?? 0) + 1);
   }
-  return [
-    { key: "all", label: "All", count: items.length, tone: "default" },
-    {
-      key: "actor:research",
-      label: "Advanced Development",
-      count: actorCounts.get("research") ?? 0,
-      tone: "acornsoft",
-    },
-    {
-      key: "actor:acornsoft",
-      label: "Our Work",
-      count: actorCounts.get("acornsoft") ?? 0,
-      tone: "acornsoft",
-    },
-    {
-      key: "kind:changelog",
-      label: "Build notes",
-      count: changelog,
-      tone: "build",
-    },
-    {
-      key: "actor:xai",
-      label: "SpaceXAI",
-      count: actorCounts.get("xai") ?? 0,
-      tone: "xai",
-    },
-    {
-      key: "actor:tesla",
-      label: "Tesla",
-      count: actorCounts.get("tesla") ?? 0,
-      tone: "default",
-    },
-    {
-      key: "actor:spacex",
-      label: "SpaceX",
-      count: actorCounts.get("spacex") ?? 0,
-      tone: "default",
-    },
+
+  const stack: FilterOption[] = [
+    { key: "all", label: "All", count: items.length, tone: "default", group: "all" },
+    { key: "surface:grok", label: "Grok", count: surfaceCounts.get("grok") ?? 0, tone: "grok", group: "stack" },
+    { key: "surface:imagine", label: "Imagine", count: surfaceCounts.get("imagine") ?? 0, tone: "imagine", group: "stack" },
+    { key: "surface:voice", label: "Voice", count: surfaceCounts.get("voice") ?? 0, tone: "voice", group: "stack" },
+    { key: "kind:changelog", label: "Build Notes", count: changelog, tone: "build", group: "stack" },
   ];
+
+  const org = (
+    [
+      { key: "actor:acornsoft", label: "Our Work", count: actorCounts.get("acornsoft") ?? 0, tone: "default", group: "org" },
+      { key: "lane:climb-notes", label: "Climb Notes", count: climbLane, tone: "default", group: "org" },
+      { key: "actor:research", label: "Advanced Development", count: actorCounts.get("research") ?? 0, tone: "default", group: "org" },
+      { key: "actor:spacex", label: "SpaceX", count: actorCounts.get("spacex") ?? 0, tone: "default", group: "org" },
+      { key: "actor:xai", label: "SpaceXAI", count: actorCounts.get("xai") ?? 0, tone: "default", group: "org" },
+      { key: "actor:tesla", label: "Tesla", count: actorCounts.get("tesla") ?? 0, tone: "default", group: "org" },
+    ] as FilterOption[]
+  ).sort((a, b) => a.label.localeCompare(b.label));
+
+  return [...stack, ...org];
 }
 
 function filterTone(
-  filter: FilterKey,
-): "default" | "build" | "acornsoft" | "xai" {
-  if (filter === "actor:acornsoft") return "acornsoft";
-  if (filter === "actor:build" || filter === "kind:changelog") return "build";
-  if (filter === "actor:xai") return "xai";
+  filters: FilterKey[],
+): "default" | "build" | "acornsoft" | "xai" | "grok" | "imagine" | "voice" {
+  if (filters.includes("surface:grok")) return "grok";
+  if (filters.includes("surface:imagine")) return "imagine";
+  if (filters.includes("surface:voice")) return "voice";
+  if (filters.includes("kind:changelog") || filters.includes("actor:build")) return "build";
+  if (filters.includes("actor:acornsoft") || filters.includes("lane:climb-notes")) return "acornsoft";
+  if (filters.includes("actor:xai")) return "xai";
   return "default";
 }
 
@@ -216,7 +252,13 @@ function blipStyle(
 
 
 export function CanopyPage() {
-  const curated = useMemo(() => buildRadarTimeline(), []);
+  const curated = useMemo(
+    () => buildRadarTimeline().map(withInferredSurface),
+    [],
+  );
+  const [journalEntries, setJournalEntries] = useState<TimelineEntry[]>(() =>
+    journalToTimeline(staticClimbNotes),
+  );
   const [liveEntries, setLiveEntries] = useState<TimelineEntry[]>([]);
   const [liveMeta, setLiveMeta] = useState<{
     updatedAt?: string;
@@ -227,20 +269,21 @@ export function CanopyPage() {
   // Load scheduled live feed cache; optionally refresh via API if token path works
   useEffect(() => {
     let cancelled = false;
-    const toTimeline = (e: LiveFeedEntry): TimelineEntry => ({
-      id: e.id,
-      date: e.date,
-      sortKey: e.sortKey,
-      title: e.title,
-      body: e.body,
-      kind: e.kind,
-      actor: e.actor,
-      source: e.source,
-      href: e.href,
-      xId: e.xId,
-      standout: e.standout,
-      live: e.live ?? true,
-    });
+    const toTimeline = (e: LiveFeedEntry): TimelineEntry =>
+      withInferredSurface({
+        id: e.id,
+        date: e.date,
+        sortKey: e.sortKey,
+        title: e.title,
+        body: e.body,
+        kind: e.kind,
+        actor: e.actor,
+        source: e.source,
+        href: e.href,
+        xId: e.xId,
+        standout: e.standout,
+        live: e.live ?? true,
+      });
 
     async function loadLive() {
       try {
@@ -287,13 +330,29 @@ export function CanopyPage() {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const notes = await listPublishedClimbNotes();
+        if (!cancelled && notes.length > 0) {
+          setJournalEntries(journalToTimeline(notes));
+        }
+      } catch {
+        /* keep static */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const items = useMemo(() => {
     const byId = new Map<string, TimelineEntry>();
-    // curated first, then live overwrites same xId/id
     for (const e of curated) byId.set(e.id, e);
+    for (const e of journalEntries) byId.set(e.id, e);
     for (const e of liveEntries) {
       if (e.xId) {
-        // drop curated duplicate of same post
         for (const [k, v] of byId) {
           if (v.xId && v.xId === e.xId) byId.delete(k);
         }
@@ -303,22 +362,59 @@ export function CanopyPage() {
     return [...byId.values()].sort((a, b) =>
       b.sortKey.localeCompare(a.sortKey),
     );
-  }, [curated, liveEntries]);
+  }, [curated, journalEntries, liveEntries]);
+
   const filterOptions = useMemo(() => buildFilterOptions(items), [items]);
-  const [filter, setFilter] = useState<FilterKey>("all");
+  const [filters, setFilters] = useState<FilterKey[]>(DEFAULT_FILTERS);
   const [activeId, setActiveId] = useState(items[0]?.id ?? "");
   const [pulse, setPulse] = useState(0);
+  const [focusId, setFocusId] = useState<string | null>(null);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
   useEffect(() => {
-    if (!filterOptions.some((o) => o.key === filter)) setFilter("all");
-  }, [filterOptions, filter]);
+    const mq = window.matchMedia("(max-width: 991px)");
+    const onChange = () => {
+      if (!mq.matches) setMobileFiltersOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    const valid = new Set(filterOptions.map((o) => o.key));
+    setFilters((prev) => {
+      const next = prev.filter((f) => f === "all" || valid.has(f));
+      if (next.length === 0) return ["all"];
+      return next;
+    });
+  }, [filterOptions]);
+
+  function toggleFilter(key: FilterKey, e?: MouseEvent) {
+    const multi = e?.shiftKey === true;
+    setFilters((prev) => {
+      if (key === "all") return ["all"];
+      if (!multi) return [key];
+      const withoutAll = prev.filter((f) => f !== "all");
+      if (withoutAll.includes(key)) {
+        const next = withoutAll.filter((f) => f !== key);
+        return next.length ? next : ["all"];
+      }
+      return [...withoutAll, key];
+    });
+  }
 
   const visible = useMemo(
-    () => items.filter((i) => matchesFilter(i, filter)),
-    [filter, items],
+    () => items.filter((i) => matchesAnyFilter(i, filters)),
+    [filters, items],
   );
 
-  const activeFilterLabel =
-    filterOptions.find((o) => o.key === filter)?.label ?? "All";
+  const activeFilterLabel = useMemo(() => {
+    if (filters.includes("all") || filters.length === 0) return "All";
+    const labels = filters
+      .map((f) => filterOptions.find((o) => o.key === f)?.label)
+      .filter(Boolean);
+    return labels.length ? labels.join(" · ") : "All";
+  }, [filters, filterOptions]);
 
 
   const laneCounts = useMemo(() => {
@@ -360,102 +456,60 @@ export function CanopyPage() {
   }, []);
 
   useEffect(() => {
-    if (!visible.length) return;
+    if (!visible.length || focusId) return;
     const hot = visible.filter(
       (i) =>
         i.standout ||
         i.actor === "research" ||
         i.kind === "feednote" ||
         i.kind === "changelog" ||
-        i.actor === "acornsoft",
+        i.actor === "acornsoft" ||
+        i.lane === "climb-notes",
     );
     const pool = hot.length ? hot : visible;
     setActiveId(pool[pulse % pool.length].id);
-  }, [pulse, visible]);
+  }, [pulse, visible, focusId]);
 
-  const tone = filterTone(filter);
+  const tone = filterTone(filters);
 
   return (
-    <div className="template-color-1 spybody ac-inbio ac-canopy">
-      <header className="rn-header haeder-default black-logo-version header--fixed header--sticky sticky">
-        <div className="header-wrapper m--0 row align-items-center">
-          <div className="col-lg-3 col-6">
-            <div className="header-left">
-              <div className="logo">
-                <Link to="/">
-                  <Logo className="acornsoft-logo" />
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-9 col-6">
-            <div className="header-center">
-              <nav className="mainmenu-nav d-none d-xl-block">
-                <ul className="primary-menu nav nav-pills">
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/">
-                      Home
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/climb-notes">
-                      <ClimbNotesMark />
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link active" to="/canopy">
-                      Canopy
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-              <div className="header-right">
-                <a
-                  className="rn-btn d-none d-md-inline-flex"
-                  href={VOICE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>Voice</span>
-                </a>
-                <Link className="ac-menu-text d-xl-none" to="/">
-                  Home
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="template-color-1 spybody ac-inbio ac-canopy ac-hero-stage">
+      <SiteHeader loginRedirect="/gnomah" />
 
       <main className="main-page-wrapper cn-page canopy-page">
-        <section
-          className="cn-canopy-shell"
-          style={{
-            backgroundImage: "url(/hero.jpg)",
-            backgroundSize: "cover",
-            backgroundPosition: "center center",
-            backgroundRepeat: "no-repeat",
-            backgroundAttachment: "fixed",
-          }}
-        >
-          <div className="cn-canopy-shell-overlay" aria-hidden="true" />
+        <section className="cn-canopy-shell ac-hero-stage-panel">
           <div className="container cn-canopy-shell-inner">
             <div className="row cn-canopy-workspace">
-              <div className="col-lg-9 col-md-7 col-12 cn-timeline-col" id="timeline">
+              <div
+                className="col-lg-9 col-md-12 col-12 cn-timeline-col order-2 order-lg-1"
+                id="timeline"
+              >
                 <div className="cn-active-filter-bar">
                   <span className="cn-active-filter-label">Showing</span>
                   <span className="cn-active-filter-value">
-                    {activeFilterLabel} ({visible.length})
+                    {activeFilterLabel} ({visible.length}
+                    {visible.length !== items.length
+                      ? ` of ${items.length}`
+                      : ""}
+                    )
                   </span>
-                  {liveMeta.updatedAt ? (
+                  <span className="cn-signal-total" title="Curated + live X + public Climb Notes">
+                    {items.length} signals
+                    {liveEntries.length ? ` · ${liveEntries.length} live` : ""}
+                  </span>
+                  {liveEntries.length > 0 ? (
                     <span
                       className="cn-live-meta"
                       title={liveMeta.error || liveMeta.source || "live"}
                     >
-                      Live{" "}
-                      {liveEntries.length
-                        ? `· ${liveEntries.length} pulled`
-                        : "· waiting for X token"}
+                      Live · {liveEntries.length} pulled
+                    </span>
+                  ) : liveMeta.error ? (
+                    <span
+                      className="cn-live-meta cn-live-meta--warn"
+                      title={liveMeta.error}
+                    >
+                      Live feed offline
                     </span>
                   ) : null}
                 </div>
@@ -465,97 +519,195 @@ export function CanopyPage() {
                   <TimelineFeed
                     items={visible}
                     activeId={activeId}
-                    onSelect={setActiveId}
-                    pageSize={18}
+                    focusId={focusId}
+                    onSelect={(id) => {
+                      setActiveId(id);
+                      setFocusId(id);
+                    }}
+                    onFocused={() => setFocusId(null)}
+                    pageSize={48}
                   />
                 )}
               </div>
 
-              {/* Sticky radar + pills for the full scroll */}
+              {/* Filters: desktop sticky; mobile accordion collapsed by default */}
               <aside
-                className="col-lg-3 col-md-5 col-12 cn-radar-col"
+                className="col-lg-3 col-md-12 col-12 cn-radar-col order-1 order-lg-2"
                 aria-label="Canopy filters"
               >
                 <div className="cn-radar-sticky cn-filter-always">
-                  <div
-                    className={`cn-radar cn-radar-sm cn-radar-live cn-radar-tone-${tone}`}
-                    role="group"
-                    aria-label="Radar filter"
-                  >
-                    <div className="cn-radar-ring r1" />
-                    <div className="cn-radar-ring r2" />
-                    <div className="cn-radar-ring r3" />
-                    <div className="cn-radar-sweep" />
+                  <div className="cn-mobile-filter-bar">
                     <button
                       type="button"
-                      className="cn-radar-core"
-                      aria-label={`Show all signals (${items.length})`}
-                      onClick={() => setFilter("all")}
+                      className="cn-mobile-filter-toggle"
+                      aria-expanded={mobileFiltersOpen}
+                      aria-controls="cn-filter-panel"
+                      onClick={() => setMobileFiltersOpen((v) => !v)}
                     >
-                      <span className="cn-radar-core-count">
-                        {visible.length}
+                      <span className="cn-mobile-filter-toggle-label">Filters</span>
+                      <span className="cn-mobile-filter-toggle-value">
+                        {activeFilterLabel} · {visible.length}
                       </span>
-                      <span className="cn-radar-core-label">
-                        {filter === "all"
-                          ? "ALL"
-                          : activeFilterLabel.slice(0, 8).toUpperCase()}
+                      <span
+                        className={
+                          "cn-mobile-filter-chevron" +
+                          (mobileFiltersOpen ? " is-open" : "")
+                        }
+                        aria-hidden
+                      >
+                        ▾
                       </span>
                     </button>
-                    {radarBlips.map(({ entry, style }) => (
-                      <button
-                        key={entry.id}
-                        type="button"
-                        className={`cn-radar-blip cn-blip-${entry.actor}${entry.id === activeId ? " is-ping" : ""}`}
-                        style={style}
-                        title={entry.title}
-                        aria-label={`${entry.title} — ${actorLabel[entry.actor]}`}
-                        onClick={() => {
-                          setFilter(
-                            entry.kind === "changelog"
-                              ? "kind:changelog"
-                              : (`actor:${entry.actor}` as FilterKey),
-                          );
-                          setActiveId(entry.id);
-                        }}
-                      />
-                    ))}
-                  </div>
-
-                  <div className="cn-radar-meta">
-                    <p className="cn-radar-caption">
-                      {activeFilterLabel} ({visible.length})
-                    </p>
                   </div>
 
                   <div
-                    className="cn-filters cn-filter-pills"
-                    role="toolbar"
-                    aria-label="Timeline filters"
+                    id="cn-filter-panel"
+                    className={
+                      "cn-filter-panel" +
+                      (mobileFiltersOpen ? " is-open" : " is-collapsed")
+                    }
                   >
-                    <span className="cn-filters-kicker">Filter</span>
-                    <div className="cn-pill-row">
-                      {filterOptions.map((opt) => (
+                    <div
+                      className={`cn-radar cn-radar-sm cn-radar-live cn-radar-tone-${tone}`}
+                      role="group"
+                      aria-label="Radar filter"
+                    >
+                      <div className="cn-radar-ring r1" />
+                      <div className="cn-radar-ring r2" />
+                      <div className="cn-radar-ring r3" />
+                      <div className="cn-radar-sweep" />
+                      <button
+                        type="button"
+                        className="cn-radar-core"
+                        aria-label={`Show all signals (${items.length})`}
+                        onClick={() => {
+                          setFilters(["all"]);
+                          if (window.matchMedia("(max-width: 991px)").matches) {
+                            setMobileFiltersOpen(false);
+                          }
+                        }}
+                      >
+                        <span className="cn-radar-core-count">{visible.length}</span>
+                        <span className="cn-radar-core-label">
+                          {filters.includes("all")
+                            ? "ALL"
+                            : activeFilterLabel.slice(0, 8).toUpperCase()}
+                        </span>
+                      </button>
+                      {radarBlips.map(({ entry, style }) => (
                         <button
-                          key={opt.key}
+                          key={entry.id}
                           type="button"
-                          data-filter={opt.key}
-                          aria-pressed={filter === opt.key}
-                          className={[
-                            "cn-pill",
-                            filter === opt.key ? "active" : "",
-                            opt.count === 0 ? "is-empty" : "",
-                            `cn-pill-${opt.tone}`,
-                          ]
-                            .filter(Boolean)
-                            .join(" ")}
-                          onClick={() => setFilter(opt.key)}
-                        >
-                          {opt.label} ({opt.count})
-                        </button>
+                          className={`cn-radar-blip cn-blip-${entry.actor}${entry.id === activeId ? " is-ping" : ""}`}
+                          style={style}
+                          title={entry.title}
+                          aria-label={`${entry.title} — ${actorLabel[entry.actor]}`}
+                          onClick={() => {
+                            const key =
+                              entry.lane === "climb-notes"
+                                ? ("lane:climb-notes" as FilterKey)
+                                : entry.kind === "changelog"
+                                  ? ("kind:changelog" as FilterKey)
+                                  : (`actor:${entry.actor}` as FilterKey);
+                            setFilters([key]);
+                            setActiveId(entry.id);
+                            setFocusId(entry.id);
+                            if (window.matchMedia("(max-width: 991px)").matches) {
+                              setMobileFiltersOpen(false);
+                            }
+                          }}
+                        />
                       ))}
                     </div>
-                  </div>
 
+                    <div className="cn-radar-meta">
+                      <p className="cn-radar-caption">
+                        {activeFilterLabel} ({visible.length})
+                      </p>
+                    </div>
+
+                    <div
+                      className="cn-filters cn-filter-pills"
+                      role="toolbar"
+                      aria-label="Timeline filters"
+                    >
+                      <span className="cn-filters-kicker">Stack</span>
+                      <div className="cn-pill-row">
+                        {filterOptions
+                          .filter((o) => o.group === "all" || o.group === "stack")
+                          .map((opt) => {
+                            const active =
+                              filters.includes(opt.key) ||
+                              (opt.key === "all" && filters.includes("all"));
+                            return (
+                              <button
+                                key={opt.key}
+                                type="button"
+                                data-filter={opt.key}
+                                title="Click: single · Shift+click: multi"
+                                aria-pressed={active}
+                                className={[
+                                  "cn-pill",
+                                  active ? "active" : "",
+                                  opt.count === 0 ? "is-empty" : "",
+                                  `cn-pill-${opt.tone}`,
+                                  opt.key === "kind:changelog" ? "cn-pill-build" : "",
+                                ]
+                                  .filter(Boolean)
+                                  .join(" ")}
+                                onClick={(e) => {
+                                  toggleFilter(opt.key, e);
+                                  if (
+                                    opt.key === "all" &&
+                                    window.matchMedia("(max-width: 991px)").matches
+                                  ) {
+                                    setMobileFiltersOpen(false);
+                                  }
+                                }}
+                              >
+                                {opt.label} ({opt.count})
+                              </button>
+                            );
+                          })}
+                      </div>
+                      <span className="cn-filters-kicker">Commuter Lane</span>
+                      <div className="cn-pill-row">
+                        {filterOptions
+                          .filter((o) => o.group === "org")
+                          .map((opt) => {
+                            const active = filters.includes(opt.key);
+                            return (
+                              <button
+                                key={opt.key}
+                                type="button"
+                                data-filter={opt.key}
+                                title="Click: single · Shift+click: multi"
+                                aria-pressed={active}
+                                className={[
+                                  "cn-pill",
+                                  "cn-pill-commuter",
+                                  active ? "active" : "",
+                                  opt.count === 0 ? "is-empty" : "",
+                                ]
+                                  .filter(Boolean)
+                                  .join(" ")}
+                                onClick={(e) => toggleFilter(opt.key, e)}
+                              >
+                                {opt.label} ({opt.count})
+                              </button>
+                            );
+                          })}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="cn-mobile-filter-done"
+                      onClick={() => setMobileFiltersOpen(false)}
+                    >
+                      Done — show timeline
+                    </button>
+                  </div>
                 </div>
               </aside>
             </div>
@@ -688,12 +840,16 @@ function packVisualLanes(entries: TimelineEntry[]): FeedRow[] {
 function TimelineFeed({
   items,
   activeId,
+  focusId,
   onSelect,
+  onFocused,
   pageSize = 18,
 }: {
   items: TimelineEntry[];
   activeId: string;
+  focusId?: string | null;
   onSelect: (id: string) => void;
+  onFocused?: () => void;
   pageSize?: number;
 }) {
   const [limit, setLimit] = useState(pageSize);
@@ -704,6 +860,28 @@ function TimelineFeed({
     setLimit(pageSize);
     setLoading(false);
   }, [items, pageSize]);
+
+  useEffect(() => {
+    const id = focusId || activeId;
+    if (!id) return;
+    const idx = items.findIndex((i) => i.id === id);
+    if (idx >= 0 && idx + 1 > limit) {
+      setLimit(Math.min(items.length, Math.max(pageSize, idx + 6)));
+    }
+  }, [focusId, activeId, items, limit, pageSize]);
+
+  useEffect(() => {
+    if (!focusId) return;
+    const el = document.getElementById(`cn-entry-${focusId}`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.classList.add("is-radar-focus");
+    const tmr = window.setTimeout(() => {
+      el.classList.remove("is-radar-focus");
+      onFocused?.();
+    }, 1600);
+    return () => window.clearTimeout(tmr);
+  }, [focusId, limit, items, onFocused]);
 
   const loaded = useMemo(() => items.slice(0, limit), [items, limit]);
   const hasMore = limit < items.length;
@@ -835,6 +1013,7 @@ function TimelineCard({
   const isWide = wide || layout.wide;
   return (
     <article
+      id={`cn-entry-${entry.id}`}
       className={`cn-card cn-${side} cn-actor-${entry.actor} cn-kind-card-${entry.kind} cn-size-${layout.size} cn-asym${isWide ? " cn-wide-interrupt" : ""}${entry.standout ? " cn-standout" : ""}${entry.live ? " cn-is-live" : ""}${active ? " is-active" : ""}`}
       data-actor={entry.actor}
       data-kind={entry.kind}

@@ -216,7 +216,8 @@ export const testimonials = [
 export const faqs = [
   {
     q: "What kinds of AI projects do you take on?",
-    a: "We focus on applied AI products—assistants, automation, analytics, and model-powered features that sit inside real business workflows. We skip pure research with no path to production.",
+    a: "We are a New York–based AI-first organization focused on applied products—assistants, automation, analytics, and model-powered features inside real business workflows. We skip pure research with no path to production.",
+
   },
   {
     q: "How quickly can we start?",

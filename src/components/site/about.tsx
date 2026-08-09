@@ -37,10 +37,10 @@ export function About() {
           </div>
           <div className="lg:col-span-7 space-y-5 text-muted leading-relaxed">
             <p>
-              Acornsoft is a New York–based applied AI studio. We partner with
-              product and operations teams who need more than a demo—teams who
-              need software that holds up under real load, real users, and real
-              compliance constraints.
+              Acornsoft is a New York–based AI-first organization. We partner
+              with product and operations teams who need more than a demo—teams
+              who need software that holds up under real load, real users, and
+              real compliance constraints.
             </p>
             <p>
               Our approach is deliberately practical: pick a sharp problem,

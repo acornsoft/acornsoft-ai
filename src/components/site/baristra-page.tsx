@@ -488,7 +488,8 @@ export function BaristraPage() {
                       <div className="underline1 no-margin" />
                       <div className="underline2 no-margin" />
                       <p className="text-2">
-                        Acornsoft is a New York–based applied AI studio. We
+                        Acornsoft is a New York–based AI-first organization. We
+
                         deliver production AI solutions via Climb Notes—software
                         that holds up under real load, real users, and real
                         compliance constraints.

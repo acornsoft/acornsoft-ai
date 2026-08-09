@@ -3,6 +3,7 @@ id: cn-000
 number: "000"
 title: Title of the climb
 date: YYYY-MM-DD
+status: draft
 tags:
   - climb-note
 xUrl:

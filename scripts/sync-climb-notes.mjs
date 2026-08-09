@@ -4,6 +4,7 @@
  *
  * Source of truth for authoring: Obsidian vault folder (or any Markdown dir).
  * Site folder: /workspace/content/climb-notes
+ * Publish gate (_publish-registry.json) is NEVER overwritten by vault sync.
  *
  * Usage:
  *   node scripts/sync-climb-notes.mjs              # one-shot copy
@@ -25,6 +26,11 @@ const ROOT = path.resolve(__dirname, "..");
 const DEST = path.join(ROOT, "content", "climb-notes");
 const CONFIG_PATH = path.join(ROOT, ".climb-notes-sync.json");
 const STATE_PATH = path.join(ROOT, ".climb-notes-sync-state.json");
+
+const PROTECTED_NAMES = new Set([
+  "_publish-registry.json",
+  "readme.md",
+]);
 
 const args = new Set(process.argv.slice(2));
 const WATCH = args.has("--watch") || args.has("-w");
@@ -57,6 +63,7 @@ function ensureDir(dir) {
 function isNoteFile(name) {
   if (!name.endsWith(".md")) return false;
   if (name.toLowerCase() === "readme.md") return false;
+  if (name.startsWith("_")) return false;
   return true;
 }
 
@@ -103,7 +110,7 @@ function syncOnce(vault) {
   if (!fs.existsSync(vaultAbs)) {
     console.error(`Vault path does not exist: ${vaultAbs}`);
     console.error(
-      "Set CLIMB_NOTES_VAULT or create .climb-notes-sync.json with { \"vault\": \"/path\" }",
+      'Set CLIMB_NOTES_VAULT or create .climb-notes-sync.json with { "vault": "/path" }',
     );
     process.exit(1);
   }
@@ -117,7 +124,11 @@ function syncOnce(vault) {
     log(
       `vault is site folder (${notes.length} note file(s)). Nothing to copy. Point vault at Obsidian to enable sync.`,
     );
-    writeState({ vault: vaultAbs, lastSync: new Date().toISOString(), files: notes.length });
+    writeState({
+      vault: vaultAbs,
+      lastSync: new Date().toISOString(),
+      files: notes.length,
+    });
     return { copied: 0, notes: notes.length };
   }
 
@@ -125,17 +136,18 @@ function syncOnce(vault) {
   let copied = 0;
   for (const f of files) {
     // flatten top-level notes into DEST; keep templates/
-    const rel = f.rel.replace(/\\/g, "/");
-    let destRel = rel;
-    // if vault has Climb Notes/ subfolder structure, strip common prefixes
+    let destRel = f.rel.replace(/\\/g, "/");
     destRel = destRel.replace(/^Climb Notes\//i, "");
+    const base = path.basename(destRel).toLowerCase();
+    if (PROTECTED_NAMES.has(base) || base.startsWith("_")) {
+      if (VERBOSE) log("skip protected", destRel);
+      continue;
+    }
     const dest = path.join(DEST, destRel);
-    // never wipe README from site docs unless vault has one at root named README
     copyFile(f.abs, dest);
     copied += 1;
   }
 
-  // Always preserve site README if vault has no README
   log(`synced ${copied} file(s) from ${vaultAbs} → ${DEST}`);
   writeState({
     vault: vaultAbs,
@@ -169,7 +181,6 @@ function watchVault(vault) {
     }
   }, 300);
 
-  // Node recursive watch (Linux/macOS)
   try {
     fs.watch(vaultAbs, { recursive: true }, (_event, filename) => {
       if (filename && filename.startsWith(".")) return;

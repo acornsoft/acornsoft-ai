@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { fetchLiveFeedFromX } from "@/lib/canopy/x-fetch";
+import { fetchLiveFeedFromX, type InterestsConfig } from "@/lib/canopy/x-fetch";
 import type { LiveFeedFile } from "@/lib/canopy/types";
+import interestsConfig from "@/lib/canopy/interests";
 
 /**
  * Scheduled / manual live feed refresh.
@@ -16,6 +17,8 @@ import type { LiveFeedFile } from "@/lib/canopy/types";
 const globalCache = globalThis as typeof globalThis & {
   __canopyLiveFeed__?: { at: number; data: LiveFeedFile };
 };
+
+const interests = interestsConfig as InterestsConfig;
 
 function authorized(request: Request): boolean {
   const secret = process.env.CRON_SECRET?.trim();
@@ -38,21 +41,7 @@ async function handle(request: Request): Promise<Response> {
     request.method === "POST" ||
     new URL(request.url).searchParams.get("force") === "1";
 
-  const interests = await import("../../../../content/canopy/interests.json", {
-    with: { type: "json" },
-  }).then((m) => m.default as {
-    scheduleMinutes: number;
-    maxResultsPerQuery: number;
-    queries: {
-      id: string;
-      actor: LiveFeedFile["entries"][0]["actor"];
-      kind: LiveFeedFile["entries"][0]["kind"];
-      query: string;
-    }[];
-  }).catch(() => undefined);
-
-  const scheduleMs =
-    (interests?.scheduleMinutes ?? 60) * 60 * 1000;
+  const scheduleMs = (interests.scheduleMinutes ?? 60) * 60 * 1000;
   const cached = globalCache.__canopyLiveFeed__;
   if (
     !force &&
@@ -66,13 +55,7 @@ async function handle(request: Request): Promise<Response> {
     });
   }
 
-  const data = await fetchLiveFeedFromX(
-    interests ?? {
-      scheduleMinutes: 60,
-      maxResultsPerQuery: 25,
-      queries: [],
-    },
-  );
+  const data = await fetchLiveFeedFromX(interests);
 
   globalCache.__canopyLiveFeed__ = { at: Date.now(), data };
 

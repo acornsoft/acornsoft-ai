@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
+import { PersonalSiteBridge } from "./personal-site-bridge";
 
 /**
  * Fixed legal / ethos footer — quiet, centered, beats Inbio global link CSS.
+ * Includes dual-site bridge to personal work bio (blaszyk.us).
  */
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -18,6 +20,10 @@ export function SiteFooter() {
             |
           </span>
           <Link to="/procedures">Procedures</Link>
+          <span className="ac-site-footer-pipe" aria-hidden="true">
+            |
+          </span>
+          <PersonalSiteBridge variant="footer" />
         </nav>
         <p className="ac-site-footer-meta">
           {`© ${year} Acornsoft  ·  Multiplanetary ambition  ·  Independent builders`}

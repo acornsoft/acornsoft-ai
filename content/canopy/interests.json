@@ -1,7 +1,7 @@
 {
   "scheduleMinutes": 60,
   "maxResultsPerQuery": 25,
-  "comment": "Radar subscriptions = user timelines (efficient). queries = topic search. Both feed Canopy live layer.",
+  "comment": "Priority order: (1) @acornsoftai Radar subscription, (2) Grok Build, (3) Imagine, (4) Voice, (5) Elon orgs (xAI/SpaceXAI, SpaceX, Tesla, Grok model). Subscriptions run first; queries follow array order.",
   "subscriptions": [
     {
       "id": "radar-acornsoftai",
@@ -11,33 +11,51 @@
       "maxResults": 40,
       "label": "Acornsoft Radar",
       "standout": true,
-      "note": "Primary Radar subscription — every @acornsoftai post (Climb Notes, research) lands on Canopy."
+      "note": "Priority 1 — every @acornsoftai post (Climb Notes, Advanced Development, studio) lands on Canopy."
     }
   ],
   "queries": [
     {
-      "id": "xai-official",
-      "actor": "xai",
-      "kind": "feednote",
-      "query": "(from:elonmusk OR from:xai OR from:SpaceXAI) (Grok OR Imagine OR Voice OR Build OR xAI OR SpaceXAI)"
-    },
-    {
-      "id": "grok-build-changelog",
+      "id": "grok-build",
       "actor": "build",
       "kind": "changelog",
-      "query": "(\"Grok Build\" OR GrokBuild) (changelog OR release OR update OR v0.) (from:XFreeze OR from:elonmusk OR from:xai)"
+      "priority": 2,
+      "query": "(\"Grok Build\" OR GrokBuild) (from:elonmusk OR from:xai OR from:XFreeze OR from:SpaceXAI) (changelog OR release OR update OR CLI OR workflow OR plugin OR agent OR v0. OR publish)"
     },
     {
-      "id": "spacex",
+      "id": "imagine",
+      "actor": "xai",
+      "kind": "feednote",
+      "priority": 3,
+      "query": "(from:elonmusk OR from:xai OR from:SpaceXAI) (\"Grok Imagine\" OR Imagine) (image OR video OR template OR edit OR restyle OR creative OR emoji OR merch OR render)"
+    },
+    {
+      "id": "voice",
+      "actor": "xai",
+      "kind": "feednote",
+      "priority": 4,
+      "query": "(from:elonmusk OR from:xai OR from:SpaceXAI) (\"Grok Voice\" OR \"Think Fast\" OR Voice) (agent OR speech OR audio OR dictation OR builder OR telephony OR Tau)"
+    },
+    {
+      "id": "org-xai",
+      "actor": "xai",
+      "kind": "feednote",
+      "priority": 5,
+      "query": "(from:elonmusk OR from:xai OR from:SpaceXAI) (Grok OR xAI OR SpaceXAI OR Colossus OR model)"
+    },
+    {
+      "id": "org-spacex",
       "actor": "spacex",
       "kind": "feednote",
-      "query": "(from:SpaceX OR from:elonmusk) (Starship OR Falcon OR Starlink OR launch OR recover)"
+      "priority": 6,
+      "query": "(from:SpaceX OR from:elonmusk) (Starship OR Falcon OR Starlink OR launch OR recover OR Raptor OR Dragon)"
     },
     {
-      "id": "tesla",
+      "id": "org-tesla",
       "actor": "tesla",
       "kind": "feednote",
-      "query": "(from:Tesla OR from:elonmusk) (Optimus OR Tesla OR Supercharger OR FSD OR robotaxi)"
+      "priority": 7,
+      "query": "(from:Tesla OR from:elonmusk OR from:Tesla_AI) (Optimus OR Tesla OR Supercharger OR FSD OR robotaxi OR Cybertruck OR energy)"
     }
   ]
 }

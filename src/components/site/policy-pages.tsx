@@ -1,8 +1,9 @@
+import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Logo } from "./logo";
+import { VoiceLink, useVoiceAccessState } from "./voice-access";
+import { SiteHeader } from "./site-chrome";
 import { ClimbNotesMark } from "./climb-notes-mark";
 
-const VOICE_URL = "https://grok.x.ai/";
 
 function PolicyChrome({
   title,
@@ -11,51 +12,11 @@ function PolicyChrome({
 }: {
   title: string;
   subtitle: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <div className="template-color-1 spybody ac-inbio ac-policy-page">
-      <header className="rn-header haeder-default black-logo-version header--fixed header--sticky sticky">
-        <div className="header-wrapper m--0 row align-items-center">
-          <div className="col-lg-3 col-6">
-            <div className="header-left">
-              <div className="logo">
-                <Link to="/">
-                  <Logo className="acornsoft-logo" />
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-9 col-6">
-            <div className="header-center">
-              <nav className="mainmenu-nav d-none d-xl-block">
-                <ul className="primary-menu nav nav-pills">
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/">
-                      Home
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/climb-notes">
-                      <ClimbNotesMark />
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/canopy">
-                      Canopy
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-              <div className="header-right">
-                <Link className="ac-menu-text d-xl-none" to="/">
-                  Home
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="template-color-1 spybody ac-inbio ac-hero-stage ac-policy-page">
+      <SiteHeader loginRedirect="/gnomah" />
 
       <main className="main-page-wrapper ac-policy-main">
         <section className="rn-section-gap ac-policy-shell">
@@ -79,11 +40,13 @@ function PolicyChrome({
 }
 
 export function PrivacyPage() {
+  const voice = useVoiceAccessState();
   return (
     <PolicyChrome title="Privacy" subtitle="Company ethos">
       <p>
         Acornsoft respects your privacy. This site does not use email forms or
-        phone queues. Conversations with Acornsoft begin through Voice.
+        phone queues. Conversations with Acornsoft begin through Voice after you
+        sign in with X.
       </p>
       <h2>What we collect</h2>
       <p>
@@ -101,10 +64,17 @@ export function PrivacyPage() {
       <h2>How to reach us</h2>
       <p>
         For privacy questions,{" "}
-        <a href={VOICE_URL} target="_blank" rel="noopener noreferrer">
-          reach us via Voice
-        </a>{" "}
-        and request a privacy follow-up.
+        {voice.allowed ? (
+          <>
+            <VoiceLink>reach us via Voice</VoiceLink> and request a privacy
+            follow-up.
+          </>
+        ) : (
+          <>
+            sign in with X on Climb Notes to unlock Voice, then request a privacy
+            follow-up.
+          </>
+        )}
       </p>
       <p className="ac-policy-note">
         Last updated July 2026. This page is part of Acornsoft company ethos—not
@@ -202,8 +172,9 @@ export function ProceduresPage() {
       <h2>How we contact and intake</h2>
       <p>
         First contact is Voice only—no email forms, no phone queue theater. Luna
-        (also known as Ara) is the current voice; a custom Acornsoft voice may
-        replace it later. Do not send secrets in public sessions.
+        and Ara are one and the same — your Sherpa on Grok Voice (or your custom
+        Acornsoft Grok Voice when configured). Do not send secrets in public
+        sessions.
       </p>
       <h2>How we credit others</h2>
       <p>
