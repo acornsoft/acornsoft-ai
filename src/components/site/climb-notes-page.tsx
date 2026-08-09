@@ -1,141 +1,163 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Logo } from "./logo";
+import { VoiceWhenSignedIn } from "./voice-access";
 import { ClimbNotesMark } from "./climb-notes-mark";
+import { SiteHeader } from "./site-chrome";
 import {
-  climbNotes,
+  climbNotes as staticClimbNotes,
+  countByStatus,
   formatClimbNoteCiteForX,
+  isPublicClimbNoteStatus,
+  CLIMB_NOTE_STATUS_LABEL,
   type ClimbNote,
+  type ClimbNoteStatus,
 } from "./climb-notes-data";
+import {
+  listAllClimbNotesPublic,
+  listPublishedClimbNotes,
+} from "@/lib/climb-notes/actions";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { authEnabled } from "@/lib/auth/client";
 
-const VOICE_URL = "https://grok.x.ai/";
-const X_ACORNSOFT = "https://x.com/acornsoftai";
+type StudioFilter = "all" | ClimbNoteStatus;
+type PageMode = "public" | "studio";
 
-function NoteCard({ note }: { note: ClimbNote }) {
+const STUDIO_FILTERS: { key: StudioFilter; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "published", label: "Published" },
+  { key: "pending", label: "Pending approval" },
+  { key: "approved", label: "Approved" },
+  { key: "draft", label: "Unapproved" },
+  { key: "archived", label: "Archived" },
+];
+
+function statusClass(status: ClimbNoteStatus): string {
+  return `ac-cn-badge ac-cn-badge-${status}`;
+}
+
+function NoteCard({
+  note,
+  studio,
+}: {
+  note: ClimbNote;
+  studio: boolean;
+}) {
   const citeText = formatClimbNoteCiteForX(note);
+  const isPublic = isPublicClimbNoteStatus(note.status);
   return (
     <article
-      className={`ac-cn-entry${note.xUrl ? " has-x" : ""}`}
-      id={note.id}
+      className={[
+        "ac-cn-entry",
+        studio && !isPublic ? "is-not-public" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
-      <header className="ac-cn-entry-head">
+      <div className="ac-cn-entry-meta">
         <span className="ac-cn-num">Climb Note {note.number}</span>
-        <span className="ac-cn-badge ac-cn-badge-stored">Stored on site</span>
-        {note.xUrl ? (
-          <span className="ac-cn-badge ac-cn-badge-x">Cited on X</span>
-        ) : null}
         <time dateTime={note.date}>{note.date}</time>
-        {note.sourceFile ? (
-          <span className="ac-cn-source" title="Obsidian file">
-            {note.sourceFile}
+        {studio ? (
+          <span className={statusClass(note.status)}>
+            {CLIMB_NOTE_STATUS_LABEL[note.status]}
           </span>
         ) : null}
-      </header>
-      <h2 className="ac-cn-entry-title">{note.title}</h2>
-
-      <div className="ac-cn-fields">
-        <div>
-          <h3>Problem</h3>
-          <p>{note.problem}</p>
-        </div>
-        <div>
-          <h3>Measure</h3>
-          <p>{note.measure}</p>
-        </div>
-        <div>
-          <h3>Slice</h3>
-          <p>{note.slice}</p>
-        </div>
-        <div>
-          <h3>Lesson</h3>
-          <p>{note.lesson}</p>
-        </div>
-      </div>
-
-      <footer className="ac-cn-entry-foot">
-        {note.xUrl ? (
-          <a
-            className="rn-btn"
-            href={note.xUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>X citation</span>
-          </a>
+        {studio && !isPublic ? (
+          <span className="ac-cn-badge ac-cn-badge-hidden">Not public</span>
         ) : null}
-        <details className="ac-cn-x-template">
-          <summary>Optional: cite this note on X</summary>
-          <p className="ac-cn-x-hint" style={{ marginTop: 10 }}>
-            The full note already lives here. On X, post a short pointer—not a
-            second full copy.
-          </p>
-          <pre className="ac-cn-x-pre">
-            <code>{citeText}</code>
-          </pre>
-          <p className="ac-cn-x-hint">
-            After you post, send the status URL so we can attach{" "}
-            <code>xUrl</code> on this note (optional back-link).
-          </p>
-          <a
-            className="ac-note-link"
-            href={X_ACORNSOFT}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Open @acornsoftai →
+      </div>
+      <h2 className="ac-cn-entry-title">{note.title}</h2>
+      <div className="ac-cn-entry-body">
+        {note.problem ? (
+          <div className="ac-cn-field">
+            <h3>Problem</h3>
+            <p>{note.problem}</p>
+          </div>
+        ) : null}
+        {note.measure ? (
+          <div className="ac-cn-field">
+            <h3>Measure</h3>
+            <p>{note.measure}</p>
+          </div>
+        ) : null}
+        {note.slice ? (
+          <div className="ac-cn-field">
+            <h3>Slice</h3>
+            <p>{note.slice}</p>
+          </div>
+        ) : null}
+        {note.lesson ? (
+          <div className="ac-cn-field">
+            <h3>Lesson</h3>
+            <p>{note.lesson}</p>
+          </div>
+        ) : null}
+      </div>
+      {note.xUrl ? (
+        <p className="ac-cn-cite">
+          <a href={note.xUrl} target="_blank" rel="noopener noreferrer">
+            Source on X
           </a>
-        </details>
-      </footer>
+        </p>
+      ) : citeText ? (
+        <p className="ac-cn-cite muted">{citeText}</p>
+      ) : null}
     </article>
   );
 }
 
 export function ClimbNotesPage() {
-  return (
-    <div className="template-color-1 spybody ac-inbio ac-climb-notes">
-      <header className="rn-header haeder-default black-logo-version header--fixed header--sticky sticky">
-        <div className="header-wrapper m--0 row align-items-center">
-          <div className="col-lg-3 col-6">
-            <div className="header-left">
-              <div className="logo">
-                <Link to="/">
-                  <Logo className="acornsoft-logo" />
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-9 col-6">
-            <div className="header-center">
-              <nav className="mainmenu-nav d-none d-xl-block">
-                <ul className="primary-menu nav nav-pills">
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/">
-                      Home
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link active" to="/climb-notes">
-                      <ClimbNotesMark />
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/canopy">
-                      Canopy
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-              <div className="header-right">
-                <Link className="ac-menu-text d-xl-none" to="/">
-                  Home
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+  const { user, isPending } = useCurrentUserState();
+  const signedIn = !authEnabled || (!isPending && !!user);
+  const [mode, setMode] = useState<PageMode>("public");
+  const [filter, setFilter] = useState<StudioFilter>("all");
+  const [notes, setNotes] = useState<ClimbNote[]>(staticClimbNotes);
+  const [loading, setLoading] = useState(true);
 
-      <main className="main-page-wrapper cn-page">
-        <section className="cn-hero rn-section-gap">
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      try {
+        const list =
+          mode === "public"
+            ? await listPublishedClimbNotes()
+            : await listAllClimbNotesPublic();
+        if (!cancelled) {
+          if (list.length > 0) setNotes(list);
+          else if (staticClimbNotes.length > 0) setNotes(staticClimbNotes);
+        }
+      } catch {
+        if (!cancelled && staticClimbNotes.length > 0) {
+          setNotes(staticClimbNotes);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [mode]);
+
+  const counts = useMemo(() => countByStatus(notes), [notes]);
+
+  const visible = useMemo(() => {
+    if (mode === "public") {
+      return notes.filter((n) => isPublicClimbNoteStatus(n.status));
+    }
+    if (filter === "all") return notes;
+    return notes.filter((n) => n.status === filter);
+  }, [notes, mode, filter]);
+
+  const publishedCount = counts.published;
+  const studioCount = counts.all;
+
+  return (
+    <div className="template-color-1 spybody ac-inbio ac-climb-notes ac-hero-stage">
+      <SiteHeader loginRedirect="/gnomah" />
+
+      <main className="main-page-wrapper cn-page ac-page-hero-main">
+        <section className="cn-hero rn-section-gap ac-page-top">
           <div className="container">
             <div className="row">
               <div className="col-lg-10">
@@ -144,47 +166,51 @@ export function ClimbNotesPage() {
                   <h1 className="title cn-page-title">
                     <ClimbNotesMark large />
                   </h1>
-                  <p className="description">
-                    Climbing logs are written in{" "}
-                    <strong>Obsidian</strong> as Markdown, then stored on this
-                    site—that is the source of truth. Each note is Problem,
-                    Measure, Slice, Lesson. X is optional: a short citation that
-                    points back here.
-                  </p>
                 </div>
               </div>
             </div>
 
             <div className="row mt--30">
               <div className="col-lg-12">
-                <div className="ac-cn-workflow">
-                  <h2 className="ac-cn-workflow-title">
-                    Obsidian → site → optional X
-                  </h2>
-                  <ol>
-                    <li>
-                      <strong>Obsidian:</strong> new note from the Climb Note
-                      template (Problem · Measure · Slice · Lesson). File name
-                      like <code>002 Title.md</code>.
-                    </li>
-                    <li>
-                      <strong>Automate sync:</strong> set{" "}
-                      <code>CLIMB_NOTES_VAULT</code> or{" "}
-                      <code>.climb-notes-sync.json</code>, then{" "}
-                      <code>npm run climb-notes:watch</code>. Saves in Obsidian
-                      copy into <code>content/climb-notes/</code>.
-                    </li>
-                    <li>
-                      <strong>Site loads Markdown</strong> at{" "}
-                      <code>/climb-notes#cn-00N</code>. One-shot:{" "}
-                      <code>npm run climb-notes:sync</code>.
-                    </li>
-                    <li>
-                      <strong>Optional — cite on X:</strong> short post + link
-                      to the site note. Set <code>xUrl</code> in frontmatter if
-                      you want a back-link.
-                    </li>
-                  </ol>
+                <div className="ac-cn-toolbar">
+                  <div
+                    className="ac-cn-mode-bar ac-cn-mode-bar--compact-right"
+                    role="tablist"
+                    aria-label="Climb Notes view"
+                  >
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={mode === "public"}
+                      className={`ac-cn-mode-btn${mode === "public" ? " is-active" : ""}`}
+                      onClick={() => setMode("public")}
+                    >
+                      Public journal
+                      <span className="ac-cn-mode-count">
+                        ({publishedCount})
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={mode === "studio"}
+                      className={`ac-cn-mode-btn${mode === "studio" ? " is-active" : ""}`}
+                      onClick={() => setMode("studio")}
+                    >
+                      Studio library
+                      <span className="ac-cn-mode-count">({studioCount})</span>
+                    </button>
+                  </div>
+
+                  {/* Open Gnomah only when signed in */}
+                  {signedIn ? (
+                    <Link
+                      className="rn-btn ac-btn-maroon ac-cn-open-gnomah"
+                      to="/gnomah"
+                    >
+                      <span>Open Gnomah</span>
+                    </Link>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -193,66 +219,77 @@ export function ClimbNotesPage() {
 
         <section className="rn-section-gap" id="notes">
           <div className="container">
-            <div className="row">
-              <div className="col-lg-12">
-                {climbNotes.map((note) => (
-                  <NoteCard key={note.id} note={note} />
+            {mode === "studio" ? (
+              <div className="ac-cn-filter-row" aria-label="Filter by status">
+                {STUDIO_FILTERS.map((f) => {
+                  const n =
+                    f.key === "all"
+                      ? counts.all
+                      : counts[f.key as ClimbNoteStatus];
+                  return (
+                    <button
+                      key={f.key}
+                      type="button"
+                      className={`ac-cn-filter-chip${filter === f.key ? " is-active" : ""}`}
+                      onClick={() => setFilter(f.key)}
+                    >
+                      {f.label}
+                      <span>({n})</span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="ac-cn-public-banner">
+                Published Climb Notes — plain-language trails for anyone learning
+                the mountaineering approach to AI. Studio library holds drafts
+                and non-public statuses.
+              </p>
+            )}
+
+            {loading ? (
+              <p className="ac-cn-empty">Loading Climb Notes…</p>
+            ) : visible.length === 0 ? (
+              <p className="ac-cn-empty">
+                {mode === "public"
+                  ? "No published Climb Notes yet."
+                  : "No Climb Notes match this filter."}
+              </p>
+            ) : (
+              <div className="ac-cn-list">
+                {visible.map((note) => (
+                  <NoteCard
+                    key={note.id}
+                    note={note}
+                    studio={mode === "studio"}
+                  />
                 ))}
+              </div>
+            )}
+
+            <div className="ac-cn-footer-links">
+              <p>
+                Climb Notes™ hold the journal on this site. Canopy shows the
+                public journal on the live radar.
+              </p>
+              <div className="ac-hero-cta" style={{ marginTop: 24 }}>
+                <VoiceWhenSignedIn>
+                  <Link className="rn-btn ac-btn-maroon" to="/voice">
+                    <span>Talk to Luna</span>
+                  </Link>
+                </VoiceWhenSignedIn>
+                <Link className="rn-btn" to="/canopy">
+                  <span>Open Canopy</span>
+                </Link>
+                {signedIn ? (
+                  <Link className="rn-btn ac-btn-maroon" to="/gnomah">
+                    <span>Open Gnomah</span>
+                  </Link>
+                ) : null}
               </div>
             </div>
           </div>
         </section>
-
-        <section className="rn-section-gap cn-cta-band">
-          <div className="container text-center">
-            <h3 className="title">Radar lives on Canopy</h3>
-            <p className="description">
-              Climb Notes™ hold the journal on this site. Canopy is the live
-              signal layer.
-            </p>
-            <div className="ac-hero-cta" style={{ marginTop: 24 }}>
-              <Link className="rn-btn" to="/canopy">
-                <span>Open Canopy</span>
-              </Link>
-              <Link className="rn-btn ac-btn-outline" to="/">
-                <span>Back to Acornsoft</span>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        <div className="rn-footer-area" style={{ paddingBottom: 48 }}>
-          <div className="container">
-            <div className="footer-area text-center">
-              <Logo className="acornsoft-logo ac-footer-logo" />
-              <ul className="ac-footer-nav">
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/climb-notes">
-                    <ClimbNotesMark />
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/canopy">Canopy</Link>
-                </li>
-                <li>
-                  <Link to="/corporate" className="ac-corp-foot-link">
-                    Corporate
-                  </Link>
-                </li>
-              </ul>
-              <p className="description mt--20">
-                © {new Date().getFullYear()} Acornsoft. Reach us via{" "}
-                <a href={VOICE_URL} target="_blank" rel="noopener noreferrer">
-                  Voice
-                </a>
-                .
-              </p>
-            </div>
-          </div>
-        </div>
       </main>
     </div>
   );

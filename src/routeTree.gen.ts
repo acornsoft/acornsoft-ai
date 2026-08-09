@@ -10,17 +10,28 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as CanopyRouteImport } from './routes/canopy'
 import { Route as ClimbNotesRouteImport } from './routes/climb-notes'
 import { Route as CorporateRouteImport } from './routes/corporate'
+import { Route as GnomahRouteImport } from './routes/gnomah'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProceduresRouteImport } from './routes/procedures'
+import { Route as ServiceRouteImport } from './routes/service'
+import { Route as VoiceRouteImport } from './routes/voice'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiCanopyRefreshRouteImport } from './routes/api/canopy/refresh'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CanopyRoute = CanopyRouteImport.update({
@@ -38,6 +49,16 @@ const CorporateRoute = CorporateRouteImport.update({
   path: '/corporate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GnomahRoute = GnomahRouteImport.update({
+  id: '/gnomah',
+  path: '/gnomah',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PoliciesRoute = PoliciesRouteImport.update({
   id: '/policies',
   path: '/policies',
@@ -53,6 +74,21 @@ const ProceduresRoute = ProceduresRouteImport.update({
   path: '/procedures',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServiceRoute = ServiceRouteImport.update({
+  id: '/service',
+  path: '/service',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VoiceRoute = VoiceRouteImport.update({
+  id: '/voice',
+  path: '/voice',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiCanopyRefreshRoute = ApiCanopyRefreshRouteImport.update({
   id: '/api/canopy/refresh',
   path: '/api/canopy/refresh',
@@ -61,76 +97,118 @@ const ApiCanopyRefreshRoute = ApiCanopyRefreshRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/canopy': typeof CanopyRoute
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
+  '/gnomah': typeof GnomahRoute
+  '/login': typeof LoginRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/procedures': typeof ProceduresRoute
+  '/service': typeof ServiceRoute
+  '/voice': typeof VoiceRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/canopy': typeof CanopyRoute
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
+  '/gnomah': typeof GnomahRoute
+  '/login': typeof LoginRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/procedures': typeof ProceduresRoute
+  '/service': typeof ServiceRoute
+  '/voice': typeof VoiceRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/canopy': typeof CanopyRoute
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
+  '/gnomah': typeof GnomahRoute
+  '/login': typeof LoginRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/procedures': typeof ProceduresRoute
+  '/service': typeof ServiceRoute
+  '/voice': typeof VoiceRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/canopy'
     | '/climb-notes'
     | '/corporate'
+    | '/gnomah'
+    | '/login'
     | '/policies'
     | '/privacy'
     | '/procedures'
+    | '/service'
+    | '/voice'
+    | '/api/auth/$'
     | '/api/canopy/refresh'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/canopy'
     | '/climb-notes'
     | '/corporate'
+    | '/gnomah'
+    | '/login'
     | '/policies'
     | '/privacy'
     | '/procedures'
+    | '/service'
+    | '/voice'
+    | '/api/auth/$'
     | '/api/canopy/refresh'
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/canopy'
     | '/climb-notes'
     | '/corporate'
+    | '/gnomah'
+    | '/login'
     | '/policies'
     | '/privacy'
     | '/procedures'
+    | '/service'
+    | '/voice'
+    | '/api/auth/$'
     | '/api/canopy/refresh'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   CanopyRoute: typeof CanopyRoute
   ClimbNotesRoute: typeof ClimbNotesRoute
   CorporateRoute: typeof CorporateRoute
+  GnomahRoute: typeof GnomahRoute
+  LoginRoute: typeof LoginRoute
   PoliciesRoute: typeof PoliciesRoute
   PrivacyRoute: typeof PrivacyRoute
   ProceduresRoute: typeof ProceduresRoute
+  ServiceRoute: typeof ServiceRoute
+  VoiceRoute: typeof VoiceRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiCanopyRefreshRoute: typeof ApiCanopyRefreshRoute
 }
 
@@ -141,6 +219,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/canopy': {
@@ -164,6 +249,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CorporateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gnomah': {
+      id: '/gnomah'
+      path: '/gnomah'
+      fullPath: '/gnomah'
+      preLoaderRoute: typeof GnomahRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/policies': {
       id: '/policies'
       path: '/policies'
@@ -185,6 +284,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProceduresRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/service': {
+      id: '/service'
+      path: '/service'
+      fullPath: '/service'
+      preLoaderRoute: typeof ServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/voice': {
+      id: '/voice'
+      path: '/voice'
+      fullPath: '/voice'
+      preLoaderRoute: typeof VoiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/canopy/refresh': {
       id: '/api/canopy/refresh'
       path: '/api/canopy/refresh'
@@ -197,12 +317,18 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   CanopyRoute: CanopyRoute,
   ClimbNotesRoute: ClimbNotesRoute,
   CorporateRoute: CorporateRoute,
+  GnomahRoute: GnomahRoute,
+  LoginRoute: LoginRoute,
   PoliciesRoute: PoliciesRoute,
   PrivacyRoute: PrivacyRoute,
   ProceduresRoute: ProceduresRoute,
+  ServiceRoute: ServiceRoute,
+  VoiceRoute: VoiceRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiCanopyRefreshRoute: ApiCanopyRefreshRoute,
 }
 export const routeTree = rootRouteImport

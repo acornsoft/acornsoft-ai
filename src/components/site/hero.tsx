@@ -50,7 +50,8 @@ export function Hero() {
       <div className="container-site relative z-10 w-full">
         <div className="max-w-2xl">
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-bg/55 px-3 py-1 text-xs font-medium uppercase tracking-[0.14em] text-muted backdrop-blur-sm">
-            Applied AI studio
+            New York · AI-first organization
+
           </p>
           <h1 className="heading-display text-[clamp(2.4rem,6vw,4.25rem)] text-fg text-balance">
             We are{" "}

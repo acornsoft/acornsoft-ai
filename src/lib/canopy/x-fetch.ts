@@ -7,6 +7,7 @@
  */
 
 import type { LiveFeedActor, LiveFeedEntry, LiveFeedFile, LiveFeedKind } from "./types";
+import interestsConfig from "./interests";
 
 export type InterestQuery = {
   id: string;
@@ -32,56 +33,8 @@ export type InterestsConfig = {
   subscriptions?: RadarSubscription[];
 };
 
-const DEFAULT_INTERESTS: InterestsConfig = {
-  scheduleMinutes: 60,
-  maxResultsPerQuery: 25,
-  subscriptions: [
-    {
-      id: "radar-acornsoftai",
-      username: "acornsoftai",
-      actor: "acornsoft",
-      kind: "feednote",
-      maxResults: 40,
-      standout: true,
-    },
-  ],
-  queries: [
-    {
-      id: "xai-official",
-      actor: "xai",
-      kind: "feednote",
-      query:
-        "(from:elonmusk OR from:xai OR from:SpaceXAI) (Grok OR Imagine OR Voice OR Build OR xAI OR SpaceXAI)",
-    },
-    {
-      id: "grok-build",
-      actor: "build",
-      kind: "changelog",
-      query:
-        '("Grok Build" OR GrokBuild) (from:XFreeze OR from:elonmusk OR from:xai)',
-    },
-    {
-      id: "spacex",
-      actor: "spacex",
-      kind: "feednote",
-      query:
-        "(from:SpaceX OR from:elonmusk) (Starship OR Falcon OR Starlink OR launch)",
-    },
-    {
-      id: "tesla",
-      actor: "tesla",
-      kind: "feednote",
-      query:
-        "(from:Tesla OR from:elonmusk) (Optimus OR Tesla OR Supercharger OR FSD)",
-    },
-    {
-      id: "acornsoft",
-      actor: "acornsoft",
-      kind: "feednote",
-      query: "from:acornsoftai",
-    },
-  ],
-};
+const DEFAULT_INTERESTS: InterestsConfig = interestsConfig as InterestsConfig;
+
 
 type XTweet = {
   id: string;
@@ -218,7 +171,7 @@ async function userTimeline(
   return json.data ?? [];
 }
 
-export function getBearerToken(): string | undefined {
+export function getBearerTokenFromEnv(): string | undefined {
   const t =
     process.env.X_BEARER_TOKEN ||
     process.env.TWITTER_BEARER_TOKEN ||
@@ -226,27 +179,40 @@ export function getBearerToken(): string | undefined {
   return t?.trim() || undefined;
 }
 
-export async function loadInterestsConfig(
-  readFile?: (path: string) => Promise<string>,
-): Promise<InterestsConfig> {
+/** @deprecated use resolveBearerForFetch — sync env-only fallback */
+export function getBearerToken(): string | undefined {
+  return getBearerTokenFromEnv();
+}
+
+/**
+ * Env first, then owner-encrypted preference (profile).
+ * Server-only; never expose the return value to clients.
+ */
+export async function resolveBearerForFetch(): Promise<{
+  token?: string;
+  source: "env" | "owner_secret" | "none";
+}> {
+  const env = getBearerTokenFromEnv();
+  if (env) return { token: env, source: "env" };
   try {
-    if (readFile) {
-      const raw = await readFile(
-        new URL("../../../content/canopy/interests.json", import.meta.url)
-          .pathname,
-      );
-      return { ...DEFAULT_INTERESTS, ...JSON.parse(raw) };
-    }
+    const { resolveXBearerForCanopy } = await import(
+      "@/lib/owner-secrets/store.server"
+    );
+    return await resolveXBearerForCanopy();
   } catch {
-    /* use default */
+    return { source: "none" };
   }
+}
+
+export async function loadInterestsConfig(): Promise<InterestsConfig> {
   return DEFAULT_INTERESTS;
 }
 
 export async function fetchLiveFeedFromX(
   interests: InterestsConfig = DEFAULT_INTERESTS,
 ): Promise<LiveFeedFile> {
-  const bearer = getBearerToken();
+  const resolved = await resolveBearerForFetch();
+  const bearer = resolved.token;
   if (!bearer) {
     return {
       updatedAt: new Date().toISOString(),
@@ -254,7 +220,7 @@ export async function fetchLiveFeedFromX(
       scheduleMinutes: interests.scheduleMinutes,
       entryCount: 0,
       error:
-        "Missing X_BEARER_TOKEN. Add an X API App-only Bearer token to enable scheduled live pull.",
+        "Missing X API Bearer. Owner: sign in and save it under Gnomah → Private preferences, or set X_BEARER_TOKEN on the host.",
       entries: [],
     };
   }

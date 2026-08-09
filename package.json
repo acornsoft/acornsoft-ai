@@ -8,15 +8,17 @@
   },
   "scripts": {
     "dev": "vite dev --host 0.0.0.0 --port 8080",
-    "build": "vite build && npm run db:migrate",
+    "build": "vite build && node scripts/copy-vercel-runtime-assets.mjs && npm run db:migrate",
     "db:migrate": "node scripts/migrate.mjs",
     "build:dev": "vite build --mode development",
     "preview": "vite preview --host 0.0.0.0 --port 8080",
+    "preview:prod": "node scripts/serve-prod.mjs 8080",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
     "climb-notes:sync": "node scripts/sync-climb-notes.mjs",
     "climb-notes:watch": "node scripts/sync-climb-notes.mjs --watch",
+    "climb-notes:publish": "node scripts/climb-notes-publish.mjs",
     "canopy:fetch": "node scripts/fetch-canopy-feed.mjs",
     "canopy:fetch:dry": "node scripts/fetch-canopy-feed.mjs --dry-run"
   },

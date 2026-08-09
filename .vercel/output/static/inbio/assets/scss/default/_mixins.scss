@@ -1,0 +1,59 @@
+@use'./variables' as *;
+
+@mixin clearfix() {
+    &::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+}
+
+// @mixin config-bg-colors($prefix, $bg-color-...) {
+//     @each $i in $bg-color- {
+//         .#{$prefix}#{nth($i, 1)} {
+//             background: nth($i, 2);
+//         }
+//     }
+// }
+
+/*----------------------------------------------
+        Background and Text color class generate
+------------------------------------------------*/
+$colors: (
+    'primary'var(--color-primary),
+    'secondary'var(--color-secondary),
+    'tertiary'var(--color-tertiary),
+    'gray'var(--color-gray),
+    'white'#FFFFFF,
+    'black'#1A1A1A,
+    'extra03'var(--color-extra03)
+);
+@each $name, $color in $colors {
+    .bg-color-#{$name} {
+        background-color: $color !important;
+    }
+}
+
+@for $i from 1 through 40 {
+    .bg_image--#{$i} {
+        background-image: url(../images/bg/bg-image-#{$i}.jpg);
+    }
+}
+
+@mixin placeholder {
+    &::-webkit-input-placeholder {
+        @content;
+    }
+
+    &:-moz-placeholder {
+        @content;
+    }
+
+    &::-moz-placeholder {
+        @content;
+    }
+
+    &:-ms-input-placeholder {
+        @content;
+    }
+}

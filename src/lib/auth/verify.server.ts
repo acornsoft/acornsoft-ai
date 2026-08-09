@@ -35,8 +35,8 @@ export const DEV_USER_ID = "dev-user";
  */
 export class UnauthorizedError extends Error {
   readonly status = 401;
-  constructor() {
-    super("Unauthorized");
+  constructor(message = "Unauthorized") {
+    super(message);
     this.name = "UnauthorizedError";
   }
 }
@@ -47,6 +47,11 @@ export type VerifiedUser = { id: string; email: string | null };
  * Resolve the signed-in user from the current request, or `null` when auth isn't
  * configured / nobody is signed in. Safe to call from server functions and SSR
  * loaders.
+ *
+ * Always hits the database (`disableCookieCache: true`). Cookie cache alone can
+ * report a session after PGLite wipe / process restart while the `user` row is
+ * gone — which previously produced owner checks throwing "Sign in required"
+ * while the client still looked signed-in.
  *
  * `bearerToken` is for the LIVE PREVIEW: the app runs in a partitioned iframe
  * whose cookies don't reach the server, so `authMiddleware` forwards the session
@@ -62,11 +67,21 @@ export async function getSessionUser(
   let headers = request.headers;
   if (bearerToken) {
     headers = new Headers(request.headers);
-    headers.set("Authorization", `Bearer ${bearerToken}`);
+    const raw = bearerToken.trim().replace(/^bearer\s+/i, "");
+    headers.set("Authorization", `Bearer ${raw}`);
   }
-  const session = await auth.api.getSession({ headers });
-  if (!session?.user) return null;
-  return { id: session.user.id, email: session.user.email ?? null };
+  try {
+    const session = await auth.api.getSession({
+      headers,
+      // Force DB validation — never trust a stale signed session_data cookie.
+      query: { disableCookieCache: true },
+    });
+    if (!session?.user?.id) return null;
+    return { id: session.user.id, email: session.user.email ?? null };
+  } catch (err) {
+    console.warn("[auth] getSession failed:", err);
+    return null;
+  }
 }
 
 /**

@@ -84,12 +84,15 @@ export const authConfigured =
   !authDisabled && Boolean(grokClientId && grokClientSecret);
 
 // This app's own Better Auth origin. When deployed the deployer injects the
-// public URL. In the sandbox live preview there's no fixed URL (each preview gets
-// a dynamic `*.grok-sandbox.com` host), so we hand Better Auth a dynamic baseURL:
-// it derives the origin per-request from the (proxied) host, validated against the
-// preview allowlist, which makes the OAuth `redirect_uri` the concrete preview URL
-// the broker's preview client accepts.
-const explicitBaseURL = env("BETTER_AUTH_URL");
+// public URL. Standalone Vercel also exposes VERCEL_URL — use it so OAuth
+// redirect_uri matches the published host without requiring a manual
+// BETTER_AUTH_URL. Sandbox live preview has no fixed URL (dynamic
+// `*.grok-sandbox.com`), so we hand Better Auth a dynamic baseURL when none of
+// the above are set.
+const vercelPublicUrl = env("VERCEL_URL")
+  ? `https://${env("VERCEL_URL")!.replace(/^https?:\/\//, "")}`
+  : undefined;
+const explicitBaseURL = env("BETTER_AUTH_URL") ?? vercelPublicUrl;
 // Explicit `string[]` (not a readonly tuple) — Better Auth's DynamicBaseURLConfig
 // requires a mutable `allowedHosts: string[]`.
 const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
@@ -145,6 +148,41 @@ const database = databaseUrl
 /** Session token cookie name — also read by the live-preview popup completion page. */
 export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
 
+/**
+ * Map broker OIDC profile fields into Better Auth's user row.
+ * For X: prefer handle (preferred_username / username) over display name so
+ * Gnomah owner checks can match @acornsoftai reliably.
+ */
+function mapBrokerProfile(
+  providerId: string,
+  profile: Record<string, unknown>,
+): { name?: string; email?: string; image?: string } {
+  const str = (k: string) => {
+    const v = profile[k];
+    return typeof v === "string" && v.trim() ? v.trim() : undefined;
+  };
+  const email = str("email");
+  const image = str("picture") ?? str("image") ?? str("avatar_url");
+
+  if (providerId === "grok-x") {
+    const handle =
+      str("preferred_username") ??
+      str("username") ??
+      str("screen_name") ??
+      str("nickname");
+    const name = handle
+      ? handle.replace(/^@+/, "")
+      : str("name") ?? str("display_name");
+    return { name, email, image };
+  }
+
+  return {
+    name: str("name") ?? str("display_name"),
+    email,
+    image,
+  };
+}
+
 // Built separately so the `betterAuth({...})` call stays easy to edit without
 // breaking brackets (models often trip on the conditional plugin spread).
 const grokOAuthPlugin = authConfigured
@@ -165,6 +203,11 @@ const grokOAuthPlugin = authConfigured
         // `prompt=select_account`, the user always gets the account chooser
         // and can pick (or switch) which account to sign in with.
         authorizationUrlParams: { idp, prompt: "login" },
+        // Refresh name/image on every X (and Google) sign-in so owner handles
+        // stay current when the upstream profile changes.
+        overrideUserInfo: true,
+        mapProfileToUser: (profile: Record<string, unknown>) =>
+          mapBrokerProfile(providerId, profile),
       })),
     })
   : null;

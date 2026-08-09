@@ -1,8 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Logo } from "./logo";
+import { SiteHeader } from "./site-chrome";
 import { ClimbNotesMark } from "./climb-notes-mark";
-
-const VOICE_URL = "https://grok.x.ai/";
+import { VoiceLink, useVoiceAccessState } from "./voice-access";
 
 const sections = [
   { id: "identity", label: "Identity" },
@@ -24,49 +23,11 @@ const sections = [
  * Linked only from quiet page footers — not primary marketing nav.
  */
 export function CorporatePage() {
+  const voice = useVoiceAccessState();
+
   return (
-    <div className="template-color-1 spybody ac-inbio ac-corporate-page">
-      <header className="rn-header haeder-default black-logo-version header--fixed header--sticky sticky">
-        <div className="header-wrapper m--0 row align-items-center">
-          <div className="col-lg-3 col-6">
-            <div className="header-left">
-              <div className="logo">
-                <Link to="/">
-                  <Logo className="acornsoft-logo" />
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-9 col-6">
-            <div className="header-center">
-              <nav className="mainmenu-nav d-none d-xl-block">
-                <ul className="primary-menu nav nav-pills">
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/">
-                      Home
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/climb-notes">
-                      <ClimbNotesMark />
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/canopy">
-                      Canopy
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-              <div className="header-right">
-                <Link className="ac-menu-text d-xl-none" to="/">
-                  Home
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="template-color-1 spybody ac-inbio ac-corporate-page ac-hero-stage">
+      <SiteHeader loginRedirect="/gnomah" />
 
       <main className="main-page-wrapper ac-corporate-main">
         <section className="rn-section-gap ac-corporate-shell">
@@ -90,26 +51,38 @@ export function CorporatePage() {
                 <article className="ac-corp-section" id="identity">
                   <h2>Identity</h2>
                   <p>
-                    <strong>Acornsoft</strong> is a New York–based applied
-                    artificial intelligence studio. Public surfaces include this
-                    site, Climb Notes, Canopy, and the X account @acornsoftai.
+                    <strong>Acornsoft</strong> is a New York–based AI-first
+                    organization. Public surfaces include this site, Climb Notes,
+                    Canopy, and the X account @acornsoftai. The founder’s personal
+                    work biography, resume, and enterprise portfolio live at{" "}
+                    <a
+                      href="https://blaszyk.us/"
+                      target="_blank"
+                      rel="noopener noreferrer me"
+                    >
+                      blaszyk.us
+                    </a>
+                    —a separate personal site, not this organization surface.
+
+
                   </p>
                   <p>
                     Contact for project and privacy questions:{" "}
-                    <a
-                      href={VOICE_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Voice
-                    </a>
+                    {voice.allowed ? (
+                      <VoiceLink>Voice</VoiceLink>
+                    ) : (
+                      <>
+                        Voice (available after signing in with X on Climb Notes)
+                      </>
+                    )}
                     . No email forms. No phone queue theater.
                   </p>
                   <p>
                     If a formal legal entity name, registration number, or
                     mailing address is required for a contract, it will be stated
                     on the statement of work. Until then, “Acornsoft” is the
-                    public trade name of the studio.
+                    public trade name of the organization.
+
                   </p>
                 </article>
 
@@ -261,8 +234,9 @@ export function CorporatePage() {
                   </ol>
                   <h3>Intake</h3>
                   <p>
-                    First contact is Voice. Luna (also known as Ara) is the
-                    current voice; a custom Acornsoft voice may replace it later.
+                    First contact is Voice. Luna and Ara are one and the same —
+                    your Sherpa on Grok Voice (or your custom Acornsoft Grok
+                    Voice when configured).
                   </p>
                   <h3>Credit others</h3>
                   <p>

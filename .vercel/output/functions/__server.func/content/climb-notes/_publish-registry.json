@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "description": "SharePoint-style publish control for Climb Notes. Registry status wins over frontmatter. Public site shows only published. Studio view shows every note.",
+  "notes": {
+    "cn-001": {
+      "status": "published",
+      "version": 1,
+      "submittedAt": "2026-07-31T12:00:00.000Z",
+      "submittedBy": "acornsoft",
+      "approvedAt": "2026-07-31T12:05:00.000Z",
+      "approvedBy": "acornsoft",
+      "publishedAt": "2026-07-31T12:10:00.000Z",
+      "unpublishedAt": null,
+      "approvalNote": "First Climb Note — Advanced Development energy.",
+      "history": [
+        {
+          "at": "2026-07-31T12:00:00.000Z",
+          "action": "submit",
+          "by": "acornsoft",
+          "note": "Ready for review"
+        },
+        {
+          "at": "2026-07-31T12:05:00.000Z",
+          "action": "approve",
+          "by": "acornsoft",
+          "note": "Approved for public journal"
+        },
+        {
+          "at": "2026-07-31T12:10:00.000Z",
+          "action": "publish",
+          "by": "acornsoft",
+          "note": "Live on Climb Notes"
+        }
+      ]
+    },
+    "cn-002": {
+      "status": "approved",
+      "version": 1,
+      "submittedAt": "2026-07-31T14:50:35.452Z",
+      "submittedBy": "acornsoft",
+      "approvedAt": "2026-07-31T14:50:35.484Z",
+      "approvedBy": "acornsoft",
+      "publishedAt": null,
+      "unpublishedAt": null,
+      "approvalNote": "Process note approved",
+      "history": [
+        {
+          "at": "2026-07-31T14:50:35.452Z",
+          "action": "submit",
+          "by": "acornsoft",
+          "note": "Ready for review"
+        },
+        {
+          "at": "2026-07-31T14:50:35.484Z",
+          "action": "approve",
+          "by": "acornsoft",
+          "note": "Process note approved"
+        }
+      ]
+    }
+  }
+}

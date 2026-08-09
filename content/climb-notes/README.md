@@ -2,7 +2,35 @@
 
 **Authoring:** Obsidian Markdown.  
 **Site storage:** files synced into this folder.  
+**Publish gate:** `_publish-registry.json` (SharePoint-style lifecycle).  
 **Automation:** `npm run climb-notes:sync` / `npm run climb-notes:watch`
+
+## Lifecycle (pull in / pull out)
+
+| Status | Public journal | Studio library |
+| --- | --- | --- |
+| `draft` | No | Yes |
+| `pending` | No (awaiting approval) | Yes |
+| `approved` | No (ready, not live) | Yes |
+| `published` | **Yes** | Yes |
+| `archived` | No | Yes |
+
+Commands (update registry + frontmatter `status`):
+
+```bash
+npm run climb-notes:publish -- list
+npm run climb-notes:publish -- submit cn-002
+npm run climb-notes:publish -- approve cn-002 --by acornsoft --note "Ready"
+npm run climb-notes:publish -- publish cn-002
+npm run climb-notes:publish -- unpublish cn-002   # pull out of public
+npm run climb-notes:publish -- archive cn-002
+npm run climb-notes:publish -- restore cn-002
+npm run climb-notes:publish -- status cn-001
+```
+
+- **Publish** = pull into the public journal.  
+- **Unpublish** = pull out (Markdown stays; Studio still shows it).  
+- Registry **wins** over frontmatter if both disagree.
 
 ## One-time setup
 
@@ -15,19 +43,36 @@
    npm run climb-notes:sync    # one-shot
    npm run climb-notes:watch   # auto-copy on save
    ```
-5. Keep `npm run dev` running — Vite reloads when Markdown under `content/climb-notes` changes.
+5. Keep the site dev process running so Markdown reloads.
+
+## Vault layout (local Gnomah import)
+
+| Folder | Role |
+| --- | --- |
+| `engagement/` | Client / engagement climbs |
+| `product/` | Product / abstract / ADO / MacroFlow climbs |
+| `foundation/` | Reserved |
+| `archive/` | Reserved |
+
+Current catalog: **35** notes (3 engagement + 32 product). Nested `*.md` files load into Gnomah.
 
 ## File rules
 
 - Note files: `001 Title.md`, `002 Title.md` (top-level `*.md` in vault)
 - Template: `templates/Climb Note.md`
 - Required headings: `## Problem` · `## Measure` · `## Slice` · `## Lesson`
-- Frontmatter: `id`, `number`, `title`, `date`, optional `tags`, `xUrl`
+- Frontmatter: `id`, `number`, `title`, `date`, `status`, optional `tags`, `xUrl`
+- Do not edit `_publish-registry.json` by hand unless you know the shape—prefer the CLI
 
 ## Flow
 
 ```
-Obsidian (save) → sync script → content/climb-notes → site /climb-notes
+Obsidian (draft)
+  → sync script → content/climb-notes
+  → submit / approve / publish (CLI)
+  → public /climb-notes  (published only)
+  → Studio library tab   (every note)
+  → optional short citation on X
 ```
 
-X remains optional short citation only.
+X remains optional short citation only—and only after Published.

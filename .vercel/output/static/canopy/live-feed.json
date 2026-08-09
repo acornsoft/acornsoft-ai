@@ -1,0 +1,8 @@
+{
+  "updatedAt": "2026-07-31T17:17:59.836Z",
+  "source": "empty",
+  "scheduleMinutes": 60,
+  "entryCount": 0,
+  "error": "Missing X API Bearer. Owner: sign in and save it under Gnomah → Private preferences, or set X_BEARER_TOKEN on the host.",
+  "entries": []
+}

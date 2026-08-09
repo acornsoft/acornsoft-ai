@@ -1,5 +1,10 @@
 /** Canopy radar data — newest first; includes ecosystem and Build notes */
 
+import {
+  climbNotes,
+  isPublicClimbNoteStatus,
+} from "./climb-notes-data";
+
 export type TimelineKind =
   | "origin"
   | "milestone"
@@ -16,6 +21,19 @@ export type TimelineActor =
   | "spacex"
   | "research";
 
+/**
+ * Grok product surface on Canopy — Imaging (Imagine), Voice, Grok, Grok Build.
+ * Distinct from actor (who said it); surfaces are the product rail filters.
+ */
+export type TimelineSurface = "grok" | "imagine" | "voice" | "build";
+
+export const SURFACE_LABEL: Record<TimelineSurface, string> = {
+  grok: "Grok",
+  imagine: "Imagine",
+  voice: "Voice",
+  build: "Grok Build",
+};
+
 export type TimelineEntry = {
   id: string;
   date: string;
@@ -25,6 +43,8 @@ export type TimelineEntry = {
   body: string;
   kind: TimelineKind;
   actor: TimelineActor;
+  /** Grok stack product surface when applicable */
+  surface?: TimelineSurface;
   source?: string;
   href?: string;
   xId?: string;
@@ -34,6 +54,8 @@ export type TimelineEntry = {
   standout?: boolean;
   /** From scheduled X API pull */
   live?: boolean;
+  /** Canopy org sub-lane (e.g. Climb Notes journal entries) */
+  lane?: "climb-notes";
 };
 
 /** Canonical history — always included; must start at formation of xAI */
@@ -68,6 +90,7 @@ export const originTimeline: TimelineEntry[] = [
     body: "Grok launches for X Premium Plus users—modeled after the Hitchhiker’s Guide, with real-time access to the X platform.",
     kind: "product",
     actor: "xai",
+    surface: "grok",
     source: "xAI",
   },
   {
@@ -78,6 +101,7 @@ export const originTimeline: TimelineEntry[] = [
     body: "xAI open-sources Grok-1 base model weights and architecture under Apache 2.0.",
     kind: "milestone",
     actor: "xai",
+    surface: "grok",
     source: "xAI",
   },
   {
@@ -88,6 +112,7 @@ export const originTimeline: TimelineEntry[] = [
     body: "Improved reasoning and long-context capabilities. Followed by Grok-1.5V multimodal.",
     kind: "product",
     actor: "xai",
+    surface: "grok",
     source: "xAI",
   },
   {
@@ -98,6 +123,7 @@ export const originTimeline: TimelineEntry[] = [
     body: "Grok-2 and Grok-2 mini with stronger reasoning and image generation.",
     kind: "product",
     actor: "xai",
+    surface: "grok",
     source: "xAI",
   },
   {
@@ -129,6 +155,7 @@ export const originTimeline: TimelineEntry[] = [
     body: "Major capability jump across reasoning, coding, and real-time knowledge.",
     kind: "product",
     actor: "xai",
+    surface: "grok",
     source: "xAI",
   },
   {
@@ -192,6 +219,7 @@ export const originTimeline: TimelineEntry[] = [
     body: "No-code platform for human-like voice agents on Grok Voice—telephony, tools, guardrails, observability.",
     kind: "product",
     actor: "xai",
+    surface: "voice",
     source: "@SpaceXAI",
     href: "https://x.com/SpaceXAI/status/2072342803787702422",
     xId: "2072342803787702422",
@@ -590,6 +618,7 @@ export const xFeednotes: TimelineEntry[] = [
     body: "Elon Musk amplifies a major Grok Imagine Templates upgrade: photo edit, restyle, smart resize, background remover, emoji creator, merch maker, and more presets.",
     kind: "feednote",
     actor: "xai",
+    surface: "imagine",
     source: "@elonmusk",
     href: "https://x.com/elonmusk/status/2083068786731553123",
     xId: "2083068786731553123",
@@ -602,6 +631,7 @@ export const xFeednotes: TimelineEntry[] = [
     body: "Short-form Imagine demos continue to dominate the product surface—Musk reposts fresh Grok Imagine creative output.",
     kind: "feednote",
     actor: "xai",
+    surface: "imagine",
     source: "@elonmusk",
     href: "https://x.com/elonmusk/status/2083031362756313410",
     xId: "2083031362756313410",
@@ -614,6 +644,7 @@ export const xFeednotes: TimelineEntry[] = [
     body: "After praise for Grok 4.5 high fast, Musk states Grok 4.6 is a significant improvement—model cadence remains the headline signal.",
     kind: "feednote",
     actor: "xai",
+    surface: "grok",
     source: "@elonmusk",
     href: "https://x.com/elonmusk/status/2082679015161069831",
     xId: "2082679015161069831",
@@ -626,6 +657,7 @@ export const xFeednotes: TimelineEntry[] = [
     body: "Another high-engagement Imagine share from Musk—image and video generation remains the public-facing product drumbeat.",
     kind: "feednote",
     actor: "xai",
+    surface: "imagine",
     source: "@elonmusk",
     href: "https://x.com/elonmusk/status/2082656239780266487",
     xId: "2082656239780266487",
@@ -686,6 +718,7 @@ export const xFeednotes: TimelineEntry[] = [
     body: "Users chain new Imagine emoji templates into Grok Build GIF workflows—product surface is creative tooling, not only chat.",
     kind: "feednote",
     actor: "xai",
+    surface: "imagine",
     source: "@princess414141",
     href: "https://x.com/princess414141/status/2083161180298678412",
     xId: "2083161180298678412",
@@ -770,6 +803,7 @@ export const xFeednotes: TimelineEntry[] = [
     body: "Independent speech-to-speech index: Think Fast 2.0 High near top of index, first on Tau Voice agentic, sub-second time to first audio.",
     kind: "feednote",
     actor: "xai",
+    surface: "voice",
     source: "@ArtificialAnlys",
     href: "https://x.com/ArtificialAnlys/status/2082528987272957960",
     xId: "2082528987272957960",
@@ -806,6 +840,7 @@ export const xFeednotes: TimelineEntry[] = [
     body: "Musk: Grok Voice is number one in agentic performance after Think Fast 2.0 release.",
     kind: "feednote",
     actor: "xai",
+    surface: "voice",
     source: "@elonmusk",
     href: "https://x.com/elonmusk/status/2082559894264430870",
     xId: "2082559894264430870",
@@ -818,6 +853,7 @@ export const xFeednotes: TimelineEntry[] = [
     body: "SpaceXAI announces next-generation voice model—better intelligence, transcription, and conversation.",
     kind: "feednote",
     actor: "xai",
+    surface: "voice",
     source: "@SpaceXAI",
     href: "https://x.com/SpaceXAI/status/2082529280341553209",
     xId: "2082529280341553209",
@@ -970,19 +1006,166 @@ export const acornsoftNotes: TimelineEntry[] = [
   },
 ];
 
+
+/** Infer Grok stack surface from actor, kind, and copy. */
+export function inferTimelineSurface(
+  entry: Pick<
+    TimelineEntry,
+    "title" | "body" | "actor" | "kind" | "source" | "surface"
+  >,
+): TimelineSurface | undefined {
+  if (entry.surface) return entry.surface;
+  if (entry.actor === "build" || entry.kind === "changelog") return "build";
+
+  const t = `${entry.title} ${entry.body} ${entry.source ?? ""}`.toLowerCase();
+  const scores: Record<TimelineSurface, number> = {
+    build: 0,
+    imagine: 0,
+    voice: 0,
+    grok: 0,
+  };
+
+  if (
+    /grok build|build changelog|command line|subagent|workflows parallel|agent harness|streaming-json/.test(
+      t,
+    )
+  ) {
+    scores.build += 4;
+  }
+  if (
+    /imagine|imaging|image gen|photo edit|restyle|background remover|emoji creator|merch maker/.test(
+      t,
+    )
+  ) {
+    scores.imagine += 4;
+  }
+  if (
+    /\bvoice\b|think fast|speech-to-speech|tau voice|voice agent|dictation/.test(
+      t,
+    )
+  ) {
+    scores.voice += 4;
+  }
+  if (
+    /grok[\s-]?[0-9]|grok arrives|grok-1|grok-2|grok-3|grok-4|model cadence|\bgrok\b/.test(
+      t,
+    )
+  ) {
+    scores.grok += 2;
+  }
+
+  // Prefer product-specific hits over generic "Grok" mentions
+  const ranked = (Object.keys(scores) as TimelineSurface[]).sort(
+    (a, b) => scores[b] - scores[a],
+  );
+  const top = ranked[0];
+  if (scores[top] <= 0) return undefined;
+  // If build and imagine both high (Imagine→Build chains), keep both signals but
+  // pick the higher score; ties break to more specific product order.
+  if (scores[ranked[0]] === scores[ranked[1]] && scores[ranked[0]] > 0) {
+    const order: TimelineSurface[] = ["build", "imagine", "voice", "grok"];
+    return order.find((s) => scores[s] === scores[ranked[0]]);
+  }
+  return top;
+}
+
+export function withInferredSurface(entry: TimelineEntry): TimelineEntry {
+  const surface = inferTimelineSurface(entry);
+  return surface ? { ...entry, surface } : entry;
+}
+
+
+/** Product surface anchors — Grok stack rails on Canopy */
+export const grokStackAnchors: TimelineEntry[] = [
+  {
+    id: "product-grok-surface",
+    date: "November 2023",
+    sortKey: "2023-11-04T12:00:00Z",
+    title: "Grok · product surface",
+    body: "Grok is the conversational model surface—reasoning, real-time X context, and model cadence from Grok-1 through the Grok-4 line.",
+    kind: "product",
+    actor: "xai",
+    surface: "grok",
+    source: "xAI",
+    href: "https://x.ai/",
+  },
+  {
+    id: "product-imagine-surface",
+    date: "2024–2026",
+    sortKey: "2024-08-13T14:00:00Z",
+    title: "Imagine · imaging surface",
+    body: "Grok Imagine is the imaging and creative surface—image and video generation, templates, photo edit, restyle, and public creative demos.",
+    kind: "product",
+    actor: "xai",
+    surface: "imagine",
+    source: "xAI",
+    href: "https://x.ai/",
+  },
+  {
+    id: "product-voice-surface",
+    date: "2025–2026",
+    sortKey: "2025-06-01T12:00:00Z",
+    title: "Voice · speech surface",
+    body: "Grok Voice is the speech and agentic voice surface—Think Fast models, speech-to-speech, and Voice Agent Builder tooling.",
+    kind: "product",
+    actor: "xai",
+    surface: "voice",
+    source: "xAI",
+    href: "https://grok.x.ai/",
+  },
+  {
+    id: "product-build-surface",
+    date: "2025–2026",
+    sortKey: "2025-09-01T12:00:00Z",
+    title: "Grok Build · builder surface",
+    body: "Grok Build is the agentic coding and app-builder surface—command line, workflows, plugins, publish targets, and daily changelogs.",
+    kind: "product",
+    actor: "build",
+    surface: "build",
+    source: "Grok Build",
+  },
+];
+
 /** Newest first (desc by sortKey). History still includes founding day. */
 export function buildRadarTimeline(): TimelineEntry[] {
   const map = new Map<string, TimelineEntry>();
   for (const e of [
     ...originTimeline,
+    ...grokStackAnchors,
     ...xFeednotes,
     ...grokBuildChangelogs,
     ...acornsoftNotes,
     ...advancedDevelopmentNotes,
     ...spacexNotes,
     ...teslaNotes,
+    ...climbNotesTimelineEntries(),
   ]) {
-    map.set(e.id, e);
+    map.set(e.id, withInferredSurface(e));
   }
   return [...map.values()].sort((a, b) => b.sortKey.localeCompare(a.sortKey));
+}
+
+/** Published Climb Notes as Canopy spine entries (Climb Notes lane). */
+function climbNotesTimelineEntries(): TimelineEntry[] {
+  return climbNotes
+    .filter((n) => isPublicClimbNoteStatus(n.status))
+    .map((n): TimelineEntry => {
+      const body = [n.problem, n.measure, n.slice, n.lesson]
+        .filter(Boolean)
+        .join(" ")
+        .replace(/\s+/g, " ")
+        .trim();
+      return {
+        id: `climb-note-${n.id}`,
+        date: n.date,
+        sortKey: (n.publishedAt || n.date || "1970-01-01").slice(0, 19),
+        title: `Climb Note ${n.number} · ${n.title}`,
+        body: body.length > 420 ? `${body.slice(0, 417)}…` : body,
+        kind: "product",
+        actor: "acornsoft",
+        lane: "climb-notes",
+        source: "Climb Notes",
+        href: n.xUrl || "/climb-notes",
+      };
+    });
 }
