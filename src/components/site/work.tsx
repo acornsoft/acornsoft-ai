@@ -71,12 +71,23 @@ export function Work() {
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
                 {item.summary}
               </p>
-              <a
-                href="#contact"
-                className="mt-5 inline-flex text-sm font-medium text-fg underline-offset-4 hover:underline"
-              >
-                Discuss a similar project
-              </a>
+              {"href" in item && item.href ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 inline-flex text-sm font-medium text-fg underline-offset-4 hover:underline"
+                >
+                  Visit site
+                </a>
+              ) : (
+                <a
+                  href="#contact"
+                  className="mt-5 inline-flex text-sm font-medium text-fg underline-offset-4 hover:underline"
+                >
+                  Discuss a similar project
+                </a>
+              )}
             </article>
           ))}
         </div>

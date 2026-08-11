@@ -26,7 +26,7 @@ export const services: ServiceItem[] = [
     title: "Learn the Climb",
     assistance: "indirect",
     description:
-      "Indirect assistance first: we teach the Mountaineering approach so anyone can understand and use it—not only developers. You climb with Luna as your Sherpa; prior Climb Notes guide the next path—same mountain route or a new one.",
+      "Indirect help first: learn the four shared words—problem, measure, slice, lesson—so AI work becomes a climb you can finish and reuse, not only a developer craft. You climb with Luna as your Sherpa; prior Climb Notes guide the next path—same mountain or a new one.",
     points: [
       "Climb Notes™ literacy for leaders, operators, creators, and builders",
       "Walkthroughs and examples that make problem → measure → slice → lesson real",
@@ -115,29 +115,56 @@ export const services: ServiceItem[] = [
   },
 ];
 
-export const serviceFaqs = [
+export type ServiceFaq = {
+  /** Stable id for click ranking (do not change casually). */
+  id: string;
+  q: string;
+  a: string;
+  /** Lower = higher when click counts are equal (0 = default first). */
+  defaultOrder: number;
+};
+
+export const serviceFaqs: ServiceFaq[] = [
   {
-    q: "How do you help people learn the Mountaineering approach?",
-    a: "Through Climb Notes™, walkthroughs, and Grok Voice with Luna (Ara) as your Sherpa—indirect assistance that anyone can understand and use. Paid engagements then apply the same metaphor on your mountain with direct strategy, build, and delivery.",
+    id: "what-is-climb-notes",
+    defaultOrder: 0,
+    q: "What is a Climb Note?",
+    a: "A Climb Note is one finished climb written so the next person can follow it. Four steps in order: Problem (what’s stuck), Measure (how we know it moved), Slice (the small step), and Lesson (what we carry next). Climb Notes are how we teach and deliver production AI—systems you can run and improve, not demos that vanish after a showcase.",
   },
   {
+    id: "mountaineering-approach",
+    defaultOrder: 1,
+    q: "What does “Mountaineering approach” actually mean?",
+    a: "Four plain steps on every Climb Note: what’s stuck (Problem), how you know it moved (Measure), the small step this week (Slice), and what you carry next time (Lesson). Luna is your Sherpa on Voice. Prior notes guide the next climb—same path or new. That is AI-first solutioning in everyday language, not a slide metaphor.",
+  },
+  {
+    id: "how-help-use",
+    defaultOrder: 2,
+    q: "How do you help people use it?",
+    a: "Through Climb Notes™, walkthroughs, and Grok Voice with Luna (Ara) as your Sherpa—indirect help anyone can follow. Paid work then applies the same four steps on your mountain: strategy, build, and delivery with a trail map you keep.",
+  },
+  {
+    id: "direct-vs-indirect",
+    defaultOrder: 3,
     q: "What is direct versus indirect assistance?",
     a: "Indirect: education, public Climb Notes, and guided Voice so you climb with a map—not alone without history. Direct: we help on strategy, product build, model systems, automation, trust, and delivery for your specific mountain, using prior climbs as guidelines when they apply.",
   },
   {
+    id: "kinds-of-projects",
+    defaultOrder: 4,
     q: "What kinds of artificial intelligence projects do you take on?",
     a: "Applied artificial intelligence products—assistants, automation, analytics, and model-powered features inside real business workflows. We skip pure research with no path to production, and we prefer problems where success can be measured.",
   },
   {
+    id: "engagements-start",
+    defaultOrder: 5,
     q: "How do engagements start?",
     a: "Often with Learn the Climb or a short discovery slice: one problem, one measure, one thin vertical. If that works, we stack Product Build, Model Systems, Trust and Safety, Automation, or Delivery as the climb demands—modular, not a large fixed program by default.",
   },
   {
+    id: "one-card",
+    defaultOrder: 6,
     q: "Can we start with only one card?",
     a: "Yes. Many start with Learn the Climb, Artificial Intelligence Strategy, or a single Product Build slice. Stack services only when the next constraint is clear. Small starts, strong roots.",
   },
-  {
-    q: "What is Climb Notes™?",
-    a: "Climb Notes is how we teach and deliver production artificial intelligence—structured problem, measure, slice, and lesson so teams get systems they can run and improve, not one-off demonstrations that vanish after a showcase.",
-  },
-] as const;
+];

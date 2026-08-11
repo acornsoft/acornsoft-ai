@@ -27,8 +27,21 @@ Configured in `interests.json` → `subscriptions`:
 
 ### Posting habit (recommended)
 - Climb Notes™ on site first (`content/climb-notes`)  
+- Gate **what** lands on Canopy with registry `onCanopy: true` (journal uses `status: published` alone)  
+- Gate **when** with optional `canopyAt` (ISO time — future = not on timeline yet)  
 - Short X post from @acornsoftai linking `#cn-00N`  
-- Next scheduled pull → Canopy shows it under **Our Work** / All with **Live** (+ **Standout** if enabled)
+- Next scheduled pull → Canopy shows live posts under **Our Work** / All with **Live** (+ **Standout** if enabled)
+
+**Climb Notes lane control** (`_publish-registry.json` per note):
+
+| Field | Controls |
+| --- | --- |
+| `status: "published"` | Public journal (`/climb-notes`) |
+| `onCanopy: true` | Climb Notes lane on Canopy timeline |
+| `canopyAt` | Go-live time for Canopy (optional schedule) |
+| `publishedAt` | Journal publish audit + fallback sort |
+
+Only **published + onCanopy + canopyAt ≤ now** appears on the timeline. Example: only `cn-016` is on Canopy while consumer pack `cn-101`… stays journal-only.
 
 ### Cost
 User timeline for one account is cheaper than many topic searches. Keep topic `queries` for SpaceXAI / SpaceX / Tesla; keep **subscriptions** for your own Radar.

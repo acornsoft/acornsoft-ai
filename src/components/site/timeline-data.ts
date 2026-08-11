@@ -2,8 +2,13 @@
 
 import {
   climbNotes,
-  isPublicClimbNoteStatus,
+  isClimbNoteOnCanopy,
+  climbNoteCanopySortKey,
+  climbNoteXActionUrl,
+  climbNoteDetailUrl,
 } from "./climb-notes-data";
+import { buildWorkXComposeUrl } from "@/lib/work-x";
+
 
 export type TimelineKind =
   | "origin"
@@ -47,6 +52,9 @@ export type TimelineEntry = {
   surface?: TimelineSurface;
   source?: string;
   href?: string;
+  /** Optional X action (compose/schedule or live post) for Climb Notes */
+  xHref?: string;
+  xLabel?: string;
   xId?: string;
   bullets?: string[];
   version?: string;
@@ -992,7 +1000,7 @@ export const advancedDevelopmentNotes: TimelineEntry[] = [
   },
 ];
 
-/** Acornsoft lane — studio posts (non-research) about Grok and Grok Build work */
+/** Acornsoft lane — studio posts + shipped work on the Canopy spine */
 export const acornsoftNotes: TimelineEntry[] = [
   {
     id: "as-studio-note",
@@ -1003,6 +1011,84 @@ export const acornsoftNotes: TimelineEntry[] = [
     kind: "milestone",
     actor: "acornsoft",
     source: "Acornsoft",
+  },
+  {
+    id: "as-work-dropshipping",
+    date: "Commerce · shipped",
+    sortKey: "2025-11-01T12:00:00Z",
+    title: "Dropshipping site — shipped",
+    body: "Built and launched a full dropshipping storefront: product catalog, cart and checkout, and the operational wiring to fulfill orders. Real commerce work—live paths customers could complete, not a demo theme.",
+    kind: "product",
+    actor: "acornsoft",
+    source: "Work · Acornsoft",
+    href: "https://blaszyk.us/",
+    xHref: buildWorkXComposeUrl({
+      id: "dropshipping",
+      title: "Dropshipping site — shipped",
+      blurb:
+        "Full storefront: catalog, cart, checkout, fulfillment wiring. Production commerce, not a mock.",
+      siteUrl: "https://blaszyk.us/",
+      tags: ["#Acornsoft", "#BuildInPublic", "#Commerce"],
+    }),
+    xLabel: "Schedule on X →",
+    standout: true,
+    bullets: [
+      "Catalog → cart → checkout path",
+      "Fulfillment-ready operations wiring",
+      "Production storefront, not a mock",
+    ],
+  },
+  {
+    id: "as-work-sals-barbershop",
+    date: "Local business · shipped",
+    sortKey: "2025-10-15T12:00:00Z",
+    title: "Sal’s Barbershop — web presence",
+    body: "Designed and shipped the web presence for Sal’s Barbershop so neighbors could find services, hours, and how to book without phone tag. Small-business site with a clear job: get people into the chair.",
+    kind: "product",
+    actor: "acornsoft",
+    source: "Work · Acornsoft",
+    href: "https://blaszyk.us/",
+    xHref: buildWorkXComposeUrl({
+      id: "sals-barbershop",
+      title: "Sal’s Barbershop — web presence",
+      blurb:
+        "Local barbershop site: services, hours, contact — get people into the chair without phone tag.",
+      siteUrl: "https://blaszyk.us/",
+      tags: ["#Acornsoft", "#BuildInPublic", "#SmallBusiness"],
+    }),
+    xLabel: "Schedule on X →",
+    standout: true,
+    bullets: [
+      "Services and hours that read in seconds",
+      "Contact path built for walk-ins and regulars",
+      "Local business, production ready",
+    ],
+  },
+  {
+    id: "as-work-unofficial-covid-report",
+    date: "Public information · shipped",
+    sortKey: "2025-10-01T12:00:00Z",
+    title: "Unofficial COVID Report — launched",
+    body: "Built the Unofficial COVID Report: an independent site that collected and presented pandemic signals in plain language when official updates lagged. Fast publishing, readable layout, focus on what people needed to know next.",
+    kind: "product",
+    actor: "acornsoft",
+    source: "Work · Acornsoft",
+    href: "https://unofficial-covid-report.grok.me/",
+    xHref: buildWorkXComposeUrl({
+      id: "unofficial-covid-report",
+      title: "Unofficial COVID Report — launched",
+      blurb:
+        "Independent plain-language COVID signals when official channels lagged. Educational reporting surface.",
+      siteUrl: "https://unofficial-covid-report.grok.me/",
+      tags: ["#Acornsoft", "#BuildInPublic", "#OpenData"],
+    }),
+    xLabel: "Schedule on X →",
+    standout: true,
+    bullets: [
+      "Independent reporting surface",
+      "Plain-language updates under pressure",
+      "Ship when the news cycle would not wait",
+    ],
   },
 ];
 
@@ -1145,27 +1231,30 @@ export function buildRadarTimeline(): TimelineEntry[] {
   return [...map.values()].sort((a, b) => b.sortKey.localeCompare(a.sortKey));
 }
 
-/** Published Climb Notes as Canopy spine entries (Climb Notes lane). */
+/** Published Climb Notes opted into Canopy (Climb Notes lane). */
 function climbNotesTimelineEntries(): TimelineEntry[] {
   return climbNotes
-    .filter((n) => isPublicClimbNoteStatus(n.status))
+    .filter((n) => isClimbNoteOnCanopy(n))
     .map((n): TimelineEntry => {
       const body = [n.problem, n.measure, n.slice, n.lesson]
         .filter(Boolean)
         .join(" ")
         .replace(/\s+/g, " ")
         .trim();
+      const x = climbNoteXActionUrl(n);
       return {
         id: `climb-note-${n.id}`,
         date: n.date,
-        sortKey: (n.publishedAt || n.date || "1970-01-01").slice(0, 19),
+        sortKey: climbNoteCanopySortKey(n),
         title: `Climb Note ${n.number} · ${n.title}`,
         body: body.length > 420 ? `${body.slice(0, 417)}…` : body,
         kind: "product",
         actor: "acornsoft",
         lane: "climb-notes",
         source: "Climb Notes",
-        href: n.xUrl || "/climb-notes",
+        href: climbNoteDetailUrl(n),
+        xHref: x.href,
+        xLabel: x.kind === "live" ? "Open on X →" : "Schedule on X →",
       };
     });
 }

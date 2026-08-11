@@ -45,6 +45,9 @@ type DraftForm = {
   lesson: string;
   tags: string;
   xUrl: string;
+  onCanopy: boolean;
+  /** ISO string or empty */
+  canopyAt: string;
 };
 
 type Mode = "browse" | "edit";
@@ -105,7 +108,37 @@ const emptyForm = (): DraftForm => ({
   lesson: "",
   tags: "climb-note",
   xUrl: "",
+  onCanopy: false,
+  canopyAt: "",
 });
+
+/** datetime-local value from ISO (local wall clock). */
+function toDatetimeLocalValue(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+/** ISO UTC from datetime-local string. */
+function fromDatetimeLocalValue(local: string): string {
+  if (!local.trim()) return "";
+  const d = new Date(local);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toISOString();
+}
+
+function nextMondayNineLocal(): Date {
+  const d = new Date();
+  d.setSeconds(0, 0);
+  d.setMinutes(0);
+  d.setHours(9);
+  const day = d.getDay(); // 0 Sun … 6 Sat
+  const add = day === 1 ? 7 : (8 - day) % 7 || 7;
+  d.setDate(d.getDate() + add);
+  return d;
+}
 
 function noteToForm(n: ClimbNote): DraftForm {
   return {
@@ -120,6 +153,8 @@ function noteToForm(n: ClimbNote): DraftForm {
     lesson: n.lesson,
     tags: (n.tags ?? []).join(", "),
     xUrl: n.xUrl ?? "",
+    onCanopy: n.onCanopy === true,
+    canopyAt: n.canopyAt ?? "",
   };
 }
 
@@ -236,6 +271,8 @@ export function GnomahEditorPage() {
       lesson: f.lesson,
       tags: f.tags,
       xUrl: f.xUrl,
+      onCanopy: f.onCanopy,
+      canopyAt: f.canopyAt,
     });
   }
 
@@ -467,6 +504,10 @@ export function GnomahEditorPage() {
             .map((t) => t.trim())
             .filter(Boolean),
           xUrl: draft.xUrl || null,
+          onCanopy: draft.onCanopy,
+          canopyAt: draft.onCanopy
+            ? draft.canopyAt || null
+            : null,
         },
       });
       const next = noteToForm(saved);
@@ -530,6 +571,31 @@ export function GnomahEditorPage() {
         CLIMB_NOTE_STATUS_LABEL[next]
       }`,
     });
+  }
+
+  function setCanopySchedule(patch: Partial<Pick<DraftForm, "onCanopy" | "canopyAt">>) {
+    const draft = { ...formRef.current, ...patch };
+    if (patch.onCanopy === false) draft.canopyAt = "";
+    if (patch.onCanopy === true && !draft.canopyAt) {
+      draft.canopyAt = new Date().toISOString();
+    }
+    setForm(draft);
+  }
+
+  function applyCanopyPreset(
+    kind: "now" | "plus1d" | "monday" | "clear",
+  ) {
+    if (kind === "clear") {
+      setCanopySchedule({ onCanopy: false, canopyAt: "" });
+      return;
+    }
+    let when = new Date();
+    if (kind === "plus1d") {
+      when = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    } else if (kind === "monday") {
+      when = nextMondayNineLocal();
+    }
+    setCanopySchedule({ onCanopy: true, canopyAt: when.toISOString() });
   }
 
   /** Delete only from carousel / browse surface. */
@@ -769,6 +835,21 @@ export function GnomahEditorPage() {
                       </p>
                       <div className="ac-gn-card-foot">
                         <time dateTime={n.date}>{n.date || "—"}</time>
+                        {n.onCanopy ? (
+                          <span
+                            className="ac-gn-card-canopy"
+                            title={
+                              n.canopyAt
+                                ? `Canopy go-live ${n.canopyAt}`
+                                : "On Canopy"
+                            }
+                          >
+                            {n.canopyAt &&
+                            Date.parse(n.canopyAt) > Date.now()
+                              ? "Canopy · scheduled"
+                              : "Canopy"}
+                          </span>
+                        ) : null}
                         {folder ? (
                           <span className="ac-gn-card-folder">{folder}</span>
                         ) : null}
@@ -964,6 +1045,98 @@ export function GnomahEditorPage() {
                   />
                 </label>
               </div>
+
+              <fieldset className="ac-gn-canopy-panel">
+                <legend>Canopy radar</legend>
+                <p className="ac-gn-canopy-hint">
+                  Journal uses <strong>Published</strong>. Canopy only shows
+                  notes you put on the radar — schedule when with the date
+                  picker.
+                </p>
+                <label className="ac-gn-canopy-toggle">
+                  <input
+                    type="checkbox"
+                    checked={form.onCanopy}
+                    disabled={saving}
+                    onChange={(e) =>
+                      setCanopySchedule({ onCanopy: e.target.checked })
+                    }
+                  />
+                  <span>Show on Canopy timeline</span>
+                </label>
+                <label className="ac-gn-canopy-when">
+                  Go live
+                  <input
+                    type="datetime-local"
+                    value={toDatetimeLocalValue(form.canopyAt || null)}
+                    disabled={saving || !form.onCanopy}
+                    onChange={(e) =>
+                      setCanopySchedule({
+                        onCanopy: true,
+                        canopyAt: fromDatetimeLocalValue(e.target.value),
+                      })
+                    }
+                  />
+                </label>
+                <div
+                  className="ac-gn-canopy-presets"
+                  role="group"
+                  aria-label="Schedule shortcuts"
+                >
+                  <button
+                    type="button"
+                    className="ac-gn-preset"
+                    disabled={saving}
+                    onClick={() => applyCanopyPreset("now")}
+                  >
+                    Now
+                  </button>
+                  <button
+                    type="button"
+                    className="ac-gn-preset"
+                    disabled={saving}
+                    onClick={() => applyCanopyPreset("plus1d")}
+                  >
+                    +1 day
+                  </button>
+                  <button
+                    type="button"
+                    className="ac-gn-preset"
+                    disabled={saving}
+                    onClick={() => applyCanopyPreset("monday")}
+                  >
+                    Next Mon 9:00
+                  </button>
+                  <button
+                    type="button"
+                    className="ac-gn-preset ac-gn-preset--quiet"
+                    disabled={saving || (!form.onCanopy && !form.canopyAt)}
+                    onClick={() => applyCanopyPreset("clear")}
+                  >
+                    Off radar
+                  </button>
+                </div>
+                {form.onCanopy ? (
+                  <p className="ac-gn-canopy-status" aria-live="polite">
+                    {(() => {
+                      if (!form.canopyAt) {
+                        return "On Canopy as soon as you save (go-live = now).";
+                      }
+                      const t = Date.parse(form.canopyAt);
+                      if (Number.isNaN(t)) return "Check the go-live time.";
+                      if (t > Date.now()) {
+                        return `Scheduled for ${new Date(form.canopyAt).toLocaleString()} — hidden on Canopy until then.`;
+                      }
+                      return `Live on Canopy since ${new Date(form.canopyAt).toLocaleString()}.`;
+                    })()}
+                  </p>
+                ) : (
+                  <p className="ac-gn-canopy-status ac-gn-canopy-status--off">
+                    Journal only — not on the Canopy timeline.
+                  </p>
+                )}
+              </fieldset>
+
               <label className="ac-gn-full">
                 Title
                 <input

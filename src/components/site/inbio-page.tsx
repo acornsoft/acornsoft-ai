@@ -18,17 +18,19 @@ const stackWords = [
   "Connectors",
 ] as const;
 
+/** Sole public Climb Note for now — origin trail (editorial number 000; id cn-016). */
 const exampleNote = {
-  number: "016",
-  title: "A mountaineering approach to building with AI",
+  number: "000",
+  packLabel: "Public journal · Climb Note 000",
+  title: "From tools to a problem you can finish",
   problem:
-    "People try new AI tools the way they try new apps — lots of experiments, little that sticks for the business.",
+    "Building with AI usually starts with tools, not with a clearly defined problem you can finish and write down. People collect many models, agents, apps, prompts, and platforms. Without a clearly defined problem, a measure of progress, a small next step, and a lesson, most people get lost. The work does not get better over time.",
   measure:
-    "One clear outcome the whole team can see: a real workflow improved, not a demo that dies on Friday.",
+    "A reader can open this Climb Note, see a clearly defined problem in everyday language, and follow what we finished—without mastering every tool first.",
   slice:
-    "Pick one climb. Write the note in plain language: what is hard, how we will know it worked, what we ship this week, what we learned.",
+    "Publish Climb Note 000 as the first public Climb Note — the origin trail all later notes build on: tools only become a climb when the problem is clearly defined, measured, sliced, and taught.",
   lesson:
-    "When everyone shares the same trail map, the next step is obvious — even if you are not technical.",
+    "Climb Notes start with a clearly defined problem you can finish — not with more tools. The written climb is the difference maker—not the model alone. Small starts. Strong roots.",
 };
 
 type TransPhase = "in" | "out";
@@ -36,8 +38,8 @@ type TransPhase = "in" | "out";
 /**
  * Three-act home story:
  * 1) Mountaineering metaphor — you climb with Luna as guide; prior climbs guide next
- * 2) Plain-language walkthrough
- * 3) Classic build hero
+ * 2) Plain-language walkthrough (numbered four moves + consumer flagship)
+ * 3) Classic build hero + lingua franca path
  */
 export function InbioPage() {
   const [index, setIndex] = useState(0);
@@ -206,7 +208,8 @@ export function InbioPage() {
                     aria-hidden={phase === "out"}
                   >
                     <p className="ac-story-kicker">
-                      The Mountaineering approach · <ClimbNotesMark />
+                      The Mountaineering approach to AI-first solutioning ·{" "}
+                      <ClimbNotesMark />
                     </p>
                     <h1 className="ac-story-headline">
                       Building with AI is like climbing a mountain — not a free
@@ -225,8 +228,8 @@ export function InbioPage() {
                       <strong className="ac-story-em">
                         Mountaineering approach
                       </strong>{" "}
-                      makes that history usable — so you do not free-solo without
-                      a map.
+                      makes AI-first solutioning usable as history — so you do
+                      not free-solo without a map.
                     </p>
                     <ul
                       className="ac-story-beats"
@@ -282,43 +285,47 @@ export function InbioPage() {
                     aria-label="2 of 3"
                     aria-hidden={phase === "out"}
                   >
-                    <p className="ac-story-kicker">Walkthrough · one climb</p>
+                    <p className="ac-story-kicker">
+                      Walkthrough · four moves · for everyone
+                    </p>
                     <h1 className="ac-story-headline ac-story-headline--md">
                       Four moves everyone can follow.
                     </h1>
                     <p className="ac-story-lede">
-                      You do not need a computer science degree. You need a
-                      clear problem, a way to know progress, a small slice to
-                      ship, and a lesson the next climb can reuse — on this path
-                      or a new one.
+                      You do not need a computer science degree. Climb Notes are
+                      the shared language for everyday problems — so anyone can
+                      understand and use AI on their path. Four numbered moves:
+                      a clear problem, a way to know progress, a small slice to
+                      finish, and a lesson the next climb can reuse — on this
+                      path or a new one.
                     </p>
 
                     <div className="ac-story-note">
                       <header className="ac-story-note-head">
                         <span className="ac-story-note-num">
-                          Example · Climb Note {exampleNote.number}
+                          Climb Note {exampleNote.number}
                         </span>
                         <h2 className="ac-story-note-title">
                           {exampleNote.title}
                         </h2>
                       </header>
                       <dl className="ac-story-note-grid">
-                        <div>
-                          <dt>Problem</dt>
-                          <dd>{exampleNote.problem}</dd>
-                        </div>
-                        <div>
-                          <dt>Measure</dt>
-                          <dd>{exampleNote.measure}</dd>
-                        </div>
-                        <div>
-                          <dt>Slice</dt>
-                          <dd>{exampleNote.slice}</dd>
-                        </div>
-                        <div>
-                          <dt>Lesson</dt>
-                          <dd>{exampleNote.lesson}</dd>
-                        </div>
+                        {(
+                          [
+                            ["1", "Problem", exampleNote.problem],
+                            ["2", "Measure", exampleNote.measure],
+                            ["3", "Slice", exampleNote.slice],
+                            ["4", "Lesson", exampleNote.lesson],
+                          ] as const
+                        ).map(([n, label, body]) => (
+                          <div key={label}>
+                            <dt>
+                              <span className="ac-story-move-n">{n}</span>
+                              <span className="ac-story-move-label">{label}</span>
+                            </dt>
+                            <dd>{body}</dd>
+                          </div>
+                        ))}
                       </dl>
                     </div>
 
@@ -344,10 +351,10 @@ export function InbioPage() {
                     aria-hidden={phase === "out"}
                   >
                     <p className="ac-story-kicker">
-                      Voice-first · Luna as your Sherpa
+                      Everyday language · Luna as your Sherpa
                     </p>
                     <h1 className="ac-story-headline ac-story-headline--build">
-                      Building Production AI Solutions via Climb Notes™
+                      Climb Notes™ — the shared language for everyday AI
                     </h1>
                     <div className="hero-sub ac-story-with">
                       <span className="hero-with">with</span>
@@ -370,9 +377,11 @@ export function InbioPage() {
                       </span>
                     </div>
                     <p className="ac-story-lede ac-story-lede--center">
-                      Today: learn the metaphor, follow examples, and use prior
-                      climbs as guidelines. Next: a{" "}
-                      <strong className="ac-story-em">voice-first</strong> site
+                      Our zero-to-one play: Climb Notes become the common tongue
+                      for people who are not developers — so anyone can
+                      understand and use AI in daily life. Learn the metaphor,
+                      follow real examples, reuse prior climbs. Next: a{" "}
+                      <strong className="ac-story-em">voice-first</strong> path
                       where you talk to{" "}
                       <strong className="ac-story-em">
                         Luna as your Sherpa
@@ -388,6 +397,9 @@ export function InbioPage() {
                       </VoiceWhenSignedIn>
                       <Link className="rn-btn ac-btn-outline" to="/service">
                         <span>Explore services</span>
+                      </Link>
+                      <Link className="rn-btn ac-btn-outline" to="/climb-notes">
+                        <span>Open Climb Notes</span>
                       </Link>
                     </div>
                   </article>

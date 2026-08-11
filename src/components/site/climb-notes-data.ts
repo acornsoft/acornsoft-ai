@@ -3,7 +3,8 @@
  *
  * Source of truth for writing: Markdown in /content/climb-notes (Obsidian-compatible).
  * Publish gate: /content/climb-notes/_publish-registry.json (SharePoint-style).
- * Public site shows only status "published". Studio surfaces every note.
+ * Public journal: status "published".
+ * Canopy timeline: published + onCanopy true (+ canopyAt not in the future).
  */
 
 export type ClimbNoteStatus =
@@ -31,6 +32,16 @@ export type ClimbNotePublishEntry = {
   unpublishedAt?: string | null;
   approvalNote?: string | null;
   history?: ClimbNotePublishHistory[];
+  /**
+   * When true (and status is published), the note appears on the Canopy timeline.
+   * Journal visibility is independent — published alone is enough for /climb-notes.
+   */
+  onCanopy?: boolean;
+  /**
+   * Optional go-live time for Canopy. If set in the future, the note stays off
+   * the timeline until then (still published on the journal if status allows).
+   */
+  canopyAt?: string | null;
 };
 
 export type ClimbNote = {
@@ -55,6 +66,9 @@ export type ClimbNote = {
   unpublishedAt?: string | null;
   approvalNote?: string | null;
   history?: ClimbNotePublishHistory[];
+  /** Canopy timeline gate (registry overrides frontmatter) */
+  onCanopy?: boolean;
+  canopyAt?: string | null;
   xUrl?: string;
   tags?: string[];
   sourceFile?: string;
@@ -80,6 +94,28 @@ export function isPublicClimbNoteStatus(status: ClimbNoteStatus): boolean {
   return status === "published";
 }
 
+/** True when this note should appear on the Canopy / public timeline. */
+export function isClimbNoteOnCanopy(
+  note: Pick<ClimbNote, "status" | "onCanopy" | "canopyAt">,
+  now: Date = new Date(),
+): boolean {
+  if (!isPublicClimbNoteStatus(note.status)) return false;
+  if (note.onCanopy !== true) return false;
+  if (note.canopyAt) {
+    const t = Date.parse(note.canopyAt);
+    if (!Number.isNaN(t) && t > now.getTime()) return false;
+  }
+  return true;
+}
+
+/** Sort / display time for Canopy: scheduled go-live, else publish, else date. */
+export function climbNoteCanopySortKey(
+  note: Pick<ClimbNote, "canopyAt" | "publishedAt" | "date">,
+): string {
+  const raw = note.canopyAt || note.publishedAt || note.date || "1970-01-01";
+  return String(raw).slice(0, 19);
+}
+
 const noteModules = import.meta.glob("../../../content/climb-notes/**/*.md", {
   query: "?raw",
   import: "default",
@@ -96,9 +132,21 @@ type RegistryFile = {
 const publishRegistry = registryJson as RegistryFile;
 
 function asStatus(value: unknown): ClimbNoteStatus | undefined {
-  if (typeof value !== "string") return undefined;
-  const v = value.trim().toLowerCase() as ClimbNoteStatus;
-  return STATUSES.includes(v) ? v : undefined;
+  if (typeof value === "string") {
+    const v = value.trim().toLowerCase() as ClimbNoteStatus;
+    return STATUSES.includes(v) ? v : undefined;
+  }
+  return undefined;
+}
+
+function asBool(value: unknown): boolean | undefined {
+  if (typeof value === "boolean") return value;
+  if (typeof value === "string") {
+    const v = value.trim().toLowerCase();
+    if (v === "true" || v === "yes" || v === "1") return true;
+    if (v === "false" || v === "no" || v === "0") return false;
+  }
+  return undefined;
 }
 
 function parseFrontmatter(raw: string): {
@@ -146,11 +194,23 @@ function section(body: string, heading: string): string {
 
 function resolvePublish(
   id: string,
-  frontmatterStatus?: ClimbNoteStatus,
+  frontmatterStatus: ClimbNoteStatus | undefined,
+  frontmatterOnCanopy: boolean | undefined,
+  frontmatterCanopyAt: string | undefined,
 ): ClimbNotePublishEntry & { status: ClimbNoteStatus } {
   const entry = publishRegistry.notes?.[id];
   const fromRegistry = asStatus(entry?.status);
   const status = fromRegistry ?? frontmatterStatus ?? "draft";
+  const onCanopy =
+    typeof entry?.onCanopy === "boolean"
+      ? entry.onCanopy
+      : frontmatterOnCanopy === true
+        ? true
+        : false;
+  const canopyAt =
+    entry?.canopyAt !== undefined
+      ? entry.canopyAt
+      : frontmatterCanopyAt ?? null;
   return {
     status,
     version: entry?.version,
@@ -162,6 +222,8 @@ function resolvePublish(
     unpublishedAt: entry?.unpublishedAt,
     approvalNote: entry?.approvalNote,
     history: entry?.history,
+    onCanopy,
+    canopyAt,
   };
 }
 
@@ -177,7 +239,17 @@ function parseNote(path: string, raw: string): ClimbNote | null {
       ? data.xUrl
       : undefined;
   const frontmatterStatus = asStatus(data.status);
-  const pub = resolvePublish(id, frontmatterStatus);
+  const frontmatterOnCanopy = asBool(data.onCanopy);
+  const frontmatterCanopyAt =
+    typeof data.canopyAt === "string" && data.canopyAt.length > 0
+      ? data.canopyAt
+      : undefined;
+  const pub = resolvePublish(
+    id,
+    frontmatterStatus,
+    frontmatterOnCanopy,
+    frontmatterCanopyAt,
+  );
   return {
     id,
     number: String(data.number ?? "").replace(/"/g, ""),
@@ -198,6 +270,8 @@ function parseNote(path: string, raw: string): ClimbNote | null {
     unpublishedAt: pub.unpublishedAt,
     approvalNote: pub.approvalNote,
     history: pub.history,
+    onCanopy: pub.onCanopy,
+    canopyAt: pub.canopyAt,
     xUrl,
     tags: tags?.length ? tags : undefined,
     sourceFile: path.split("/").pop(),
@@ -207,11 +281,23 @@ function parseNote(path: string, raw: string): ClimbNote | null {
 export const climbNotes: ClimbNote[] = Object.entries(noteModules)
   .map(([path, raw]) => parseNote(path, raw))
   .filter((n): n is ClimbNote => n !== null)
-  .sort((a, b) => b.number.localeCompare(a.number));
+  .sort((a, b) => {
+    // Sole public SoT first
+    if (a.id === "cn-016") return -1;
+    if (b.id === "cn-016") return 1;
+    const byNum = b.number.localeCompare(a.number);
+    if (byNum !== 0) return byNum;
+    return a.title.localeCompare(b.title);
+  });
 
 /** Notes visible on the public Climb Notes page and safe to cite on X. */
 export const publishedClimbNotes: ClimbNote[] = climbNotes.filter((n) =>
   isPublicClimbNoteStatus(n.status),
+);
+
+/** Notes that should appear on the Canopy timeline right now. */
+export const canopyClimbNotes: ClimbNote[] = climbNotes.filter((n) =>
+  isClimbNoteOnCanopy(n),
 );
 
 export function countByStatus(
@@ -233,13 +319,69 @@ export function formatClimbNoteCiteForX(
   note: ClimbNote,
   siteOrigin = "https://acornsoft.ai",
 ): string {
+  const detailUrl = climbNoteDetailUrl(note, siteOrigin);
   const oneLine =
-    note.lesson.length > 180 ? `${note.lesson.slice(0, 177)}…` : note.lesson;
+    note.lesson.length > 160 ? `${note.lesson.slice(0, 157)}…` : note.lesson;
   return `Climb Note ${note.number} · ${note.title}
 
 ${oneLine}
 
-Full note (stored on site):
-${siteOrigin}/climb-notes#${note.id}
-`;
+Full Climb Note (detail):
+${detailUrl}`;
+}
+
+/** Canonical public URL for the long-form Climb Note on the site. */
+export function climbNoteDetailUrl(
+  note: Pick<ClimbNote, "id">,
+  siteOrigin = "https://acornsoft.ai",
+): string {
+  const base = siteOrigin.replace(/\/$/, "");
+  return `${base}/climb-notes#${note.id}`;
+}
+
+/**
+ * X compose / schedule intent — opens post box with text + direct link
+ * to the detailed Climb Note. User can Post now or Schedule (Premium).
+ * https://x.com/intent/post
+ */
+export function buildClimbNoteXComposeUrl(
+  note: ClimbNote,
+  siteOrigin = "https://acornsoft.ai",
+): string {
+  const detailUrl = climbNoteDetailUrl(note, siteOrigin);
+  // Keep under ~280 with t.co link budget
+  const title =
+    note.title.length > 90 ? `${note.title.slice(0, 87)}…` : note.title;
+  const lessonBit = (note.lesson || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 100);
+  const body = [
+    `Climb Note ${note.number} · ${title}`,
+    "",
+    lessonBit ? `${lessonBit}${note.lesson && note.lesson.length > 100 ? "…" : ""}` : null,
+    "",
+    `Full Climb Note → ${detailUrl}`,
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
+
+  const params = new URLSearchParams();
+  params.set("text", body);
+  return `https://x.com/intent/post?${params.toString()}`;
+}
+
+/** Prefer live post URL; otherwise X compose with site deep link. */
+export function climbNoteXActionUrl(
+  note: ClimbNote,
+  siteOrigin = "https://acornsoft.ai",
+): { href: string; label: string; kind: "live" | "compose" } {
+  if (note.xUrl && /^https?:\/\//i.test(note.xUrl)) {
+    return { href: note.xUrl, label: "Open on X", kind: "live" };
+  }
+  return {
+    href: buildClimbNoteXComposeUrl(note, siteOrigin),
+    label: "Schedule on X",
+    kind: "compose",
+  };
 }

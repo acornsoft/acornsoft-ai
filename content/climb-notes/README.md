@@ -1,6 +1,8 @@
 # Climb Notes — Obsidian vault folder
 
 **Authoring:** Obsidian Markdown.  
+**Writing style:** [WRITING-STYLE.md](./WRITING-STYLE.md) — plain language.  
+**Public STE bar:** [STE-CHECKLIST.md](./STE-CHECKLIST.md) — verbs, sentence length, glossary (path to true ASD-STE100).  
 **Site storage:** files synced into this folder.  
 **Publish gate:** `_publish-registry.json` (SharePoint-style lifecycle).  
 **Automation:** `npm run climb-notes:sync` / `npm run climb-notes:watch`
@@ -51,10 +53,17 @@ npm run climb-notes:publish -- status cn-001
 | --- | --- |
 | `engagement/` | Client / engagement climbs |
 | `product/` | Product / abstract / ADO / MacroFlow climbs |
-| `foundation/` | Reserved |
+| `foundation/` | Consumer Basecamp pack + studio path notes |
 | `archive/` | Reserved |
 
-Current catalog: **35** notes (3 engagement + 32 product). Nested `*.md` files load into Gnomah.
+Current catalog: **45** notes (3 engagement + 32 product + 10 foundation). Nested `*.md` files load into Gnomah.
+
+### Foundation pack (consumer + studio)
+
+| IDs | Role | Public |
+| --- | --- | --- |
+| cn-101 … cn-105 | Consumer Basecamp (everyday problems; **101 is flagship**) | Published |
+| cn-106 … cn-110 | Acornsoft studio path (rat race → AI-first studio) | Draft |
 
 ## File rules
 

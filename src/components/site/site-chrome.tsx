@@ -24,6 +24,7 @@ function pageTitle(pathname: string): string {
   if (pathname === "/") return "Home";
   if (pathname.startsWith("/about")) return "About";
   if (pathname.startsWith("/service")) return "Service";
+  if (pathname.startsWith("/method")) return "Method";
   if (pathname.startsWith("/climb-notes")) return "Climb Notes";
   if (pathname.startsWith("/voice")) return "Voice";
   if (pathname.startsWith("/canopy")) return "Canopy";
@@ -37,17 +38,27 @@ function NavLinks({
   onNavigate,
   mobile = false,
   showGnomah = false,
+  showMethod = false,
 }: {
   onNavigate?: () => void;
   mobile?: boolean;
   showGnomah?: boolean;
+  /** Method hub — signed-in only for now (will rework later). */
+  showMethod?: boolean;
 }) {
   const pathname = useActivePath();
   const voice = useVoiceAccessState();
 
+  const links = primaryNav.filter((item) => {
+    if ("authOnly" in item && item.authOnly) {
+      return item.to === "/method" ? showMethod : showGnomah;
+    }
+    return true;
+  });
+
   return (
     <>
-      {primaryNav.map((item) => {
+      {links.map((item) => {
         const active = isActivePath(pathname, item.to);
         const className = [
           "ac-nav-link",
@@ -128,6 +139,7 @@ export function SiteHeader({
   const pathname = useActivePath();
   const { user, isPending } = useCurrentUserState();
   const showGnomah = !isPending && !!user;
+  const showMethod = showGnomah; // signed-in only for now; rework later
   const title = pageTitle(pathname);
 
   useEffect(() => {
@@ -178,7 +190,7 @@ export function SiteHeader({
 
           <nav className="ac-site-nav ac-site-nav--desktop" aria-label="Primary">
             <ul className="ac-site-nav-list">
-              <NavLinks showGnomah={showGnomah} />
+              <NavLinks showGnomah={showGnomah} showMethod={showMethod} />
             </ul>
           </nav>
 
@@ -233,6 +245,7 @@ export function SiteHeader({
               <NavLinks
                 mobile
                 showGnomah={showGnomah}
+                showMethod={showMethod}
                 onNavigate={() => setMenuOpen(false)}
               />
             </ul>

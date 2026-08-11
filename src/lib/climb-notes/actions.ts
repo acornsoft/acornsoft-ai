@@ -79,6 +79,8 @@ export type SaveNotePayload = {
   lesson: string;
   tags?: string[];
   xUrl?: string | null;
+  onCanopy?: boolean;
+  canopyAt?: string | null;
 };
 
 export const saveClimbNoteAction = createServerFn({ method: "POST" })

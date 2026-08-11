@@ -4,9 +4,11 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/lib/auth/provider";
 import { ScrollToTop } from "@/components/site/scroll-to-top";
+import { bootstrapAnalytics } from "@/lib/analytics/client";
 import appCss from "../styles.css?url";
 
 const inbioCss = [
@@ -16,7 +18,7 @@ const inbioCss = [
   "/inbio/assets/css/vendor/aos.css",
   "/inbio/assets/css/plugins/feature.css",
   "/inbio/assets/css/style.css",
-  "/inbio/acornsoft-overrides.css?v=service-metaphor-assist-1",
+  "/inbio/acornsoft-overrides.css?v=service-book-curl-2",
 ] as const;
 
 export const Route = createRootRouteWithContext()({
@@ -63,6 +65,10 @@ export const Route = createRootRouteWithContext()({
 });
 
 function RootComponent() {
+  useEffect(() => {
+    bootstrapAnalytics();
+  }, []);
+
   return (
     <AuthProvider>
       <Outlet />

@@ -16,6 +16,7 @@ import { Route as ClimbNotesRouteImport } from './routes/climb-notes'
 import { Route as CorporateRouteImport } from './routes/corporate'
 import { Route as GnomahRouteImport } from './routes/gnomah'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as MethodRouteImport } from './routes/method'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProceduresRouteImport } from './routes/procedures'
@@ -57,6 +58,11 @@ const GnomahRoute = GnomahRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MethodRoute = MethodRouteImport.update({
+  id: '/method',
+  path: '/method',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PoliciesRoute = PoliciesRouteImport.update({
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/corporate': typeof CorporateRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
+  '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/procedures': typeof ProceduresRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/corporate': typeof CorporateRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
+  '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/procedures': typeof ProceduresRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/corporate': typeof CorporateRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
+  '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/procedures': typeof ProceduresRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/corporate'
     | '/gnomah'
     | '/login'
+    | '/method'
     | '/policies'
     | '/privacy'
     | '/procedures'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/corporate'
     | '/gnomah'
     | '/login'
+    | '/method'
     | '/policies'
     | '/privacy'
     | '/procedures'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/corporate'
     | '/gnomah'
     | '/login'
+    | '/method'
     | '/policies'
     | '/privacy'
     | '/procedures'
@@ -203,6 +215,7 @@ export interface RootRouteChildren {
   CorporateRoute: typeof CorporateRoute
   GnomahRoute: typeof GnomahRoute
   LoginRoute: typeof LoginRoute
+  MethodRoute: typeof MethodRoute
   PoliciesRoute: typeof PoliciesRoute
   PrivacyRoute: typeof PrivacyRoute
   ProceduresRoute: typeof ProceduresRoute
@@ -261,6 +274,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/method': {
+      id: '/method'
+      path: '/method'
+      fullPath: '/method'
+      preLoaderRoute: typeof MethodRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/policies': {
@@ -323,6 +343,7 @@ const rootRouteChildren: RootRouteChildren = {
   CorporateRoute: CorporateRoute,
   GnomahRoute: GnomahRoute,
   LoginRoute: LoginRoute,
+  MethodRoute: MethodRoute,
   PoliciesRoute: PoliciesRoute,
   PrivacyRoute: PrivacyRoute,
   ProceduresRoute: ProceduresRoute,
