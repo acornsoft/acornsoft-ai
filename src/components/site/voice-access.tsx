@@ -160,11 +160,8 @@ export function VoiceCta({
   const cls = outline ? `${className} ac-btn-outline` : className;
 
   if (isPending) {
-    return (
-      <span className={`${cls} ac-voice-pending`} aria-hidden>
-        <span>…</span>
-      </span>
-    );
+    // No placeholder glyph — bare "…" looked like a second scroll control
+    return null;
   }
 
   if (!allowed) return null;

@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -18,7 +19,10 @@ import {
 import type { LiveFeedEntry, LiveFeedFile } from "@/lib/canopy/types";
 import {
   climbNotes as staticClimbNotes,
-  isPublicClimbNoteStatus,
+  isClimbNoteOnCanopy,
+  climbNoteCanopySortKey,
+  climbNoteXActionUrl,
+  climbNoteDetailUrl,
   type ClimbNote,
 } from "./climb-notes-data";
 import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
@@ -148,24 +152,28 @@ function matchesAnyFilter(entry: TimelineEntry, filters: FilterKey[]): boolean {
 
 function journalToTimeline(notes: ClimbNote[]): TimelineEntry[] {
   return notes
-    .filter((n) => isPublicClimbNoteStatus(n.status))
+    .filter((n) => isClimbNoteOnCanopy(n))
     .map((n) => {
       const body = [n.problem, n.measure, n.slice, n.lesson]
         .filter(Boolean)
         .join(" ")
         .replace(/\s+/g, " ")
         .trim();
+      const x = climbNoteXActionUrl(n);
       return withInferredSurface({
         id: `climb-note-${n.id}`,
         date: n.date,
-        sortKey: (n.publishedAt || n.date || "1970-01-01").slice(0, 19),
+        sortKey: climbNoteCanopySortKey(n),
         title: `Climb Note ${n.number} · ${n.title}`,
         body: body.length > 420 ? `${body.slice(0, 417)}…` : body,
         kind: "product",
         actor: "acornsoft",
         lane: "climb-notes",
         source: "Climb Notes",
-        href: n.xUrl || "/climb-notes",
+        // Site detail for the card primary path; X action is separate in foot when needed
+        href: x.kind === "live" ? x.href : climbNoteDetailUrl(n),
+        xHref: x.href,
+        xLabel: x.kind === "live" ? "Open on X →" : "Schedule on X →",
       });
     });
 }
@@ -264,70 +272,102 @@ export function CanopyPage() {
     updatedAt?: string;
     source?: string;
     error?: string;
+    entryCount?: number;
   }>({});
+  const [liveRefreshing, setLiveRefreshing] = useState(false);
 
-  // Load scheduled live feed cache; optionally refresh via API if token path works
+  const toLiveTimeline = useCallback((e: LiveFeedEntry): TimelineEntry => {
+    return withInferredSurface({
+      id: e.id,
+      date: e.date,
+      sortKey: e.sortKey,
+      title: e.title,
+      body: e.body,
+      kind: e.kind,
+      actor: e.actor,
+      source: e.source,
+      href: e.href,
+      xId: e.xId,
+      standout: e.standout,
+      live: e.live ?? true,
+    });
+  }, []);
+
+  const applyLiveFeed = useCallback(
+    (data: LiveFeedFile) => {
+      setLiveMeta({
+        updatedAt: data.updatedAt,
+        source: data.source,
+        error: data.error,
+        entryCount: data.entryCount ?? data.entries?.length ?? 0,
+      });
+      // Always replace with server truth (including empty when offline)
+      setLiveEntries((data.entries || []).map(toLiveTimeline));
+    },
+    [toLiveTimeline],
+  );
+
+  /** Pull latest X → Canopy. force=true bypasses server cache. */
+  const refreshLiveFeed = useCallback(
+    async (force = false) => {
+      setLiveRefreshing(true);
+      try {
+        if (!force) {
+          try {
+            const res = await fetch("/canopy/live-feed.json", {
+              cache: "no-store",
+            });
+            if (res.ok) {
+              const data = (await res.json()) as LiveFeedFile;
+              applyLiveFeed(data);
+            }
+          } catch {
+            /* ignore */
+          }
+        }
+
+        const url = force
+          ? "/api/canopy/refresh?force=1"
+          : "/api/canopy/refresh";
+        const res = await fetch(url, {
+          method: force ? "POST" : "GET",
+          cache: "no-store",
+        });
+        if (res.ok) {
+          const data = (await res.json()) as LiveFeedFile;
+          applyLiveFeed(data);
+          return data;
+        }
+      } catch {
+        setLiveMeta((m) => ({
+          ...m,
+          error: m.error || "Refresh failed — try again in a moment.",
+        }));
+      } finally {
+        setLiveRefreshing(false);
+      }
+      return null;
+    },
+    [applyLiveFeed],
+  );
+
+  // Load scheduled live feed cache; soft-refresh on an interval
   useEffect(() => {
     let cancelled = false;
-    const toTimeline = (e: LiveFeedEntry): TimelineEntry =>
-      withInferredSurface({
-        id: e.id,
-        date: e.date,
-        sortKey: e.sortKey,
-        title: e.title,
-        body: e.body,
-        kind: e.kind,
-        actor: e.actor,
-        source: e.source,
-        href: e.href,
-        xId: e.xId,
-        standout: e.standout,
-        live: e.live ?? true,
-      });
-
-    async function loadLive() {
-      try {
-        const res = await fetch("/canopy/live-feed.json", { cache: "no-store" });
-        if (res.ok) {
-          const data = (await res.json()) as LiveFeedFile;
-          if (!cancelled) {
-            setLiveMeta({
-              updatedAt: data.updatedAt,
-              source: data.source,
-              error: data.error,
-            });
-            setLiveEntries((data.entries || []).map(toTimeline));
-          }
-        }
-      } catch {
-        /* ignore */
-      }
-
-      // Soft refresh: hits in-memory/API path when CRON secret not required
-      try {
-        const res = await fetch("/api/canopy/refresh", { cache: "no-store" });
-        if (res.ok) {
-          const data = (await res.json()) as LiveFeedFile;
-          if (!cancelled && data.entries?.length) {
-            setLiveMeta({
-              updatedAt: data.updatedAt,
-              source: data.source,
-              error: data.error,
-            });
-            setLiveEntries(data.entries.map(toTimeline));
-          }
-        }
-      } catch {
-        /* API may not be configured */
-      }
-    }
-
-    loadLive();
-    const id = window.setInterval(loadLive, 15 * 60 * 1000); // re-check every 15m
+    const run = async (force: boolean) => {
+      if (cancelled) return;
+      await refreshLiveFeed(force);
+    };
+    void run(false);
+    const id = window.setInterval(() => {
+      void run(false);
+    }, 15 * 60 * 1000);
     return () => {
       cancelled = true;
       window.clearInterval(id);
     };
+    // Mount-only: refreshLiveFeed is stable enough for interval use
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -384,7 +424,14 @@ export function CanopyPage() {
     const valid = new Set(filterOptions.map((o) => o.key));
     setFilters((prev) => {
       const next = prev.filter((f) => f === "all" || valid.has(f));
-      if (next.length === 0) return ["all"];
+      if (next.length === 0) return prev.includes("all") ? prev : ["all"];
+      // Avoid new array identity when unchanged (prevents update loops)
+      if (
+        next.length === prev.length &&
+        next.every((k, i) => k === prev[i])
+      ) {
+        return prev;
+      }
       return next;
     });
   }, [filterOptions]);
@@ -512,6 +559,18 @@ export function CanopyPage() {
                       Live feed offline
                     </span>
                   ) : null}
+                  <button
+                    type="button"
+                    className="cn-live-refresh"
+                    disabled={liveRefreshing}
+                    onClick={() => void refreshLiveFeed(true)}
+                    title={
+                      liveMeta.error ||
+                      "Pull latest posts from configured X sources"
+                    }
+                  >
+                    {liveRefreshing ? "Refreshing…" : "Refresh live"}
+                  </button>
                 </div>
                 {visible.length === 0 ? (
                   <p className="cn-empty">No signals for this filter.</p>
@@ -1084,16 +1143,39 @@ function TimelineCard({
           {entry.source ? (
             <span className="cn-source">{entry.source}</span>
           ) : null}
-          {entry.href ? (
+          {entry.lane === "climb-notes" && entry.href ? (
+            <a
+              href={entry.href}
+              onClick={(e) => e.stopPropagation()}
+            >
+              Full Climb Note →
+            </a>
+          ) : null}
+          {/* Work / general: site link when not climb-notes lane */}
+          {entry.lane !== "climb-notes" && entry.href ? (
             <a
               href={entry.href}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
             >
-              {entry.kind === "changelog"
-                ? "Changelog source →"
-                : "Open on X →"}
+              {entry.actor === "acornsoft" && entry.source?.startsWith("Work")
+                ? "Visit site →"
+                : entry.kind === "changelog"
+                  ? "Changelog source →"
+                  : entry.href.includes("x.com")
+                    ? "Open on X →"
+                    : "Open link →"}
+            </a>
+          ) : null}
+          {entry.xHref ? (
+            <a
+              href={entry.xHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {entry.xLabel || "Schedule on X →"}
             </a>
           ) : null}
         </div>

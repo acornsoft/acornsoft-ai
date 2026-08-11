@@ -80,6 +80,30 @@ export const skills = [
 
 export const portfolio = [
   {
+    id: "dropshipping",
+    title: "Dropshipping site",
+    category: "Product",
+    summary:
+      "End-to-end commerce storefront: catalog, cart, checkout, and fulfillment wiring for a dropshipping operation—shipped as a real store, not a mock.",
+    href: "https://blaszyk.us/",
+  },
+  {
+    id: "sals-barbershop",
+    title: "Sal’s Barbershop",
+    category: "Product",
+    summary:
+      "Local business web presence for Sal’s Barbershop—clear services, hours, and contact so customers can find the chair without the phone tag.",
+    href: "https://blaszyk.us/",
+  },
+  {
+    id: "unofficial-covid-report",
+    title: "Unofficial COVID Report",
+    category: "Analytics",
+    summary:
+      "Independent reporting site that gathered and presented COVID-related signals in plain language—fast updates when official channels lagged.",
+    href: "https://unofficial-covid-report.grok.me/",
+  },
+  {
     id: "atlas",
     title: "Atlas Research Desk",
     category: "Product",

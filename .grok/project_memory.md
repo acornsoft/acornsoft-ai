@@ -1,0 +1,7 @@
+- Climb Notes consumer Basecamp pack started: everyday-life problems (not tech-framed); Memory Master climb note added (this week / next week / month / history jog) [2026-08-05]
+- Home story carousel: Page 1 = mountaineering metaphor (you climb + Luna as Sherpa); Page 2 = four moves walkthrough; Page 3 = build + with/animated words [2026-08-02]
+- Four moves of a Climb Note are: Problem, Measure, Slice, Lesson — user wants these numbered on home Page 2 [2026-08-09]
+- Climb Notes 0→1 play: lingua franca for common people (non-developers) to use AI in daily life [2026-08-09]
+- First 5 consumer Climb Notes drafted; Note 1 promoted to lead = Someday life that never starts [2026-08-09]
+- Committed to acornsoft/gnomah main: foundation/Climb-Notes-00, foundation/Climb-Notes-01, foundation/Climb-Notes-Studio-Sequencing-Core-Principle; README indexed [2026-08-09]
+- Core principle locked: productize the path not the hours; sequence 0+1 → education 2–5 → studio spine 6–9 → developers 10 → one offer → repeatable delivery → agents on catalog [2026-08-09]

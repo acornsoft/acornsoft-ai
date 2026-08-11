@@ -81,6 +81,8 @@ type RegistryNote = {
   unpublishedAt?: string | null;
   approvalNote?: string | null;
   history?: ClimbNotePublishHistory[];
+  onCanopy?: boolean;
+  canopyAt?: string | null;
 };
 
 function asStatus(v: string | null | undefined): ClimbNoteStatus {
@@ -121,6 +123,41 @@ function rowToNote(row: NoteRow): ClimbNote {
     xUrl: row.x_url || undefined,
     tags: parseJsonArray<string>(row.tags, []),
     sourceFile: row.source_file || undefined,
+  };
+}
+
+/** Overlay publish + Canopy fields from the registry (SoT for public gates). */
+function withRegistryFields(
+  note: ClimbNote,
+  registry: Record<string, RegistryNote> = loadRegistry(),
+): ClimbNote {
+  const reg = registry[note.id];
+  if (!reg) {
+    return {
+      ...note,
+      onCanopy: note.onCanopy === true,
+      canopyAt: note.canopyAt ?? null,
+    };
+  }
+  const status = asStatus(reg.status ?? note.status);
+  return {
+    ...note,
+    status,
+    version: reg.version ?? note.version,
+    submittedAt: reg.submittedAt ?? note.submittedAt ?? null,
+    submittedBy: reg.submittedBy ?? note.submittedBy ?? null,
+    approvedAt: reg.approvedAt ?? note.approvedAt ?? null,
+    approvedBy: reg.approvedBy ?? note.approvedBy ?? null,
+    publishedAt: reg.publishedAt ?? note.publishedAt ?? null,
+    unpublishedAt: reg.unpublishedAt ?? note.unpublishedAt ?? null,
+    approvalNote: reg.approvalNote ?? note.approvalNote ?? null,
+    history: reg.history ?? note.history ?? [],
+    onCanopy:
+      typeof reg.onCanopy === "boolean"
+        ? reg.onCanopy
+        : note.onCanopy === true,
+    canopyAt:
+      reg.canopyAt !== undefined ? reg.canopyAt : (note.canopyAt ?? null),
   };
 }
 
@@ -189,6 +226,16 @@ function loadRegistry(): Record<string, RegistryNote> {
   return {};
 }
 
+function asBool(v: unknown): boolean | undefined {
+  if (typeof v === "boolean") return v;
+  if (typeof v === "string") {
+    const s = v.trim().toLowerCase();
+    if (s === "true" || s === "yes" || s === "1") return true;
+    if (s === "false" || s === "no" || s === "0") return false;
+  }
+  return undefined;
+}
+
 function noteFromMarkdown(
   file: string,
   raw: string,
@@ -201,6 +248,19 @@ function noteFromMarkdown(
   const fmStatus = asStatus(String(data.status ?? "draft"));
   const status = asStatus(reg?.status ?? fmStatus);
   const tags = Array.isArray(data.tags) ? (data.tags as string[]) : [];
+  const fmOnCanopy = asBool(data.onCanopy);
+  const onCanopy =
+    typeof reg?.onCanopy === "boolean"
+      ? reg.onCanopy
+      : fmOnCanopy === true
+        ? true
+        : false;
+  const fmCanopyAt =
+    typeof data.canopyAt === "string" && data.canopyAt.length > 0
+      ? data.canopyAt
+      : null;
+  const canopyAt =
+    reg?.canopyAt !== undefined ? reg.canopyAt : fmCanopyAt;
   return {
     id,
     number: String(data.number ?? "").replace(/"/g, ""),
@@ -220,6 +280,8 @@ function noteFromMarkdown(
     unpublishedAt: reg?.unpublishedAt ?? null,
     approvalNote: reg?.approvalNote ?? null,
     history: reg?.history ?? [],
+    onCanopy,
+    canopyAt,
     xUrl:
       typeof data.xUrl === "string" && data.xUrl.length > 0
         ? data.xUrl
@@ -393,6 +455,35 @@ export async function ensureClimbNotesSeeded(): Promise<void> {
       console.warn(`[climb-notes] seed insert failed for ${note.id}`, err);
     }
   }
+  // Refresh listed notes' body fields from vault (000 origin / cn-016; 017 draft example)
+  await refreshDraftSeedBodies(seeds, ["cn-016", "cn-017"]).catch(() => {});
+}
+
+/** Update body fields for listed IDs from current markdown seeds (content sync). */
+async function refreshDraftSeedBodies(
+  seeds: ClimbNote[],
+  ids: string[],
+): Promise<void> {
+  const sql = await getSql();
+  const want = new Set(ids);
+  for (const note of seeds) {
+    if (!want.has(note.id)) continue;
+    // Always pull number + title + four moves from vault for these SoT / example notes
+    await sql`
+      update climb_notes set
+        number = ${note.number},
+        title = ${note.title},
+        note_date = ${note.date},
+        problem = ${note.problem},
+        measure = ${note.measure},
+        slice = ${note.slice},
+        lesson = ${note.lesson},
+        tags = ${JSON.stringify(note.tags ?? [])},
+        source_file = ${note.sourceFile ?? null},
+        updated_at = now()
+      where id = ${note.id}
+    `;
+  }
 }
 
 
@@ -456,27 +547,62 @@ export async function listClimbNotesFromDb(opts?: {
   publishedOnly?: boolean;
 }): Promise<ClimbNote[]> {
   await ensureClimbNotesSeeded();
+  const sortNotes = (list: ClimbNote[]) =>
+    [...list].sort((a, b) => {
+      // Only public SoT first when present
+      if (a.id === "cn-016") return -1;
+      if (b.id === "cn-016") return 1;
+      const byNum = b.number.localeCompare(a.number);
+      if (byNum !== 0) return byNum;
+      return a.title.localeCompare(b.title);
+    });
+
   try {
     const sql = await getSql();
-    const rows = opts?.publishedOnly
-      ? await sql<NoteRow>`
-          select * from climb_notes
-          where status = 'published'
-          order by number desc
-        `
-      : await sql<NoteRow>`
-          select * from climb_notes
-          order by number desc
-        `;
-    if (rows.length > 0) return rows.map(rowToNote);
+    // Load all rows; registry status is SoT for public gate (DB can lag after unpublish)
+    const rows = await sql<NoteRow>`
+      select * from climb_notes
+      order by number desc
+    `;
+    if (rows.length > 0) {
+      const registry = loadRegistry();
+      let list = rows.map((r) => withRegistryFields(rowToNote(r), registry));
+      // Best-effort: push registry status into DB so next SQL stays consistent
+      await syncDbStatusFromRegistry(list, registry).catch(() => {});
+      if (opts?.publishedOnly) {
+        list = list.filter((n) => n.status === "published");
+      }
+      return sortNotes(list);
+    }
   } catch (err) {
     console.warn("[climb-notes] DB list failed, falling back to markdown", err);
   }
   const seeds = readMarkdownSeeds();
   if (opts?.publishedOnly) {
-    return seeds.filter((n) => n.status === "published");
+    return sortNotes(seeds.filter((n) => n.status === "published"));
   }
-  return seeds;
+  return sortNotes(seeds);
+}
+
+/** Align DB status/publish columns with registry when they diverge. */
+async function syncDbStatusFromRegistry(
+  _notes: ClimbNote[],
+  registry: Record<string, RegistryNote>,
+): Promise<void> {
+  const sql = await getSql();
+  for (const [id, reg] of Object.entries(registry)) {
+    if (!reg?.status) continue;
+    const want = asStatus(reg.status);
+    await sql`
+      update climb_notes set
+        status = ${want},
+        published_at = ${reg.publishedAt ?? null},
+        unpublished_at = ${reg.unpublishedAt ?? null},
+        updated_at = now()
+      where id = ${id}
+        and status is distinct from ${want}
+    `;
+  }
 }
 
 async function getClimbNoteFromDb(id: string): Promise<ClimbNote | null> {
@@ -485,7 +611,7 @@ async function getClimbNoteFromDb(id: string): Promise<ClimbNote | null> {
   const rows = await sql<NoteRow>`
     select * from climb_notes where id = ${id} limit 1
   `;
-  return rows[0] ? rowToNote(rows[0]) : null;
+  return rows[0] ? withRegistryFields(rowToNote(rows[0])) : null;
 }
 
 function toMarkdown(note: ClimbNote): string {
@@ -493,13 +619,18 @@ function toMarkdown(note: ClimbNote): string {
   const safeTitle = note.title.includes(":")
     ? JSON.stringify(note.title)
     : note.title;
+  const canopyAtLine =
+    note.canopyAt && String(note.canopyAt).length > 0
+      ? `canopyAt: ${note.canopyAt}\n`
+      : "";
   return `---
 id: ${note.id}
 number: "${note.number}"
 title: ${safeTitle}
 date: ${note.date}
 status: ${note.status}
-tags:
+onCanopy: ${note.onCanopy === true}
+${canopyAtLine}tags:
 ${tags || "  - climb-note"}
 xUrl: ${note.xUrl ?? ""}
 ---
@@ -551,8 +682,10 @@ function writeMarkdownMirror(note: ClimbNote): string | null {
 
 function writeRegistryFromDbNotes(notes: ClimbNote[]) {
   try {
+    const prev = loadRegistry();
     const notesMap: Record<string, RegistryNote> = {};
     for (const n of notes) {
+      const prior = prev[n.id];
       notesMap[n.id] = {
         status: n.status,
         version: n.version ?? 1,
@@ -564,12 +697,20 @@ function writeRegistryFromDbNotes(notes: ClimbNote[]) {
         unpublishedAt: n.unpublishedAt ?? null,
         approvalNote: n.approvalNote ?? null,
         history: n.history ?? [],
+        onCanopy:
+          typeof n.onCanopy === "boolean"
+            ? n.onCanopy
+            : (prior?.onCanopy ?? false),
+        canopyAt:
+          n.canopyAt !== undefined
+            ? n.canopyAt
+            : (prior?.canopyAt ?? null),
       };
     }
     const payload = {
       version: 1,
       description:
-        "SharePoint-style publish control for Climb Notes. Managed by Gnomah editor and CLI.",
+        "SharePoint-style publish control for Climb Notes. status=journal; onCanopy+canopyAt=Canopy timeline. Managed by Gnomah editor and CLI.",
       notes: notesMap,
     };
     fs.mkdirSync(NOTES_DIR, { recursive: true });
@@ -591,6 +732,8 @@ export type SaveClimbNoteInput = {
   lesson: string;
   tags?: string[];
   xUrl?: string | null;
+  onCanopy?: boolean;
+  canopyAt?: string | null;
 };
 
 export async function saveClimbNote(
@@ -671,6 +814,23 @@ export async function saveClimbNote(
     },
   ];
 
+  const onCanopy =
+    typeof input.onCanopy === "boolean"
+      ? input.onCanopy
+      : existing?.onCanopy === true;
+  let canopyAt: string | null =
+    input.canopyAt !== undefined
+      ? input.canopyAt
+      : (existing?.canopyAt ?? null);
+  // Opting into Canopy with no schedule → go live now
+  if (onCanopy && !canopyAt) {
+    canopyAt = at;
+  }
+  // Opting out clears schedule
+  if (!onCanopy) {
+    canopyAt = null;
+  }
+
   const note: ClimbNote = {
     id,
     number:
@@ -691,6 +851,8 @@ export async function saveClimbNote(
     unpublishedAt,
     approvalNote,
     history,
+    onCanopy,
+    canopyAt,
     xUrl: input.xUrl || undefined,
     tags: input.tags?.length
       ? input.tags
@@ -706,7 +868,13 @@ export async function saveClimbNote(
       update climb_notes set source_file = ${fileName} where id = ${note.id}
     `;
   }
-  writeRegistryFromDbNotes(await listClimbNotesFromDb());
+  // Prefer this note's canopy fields when rewriting the registry
+  const all = (await listClimbNotesFromDb()).map((n) =>
+    n.id === note.id
+      ? { ...n, onCanopy: note.onCanopy, canopyAt: note.canopyAt }
+      : n,
+  );
+  writeRegistryFromDbNotes(all);
   return (await getClimbNoteFromDb(note.id)) ?? note;
 }
 
@@ -730,6 +898,8 @@ export async function setClimbNoteStatus(
       lesson: existing.lesson,
       tags: existing.tags,
       xUrl: existing.xUrl ?? null,
+      onCanopy: existing.onCanopy === true,
+      canopyAt: existing.canopyAt ?? null,
     },
     "",
     actorHandle,

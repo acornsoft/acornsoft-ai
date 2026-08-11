@@ -1,8 +1,10 @@
-/** Top-level primary nav — same on every page (Gnomah is auth-gated in the header). */
+/** Top-level primary nav. Items with `authOnly` show only when signed in. */
 export const primaryNav = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/service", label: "Service" },
+  /** Studio map — rework later; signed-in only for now */
+  { to: "/method", label: "Method", authOnly: true as const },
   { to: "/climb-notes", label: "Climb Notes" },
   { to: "/canopy", label: "Canopy" },
 ] as const;

@@ -119,6 +119,49 @@ function authPopupPlugin(): Plugin {
   };
 }
 
+/** Dev IP allowlist — mirrors Nitro middleware for local/preview. */
+function ipAllowlistPlugin(): Plugin {
+  return {
+    name: "app-builder:ip-allowlist",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        try {
+          const mod = (await server.ssrLoadModule(
+            "/src/lib/access/ip-allowlist.ts",
+          )) as typeof import("./src/lib/access/ip-allowlist");
+          const config = mod.loadAllowlistConfig();
+          if (!config.enabled) {
+            next();
+            return;
+          }
+          const pathOnly = (req.url ?? "/").split("?", 1)[0] || "/";
+          const ip =
+            mod.clientIpFromHeaders(req.headers, config.trustProxy) ||
+            req.socket?.remoteAddress ||
+            null;
+          const result = mod.evaluateAccess({
+            ip,
+            pathname: pathOnly,
+            config,
+          });
+          if (result.allowed) {
+            next();
+            return;
+          }
+          res.statusCode = 403;
+          res.setHeader("content-type", "text/html; charset=utf-8");
+          res.setHeader("cache-control", "no-store");
+          res.end(mod.forbiddenHtml(ip));
+        } catch (err) {
+          console.error("[ip-allowlist] middleware error:", err);
+          next();
+        }
+      });
+    },
+  };
+}
+
 // `0.0.0.0:8080` is the live-preview contract — don't change host/port.
 // Keep `nitro` gated to `build` (the Vercel deploy target): enabled in dev it
 // opens a second dev-server port, which breaks the single-port preview.
@@ -133,11 +176,19 @@ export default defineConfig(({ command }) => ({
   resolve: { tsconfigPaths: true },
   plugins: [
     pgliteBootstrapPlugin(),
+    ipAllowlistPlugin(),
     // Before tanstackStart so /auth/popup never falls through to the SPA.
     authPopupPlugin(),
     tailwindcss(),
     tanstackStart(),
-    ...(command === "build" ? [nitro({ preset: "vercel" })] : []),
+    ...(command === "build"
+      ? [
+          nitro({
+            preset: "vercel",
+            // Ensure server/middleware is included in the Vercel function
+          }),
+        ]
+      : []),
     viteReact(),
   ],
 }));

@@ -9,18 +9,20 @@ tags:
 xUrl:
 ---
 
+<!-- Writing: WRITING-STYLE.md · Public publish: STE-CHECKLIST.md -->
+
 ## Problem
 
-What is true and hard about this climb?
+What’s stuck? Use plain words. Prefer a clearly defined problem, not a tool list.
 
 ## Measure
 
-How do we know the slice worked?
+How will we know it moved? Something a reader can check.
 
 ## Slice
 
-What did we actually ship or try?
+What is the small next step we will finish for this note?
 
 ## Lesson
 
-What energy carries to the next climb?
+What do we carry to the next climb? Short. Reusable. No jargon pile-up.
