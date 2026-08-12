@@ -50,7 +50,7 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Artificial Intelligence Strategy",
     assistance: "direct",
     description:
-      "Direct assistance on the mountain you should climb. We map workflows, data reality, risk, and success measures so pilots have a path to production—not a slide deck that dies after the demonstration.",
+      "We map the mountain you should climb—workflows, risk, and what “done” means—so a pilot has a path to production.",
     points: [
       "Use-case ranking with effort, value, and risk",
       "Clear measures of success (and what “done” means)",
@@ -64,7 +64,7 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Product Build",
     assistance: "direct",
     description:
-      "Direct build on a thin vertical: full-stack artificial intelligence applications inside real work—interfaces, authentication, data paths, and the glue that keeps models useful for actual users.",
+      "A thin vertical you can ship: the app, the data path, and the glue that keeps a model useful for real users.",
     points: [
       "End-to-end product slices you can ship and operate",
       "Interfaces that match how teams already work",
@@ -78,7 +78,7 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Model Systems",
     assistance: "direct",
     description:
-      "Direct assistance on the technical pitch: retrieval, evaluation, guardrails, and monitoring that hold up under traffic and audit. The model is one component of a system—not the whole product.",
+      "Retrieval, evaluation, guardrails, and monitoring. The model is one part of a system—not the whole product.",
     points: [
       "Retrieval and tool wiring with sourceable answers",
       "Evaluation harnesses and regression checks before release",
@@ -92,7 +92,7 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Trust and Safety",
     assistance: "both",
     description:
-      "Direct design of safe production paths, plus patterns your team can reuse. Privacy, reliability, and human judgment where it matters—so the climb does not become a free solo on high stakes.",
+      "Safe production paths your team can reuse—privacy, judgment, and a way down when the model is wrong.",
     points: [
       "Data handling and access patterns that match policy",
       "Human checkpoints on high-stakes actions",
@@ -106,7 +106,7 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Automation",
     assistance: "direct",
     description:
-      "Direct assistance with agents and multi-step workflows—clear handoffs, not black boxes. Supervised autonomy: research, draft, act—with humans still accountable for outcomes.",
+      "Agents and workflows with clear handoffs. Supervised autonomy: research, draft, act—humans stay accountable.",
     points: [
       "Task agents with defined tools and boundaries",
       "Workflows that pass work to people at the right step",
@@ -143,28 +143,94 @@ function must(id: string): ServiceItem {
 /**
  * Public baseline (6). Delivery is not dropped — it is the method inside
  * Learn the Climb (literacy + the trail every engagement leaves).
+ * Card copy is first-principles: Does + Why on the front, You get on the back.
  */
-export const baselineServices: ServiceItem[] = (() => {
-  const learn = must("learn-the-climb");
-  const delivery = must("delivery-climb-notes");
-  return [
-    {
-      id: "learn-the-climb",
-      icon: learn.icon,
-      title: learn.title,
-      assistance: "both",
-      composedFrom: [learn.id, delivery.id],
-      description:
-        "Learn the four shared words—problem, measure, slice, lesson—and use Climb Notes as the delivery record. You climb with Luna as your Sherpa; every engagement leaves a trail the next team can re-ascend. Indirect first; the same trail runs through paid work.",
-      points: [...learn.points, ...delivery.points],
-    },
-    must("ai-strategy"),
-    must("product-build"),
-    must("model-systems"),
-    must("trust-and-safety"),
-    must("automation"),
-  ];
-})();
+export const baselineServices: ServiceItem[] = [
+  {
+    id: "learn-the-climb",
+    icon: GraduationCap,
+    title: "Learn the Climb",
+    assistance: "both",
+    composedFrom: ["learn-the-climb", "delivery-climb-notes"],
+    description:
+      "Does: teach you to write one finished AI job as Problem → Measure → Slice → Lesson. Why: without that, tools pile up and you cannot tell if the work got better.",
+    points: [
+      "The four-step template",
+      "Public notes you can copy",
+      "Voice with Luna to walk a note",
+      "The same write-up used when we do paid work",
+    ],
+  },
+  {
+    id: "ai-strategy",
+    icon: Brain,
+    title: "Artificial Intelligence Strategy",
+    assistance: "direct",
+    description:
+      "Does: choose which AI job to do first, and what “done” means. Why: most pilots die because nobody ranked effort, value, and risk — or named a measure.",
+    points: [
+      "Ranked use cases",
+      "A written definition of done",
+      "A path from pilot to production with owners",
+      "Build, buy, or wait",
+    ],
+  },
+  {
+    id: "product-build",
+    icon: Code2,
+    title: "Product Build",
+    assistance: "direct",
+    description:
+      "Does: ship one working slice — screen, login, data, model, deploy. Why: a demo is not a product. Users cannot use a slide.",
+    points: [
+      "A running slice in your workflow",
+      "The repo and how to run it",
+      "A handoff so your people can change it",
+    ],
+  },
+  {
+    id: "model-systems",
+    icon: Layers,
+    title: "Model Systems",
+    assistance: "direct",
+    description:
+      "Does: put the model inside a system that can be tested and watched. Why: a model alone cannot cite a source, fail a test, or tell you it drifted.",
+    points: [
+      "Retrieval with sources",
+      "Evals before release",
+      "Output limits",
+      "Logs when it breaks",
+    ],
+  },
+  {
+    id: "trust-and-safety",
+    icon: ShieldCheck,
+    title: "Trust and Safety",
+    assistance: "both",
+    description:
+      "Does: decide what the system may do, who must approve it, and what happens when it is wrong. Why: high-stakes actions without a human stop or an audit trail become incidents.",
+    points: [
+      "Data rules",
+      "Human checkpoints",
+      "A fallback when the model is down or wrong",
+      "Logs you can review",
+    ],
+  },
+  {
+    id: "automation",
+    icon: Sparkles,
+    title: "Automation",
+    assistance: "direct",
+    description:
+      "Does: have software take the next step — with a person still on the hook. Why: an agent with no boundary will act when it should stop.",
+    points: [
+      "Agents with listed tools",
+      "Handoff to a person at a named step",
+      "Retries and status you can see",
+      "A stop rule",
+    ],
+  },
+];
 
 /** @deprecated Use baselineServices on the public page; serviceCatalog is the full archive. */
 export const services = baselineServices;

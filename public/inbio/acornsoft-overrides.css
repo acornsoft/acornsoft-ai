@@ -19573,3 +19573,126 @@ body:has(.ac-service-page) .ac-about-top-fab {
     padding-bottom: 8px !important;
   }
 }
+
+/* ===== Home slide 2 close line ===== */
+.ac-story-note-close {
+  margin: 16px 0 0 !important;
+  max-width: 42em !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  color: #c4cfde !important;
+}
+
+/* ===== Service cards: no scrollbars, taller box ===== */
+.ac-service-page .ac-svc-flip,
+.ac-service-page .ac-svc-flip-hit,
+.ac-service-page .ac-svc-flip-inner,
+.ac-service-page .ac-svc-flip-face {
+  min-height: 420px !important;
+  max-height: none !important;
+}
+.ac-service-page .ac-svc-flip-face--front .ac-svc-card-text,
+.ac-service-page .ac-svc-flip-face--back .ac-svc-card-points {
+  max-height: none !important;
+  overflow: visible !important;
+  overflow-y: visible !important;
+}
+
+/* ===== Service flip: readable back — do not rotateY the type ===== */
+.ac-service-page .ac-svc-flip {
+  perspective: none !important;
+  overflow: visible !important;
+}
+.ac-service-page .ac-svc-flip-hit,
+.ac-service-page .ac-svc-flip-inner {
+  transform: none !important;
+  transform-style: flat !important;
+  overflow: visible !important;
+}
+.ac-service-page .ac-svc-flip.is-flipped .ac-svc-flip-inner {
+  transform: none !important;
+}
+.ac-service-page .ac-svc-flip-face {
+  backface-visibility: visible !important;
+  -webkit-backface-visibility: visible !important;
+  transform: none !important;
+}
+.ac-service-page .ac-svc-flip-face--front {
+  position: relative !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 2 !important;
+}
+.ac-service-page .ac-svc-flip-face--back {
+  position: absolute !important;
+  inset: 0 !important;
+  transform: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+.ac-service-page .ac-svc-flip.is-flipped .ac-svc-flip-face--front {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+.ac-service-page .ac-svc-flip.is-flipped .ac-svc-flip-face--back {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  z-index: 2 !important;
+}
+.ac-service-page .ac-svc-flip-face--front,
+.ac-service-page .ac-svc-flip-face--back {
+  transition: opacity 0.2s ease, visibility 0.2s ease !important;
+}
+.ac-service-page .ac-svc-flip-face,
+.ac-service-page .ac-svc-flip-face * {
+  unicode-bidi: normal !important;
+  direction: ltr !important;
+}
+.ac-service-page .ac-svc-flip.is-flipped {
+  animation: ac-svc-card-turn 0.36s ease;
+}
+@keyframes ac-svc-card-turn {
+  0% { transform: scaleX(1); }
+  40% { transform: scaleX(0.06); }
+  100% { transform: scaleX(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ac-service-page .ac-svc-flip.is-flipped {
+    animation: none !important;
+  }
+}
+
+/* Ease catalog reorder after a card flips closed */
+.ac-service-page .ac-svc-grid.is-settling > [role="listitem"] {
+  animation: ac-svc-settle 0.4s ease both;
+}
+@keyframes ac-svc-settle {
+  from { opacity: 0.55; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ac-service-page .ac-svc-grid.is-settling > [role="listitem"] {
+    animation: none !important;
+  }
+}
+
+.ac-service-page .ac-svc-card-text {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+.ac-service-page .ac-svc-card-does,
+.ac-service-page .ac-svc-card-why {
+  display: block !important;
+  font-size: 14.5px !important;
+  line-height: 1.45 !important;
+  color: #c4cfde !important;
+}
+.ac-service-page .ac-svc-card-why {
+  color: #b8b0a6 !important;
+}

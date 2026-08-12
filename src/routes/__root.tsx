@@ -18,7 +18,7 @@ const inbioCss = [
   "/inbio/assets/css/vendor/aos.css",
   "/inbio/assets/css/plugins/feature.css",
   "/inbio/assets/css/style.css",
-  "/inbio/acornsoft-overrides.css?v=home-p1-cta-contrast-1",
+  "/inbio/acornsoft-overrides.css?v=svc-first-principles-1",
 ] as const;
 
 export const Route = createRootRouteWithContext()({
