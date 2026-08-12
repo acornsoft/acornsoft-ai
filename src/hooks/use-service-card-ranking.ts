@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { baselineServices, type ServiceItem } from "@/components/site/service-data";
 import {
   listServiceCardClicks,
@@ -17,12 +17,15 @@ import { track } from "@/lib/analytics/client";
 const OPEN_COOLDOWN_MS = 1500;
 
 export function useServiceCardRanking() {
-  const [clickMap, setClickMap] = useState<ClickMap>({});
+  const [clickMap, setClickMap] = useState<ClickMap>(() => loadLocalClicks());
+  const [display] = useState<ServiceItem[]>(() =>
+    rankBaselineServices(baselineServices, loadLocalClicks()),
+  );
+
   const lastAt = useRef<Record<string, number>>({});
   const inFlight = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    setClickMap(loadLocalClicks());
     let cancelled = false;
     (async () => {
       try {
@@ -38,18 +41,13 @@ export function useServiceCardRanking() {
           return merged;
         });
       } catch {
-        /* local only */
+        /* counters stay local */
       }
     })();
     return () => {
       cancelled = true;
     };
   }, []);
-
-  const ranked = useMemo(
-    () => rankBaselineServices(baselineServices, clickMap),
-    [clickMap],
-  );
 
   const recordFlip = useCallback(async (item: ServiceItem) => {
     const now = Date.now();
@@ -92,5 +90,5 @@ export function useServiceCardRanking() {
     }
   }, []);
 
-  return { ranked, clickMap, recordFlip };
+  return { display, clickMap, recordFlip };
 }

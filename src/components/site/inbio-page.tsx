@@ -18,20 +18,34 @@ const stackWords = [
   "Connectors",
 ] as const;
 
-/** Sole public Climb Note for now — origin trail (editorial number 000; id cn-016). */
-const exampleNote = {
-  number: "000",
-  packLabel: "Public journal · Climb Note 000",
-  title: "From tools to a problem you can finish",
-  problem:
-    "Building with AI usually starts with tools, not with a clearly defined problem you can finish and write down. People collect many models, agents, apps, prompts, and platforms. Without a clearly defined problem, a measure of progress, a small next step, and a lesson, most people get lost. The work does not get better over time.",
-  measure:
-    "A reader can open this Climb Note, see a clearly defined problem in everyday language, and follow what we finished—without mastering every tool first.",
-  slice:
-    "Publish Climb Note 000 as the first public Climb Note — the origin trail all later notes build on: tools only become a climb when the problem is clearly defined, measured, sliced, and taught.",
-  lesson:
-    "Climb Notes start with a clearly defined problem you can finish — not with more tools. The written climb is the difference maker—not the model alone. Small starts. Strong roots.",
+/** Teaching climb for slide 2 — not a published Climb Note. 000 lives on /climb-notes. */
+const teachingClimb = {
+  kicker: "Teaching climb · not a journal entry",
+  title: "A shop has a site. Nobody books from it.",
+  moves: [
+    {
+      n: "1",
+      label: "What’s stuck",
+      body: "People find the shop online, then call or leave. The site does not turn a visit into a booking.",
+    },
+    {
+      n: "2",
+      label: "How we know it moved",
+      body: "In two weeks, at least five bookings start on the site — not on the phone.",
+    },
+    {
+      n: "3",
+      label: "The small step",
+      body: "One page: hours, service, and a single “Book” action. Nothing else this week.",
+    },
+    {
+      n: "4",
+      label: "What we carry next",
+      body: "One obvious next step beats a pretty site with five paths. Write that down before the next pitch.",
+    },
+  ],
 };
+
 
 type TransPhase = "in" | "out";
 
@@ -292,55 +306,54 @@ export function InbioPage() {
                       Four moves everyone can follow.
                     </h1>
                     <p className="ac-story-lede">
-                      You do not need a computer science degree. Climb Notes are
-                      the shared language for everyday problems — so anyone can
-                      understand and use AI on their path. Four numbered moves:
-                      a clear problem, a way to know progress, a small slice to
-                      finish, and a lesson the next climb can reuse — on this
-                      path or a new one.
+                      You do not need a computer science degree. Name what is
+                      stuck, how you will know it moved, the small step this
+                      week, and the lesson you carry next time. That is a climb.
+                      The written note is the trail.
                     </p>
 
                     <div className="ac-story-note">
                       <header className="ac-story-note-head">
                         <span className="ac-story-note-num">
-                          Climb Note {exampleNote.number}
+                          {teachingClimb.kicker}
                         </span>
                         <h2 className="ac-story-note-title">
-                          {exampleNote.title}
+                          {teachingClimb.title}
                         </h2>
                       </header>
                       <dl className="ac-story-note-grid">
-                        {(
-                          [
-                            ["1", "Problem", exampleNote.problem],
-                            ["2", "Measure", exampleNote.measure],
-                            ["3", "Slice", exampleNote.slice],
-                            ["4", "Lesson", exampleNote.lesson],
-                          ] as const
-                        ).map(([n, label, body]) => (
+                        {teachingClimb.moves.map(({ n, label, body }) => (
                           <div key={label}>
                             <dt>
                               <span className="ac-story-move-n">{n}</span>
-                              <span className="ac-story-move-label">{label}</span>
+                              <span className="ac-story-move-label">
+                                {label}
+                              </span>
                             </dt>
                             <dd>{body}</dd>
                           </div>
                         ))}
                       </dl>
+                      <p className="ac-story-note-close">
+                        That is the shape of every Climb Note. The journal is
+                        where finished climbs live — starting with the origin
+                        trail.
+                      </p>
                     </div>
 
                     <div className="ac-story-actions">
+                      <Link className="rn-btn ac-btn-maroon" to="/climb-notes">
+                        <span>See the journal</span>
+                      </Link>
                       <button
                         type="button"
-                        className="rn-btn ac-btn-maroon"
+                        className="rn-btn ac-btn-outline"
                         onClick={() => go(1)}
                       >
                         <span>Meet the path ahead</span>
                       </button>
-                      <Link className="rn-btn ac-btn-outline" to="/climb-notes">
-                        <span>Browse the journal</span>
-                      </Link>
                     </div>
+
                   </article>
                 ) : null}
 

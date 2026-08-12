@@ -1,4 +1,5 @@
 import { useEffect, useId, useState } from "react";
+
 import { SiteChrome } from "./site-chrome";
 import { VoiceCta, VoiceWhenSignedIn } from "./voice-access";
 import { type ServiceItem } from "./service-data";
@@ -6,37 +7,43 @@ import { useServiceFaqRanking } from "@/hooks/use-service-faq-ranking";
 import { useServiceCardRanking } from "@/hooks/use-service-card-ranking";
 import { trackPageView } from "@/lib/analytics/client";
 
+function splitDoesWhy(text: string): { does: string; why: string | null } {
+  const at = text.search(/\sWhy:/);
+  if (at === -1) return { does: text, why: null };
+  return {
+    does: text.slice(0, at).trim(),
+    why: text.slice(at).trim(),
+  };
+}
+
 function assistanceLabel(kind: "direct" | "indirect" | "both"): string {
   if (kind === "direct") return "Direct assistance";
   if (kind === "indirect") return "Indirect assistance";
   return "Direct and indirect";
 }
 
+
 function ServiceFlipCard({
+
   item,
   catalogNum,
   total,
   lead,
   interest,
-  onFlipToBack,
+  flipped,
+  onToggle,
 }: {
   item: ServiceItem;
   catalogNum: string;
   total: number;
   lead?: boolean;
   interest: number;
-  onFlipToBack: () => void;
+  flipped: boolean;
+  onToggle: () => void;
 }) {
-  const [flipped, setFlipped] = useState(false);
   const Icon = item.icon;
+  const { does, why } = splitDoesWhy(item.description);
 
-  function toggle() {
-    setFlipped((v) => {
-      const next = !v;
-      if (next) onFlipToBack();
-      return next;
-    });
-  }
 
   return (
     <div
@@ -47,7 +54,7 @@ function ServiceFlipCard({
       <button
         type="button"
         className="ac-svc-flip-hit"
-        onClick={toggle}
+        onClick={onToggle}
         aria-pressed={flipped}
         aria-label={`${item.title} (${catalogNum} of ${String(total).padStart(2, "0")}). ${
           flipped ? "Show overview" : "Show outcomes"
@@ -72,7 +79,11 @@ function ServiceFlipCard({
               </span>
             </span>
             <span className="ac-svc-card-title">{item.title}</span>
-            <span className="ac-svc-card-text">{item.description}</span>
+            <span className="ac-svc-card-text">
+              <span className="ac-svc-card-does">{does}</span>
+              {why ? <span className="ac-svc-card-why">{why}</span> : null}
+            </span>
+
             {item.composedFrom?.includes("delivery-climb-notes") ? (
               <span className="ac-svc-flip-composed">
                 Includes Delivery with Climb Notes™
@@ -84,7 +95,8 @@ function ServiceFlipCard({
           <span className="ac-svc-flip-face ac-svc-flip-face--back">
             <span className="ac-svc-card-top">
               <span className="ac-svc-card-num">{catalogNum}</span>
-              <span className="ac-svc-flip-back-kicker">Outcomes</span>
+              <span className="ac-svc-flip-back-kicker">You get</span>
+
               <span className="ac-svc-card-icon" aria-hidden="true">
                 <Icon strokeWidth={1.75} />
               </span>
@@ -107,8 +119,19 @@ function ServiceFlipCard({
 
 function ServiceCatalog() {
   const labelId = useId();
-  const { ranked, clickMap, recordFlip } = useServiceCardRanking();
-  const total = ranked.length;
+  const { display, clickMap, recordFlip } = useServiceCardRanking();
+  const [openId, setOpenId] = useState<string | null>(null);
+  const total = display.length;
+
+  function toggleCard(id: string, item: (typeof display)[number]) {
+    if (openId === id) {
+      setOpenId(null);
+      return;
+    }
+    setOpenId(id);
+    void recordFlip(item);
+  }
+
 
   return (
     <section
@@ -121,9 +144,13 @@ function ServiceCatalog() {
         </h2>
       </div>
 
+      <div
+        className="ac-svc-grid"
 
-      <div className="ac-svc-grid" role="list" aria-label="All services">
-        {ranked.map((s, i) => (
+        role="list"
+        aria-label="All services"
+      >
+        {display.map((s, i) => (
           <div key={s.id} role="listitem" id={`service-${s.id}`}>
             <ServiceFlipCard
               item={s}
@@ -131,7 +158,8 @@ function ServiceCatalog() {
               total={total}
               lead={i === 0}
               interest={clickMap[s.id] ?? 0}
-              onFlipToBack={() => void recordFlip(s)}
+              flipped={openId === s.id}
+              onToggle={() => toggleCard(s.id, s)}
             />
           </div>
         ))}
