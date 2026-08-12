@@ -1,14 +1,10 @@
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useState,
-} from "react";
+import { useEffect, useId, useState } from "react";
 import { SiteChrome } from "./site-chrome";
 import { VoiceCta, VoiceWhenSignedIn } from "./voice-access";
-import { services, type ServiceItem } from "./service-data";
+import { type ServiceItem } from "./service-data";
 import { useServiceFaqRanking } from "@/hooks/use-service-faq-ranking";
-import { track, trackPageView } from "@/lib/analytics/client";
+import { useServiceCardRanking } from "@/hooks/use-service-card-ranking";
+import { trackPageView } from "@/lib/analytics/client";
 
 function assistanceLabel(kind: "direct" | "indirect" | "both"): string {
   if (kind === "direct") return "Direct assistance";
@@ -16,307 +12,129 @@ function assistanceLabel(kind: "direct" | "indirect" | "both"): string {
   return "Direct and indirect";
 }
 
-/** How many open leaves: 1 phone · 2 tablet · 3 desktop */
-function useSpreadCount() {
-  const [count, setCount] = useState(1);
-  useEffect(() => {
-    const calc = () => {
-      const w = window.innerWidth;
-      if (w >= 1100) setCount(3);
-      else if (w >= 720) setCount(2);
-      else setCount(1);
-    };
-    calc();
-    window.addEventListener("resize", calc);
-    return () => window.removeEventListener("resize", calc);
-  }, []);
-  return count;
-}
-
-function ServiceBookPage({
+function ServiceFlipCard({
   item,
-  index,
+  catalogNum,
   total,
-  role,
+  lead,
+  interest,
+  onFlipToBack,
 }: {
   item: ServiceItem;
-  index: number;
+  catalogNum: string;
   total: number;
-  role: "past" | "current" | "ahead";
+  lead?: boolean;
+  interest: number;
+  onFlipToBack: () => void;
 }) {
+  const [flipped, setFlipped] = useState(false);
   const Icon = item.icon;
+
+  function toggle() {
+    setFlipped((v) => {
+      const next = !v;
+      if (next) onFlipToBack();
+      return next;
+    });
+  }
+
   return (
-    <article
-      className={`ac-book-page-face ac-book-page-face--${role}`}
-      aria-label={`Service ${index + 1} of ${total}: ${item.title}`}
+    <div
+      className={`ac-svc-flip${lead ? " is-lead" : ""}${
+        flipped ? " is-flipped" : ""
+      }`}
     >
-      <header className="ac-book-page-head">
-        <span className="ac-book-page-num" aria-hidden="true">
-          {String(index + 1).padStart(2, "0")}
+      <button
+        type="button"
+        className="ac-svc-flip-hit"
+        onClick={toggle}
+        aria-pressed={flipped}
+        aria-label={`${item.title} (${catalogNum} of ${String(total).padStart(2, "0")}). ${
+          flipped ? "Show overview" : "Show outcomes"
+        }`}
+      >
+        <span className="ac-svc-flip-inner">
+          <span className="ac-svc-flip-face ac-svc-flip-face--front">
+            <span className="ac-svc-card-top">
+              <span className="ac-svc-card-num">{catalogNum}</span>
+              <span
+                className={`ac-service-assist ac-service-assist--${item.assistance}`}
+              >
+                {assistanceLabel(item.assistance)}
+              </span>
+              {interest > 0 ? (
+                <span className="ac-svc-interest" title="Times flipped">
+                  {interest}
+                </span>
+              ) : null}
+              <span className="ac-svc-card-icon" aria-hidden="true">
+                <Icon strokeWidth={1.75} />
+              </span>
+            </span>
+            <span className="ac-svc-card-title">{item.title}</span>
+            <span className="ac-svc-card-text">{item.description}</span>
+            {item.composedFrom?.includes("delivery-climb-notes") ? (
+              <span className="ac-svc-flip-composed">
+                Includes Delivery with Climb Notes™
+              </span>
+            ) : null}
+            <span className="ac-svc-flip-hint">Flip for outcomes →</span>
+          </span>
+
+          <span className="ac-svc-flip-face ac-svc-flip-face--back">
+            <span className="ac-svc-card-top">
+              <span className="ac-svc-card-num">{catalogNum}</span>
+              <span className="ac-svc-flip-back-kicker">Outcomes</span>
+              <span className="ac-svc-card-icon" aria-hidden="true">
+                <Icon strokeWidth={1.75} />
+              </span>
+            </span>
+            <span className="ac-svc-card-title">{item.title}</span>
+            <span className="ac-svc-card-points" role="list">
+              {item.points.map((point) => (
+                <span key={point} role="listitem">
+                  {point}
+                </span>
+              ))}
+            </span>
+            <span className="ac-svc-flip-hint">← Flip back</span>
+          </span>
         </span>
-        <span className="ac-book-page-folio" aria-hidden="true">
-          Service catalog · leaf {index + 1}
-        </span>
-        <span className="ac-service-icon ac-book-page-icon" aria-hidden="true">
-          <Icon strokeWidth={1.75} />
-        </span>
-      </header>
-
-      <p className={`ac-service-assist ac-service-assist--${item.assistance}`}>
-        {assistanceLabel(item.assistance)}
-      </p>
-
-      <h3 className="ac-book-page-title">{item.title}</h3>
-      <p className="ac-book-page-text">{item.description}</p>
-
-      <ul className="ac-book-page-points">
-        {item.points.map((point) => (
-          <li key={point}>{point}</li>
-        ))}
-      </ul>
-
-      <footer className="ac-book-page-foot" aria-hidden="true">
-        <span>{index + 1}</span>
-        <span className="ac-book-page-foot-rule" />
-        <span>{total}</span>
-      </footer>
-    </article>
+      </button>
+    </div>
   );
 }
 
-type CurlKind = "forward" | "back" | null;
-
-function ServiceBookCarousel() {
-  const total = services.length;
-  const spread = useSpreadCount();
-  const [page, setPage] = useState(0);
-  const [curl, setCurl] = useState<CurlKind>(null);
-  const [animating, setAnimating] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
+function ServiceCatalog() {
   const labelId = useId();
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const apply = () => setReducedMotion(mq.matches);
-    apply();
-    mq.addEventListener?.("change", apply);
-    return () => mq.removeEventListener?.("change", apply);
-  }, []);
-
-  // Keep page in range when spread changes so we never overshoot the end
-  useEffect(() => {
-    setPage((p) => Math.min(p, Math.max(0, total - spread)));
-  }, [spread, total]);
-
-  const maxStart = Math.max(0, total - spread);
-
-  const turn = useCallback(
-    (dir: "forward" | "back") => {
-      if (animating) return;
-      const next =
-        dir === "forward"
-          ? Math.min(page + 1, maxStart)
-          : Math.max(page - 1, 0);
-      if (next === page) return;
-
-      track("service_card_select", {
-        index: next,
-        service: services[next]?.title ?? "",
-        assistance: services[next]?.assistance ?? "",
-        flip: dir,
-        spread,
-      });
-
-      if (reducedMotion) {
-        setPage(next);
-        return;
-      }
-
-      setAnimating(true);
-      setCurl(dir);
-      // Mid-curl: swap spread; end: clear curl class
-      window.setTimeout(() => setPage(next), 280);
-      window.setTimeout(() => {
-        setCurl(null);
-        setAnimating(false);
-      }, 560);
-    },
-    [animating, maxStart, page, reducedMotion, spread],
-  );
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight" || e.key === "PageDown") turn("forward");
-      if (e.key === "ArrowLeft" || e.key === "PageUp") turn("back");
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [turn]);
-
-  const visible = Array.from({ length: spread }, (_, i) => {
-    const idx = page + i;
-    if (idx >= total) return null;
-    return { item: services[idx], index: idx };
-  }).filter(Boolean) as { item: ServiceItem; index: number }[];
-
-  const canBack = page > 0;
-  const canForward = page < maxStart;
-  const endLeaf = Math.min(page + spread, total);
-
-  const stageClass = [
-    "ac-book-stage",
-    `ac-book-stage--spread-${spread}`,
-    curl === "forward" ? "is-curl-forward" : "",
-    curl === "back" ? "is-curl-back" : "",
-    reducedMotion ? "is-reduced-motion" : "",
-    animating ? "is-animating" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const { ranked, clickMap, recordFlip } = useServiceCardRanking();
+  const total = ranked.length;
 
   return (
     <section
-      className="ac-service-series ac-service-book"
+      className="ac-service-series ac-svc-catalog"
       aria-labelledby={labelId}
-      aria-roledescription="carousel"
     >
-      <div className="ac-service-series-head">
+      <div className="ac-svc-catalog-bar">
         <h2 className="ac-service-series-title" id={labelId}>
           Service catalog
         </h2>
-        <p className="ac-service-series-meta" aria-live="polite">
-          Leaves {String(page + 1).padStart(2, "0")}–
-          {String(endLeaf).padStart(2, "0")} of {String(total).padStart(2, "0")}
-          <span className="ac-book-spread-label"> · open {spread}</span>
-        </p>
       </div>
 
-      <p className="ac-book-hint">
-        Top-left corner turns back · bottom-right corner curls forward · arrow
-        keys work too.
-      </p>
 
-      <div className="ac-book-shell">
-        <div className="ac-book-spine" aria-hidden="true">
-          <span className="ac-book-spine-title">Acornsoft</span>
-          <span className="ac-book-spine-sub">Services</span>
-        </div>
-
-        <div className={stageClass}>
-          {/* Open spread: 1–3 pages */}
-          <div
-            className="ac-book-spread"
-            style={{
-              ["--ac-spread" as string]: String(spread),
-            }}
-          >
-            {visible.map(({ item, index }, i) => {
-              const role =
-                i === 0 ? "current" : i === visible.length - 1 ? "ahead" : "past";
-              // middle of 3 is "past" in naming — use current for center emphasis
-              const r =
-                spread === 3
-                  ? i === 0
-                    ? "past"
-                    : i === 1
-                      ? "current"
-                      : "ahead"
-                  : i === 0
-                    ? "current"
-                    : "ahead";
-              return (
-                <div
-                  key={`${item.title}-${index}`}
-                  className={`ac-book-leaf-slot ac-book-leaf-slot--${i} ac-book-leaf-slot--${r}`}
-                >
-                  <ServiceBookPage
-                    item={item}
-                    index={index}
-                    total={total}
-                    role={role === "past" ? r : r}
-                  />
-                </div>
-              );
-            })}
+      <div className="ac-svc-grid" role="list" aria-label="All services">
+        {ranked.map((s, i) => (
+          <div key={s.id} role="listitem" id={`service-${s.id}`}>
+            <ServiceFlipCard
+              item={s}
+              catalogNum={String(i + 1).padStart(2, "0")}
+              total={total}
+              lead={i === 0}
+              interest={clickMap[s.id] ?? 0}
+              onFlipToBack={() => void recordFlip(s)}
+            />
           </div>
-
-          {/* Corner: top-left = back */}
-          <button
-            type="button"
-            className={`ac-book-corner ac-book-corner--back${
-              canBack ? "" : " is-disabled"
-            }`}
-            onClick={() => turn("back")}
-            disabled={!canBack || animating}
-            aria-label="Turn back a page"
-            title={canBack ? "Turn back" : "Start of catalog"}
-          >
-            <span className="ac-book-corner-curl" aria-hidden="true" />
-            <span className="ac-book-corner-label">Back</span>
-          </button>
-
-          {/* Corner: bottom-right = forward (page curl / wipe) */}
-          <button
-            type="button"
-            className={`ac-book-corner ac-book-corner--forward${
-              canForward ? "" : " is-disabled"
-            }`}
-            onClick={() => turn("forward")}
-            disabled={!canForward || animating}
-            aria-label="Turn forward a page"
-            title={canForward ? "Curl page forward" : "End of catalog"}
-          >
-            <span className="ac-book-corner-curl" aria-hidden="true" />
-            <span className="ac-book-corner-label">Next</span>
-          </button>
-
-          {/* Full-stage curl wipe overlay during forward/back */}
-          <div className="ac-book-curl-wipe" aria-hidden="true">
-            <div className="ac-book-curl-sheet" />
-            <div className="ac-book-curl-shade" />
-          </div>
-        </div>
-      </div>
-
-      <div className="ac-book-controls">
-        <div className="ac-book-dots" role="tablist" aria-label="Service leaves">
-          {services.map((s, i) => {
-            const inView = i >= page && i < page + spread;
-            return (
-              <button
-                key={s.title}
-                type="button"
-                role="tab"
-                aria-selected={inView}
-                aria-label={`${s.title} (${i + 1} of ${total})`}
-                className={`ac-book-dot${inView ? " is-active" : ""}`}
-                disabled={animating}
-                onClick={() => {
-                  if (animating) return;
-                  const target = Math.min(i, maxStart);
-                  if (target === page) return;
-                  const dir = target > page ? "forward" : "back";
-                  track("service_card_select", {
-                    index: target,
-                    service: services[target]?.title ?? "",
-                    via: "dot",
-                  });
-                  if (reducedMotion) {
-                    setPage(target);
-                    return;
-                  }
-                  setAnimating(true);
-                  setCurl(dir);
-                  window.setTimeout(() => setPage(target), 280);
-                  window.setTimeout(() => {
-                    setCurl(null);
-                    setAnimating(false);
-                  }, 560);
-                }}
-              />
-            );
-          })}
-        </div>
+        ))}
       </div>
     </section>
   );
@@ -366,7 +184,7 @@ export function ServicePage() {
             </div>
           </header>
 
-          <ServiceBookCarousel />
+          <ServiceCatalog />
 
           <section
             className="ac-service-faq"
@@ -416,3 +234,4 @@ export function ServicePage() {
     </SiteChrome>
   );
 }
+

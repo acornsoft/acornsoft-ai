@@ -41,7 +41,7 @@ export const getClimbNotesAccess = createServerFn({ method: "GET" })
     }
   });
 
-/** Public: published notes only (no auth). */
+/** Published notes only — safe for anonymous visitors. */
 export const listPublishedClimbNotes = createServerFn({ method: "GET" }).handler(
   async (): Promise<ClimbNote[]> => {
     const { listClimbNotesFromDb } = await import("./store.server");
@@ -49,13 +49,17 @@ export const listPublishedClimbNotes = createServerFn({ method: "GET" }).handler
   },
 );
 
-/** Public-ish: all notes for studio view on the journal page (read). */
-export const listAllClimbNotesPublic = createServerFn({
-  method: "GET",
-}).handler(async (): Promise<ClimbNote[]> => {
-  const { listClimbNotesFromDb } = await import("./store.server");
-  return listClimbNotesFromDb({ publishedOnly: false });
-});
+/**
+ * Full library (draft / pending / approved / archived).
+ * Requires a signed-in session. Prefer listClimbNotesForEditor for Gnomah.
+ * Not used by the public Climb Notes journal (published only).
+ */
+export const listAllClimbNotesPublic = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .handler(async (): Promise<ClimbNote[]> => {
+    const { listClimbNotesFromDb } = await import("./store.server");
+    return listClimbNotesFromDb({ publishedOnly: false });
+  });
 
 /** Owner: full library for Gnomah editor. */
 export const listClimbNotesForEditor = createServerFn({ method: "GET" })

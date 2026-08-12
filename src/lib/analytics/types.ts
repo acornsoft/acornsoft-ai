@@ -4,7 +4,9 @@ export const ANALYTICS_EVENTS = [
   "faq_open",
   "service_carousel_view",
   "service_carousel_nav",
+  "service_card_select",
   "cta_click",
+
   "link_click",
 ] as const;
 

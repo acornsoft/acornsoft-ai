@@ -3,13 +3,15 @@ import {
   Code2,
   GraduationCap,
   Layers,
-  LineChart,
   ShieldCheck,
   Sparkles,
+  LineChart,
   type LucideIcon,
 } from "lucide-react";
 
 export type ServiceItem = {
+  /** Stable id — do not recycle if a card is composed or retired from the public baseline. */
+  id: string;
   icon: LucideIcon;
   title: string;
   description: string;
@@ -17,11 +19,18 @@ export type ServiceItem = {
   points: string[];
   /** How help is offered: direct engagement vs enablement / public trails. */
   assistance: "direct" | "indirect" | "both";
+  /** If set, this public card is composed from catalog ids (nothing deleted). */
+  composedFrom?: string[];
 };
 
-/** One card per engagement type on /service. */
-export const services: ServiceItem[] = [
+/**
+ * Full catalog — every service we have defined.
+ * Do not delete entries. The public page shows `baselineServices` (6),
+ * composed from this list so copy and outcomes stay recoverable.
+ */
+export const serviceCatalog: ServiceItem[] = [
   {
+    id: "learn-the-climb",
     icon: GraduationCap,
     title: "Learn the Climb",
     assistance: "indirect",
@@ -36,6 +45,7 @@ export const services: ServiceItem[] = [
     ],
   },
   {
+    id: "ai-strategy",
     icon: Brain,
     title: "Artificial Intelligence Strategy",
     assistance: "direct",
@@ -49,6 +59,7 @@ export const services: ServiceItem[] = [
     ],
   },
   {
+    id: "product-build",
     icon: Code2,
     title: "Product Build",
     assistance: "direct",
@@ -62,6 +73,7 @@ export const services: ServiceItem[] = [
     ],
   },
   {
+    id: "model-systems",
     icon: Layers,
     title: "Model Systems",
     assistance: "direct",
@@ -75,6 +87,7 @@ export const services: ServiceItem[] = [
     ],
   },
   {
+    id: "trust-and-safety",
     icon: ShieldCheck,
     title: "Trust and Safety",
     assistance: "both",
@@ -88,6 +101,7 @@ export const services: ServiceItem[] = [
     ],
   },
   {
+    id: "automation",
     icon: Sparkles,
     title: "Automation",
     assistance: "direct",
@@ -101,6 +115,7 @@ export const services: ServiceItem[] = [
     ],
   },
   {
+    id: "delivery-climb-notes",
     icon: LineChart,
     title: "Delivery with Climb Notes™",
     assistance: "both",
@@ -114,6 +129,45 @@ export const services: ServiceItem[] = [
     ],
   },
 ];
+
+const catalogById = Object.fromEntries(
+  serviceCatalog.map((s) => [s.id, s]),
+) as Record<string, ServiceItem>;
+
+function must(id: string): ServiceItem {
+  const s = catalogById[id];
+  if (!s) throw new Error(`Unknown service catalog id: ${id}`);
+  return s;
+}
+
+/**
+ * Public baseline (6). Delivery is not dropped — it is the method inside
+ * Learn the Climb (literacy + the trail every engagement leaves).
+ */
+export const baselineServices: ServiceItem[] = (() => {
+  const learn = must("learn-the-climb");
+  const delivery = must("delivery-climb-notes");
+  return [
+    {
+      id: "learn-the-climb",
+      icon: learn.icon,
+      title: learn.title,
+      assistance: "both",
+      composedFrom: [learn.id, delivery.id],
+      description:
+        "Learn the four shared words—problem, measure, slice, lesson—and use Climb Notes as the delivery record. You climb with Luna as your Sherpa; every engagement leaves a trail the next team can re-ascend. Indirect first; the same trail runs through paid work.",
+      points: [...learn.points, ...delivery.points],
+    },
+    must("ai-strategy"),
+    must("product-build"),
+    must("model-systems"),
+    must("trust-and-safety"),
+    must("automation"),
+  ];
+})();
+
+/** @deprecated Use baselineServices on the public page; serviceCatalog is the full archive. */
+export const services = baselineServices;
 
 export type ServiceFaq = {
   /** Stable id for click ranking (do not change casually). */
@@ -141,13 +195,13 @@ export const serviceFaqs: ServiceFaq[] = [
     id: "how-help-use",
     defaultOrder: 2,
     q: "How do you help people use it?",
-    a: "Through Climb Notes™, walkthroughs, and Grok Voice with Luna (Ara) as your Sherpa—indirect help anyone can follow. Paid work then applies the same four steps on your mountain: strategy, build, and delivery with a trail map you keep.",
+    a: "Through Climb Notes™, walkthroughs, and Grok Voice with Luna (Ara) as your Sherpa—indirect help anyone can follow. Paid work then applies the same four steps on your mountain: strategy, build, systems, automation, and trust, with a trail map you keep.",
   },
   {
     id: "direct-vs-indirect",
     defaultOrder: 3,
     q: "What is direct versus indirect assistance?",
-    a: "Indirect: education, public Climb Notes, and guided Voice so you climb with a map—not alone without history. Direct: we help on strategy, product build, model systems, automation, trust, and delivery for your specific mountain, using prior climbs as guidelines when they apply.",
+    a: "Indirect: education, public Climb Notes, and guided Voice so you climb with a map—not alone without history. Direct: we help on strategy, product build, model systems, automation, and trust for your specific mountain. Delivery is not a seventh service—it is Climb Notes running through every engagement.",
   },
   {
     id: "kinds-of-projects",
@@ -159,12 +213,18 @@ export const serviceFaqs: ServiceFaq[] = [
     id: "engagements-start",
     defaultOrder: 5,
     q: "How do engagements start?",
-    a: "Often with Learn the Climb or a short discovery slice: one problem, one measure, one thin vertical. If that works, we stack Product Build, Model Systems, Trust and Safety, Automation, or Delivery as the climb demands—modular, not a large fixed program by default.",
+    a: "Often with Learn the Climb or a short discovery slice: one problem, one measure, one thin vertical. If that works, we stack Strategy, Product Build, Model Systems, Trust and Safety, or Automation as the climb demands—modular, not a large fixed program by default.",
   },
   {
     id: "one-card",
     defaultOrder: 6,
     q: "Can we start with only one card?",
     a: "Yes. Many start with Learn the Climb, Artificial Intelligence Strategy, or a single Product Build slice. Stack services only when the next constraint is clear. Small starts, strong roots.",
+  },
+  {
+    id: "six-baseline",
+    defaultOrder: 7,
+    q: "Why six services, not seven?",
+    a: "Six is the public baseline: Learn the Climb, Strategy, Product Build, Model Systems, Trust and Safety, and Automation. Delivery with Climb Notes is how those six run—the trail inside Learn the Climb and every paid engagement—not a separate seventh offer. The full catalog is still kept so nothing is thrown away.",
   },
 ];
