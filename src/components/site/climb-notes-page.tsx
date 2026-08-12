@@ -5,32 +5,16 @@ import { ClimbNotesMark } from "./climb-notes-mark";
 import { SiteHeader } from "./site-chrome";
 import {
   climbNotes as staticClimbNotes,
-  countByStatus,
+  publishedClimbNotes as staticPublishedClimbNotes,
   formatClimbNoteCiteForX,
   climbNoteXActionUrl,
   isPublicClimbNoteStatus,
   CLIMB_NOTE_STATUS_LABEL,
   type ClimbNote,
-  type ClimbNoteStatus,
 } from "./climb-notes-data";
-import {
-  listAllClimbNotesPublic,
-  listPublishedClimbNotes,
-} from "@/lib/climb-notes/actions";
+import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { authEnabled } from "@/lib/auth/client";
-
-type StudioFilter = "all" | ClimbNoteStatus;
-type PageMode = "public" | "studio";
-
-const STUDIO_FILTERS: { key: StudioFilter; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "published", label: "Published" },
-  { key: "pending", label: "Pending approval" },
-  { key: "approved", label: "Approved" },
-  { key: "draft", label: "Unapproved" },
-  { key: "archived", label: "Archived" },
-];
 
 const CLIMB_STEPS: {
   key: "problem" | "measure" | "slice" | "lesson";
@@ -63,19 +47,33 @@ function cnPinLabel(number: string): string {
   return `CN-${n}`;
 }
 
+function sortPublished(list: ClimbNote[]): ClimbNote[] {
+  return [...list]
+    .filter((n) => isPublicClimbNoteStatus(n.status))
+    .sort((a, b) => {
+      if (a.id === "cn-016" || a.number === "000" || a.number === "016")
+        return -1;
+      if (b.id === "cn-016" || b.number === "000" || b.number === "016")
+        return 1;
+      const byNum = b.number.localeCompare(a.number);
+      if (byNum !== 0) return byNum;
+      return a.title.localeCompare(b.title);
+    });
+}
+
 function NoteCard({
   note,
-  studio,
   signedIn,
 }: {
   note: ClimbNote;
-  studio: boolean;
   signedIn: boolean;
 }) {
   const citeText = formatClimbNoteCiteForX(note);
   const isPublic = isPublicClimbNoteStatus(note.status);
+  // Guard: never render non-published on this page
+  if (!isPublic) return null;
+
   const tags = note.tags?.filter(Boolean) ?? [];
-  const visibility = isPublic ? "Public" : "Not public";
   const xAction = climbNoteXActionUrl(note);
   const cnPin = cnPinLabel(note.number);
   const statusLabel = CLIMB_NOTE_STATUS_LABEL[note.status];
@@ -83,14 +81,7 @@ function NoteCard({
   return (
     <article
       id={note.id}
-      className={[
-        "ac-cn-entry",
-        "ac-cn-entry--trail",
-        studio && !isPublic ? "is-not-public" : "",
-        `is-${note.status}`,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      className="ac-cn-entry ac-cn-entry--trail is-published"
     >
       <header className="ac-cn-entry-head">
         <div className="ac-cn-title-row">
@@ -100,21 +91,22 @@ function NoteCard({
               className={[
                 "ac-cn-pill",
                 "ac-cn-pill--status",
-                "ac-cn-status-select",
-                `is-${note.status}`,
+                "ac-cn-pill--published",
                 signedIn ? "is-editable" : "is-locked",
-              ].join(" ")}
+              ]
+                .filter(Boolean)
+                .join(" ")}
               title={
                 signedIn
-                  ? `Status: ${statusLabel}`
-                  : "Sign in to change status"
+                  ? "Published — manage status in Gnomah"
+                  : "Published"
               }
               aria-disabled={!signedIn}
             >
               {statusLabel}
             </span>
             <a
-              className="ac-cn-gear-link ac-cn-gear-link--primary"
+              className="ac-cn-pill ac-cn-pill--x ac-cn-pill--action"
               href={xAction.href}
               target="_blank"
               rel="noopener noreferrer"
@@ -122,11 +114,11 @@ function NoteCard({
               {xAction.kind === "live" ? "Open on X" : "Schedule on X"}
             </a>
             {xAction.kind === "compose" && citeText ? (
-              <details className="ac-cn-cite-details ac-cn-cite-details--gear">
-                <summary className="ac-cn-gear-link">View post text</summary>
-                <pre className="ac-cn-x-pre" tabIndex={0}>
-                  {citeText}
-                </pre>
+              <details className="ac-cn-cite-details">
+                <summary className="ac-cn-pill ac-cn-pill--ghost ac-cn-pill--action">
+                  View post text
+                </summary>
+                <pre className="ac-cn-cite-panel">{citeText}</pre>
               </details>
             ) : null}
           </div>
@@ -182,24 +174,17 @@ function NoteCard({
       </section>
 
       <footer className="ac-cn-meta-foot">
-        <p className="ac-cn-section-kicker ac-cn-meta-kicker">Metadata</p>
-        <ul className="ac-cn-fact-pills" aria-label="Climb Note metadata">
-          {note.date ? (
-            <li>
-              <span className="ac-cn-fact-k">Date</span>
-              <span className="ac-cn-pill ac-cn-pill--fact">
-                {formatMetaDate(note.date)}
-              </span>
-            </li>
-          ) : null}
-          {note.version != null ? (
-            <li>
-              <span className="ac-cn-fact-k">Version</span>
-              <span className="ac-cn-pill ac-cn-pill--fact">
-                v{note.version}
-              </span>
-            </li>
-          ) : null}
+        <ul className="ac-cn-fact-pills">
+          <li>
+            <span className="ac-cn-fact-k">Number</span>
+            <span className="ac-cn-pill ac-cn-pill--fact">{cnPin}</span>
+          </li>
+          <li>
+            <span className="ac-cn-fact-k">Date</span>
+            <span className="ac-cn-pill ac-cn-pill--fact">
+              {formatMetaDate(note.date)}
+            </span>
+          </li>
           {note.publishedAt ? (
             <li>
               <span className="ac-cn-fact-k">Published</span>
@@ -210,7 +195,7 @@ function NoteCard({
           ) : null}
           <li>
             <span className="ac-cn-fact-k">Who can see it</span>
-            <span className="ac-cn-pill ac-cn-pill--fact">{visibility}</span>
+            <span className="ac-cn-pill ac-cn-pill--fact">Public</span>
           </li>
           {tags.length > 0 ? (
             <li className="ac-cn-fact-tags">
@@ -230,12 +215,16 @@ function NoteCard({
   );
 }
 
+/**
+ * Public Climb Notes journal — **published only**.
+ * Draft / pending / approved / archived live in Gnomah (owner), never here.
+ */
 export function ClimbNotesPage() {
   const { user, isPending } = useCurrentUserState();
   const signedIn = !authEnabled || (!isPending && !!user);
-  const [mode, setMode] = useState<PageMode>("public");
-  const [filter, setFilter] = useState<StudioFilter>("all");
-  const [notes, setNotes] = useState<ClimbNote[]>(staticClimbNotes);
+  const [notes, setNotes] = useState<ClimbNote[]>(() =>
+    sortPublished(staticPublishedClimbNotes),
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -243,17 +232,25 @@ export function ClimbNotesPage() {
     (async () => {
       setLoading(true);
       try {
-        const list =
-          mode === "public"
-            ? await listPublishedClimbNotes()
-            : await listAllClimbNotesPublic();
-        if (!cancelled) {
-          if (list.length > 0) setNotes(list);
-          else if (staticClimbNotes.length > 0) setNotes(staticClimbNotes);
-        }
+        const list = await listPublishedClimbNotes();
+        if (cancelled) return;
+        const published = sortPublished(
+          list.length > 0
+            ? list
+            : staticPublishedClimbNotes.length > 0
+              ? staticPublishedClimbNotes
+              : staticClimbNotes,
+        );
+        setNotes(published);
       } catch {
-        if (!cancelled && staticClimbNotes.length > 0) {
-          setNotes(staticClimbNotes);
+        if (!cancelled) {
+          setNotes(
+            sortPublished(
+              staticPublishedClimbNotes.length > 0
+                ? staticPublishedClimbNotes
+                : staticClimbNotes,
+            ),
+          );
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -262,30 +259,9 @@ export function ClimbNotesPage() {
     return () => {
       cancelled = true;
     };
-  }, [mode]);
+  }, []);
 
-  const counts = useMemo(() => countByStatus(notes), [notes]);
-
-  const visible = useMemo(() => {
-    let list: ClimbNote[];
-    if (mode === "public") {
-      list = notes.filter((n) => isPublicClimbNoteStatus(n.status));
-    } else if (filter === "all") {
-      list = notes;
-    } else {
-      list = notes.filter((n) => n.status === filter);
-    }
-    return [...list].sort((a, b) => {
-      if (a.id === "cn-016") return -1;
-      if (b.id === "cn-016") return 1;
-      const byNum = b.number.localeCompare(a.number);
-      if (byNum !== 0) return byNum;
-      return a.title.localeCompare(b.title);
-    });
-  }, [notes, mode, filter]);
-
-  const publishedCount = counts.published;
-  const studioCount = counts.all;
+  const visible = useMemo(() => sortPublished(notes), [notes]);
 
   return (
     <div className="template-color-1 spybody ac-inbio ac-climb-notes ac-hero-stage">
@@ -308,93 +284,35 @@ export function ClimbNotesPage() {
                 </div>
               </div>
             </div>
-
-            <div className="row mt--30">
-              <div className="col-lg-12">
-                <div className="ac-cn-toolbar">
-                  <div
-                    className="ac-cn-mode-bar ac-cn-mode-bar--compact-right"
-                    role="tablist"
-                    aria-label="Climb Notes view"
-                  >
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={mode === "public"}
-                      className={`ac-cn-mode-btn${
-                        mode === "public" ? " is-active" : ""
-                      }`}
-                      onClick={() => setMode("public")}
-                    >
-                      Public journal
-                      <span className="ac-cn-mode-count">
-                        ({publishedCount})
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={mode === "studio"}
-                      className={`ac-cn-mode-btn${
-                        mode === "studio" ? " is-active" : ""
-                      }`}
-                      onClick={() => setMode("studio")}
-                    >
-                      Studio library
-                      <span className="ac-cn-mode-count">({studioCount})</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
         <section className="rn-section-gap" id="notes">
           <div className="container">
-            {mode === "studio" ? (
-              <div className="ac-cn-filter-row" aria-label="Filter by status">
-                {STUDIO_FILTERS.map((f) => {
-                  const n =
-                    f.key === "all"
-                      ? counts.all
-                      : counts[f.key as ClimbNoteStatus];
-                  return (
-                    <button
-                      key={f.key}
-                      type="button"
-                      className={`ac-cn-filter-pill${
-                        filter === f.key ? " is-active" : ""
-                      }`}
-                      onClick={() => setFilter(f.key)}
-                    >
-                      {f.label}
-                      <span>({n})</span>
-                    </button>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="ac-cn-public-banner">
-                Published Climb Notes — trails anyone can follow.
-              </p>
-            )}
+            <p className="ac-cn-public-banner">
+              Published Climb Notes only — trails anyone can follow.
+              {signedIn ? (
+                <>
+                  {" "}
+                  Unapproved work stays in{" "}
+                  <Link to="/gnomah" className="ac-cn-public-signin">
+                    Gnomah
+                  </Link>
+                  .
+                </>
+              ) : null}
+            </p>
 
             {loading ? (
               <p className="ac-cn-empty">Loading Climb Notes…</p>
             ) : visible.length === 0 ? (
-              <p className="ac-cn-empty">
-                {mode === "public"
-                  ? "No published Climb Notes yet."
-                  : "No Climb Notes match this filter."}
-              </p>
+              <p className="ac-cn-empty">No published Climb Notes yet.</p>
             ) : (
               <div className="ac-cn-list">
                 {visible.map((note) => (
                   <NoteCard
                     key={note.id}
                     note={note}
-                    studio={mode === "studio"}
                     signedIn={signedIn}
                   />
                 ))}
@@ -415,6 +333,11 @@ export function ClimbNotesPage() {
                 <Link className="rn-btn" to="/canopy">
                   <span>Open Canopy</span>
                 </Link>
+                {signedIn ? (
+                  <Link className="rn-btn ac-btn-outline" to="/gnomah">
+                    <span>Open Gnomah</span>
+                  </Link>
+                ) : null}
               </div>
             </div>
           </div>
