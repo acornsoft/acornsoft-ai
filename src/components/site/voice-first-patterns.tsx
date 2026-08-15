@@ -61,7 +61,7 @@ const INTENTS: {
   {
     id: "explain-climb",
     label: "Walk me through",
-    prompt: "Walk me through problem, measure, slice, and lesson.",
+    prompt: "Walk me through problem, measure, pitch, and lesson.",
   },
 ];
 
@@ -71,9 +71,9 @@ const LUNA_REPLIES: Record<VoiceIntentId, string> = {
   "find-note":
     "Tell me what you’re trying to improve — customers, operations, or a product decision — and I’ll point you to published Climb Notes that fit.",
   "business-problem":
-    "Start with the hard thing in plain language. We’ll pick one thin vertical, a way to know it worked, and a slice you can ship this week.",
+    "Start with the hard thing in plain language. We’ll pick one thin vertical, a way to know it worked, and a pitch you can ship this week.",
   "explain-climb":
-    "Problem: what’s hard. Measure: how you’ll know. Slice: what ships next. Lesson: what the next person reuses. Four moves. Everyone can follow.",
+    "Problem: what’s hard. Measure: how you’ll know. Pitch: what ships next. Lesson: what the next person reuses. Four moves. Everyone can follow.",
 };
 
 type SpeechRecognitionLike = {

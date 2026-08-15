@@ -257,7 +257,7 @@ function parseNote(path: string, raw: string): ClimbNote | null {
     date: String(data.date ?? ""),
     problem: section(body, "Problem"),
     measure: section(body, "Measure"),
-    slice: section(body, "Slice"),
+    slice: section(body, "Pitch") || section(body, "Slice"),
     lesson: section(body, "Lesson"),
     status: pub.status,
     frontmatterStatus,

@@ -35,10 +35,10 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Learn the Climb",
     assistance: "indirect",
     description:
-      "Indirect help first: learn the four shared words—problem, measure, slice, lesson—so AI work becomes a climb you can finish and reuse, not only a developer craft. You climb with Luna as your Sherpa; prior Climb Notes guide the next path—same mountain or a new one.",
+      "Indirect help first: learn the four shared words—problem, measure, pitch, lesson—so AI work becomes a climb you can finish and reuse, not only a developer craft. You climb with Luna as your Sherpa; prior Climb Notes guide the next path—same mountain or a new one.",
     points: [
       "Climb Notes™ literacy for leaders, operators, creators, and builders",
-      "Walkthroughs and examples that make problem → measure → slice → lesson real",
+      "Walkthroughs and examples that make problem → measure → pitch → lesson real",
       "Path into Grok Voice with Luna (Ara) as your Sherpa — one voice on your climb",
       "Prior Climb Notes as guidelines for future climbs (same path or new)",
       "Content and journal trails people can re-ascend without us in the room",
@@ -120,7 +120,7 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Delivery with Climb Notes™",
     assistance: "both",
     description:
-      "Direct delivery and indirect enablement: Climb Notes structure the climb—problem, measure, slice, lesson—so every engagement leaves a trail the next team can re-ascend.",
+      "Direct delivery and indirect enablement: Climb Notes structure the climb—problem, measure, pitch, lesson—so every engagement leaves a trail the next team can re-ascend.",
     points: [
       "Climb Notes as the delivery record (not optional theater)",
       "Thin vertical slices that prove value under real load",
@@ -153,7 +153,7 @@ export const baselineServices: ServiceItem[] = [
     assistance: "both",
     composedFrom: ["learn-the-climb", "delivery-climb-notes"],
     description:
-      "Does: teach you to write one finished AI job as Problem → Measure → Slice → Lesson. Why: without that, tools pile up and you cannot tell if the work got better.",
+      "Does: teach you to write one finished AI job as Problem → Measure → Pitch → Lesson. Why: without that, tools pile up and you cannot tell if the work got better.",
     points: [
       "The four-step template",
       "Public notes you can copy",
@@ -249,13 +249,13 @@ export const serviceFaqs: ServiceFaq[] = [
     id: "what-is-climb-notes",
     defaultOrder: 0,
     q: "What is a Climb Note?",
-    a: "A Climb Note is one finished climb written so the next person can follow it. Four steps in order: Problem (what’s stuck), Measure (how we know it moved), Slice (the small step), and Lesson (what we carry next). Climb Notes are how we teach and deliver production AI—systems you can run and improve, not demos that vanish after a showcase.",
+    a: "A Climb Note is one finished climb written so the next person can follow it. Four steps in order: Problem (what’s stuck), Measure (how we know it moved), Pitch (the next safe pitch), and Lesson (what we carry next). Climb Notes are how we teach and deliver production AI—systems you can run and improve, not demos that vanish after a showcase.",
   },
   {
     id: "mountaineering-approach",
     defaultOrder: 1,
     q: "What does “Mountaineering approach” actually mean?",
-    a: "Four plain steps on every Climb Note: what’s stuck (Problem), how you know it moved (Measure), the small step this week (Slice), and what you carry next time (Lesson). Luna is your Sherpa on Voice. Prior notes guide the next climb—same path or new. That is AI-first solutioning in everyday language, not a slide metaphor.",
+    a: "Four plain steps on every Climb Note: what’s stuck (Problem), how you know it moved (Measure), the next safe pitch this week (Pitch), and what you carry next time (Lesson). Luna is your Sherpa on Voice. Prior notes guide the next climb—same path or new. That is AI-first solutioning in everyday language, not a slide metaphor.",
   },
   {
     id: "how-help-use",
@@ -279,7 +279,7 @@ export const serviceFaqs: ServiceFaq[] = [
     id: "engagements-start",
     defaultOrder: 5,
     q: "How do engagements start?",
-    a: "Often with Learn the Climb or a short discovery slice: one problem, one measure, one thin vertical. If that works, we stack Strategy, Product Build, Model Systems, Trust and Safety, or Automation as the climb demands—modular, not a large fixed program by default.",
+    a: "Often with Learn the Climb or a short discovery pitch: one problem, one measure, one thin vertical. If that works, we stack Strategy, Product Build, Model Systems, Trust and Safety, or Automation as the climb demands—modular, not a large fixed program by default.",
   },
   {
     id: "one-card",

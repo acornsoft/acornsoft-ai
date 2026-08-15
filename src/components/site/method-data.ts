@@ -37,7 +37,7 @@ export const methodObjects = [
   },
   {
     name: "Climb Note",
-    blurb: "One finished climb: Problem → Measure → Slice → Lesson.",
+    blurb: "One finished climb: Problem → Measure → Pitch → Lesson.",
     where: "/climb-notes",
   },
   {
@@ -59,7 +59,7 @@ export const serviceClimbLinks: ServiceClimbLink[] = [
   },
   {
     service: "AI Strategy",
-    role: "Notes capture ranked problems, measures, and the chosen slice.",
+    role: "Notes capture ranked problems, measures, and the chosen pitch.",
   },
   {
     service: "Product Build",
@@ -75,7 +75,7 @@ export const serviceClimbLinks: ServiceClimbLink[] = [
   },
   {
     service: "Automation",
-    role: "Agent boundaries and escalations written as slice + lesson.",
+    role: "Agent boundaries and escalations written as pitch + lesson.",
   },
   {
     service: "Delivery with Climb Notes",
@@ -92,7 +92,7 @@ export const useExistingSteps: WorkflowStep[] = [
   {
     n: 2,
     title: "Read in order",
-    body: "Problem → Measure → Slice → Lesson. One climb, not a tool catalog.",
+    body: "Problem → Measure → Pitch → Lesson. One climb, not a tool catalog.",
   },
   {
     n: 3,
@@ -162,7 +162,7 @@ export const trainingModules: TrainingModule[] = [
     trackLabel: "Voice",
     title: "Four steps out loud",
     time: "~10 min",
-    goal: "Say Problem, Measure, Slice, Lesson without notes.",
+    goal: "Say Problem, Measure, Pitch, Lesson without notes.",
     doneWhen: "You can list the four steps and one plain phrase for each.",
     steps: [
       "Pick Climb Note 000 (or any public note).",
@@ -181,7 +181,7 @@ export const trainingModules: TrainingModule[] = [
     goal: "One image that teaches the four steps at a glance.",
     doneWhen: "A stranger can name the four steps from the image alone.",
     steps: [
-      "Prompt Imagine for a simple four-station trail: Problem, Measure, Slice, Lesson.",
+      "Prompt Imagine for a simple four-station trail: Problem, Measure, Pitch, Lesson.",
       "Keep text large. Dark background. One accent. No clutter.",
       "Save for service pages, training, or social stills.",
       "Caption: “How a Climb Note runs.” Link back to the site.",
@@ -197,7 +197,7 @@ export const trainingModules: TrainingModule[] = [
     doneWhen: "The link between paid work and the written trail is obvious.",
     steps: [
       "Pick one service (e.g. Product Build).",
-      "Two-panel image: service action → Climb Note P/M/S/L.",
+      "Two-panel image: service action → Climb Note Problem/Measure/Pitch/Lesson.",
       "Title: “Every climb leaves a trail.”",
       "Use on site long-form; on X only as a still + link.",
     ],
@@ -206,13 +206,13 @@ export const trainingModules: TrainingModule[] = [
     id: "build-01",
     track: "build",
     trackLabel: "Grok Build",
-    title: "Thin slice",
+    title: "Thin pitch",
     time: "One focused session",
     goal: "Ship a small vertical that a user can try — not a deck.",
     doneWhen: "Happy path runs; raw notes for a Climb Note exist.",
     steps: [
       "Write Problem and Measure first (Voice modules help).",
-      "In Build, implement only the Slice that proves the measure.",
+      "In Build, implement only the Pitch that proves the measure.",
       "Stop when a stranger can click the happy path.",
       "Draft Lesson: what you reuse next time.",
     ],
@@ -222,12 +222,12 @@ export const trainingModules: TrainingModule[] = [
     track: "build",
     trackLabel: "Grok Build",
     title: "Leave a Climb Note",
-    time: "~20 min after a slice",
+    time: "~20 min after a pitch",
     goal: "No free solo — the trail outlives the session.",
     doneWhen: "A Climb Note has all four headings filled.",
     steps: [
       "Open the Climb Note template.",
-      "Fill Problem, Measure, Slice, Lesson in plain language.",
+      "Fill Problem, Measure, Pitch, Lesson in plain language.",
       "Studio path: draft → submit → approve → publish when ready.",
       "Optional: short X cite linking to acornsoft.ai.",
     ],

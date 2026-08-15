@@ -11,7 +11,7 @@ Long-form always lives on **acornsoft.ai**. X is a short cite with a link back. 
 | Object | What it is | Where |
 | --- | --- | --- |
 | **Service** | An offer (strategy, build, trust, …) | `/service` + optional long page later |
-| **Climb Note** | One finished climb: Problem → Measure → Slice → Lesson | `/climb-notes` |
+| **Climb Note** | One finished climb: Problem → Measure → Pitch → Lesson | `/climb-notes` |
 | **Training module** | Short practice with a tool (Voice / Imagine / Build) | `/method#training` |
 | **X post** | Hook + link to the site | X → site URL |
 
@@ -24,11 +24,11 @@ Long-form always lives on **acornsoft.ai**. X is a short cite with a link back. 
 | Service | Climb Notes role |
 | --- | --- |
 | Learn the Climb | Read public notes; practice the four steps; Voice with Luna |
-| AI Strategy | Notes capture ranked problems, measures, and the chosen slice |
+| AI Strategy | Notes capture ranked problems, measures, and the chosen pitch |
 | Product Build | Each shippable vertical leaves a Climb Note |
 | Model Systems | Eval, guardrails, and ops lessons are written as notes |
 | Trust and Safety | Checkpoints and fallbacks recorded as measure + lesson |
-| Automation | Agent boundaries and escalations written as slice + lesson |
+| Automation | Agent boundaries and escalations written as pitch + lesson |
 | Delivery with Climb Notes | Notes **are** the delivery record |
 
 **Rule:** every paid climb ends with a Climb Note (or an explicit update to an existing one). No free solo.
@@ -38,7 +38,7 @@ Long-form always lives on **acornsoft.ai**. X is a short cite with a link back. 
 ## 3. Use an existing Climb Note
 
 1. Open **Climb Notes** (public journal) or **Canopy** (public radar).  
-2. Read in order: Problem → Measure → Slice → Lesson.  
+2. Read in order: Problem → Measure → Pitch → Lesson.  
 3. Reuse the **lesson** on your next climb (same path or new).  
 4. Optional: open the **X** short cite for share — detail stays on site.  
 5. Optional: **Voice** with Luna to walk the same four steps out loud.
@@ -80,7 +80,7 @@ Three tool tracks. Each module is short: goal, do this, done when.
 | --- | --- | --- |
 | **Voice** | Grok Voice + Luna | Say the climb out loud; guided four steps |
 | **Imagine** | Grok Imagine | Visual trail maps, cards, diagrams for teaching |
-| **Build** | Grok Build | Ship a thin slice; leave a Climb Note |
+| **Build** | Grok Build | Ship a thin pitch; leave a Climb Note |
 
 Curriculum lives under `content/training/` and on `/method#training`.
 

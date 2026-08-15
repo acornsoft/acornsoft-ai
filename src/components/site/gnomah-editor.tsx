@@ -914,7 +914,7 @@ export function GnomahEditorPage() {
                     <p>{focused.measure || "—"}</p>
                   </div>
                   <div>
-                    <h3>Slice</h3>
+                    <h3>Pitch</h3>
                     <p>{focused.slice || "—"}</p>
                   </div>
                   <div>
@@ -1152,7 +1152,11 @@ export function GnomahEditorPage() {
                 [
                   ["problem", "Problem", "What is true and hard?"],
                   ["measure", "Measure", "How do we know it worked?"],
-                  ["slice", "Slice", "What thin vertical ships first?"],
+                  [
+                    "slice",
+                    "Pitch",
+                    "What is the next safe pitch that can move the measure?",
+                  ],
                   ["lesson", "Lesson", "What energy carries next?"],
                 ] as const
               ).map(([key, label, ph]) => (

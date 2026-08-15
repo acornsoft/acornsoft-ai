@@ -25,7 +25,7 @@ const CLIMB_STEPS: {
 }[] = [
   { key: "problem", n: 1, label: "Problem", plain: "What's stuck", stage: "Basecamp" },
   { key: "measure", n: 2, label: "Measure", plain: "How we know it moved", stage: "Brief" },
-  { key: "slice", n: 3, label: "Slice", plain: "The small step", stage: "Route" },
+  { key: "slice", n: 3, label: "Pitch", plain: "The next safe pitch", stage: "Route" },
   { key: "lesson", n: 4, label: "Lesson", plain: "What we carry next", stage: "Ascent" },
 ];
 

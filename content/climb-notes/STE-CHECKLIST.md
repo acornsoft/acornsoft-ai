@@ -29,7 +29,7 @@ Companion: [WRITING-STYLE.md](./WRITING-STYLE.md).
 | Max clauses | Prefer **1** main idea; max **2** with a simple connector (and / but / so) |
 | Max sentences — Problem | **5** |
 | Max sentences — Measure | **3** |
-| Max sentences — Slice | **4** (or one short numbered list ≤ 5 lines) |
+| Max sentences — Pitch | **4** (or one short numbered list ≤ 5 lines) |
 | Max sentences — Lesson | **3** |
 | Title | ≤ **12** words |
 
@@ -47,7 +47,7 @@ Use these first. Prefer **present** or **simple past**. One verb meaning per sen
 
 ### Climb Notes verbs (allowed product terms)
 
-`climb` · `write down` · `step` · `slice` (as verb: “slice the work”) — use sparingly; prefer “small next step” in public prose.
+`climb` · `write down` · `step` · `pitch` (as verb: “pitch the work”) — use sparingly; prefer “small next step” in public prose.
 
 ### Prefer not (public)
 
@@ -79,7 +79,7 @@ Add new verbs only when plain English cannot say the same thing. Log them in the
 | **climb** | The work from problem to lesson | Lowercase when general |
 | **problem** | What is stuck | Prefer **clearly defined problem** |
 | **measure** | How we know progress happened | Observable check |
-| **slice** | The small next step we finish | Prefer “small next step” once in a note if “slice” feels insider |
+| **pitch** | The next safe pitch that can move the measure | Prefer “next safe pitch” in Climb Notes |
 | **lesson** | What we keep for the next climb | Reusable |
 | **path / trail** | Order of steps people can follow | Light metaphor |
 | **tools** | Models, apps, prompts, platforms | List only when needed |
@@ -114,7 +114,7 @@ First mention of a rare product: one short plain phrase, then the name.
 - [ ] **No noun stacks** of 3+ (*enterprise AI agent orchestration platform* → break up).
 - [ ] **No slang or idioms** that fail outside US tech (*boil the ocean*, *move the needle*).
 - [ ] **No humor that hides the measure.**
-- [ ] **Commands OK in Slice** (“Name one problem. Write the measure.”).
+- [ ] **Commands OK in Pitch** (“Name one problem. Write the measure.”).
 - [ ] **Consistent terms** inside one note (pick *problem* or *stuck state*, not both randomly).
 - [ ] **Numbers as digits** for measures (`5 seconds`, `1 team`).
 
@@ -126,7 +126,7 @@ First mention of a rare product: one short plain phrase, then the name.
 
 ### Length
 - [ ] No sentence over 25 words  
-- [ ] Problem ≤ 5 sentences · Measure ≤ 3 · Slice ≤ 4 · Lesson ≤ 3  
+- [ ] Problem ≤ 5 sentences · Measure ≤ 3 · Pitch ≤ 4 · Lesson ≤ 3  
 - [ ] Title ≤ 12 words  
 
 ### Words
@@ -136,9 +136,9 @@ First mention of a rare product: one short plain phrase, then the name.
 - [ ] Glossary terms used consistently  
 
 ### Structure
-- [ ] Only headings: Problem · Measure · Slice · Lesson  
+- [ ] Only headings: Problem · Measure · Pitch · Lesson  
 - [ ] Measure is checkable by a stranger  
-- [ ] Slice is one small finishable step  
+- [ ] Pitch is one safe finishable step  
 - [ ] Lesson works without reading the tool list  
 
 ### Read-aloud

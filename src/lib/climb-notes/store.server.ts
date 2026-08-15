@@ -268,7 +268,7 @@ function noteFromMarkdown(
     date: String(data.date ?? ""),
     problem: section(body, "Problem"),
     measure: section(body, "Measure"),
-    slice: section(body, "Slice"),
+    slice: section(body, "Pitch") || section(body, "Slice"),
     lesson: section(body, "Lesson"),
     status,
     version: reg?.version ?? 1,
@@ -643,7 +643,7 @@ ${note.problem}
 
 ${note.measure}
 
-## Slice
+## Pitch
 
 ${note.slice}
 

@@ -17,7 +17,7 @@ It always has four steps:
 | --- | --- | --- |
 | **Problem** | What’s stuck | What is wrong, in clear words? |
 | **Measure** | How we know it moved | How will we know we made progress? |
-| **Slice** | The small step | What is the smallest useful step we will finish? |
+| **Pitch** | The next safe pitch | What is the next safe pitch that can move the measure? |
 | **Lesson** | What we carry next | What do we keep for the next climb? |
 
 How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same four steps in order — not a second essay.
@@ -47,7 +47,7 @@ How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same fou
 5. **Avoid fluff.** Cut “leverage,” “solutioning,” “synergy,” “best-in-class,” “revolutionize.”
 6. **Numbers and names when real.** Prefer “under five seconds” over “fast.” Prefer product names only when the reader needs them.
 7. **No unexplained acronyms.** First use: full phrase, then short form if needed.
-8. **Commands are fine** in Slice (“Name one problem. Write the measure.”).
+8. **Commands are fine** in Pitch (“Name one problem. Write the measure.”).
 
 ---
 
@@ -67,7 +67,7 @@ How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same fou
 - Something a reader can **check** (open a page, see a result, count an action).
 - Not “better AI” — **observable**.
 
-### Slice
+### Pitch
 - The smallest finished step for **this** note.
 - One path. Not a roadmap.
 
@@ -85,7 +85,7 @@ How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same fou
 | leverage / solutioning | use / solve / build |
 | compound (unless finance) | get better over time / build on last week |
 | characterization / MacroFlow (public) | the climb / four steps / how the climb runs |
-| demo-as-progress | finished slice + written lesson |
+| demo-as-progress | finished pitch + written lesson |
 | walls of tags and process talk | plain problem first |
 
 ---
@@ -97,7 +97,7 @@ How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same fou
 | Title | ≤ ~8 words when possible |
 | Problem | 2–5 short sentences |
 | Measure | 1–3 sentences |
-| Slice | 1–4 sentences or a short numbered list |
+| Pitch | 1–4 sentences or a short numbered list |
 | Lesson | 1–3 sentences |
 
 X citation: even shorter. Site holds the full note; X points at it.
@@ -119,11 +119,11 @@ X citation: even shorter. Site holds the full note; X points at it.
 - [ ] Title is concrete  
 - [ ] Problem names a **clearly defined** stuck state  
 - [ ] Measure is checkable  
-- [ ] Slice is small enough to finish  
+- [ ] Pitch is small enough to finish  
 - [ ] Lesson is reusable without the tools list  
 - [ ] Average reader understands every sentence  
 - [ ] No “raft / stack / free solo” pile-up  
-- [ ] Four headings only: Problem · Measure · Slice · Lesson  
+- [ ] Four headings only: Problem · Measure · Pitch · Lesson  
 
 ---
 
