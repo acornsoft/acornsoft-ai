@@ -19696,3 +19696,33 @@ body:has(.ac-service-page) .ac-about-top-fab {
 .ac-service-page .ac-svc-card-why {
   color: #b8b0a6 !important;
 }
+
+/* ============================================================
+   FLICKER KILL (2026-08-16) — last block wins.
+   The global hero used a 16% Ken Burns + stacked opacity/filter
+   overrides. That loop is what flickered. Photo stays; motion dies.
+   ============================================================ */
+@keyframes ac-hero-bg-breathe {
+  0%,
+  50%,
+  100% {
+    transform: scale3d(1.04, 1.04, 1) translate3d(0, 0, 0);
+  }
+}
+
+.ac-global-hero-photo,
+body.ac-has-global-hero .ac-global-hero-photo,
+body.ac-hero-static .ac-global-hero-photo,
+.ac-hero-static .ac-global-hero-photo {
+  animation: none !important;
+  animation-name: none !important;
+  animation-duration: 0s !important;
+  animation-iteration-count: 1 !important;
+  transform: scale3d(1.04, 1.04, 1) translate3d(0, 0, 0) !important;
+  will-change: auto !important;
+  filter: brightness(1.04) contrast(1.04) saturate(1.04) !important;
+  opacity: 0.62 !important;
+  inset: -4% !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}

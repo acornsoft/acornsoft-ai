@@ -3,7 +3,6 @@ import { defineConfig } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import { nitro } from "nitro/vite";
 
 /**
  * Finish PGLite bootstrap during dev-server setup (before traffic). Vite awaits
@@ -163,32 +162,36 @@ function ipAllowlistPlugin(): Plugin {
 }
 
 // `0.0.0.0:8080` is the live-preview contract — don't change host/port.
-// Keep `nitro` gated to `build` (the Vercel deploy target): enabled in dev it
-// opens a second dev-server port, which breaks the single-port preview.
-// The dev server starts once `src/router.tsx` and `src/routes/` exist — see
-// AGENTS.md § "First scaffold".
-export default defineConfig(({ command }) => ({
-  server: {
-    host: "0.0.0.0",
-    port: 8080,
-    strictPort: true,
-  },
-  resolve: { tsconfigPaths: true },
-  plugins: [
+// Nitro is loaded only on `build` so the preview stays on a single port
+// and so a half-broken node_modules can't block `npm run dev`.
+export default defineConfig(async ({ command }) => {
+  const plugins: Plugin[] = [
     pgliteBootstrapPlugin(),
     ipAllowlistPlugin(),
     // Before tanstackStart so /auth/popup never falls through to the SPA.
     authPopupPlugin(),
     tailwindcss(),
     tanstackStart(),
-    ...(command === "build"
-      ? [
-          nitro({
-            preset: "vercel",
-            // Ensure server/middleware is included in the Vercel function
-          }),
-        ]
-      : []),
-    viteReact(),
-  ],
-}));
+  ];
+
+  if (command === "build") {
+    const { nitro } = await import("nitro/vite");
+    plugins.push(
+      nitro({
+        preset: "vercel",
+      }),
+    );
+  }
+
+  plugins.push(viteReact());
+
+  return {
+    server: {
+      host: "0.0.0.0",
+      port: 8080,
+      strictPort: true,
+    },
+    resolve: { tsconfigPaths: true },
+    plugins,
+  };
+});

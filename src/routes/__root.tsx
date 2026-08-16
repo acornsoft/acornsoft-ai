@@ -18,7 +18,7 @@ const inbioCss = [
   "/inbio/assets/css/vendor/aos.css",
   "/inbio/assets/css/plugins/feature.css",
   "/inbio/assets/css/style.css",
-  "/inbio/acornsoft-overrides.css?v=svc-first-principles-1",
+  "/inbio/acornsoft-overrides.css?v=hero-static-2026-08-16",
 ] as const;
 
 export const Route = createRootRouteWithContext()({
@@ -83,45 +83,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="template-color-1 spybody ac-has-global-hero">
-        {/* Single shared hero stage — same image + animation phase on every route */}
+      <body className="template-color-1 spybody ac-has-global-hero ac-hero-static">
+        {/* Shared still photo — no Ken Burns / breathe. Flicker came from that loop. */}
         <div className="ac-global-hero" aria-hidden="true">
           <div className="ac-global-hero-photo" />
           <div className="ac-global-hero-wash" />
         </div>
-        {/*
-          Hero breathe runs sitewide (root layer). Pause when motion is reduced,
-          Save-Data is on, or the network is slow / high-latency.
-        */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{
-  var b=document.body;
-  if(!b)return;
-  function pause(reason){
-    b.classList.add("ac-hero-static");
-    if(reason)b.setAttribute("data-hero-static",reason);
-  }
-  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-    pause("reduced-motion");return;
-  }
-  if(window.matchMedia("(prefers-reduced-data: reduce)").matches){
-    pause("reduced-data");return;
-  }
-  var c=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
-  if(c){
-    if(c.saveData){pause("save-data");return;}
-    var t=String(c.effectiveType||"");
-    if(t==="slow-2g"||t==="2g"){pause("slow-network");return;}
-    if(typeof c.downlink==="number"&&c.downlink>0&&c.downlink<1.5){
-      pause("low-bandwidth");return;
-    }
-    /* High RTT = high latency — skip animation to keep the main thread free */
-    if(typeof c.rtt==="number"&&c.rtt>=400){pause("high-latency");return;}
-  }
-}catch(e){}})();`,
-          }}
-        />
         {children}
         <Toaster position="top-center" richColors />
         <Scripts />
