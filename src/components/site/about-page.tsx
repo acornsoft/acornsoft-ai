@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SiteChrome } from "./site-chrome";
 import { VoiceCta } from "./voice-access";
 import { PERSONAL_SITE, dualSiteNote } from "@/lib/site-links";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
 
 const aboutSections = [
   { id: "about-intro", label: "Who we are" },
@@ -12,14 +13,25 @@ const aboutSections = [
   { id: "founder", label: "Founder" },
 ] as const;
 
+type AboutSectionId = (typeof aboutSections)[number]["id"];
+
 export function AboutPage() {
-  const [activeId, setActiveId] = useState<string>(aboutSections[0].id);
+  const { user, isPending } = useCurrentUserState();
+  const showFounder = !isPending && !!user;
+  const sections = useMemo(
+    () =>
+      showFounder
+        ? aboutSections
+        : aboutSections.filter((s) => s.id !== "founder"),
+    [showFounder],
+  );
+  const [activeId, setActiveId] = useState<AboutSectionId>("about-intro");
 
   useEffect(() => {
     const onScroll = () => {
       const offset = 120;
-      let current = aboutSections[0].id;
-      for (const s of aboutSections) {
+      let current: AboutSectionId = "about-intro";
+      for (const s of sections) {
         const el = document.getElementById(s.id);
         if (!el) continue;
         if (el.getBoundingClientRect().top - offset <= 0) {
@@ -31,7 +43,7 @@ export function AboutPage() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [sections]);
 
   return (
     <SiteChrome loginRedirect="/about">
@@ -42,7 +54,7 @@ export function AboutPage() {
               <div className="ac-about-side-inner">
                 <p className="ac-about-side-label">On this page</p>
                 <nav className="ac-about-side-nav">
-                  {aboutSections.map((s) => (
+                  {sections.map((s) => (
                     <a
                       key={s.id}
                       href={`#${s.id}`}
@@ -258,7 +270,8 @@ export function AboutPage() {
                 </article>
               </section>
 
-              {/* Single section: Founder + personal site (was Founder + Also) */}
+              {/* Founder + blaszyk.us — signed-in only */}
+              {showFounder ? (
               <section
                 className="ac-about-block"
                 id="founder"
@@ -309,6 +322,7 @@ export function AboutPage() {
                   </div>
                 </article>
               </section>
+              ) : null}
             </div>
           </div>
         </div>

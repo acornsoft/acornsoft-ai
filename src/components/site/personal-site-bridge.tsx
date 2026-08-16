@@ -1,9 +1,11 @@
 import { PERSONAL_SITE, dualSiteNote } from "@/lib/site-links";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
 
 type Variant = "card" | "inline" | "footer";
 
 /**
  * Links this Acornsoft surface to the personal work bio on blaszyk.us.
+ * Hidden until a visitor is signed in (no flash while session loads).
  */
 export function PersonalSiteBridge({
   variant = "card",
@@ -12,6 +14,9 @@ export function PersonalSiteBridge({
   variant?: Variant;
   className?: string;
 }) {
+  const { user, isPending } = useCurrentUserState();
+  if (isPending || !user) return null;
+
   if (variant === "footer") {
     return (
       <a
