@@ -2945,7 +2945,7 @@ footer.ac-site-footer a:visited {
   max-width: none !important;
   margin: 0 !important;
   padding: 6px 14px !important;
-  font-family: "Poppins", sans-serif !important;
+  font-family: var(--font-ui), sans-serif !important;
   font-size: 13px !important;
   font-weight: 500 !important;
   line-height: 1.3 !important;
@@ -2985,7 +2985,7 @@ footer.ac-site-footer .ac-site-footer-meta {
   display: block !important;
   margin: 0 !important;
   padding: 0 !important;
-  font-family: "Poppins", sans-serif !important;
+  font-family: var(--font-ui), sans-serif !important;
   font-size: 11px !important;
   font-weight: 400 !important;
   letter-spacing: 0.04em !important;
@@ -3373,7 +3373,7 @@ button.cn-pill[data-filter="actor:research"].active {
   display: block !important;
   padding: 10px 12px !important;
   border-radius: 8px !important;
-  font-family: "Poppins", sans-serif !important;
+  font-family: var(--font-ui), sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;
   color: #c4cfde !important;
@@ -3873,7 +3873,7 @@ a.ac-corp-foot-link:hover {
   border: 1px solid rgba(255, 153, 0, 0.35);
   background: rgba(80, 32, 0, 0.45);
   color: #ffcc66;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--font-ui), sans-serif;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -4377,7 +4377,7 @@ a.ac-corp-foot-link:hover {
   border: none;
   background: transparent;
   color: #8b929a;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--font-ui), sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -7988,7 +7988,7 @@ body .ac-scroll-top {
 }
 .ac-service-index {
   flex: 0 0 auto;
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: var(--font-ui), system-ui, sans-serif;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -20836,4 +20836,123 @@ body.ac-hero-static .ac-global-hero-photo,
   backface-visibility: hidden !important;
   -webkit-backface-visibility: hidden !important;
 }
+
+/* ============================================================
+   TYPE 2026 — Whitney stand-in (last block wins)
+   Whitney / WhitneyK is a licensed Hoefler face. We cannot
+   embed it without the kit. Source Sans 3 is the closest
+   honest humanist sans for screen (same job Whitney was
+   drawn for: wayfinding + editorial). Source Serif 4 is
+   the Climb Note / page-title voice — a field guide, not a
+   ThemeForest template.
+   ============================================================ */
+:root {
+  --font-ui: "Source Sans 3", "Source Sans Pro", ui-sans-serif, system-ui,
+    sans-serif;
+  --font-display: "Source Serif 4", "Source Serif Pro", "Iowan Old Style",
+    Georgia, "Times New Roman", serif;
+  --font-primary: var(--font-ui);
+  --font-secondary: var(--font-ui);
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body,
+body.template-color-1,
+body.ac-inbio,
+body.ac-has-global-hero {
+  font-family: var(--font-ui) !important;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-synthesis: none;
+  letter-spacing: -0.011em;
+}
+
+p,
+li,
+label,
+input,
+select,
+textarea,
+button,
+.rn-btn,
+.ac-site-header,
+.ac-site-nav,
+.ac-site-footer,
+.ac-service-lede,
+.ac-service-kicker,
+.ac-cn-pill,
+.ac-recipe-when,
+.ac-recipe-steps,
+.ac-recipe-done,
+.ac-recipe-tool,
+.subtitle,
+.hero-with,
+.cd-words-wrapper,
+.cd-words-wrapper b {
+  font-family: var(--font-ui) !important;
+}
+
+/* Display serif: page titles + journal titles only */
+.ac-hero-center h1.title,
+.ac-hero-center .hero-title,
+.hero-title,
+h1.cd-headline,
+.ac-story-headline,
+.ac-service-title,
+.ac-cn-entry-title,
+.ac-recipe-title,
+.ac-gn-title,
+.ac-gn-focus-title,
+.ac-gn-card-title,
+.ac-about-h2,
+.section-title .title {
+  font-family: var(--font-display) !important;
+  font-optical-sizing: auto;
+  font-feature-settings: "kern" 1, "liga" 1, "onum" 0;
+  letter-spacing: -0.02em;
+}
+
+.ac-hero-center h1.title,
+.ac-hero-center .hero-title {
+  letter-spacing: -0.025em !important;
+  font-weight: 600 !important;
+}
+
+.ac-service-kicker,
+.subtitle,
+.hero-with {
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
+/* Do not restyle icon fonts or code */
+[class^="feather-"],
+[class*=" feather-"],
+.feather,
+code,
+kbd,
+pre,
+samp,
+.ac-mono {
+  font-family: inherit;
+}
+code,
+kbd,
+pre,
+samp,
+.ac-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  letter-spacing: 0;
+}
+[class^="feather-"],
+[class*=" feather-"],
+.feather {
+  font-family: "feather" !important;
+  letter-spacing: 0;
+}
+
 
