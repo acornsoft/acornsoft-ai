@@ -74,10 +74,15 @@ export async function setOwnerSecret(
   if (!value || value.length < 20) {
     throw new Error("Token looks too short — paste the full X App Bearer Token.");
   }
-  // Basic shape check for X bearer tokens (usually long alphanumeric)
+  if (/^xai[-_]/i.test(value)) {
+    throw new Error(
+      "That is an xAI / Grok key (console.x.ai). Canopy needs an X App Bearer Token from developer.x.com → App → Keys and tokens.",
+    );
+  }
   if (/\s/.test(value) || value.length > 2000) {
     throw new Error("Invalid token format.");
   }
+
 
   const blob = encryptSecret(value);
   const last4 = secretLast4(value);
@@ -169,22 +174,33 @@ export async function resolveXBearerForCanopy(): Promise<{
   if (envToken) return { token: envToken, source: "env" };
 
   const sql = await getSql();
-  // Prefer secrets belonging to known owners
-  const rows = await sql<{ user_id: string }>`
-    select s.user_id
+  const rows = await sql<{
+    user_id: string;
+    ciphertext: string;
+    iv: string;
+    auth_tag: string;
+    key_version: number;
+  }>`
+    select s.user_id, s.ciphertext, s.iv, s.auth_tag, s.key_version
     from owner_private_secrets s
-    inner join climb_notes_owner o on o.user_id = s.user_id
+    left join climb_notes_owner o on o.user_id = s.user_id
     where s.secret_kind = ${SECRET_X_API_BEARER}
-    order by s.updated_at desc
+    order by (o.user_id is not null) desc, s.updated_at desc
     limit 1
   `;
-  const ownerId = rows[0]?.user_id;
-  if (!ownerId) return { source: "none" };
+  const row = rows[0];
+  if (!row) return { source: "none" };
   try {
-    const token = await readOwnerSecretPlaintext(ownerId, SECRET_X_API_BEARER);
-    if (token) return { token, source: "owner_secret" };
+    const token = decryptSecret({
+      ciphertext: row.ciphertext,
+      iv: row.iv,
+      authTag: row.auth_tag,
+      keyVersion: row.key_version,
+    });
+    if (token?.trim()) return { token: token.trim(), source: "owner_secret" };
   } catch {
-    /* owner check failed — ignore */
+    /* decrypt failed */
   }
   return { source: "none" };
 }
+

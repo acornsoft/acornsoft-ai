@@ -10,26 +10,25 @@ import { toast } from "sonner";
 import {
   ChevronLeft,
   ChevronRight,
-  Edit3,
-  FilePlus2,
-  Mountain,
   RefreshCw,
+
   Search,
-  Trash2,
+  X,
+
 } from "lucide-react";
-import { Logo } from "./logo";
-import { SiteHeader } from "./site-chrome";
+import { SiteChrome } from "./site-chrome";
+
 import {
   CLIMB_NOTE_STATUS_LABEL,
   type ClimbNote,
   type ClimbNoteStatus,
 } from "./climb-notes-data";
 import {
-  deleteClimbNoteAction,
   listClimbNotesForEditor,
   refreshClimbNotesLibrary,
   saveClimbNoteAction,
 } from "@/lib/climb-notes/actions";
+
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { authEnabled, signOut } from "@/lib/auth/client";
 
@@ -52,22 +51,6 @@ type DraftForm = {
 
 type Mode = "browse" | "edit";
 
-type ViewFilter =
-  | "all"
-  | "engagement"
-  | "product"
-  | "open"
-  | "live"
-  | "archived";
-
-const VIEW_FILTERS: { key: ViewFilter; label: string; hint: string }[] = [
-  { key: "all", label: "Everything", hint: "Full timeline" },
-  { key: "engagement", label: "Engagements", hint: "Client / delivery climbs" },
-  { key: "product", label: "Product", hint: "Product & abstract climbs" },
-  { key: "open", label: "Open work", hint: "Unapproved, pending, approved" },
-  { key: "live", label: "On the journal", hint: "Published only" },
-  { key: "archived", label: "Shelved", hint: "Archived climbs" },
-];
 
 const STATE_OPTIONS: {
   value: ClimbNoteStatus;
@@ -169,40 +152,36 @@ function noteRecencyKey(n: ClimbNote): string {
   );
 }
 
-function folderOf(n: ClimbNote): string {
-  const f = (n.sourceFile || "").toLowerCase();
-  if (f.includes("engagement")) return "engagement";
-  if (f.includes("product")) return "product";
-  if (f.includes("foundation")) return "foundation";
-  if (f.includes("archive")) return "archive";
-  const t = `${n.title} ${(n.tags || []).join(" ")}`.toLowerCase();
-  if (/\bengagement\b|\bclient\b|\baurora\b|\bharbor\b/.test(t))
-    return "engagement";
-  return "product";
-}
-
-function matchesView(n: ClimbNote, view: ViewFilter): boolean {
-  if (view === "all") return true;
-  if (view === "engagement") return folderOf(n) === "engagement";
-  if (view === "product") return folderOf(n) === "product";
-  if (view === "open")
-    return (
-      n.status === "draft" ||
-      n.status === "pending" ||
-      n.status === "approved"
-    );
-  if (view === "live") return n.status === "published";
-  if (view === "archived") return n.status === "archived";
-  return true;
-}
-
-function countView(notes: ClimbNote[], view: ViewFilter): number {
-  return notes.filter((n) => matchesView(n, view)).length;
-}
-
 function previewLine(n: ClimbNote): string {
   return (n.problem || n.measure || n.slice || n.lesson || "").slice(0, 140);
 }
+
+function noteSearchHay(n: ClimbNote): string {
+  return [
+    n.number,
+    `cn-${n.number}`,
+    n.title,
+    n.problem,
+    n.measure,
+    n.slice,
+    n.lesson,
+    ...(n.tags ?? []),
+  ]
+    .join(" ")
+    .toLowerCase();
+}
+
+function searchScore(n: ClimbNote, q: string): number {
+  const num = n.number.toLowerCase();
+  const title = n.title.toLowerCase();
+  if (num === q || `cn-${num}` === q) return 100;
+  if (num.startsWith(q) || `cn-${num}`.startsWith(q)) return 90;
+  if (title.startsWith(q)) return 80;
+  if (title.includes(q)) return 60;
+  if (noteSearchHay(n).includes(q)) return 40;
+  return 0;
+}
+
 
 function isSessionAuthError(err: unknown): boolean {
   const msg = (err instanceof Error ? err.message : String(err)).toLowerCase();
@@ -238,8 +217,10 @@ export function GnomahEditorPage() {
   const [forbidden, setForbidden] = useState(false);
   const [forbidMsg, setForbidMsg] = useState<string | null>(null);
   const [needsReauth, setNeedsReauth] = useState(false);
-  const [view, setView] = useState<ViewFilter>("all");
   const [query, setQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchHi, setSearchHi] = useState(0);
+
   const [saveState, setSaveState] = useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
@@ -249,6 +230,8 @@ export function GnomahEditorPage() {
   const [syncing, setSyncing] = useState(false);
 
   const carouselRef = useRef<HTMLDivElement>(null);
+  const searchWrapRef = useRef<HTMLDivElement>(null);
+
   const cardRefs = useRef<Map<string, HTMLElement>>(new Map());
   const formRef = useRef(form);
   formRef.current = form;
@@ -382,40 +365,27 @@ export function GnomahEditorPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    if (!q) return notes;
     return notes
-      .filter((n) => matchesView(n, view))
-      .filter((n) => {
-        if (!q) return true;
-        const hay = [
-          n.number,
-          n.title,
-          n.problem,
-          n.measure,
-          n.slice,
-          n.lesson,
-          ...(n.tags ?? []),
-        ]
-          .join(" ")
-          .toLowerCase();
-        return hay.includes(q);
-      });
-  }, [notes, view, query]);
+      .map((n) => ({ n, s: searchScore(n, q) }))
+      .filter((x) => x.s > 0)
+      .sort((a, b) => b.s - a.s || a.n.number.localeCompare(b.n.number))
+      .map((x) => x.n);
+  }, [notes, query]);
 
-  const focused = useMemo(
-    () => filtered.find((n) => n.id === focusId) ?? filtered[0] ?? null,
-    [filtered, focusId],
-  );
-  const focusFolder = focused ? folderOf(focused) : "";
+  const suggestions = useMemo(() => filtered.slice(0, 8), [filtered]);
 
-  useEffect(() => {
-    if (!filtered.length) {
-      setFocusId(null);
-      return;
-    }
-    if (!focusId || !filtered.some((n) => n.id === focusId)) {
-      setFocusId(filtered[0].id);
-    }
-  }, [filtered, focusId]);
+
+  function scrollCarousel(dir: -1 | 1) {
+
+    const el = carouselRef.current;
+    if (!el) return;
+    el.scrollBy({
+      left: dir * Math.min(360, el.clientWidth * 0.72),
+      behavior: "smooth",
+    });
+  }
+
 
   useEffect(() => {
     if (!focusId || mode !== "browse") return;
@@ -428,8 +398,31 @@ export function GnomahEditorPage() {
   }, [focusId, mode, filtered.length]);
 
   function selectCard(n: ClimbNote) {
-    setFocusId(n.id);
+    enterEdit(n);
   }
+
+  function pickSearchHit(n: ClimbNote) {
+    setQuery(n.title || `CN-${n.number}`);
+    setSearchOpen(false);
+    setSearchHi(0);
+    enterEdit(n);
+  }
+
+  useEffect(() => {
+    setSearchHi(0);
+  }, [query]);
+
+  useEffect(() => {
+    const onDoc = (e: MouseEvent) => {
+      if (!searchWrapRef.current?.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+
 
   function enterEdit(n: ClimbNote, opts?: { refresh?: boolean }) {
     setFocusId(n.id);
@@ -452,7 +445,22 @@ export function GnomahEditorPage() {
     void load({ quiet: true });
   }
 
+  useEffect(() => {
+    if (mode !== "edit") return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") exitEdit();
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
+
   function newNote() {
+
     const nextNum =
       notes
         .map((n) => parseInt(n.number, 10))
@@ -468,16 +476,8 @@ export function GnomahEditorPage() {
     setMode("edit");
   }
 
-  function scrollCarousel(dir: -1 | 1) {
-    const el = carouselRef.current;
-    if (!el) return;
-    el.scrollBy({
-      left: dir * Math.min(340, el.clientWidth * 0.7),
-      behavior: "smooth",
-    });
-  }
-
   async function persistForm(
+
     draft: DraftForm,
     opts?: { quiet?: boolean; toastLabel?: string },
   ): Promise<ClimbNote | null> {
@@ -560,6 +560,8 @@ export function GnomahEditorPage() {
 
   async function onStateChange(next: ClimbNoteStatus) {
     const draft = { ...formRef.current, status: next };
+    formRef.current = draft;
+    suppressAutoSave.current = true;
     setForm(draft);
     if (saveTimer.current) {
       window.clearTimeout(saveTimer.current);
@@ -572,6 +574,7 @@ export function GnomahEditorPage() {
       }`,
     });
   }
+
 
   function setCanopySchedule(patch: Partial<Pick<DraftForm, "onCanopy" | "canopyAt">>) {
     const draft = { ...formRef.current, ...patch };
@@ -598,37 +601,16 @@ export function GnomahEditorPage() {
     setCanopySchedule({ onCanopy: true, canopyAt: when.toISOString() });
   }
 
-  /** Delete only from carousel / browse surface. */
-  async function onDeleteNote(n: ClimbNote) {
-    if (
-      !window.confirm(
-        `Delete Climb Note ${n.number} — ${n.title || "Untitled"}? This cannot be undone.`,
-      )
-    ) {
-      return;
-    }
-    setSaving(true);
-    try {
-      await deleteClimbNoteAction({ data: { id: n.id } });
-      toast.success(`Deleted #${n.number}`);
-      if (form.id === n.id) {
-        loadForm(emptyForm());
-        setMode("browse");
-      }
-      await load({ quiet: true });
-    } catch (e) {
-      if (isSessionAuthError(e)) await handleAuthFailure();
-      else toast.error(e instanceof Error ? e.message : "Delete failed");
-    } finally {
-      setSaving(false);
-    }
-  }
-
   if (isPending || needsReauth) {
+
     return (
-      <div className="ac-gnomah ac-gnomah-loading ac-gnomah-app">
-        <p>{needsReauth ? "Redirecting to sign in…" : "Loading session…"}</p>
-      </div>
+      <SiteChrome loginRedirect="/gnomah">
+        <div className="ac-service-page ac-gnomah ac-page-top">
+          <p className="ac-gn-empty">
+            {needsReauth ? "Redirecting to sign in…" : "Loading session…"}
+          </p>
+        </div>
+      </SiteChrome>
     );
   }
 
@@ -638,550 +620,448 @@ export function GnomahEditorPage() {
 
   if (forbidden) {
     return (
-      <div className="template-color-1 spybody ac-inbio ac-gnomah ac-gnomah-app ac-hero-stage">
-        <SiteHeader loginRedirect="/gnomah" />
-        <main className="main-page-wrapper ac-gnomah-gate">
-          <div className="ac-gnomah-gate-card">
-            <Mountain aria-hidden className="ac-gnomah-gate-icon" />
-            <h1>Gnomah</h1>
-            <p className="ac-gnomah-gate-copy ac-gnomah-gate-copy--alert">
-              Climb Notes may only be edited when signed in with X as
-              @acornsoftai.
-              {user
-                ? ` You are signed in as ${user.displayName || user.primaryEmail || "this account"}, but this account is not authorized for Gnomah.`
-                : ""}
-            </p>
-            <p className="ac-gnomah-gate-copy ac-gnomah-gate-copy--alert">
-              {forbidMsg ||
-                "This X account is not the Acornsoft owner. Sign in with @acornsoftai."}
-            </p>
-            <div className="ac-hero-cta ac-gnomah-gate-actions">
-              <Link className="rn-btn" to="/climb-notes">
-                <span>Public Climb Notes</span>
-              </Link>
-            </div>
+      <SiteChrome loginRedirect="/gnomah">
+        <div className="ac-service-page ac-gnomah ac-page-top">
+          <div className="ac-service-stack">
+            <header className="ac-service-head">
+              <span className="ac-service-kicker">Studio</span>
+              <h1 className="ac-service-title">Gnomah</h1>
+              <div className="ac-service-lede-box">
+                <p className="ac-service-lede">
+                  Climb Notes may only be edited when signed in with X as
+                  @acornsoftai.
+                  {user
+                    ? ` You are signed in as ${user.displayName || user.primaryEmail || "this account"}, but this account is not authorized.`
+                    : ""}
+                </p>
+                <p className="ac-service-lede ac-service-lede--last">
+                  {forbidMsg ||
+                    "This X account is not the Acornsoft owner. Sign in with @acornsoftai."}
+                </p>
+              </div>
+            </header>
+            <Link className="rn-btn" to="/climb-notes">
+              <span>Public Climb Notes</span>
+            </Link>
           </div>
-        </main>
-      </div>
+        </div>
+      </SiteChrome>
     );
   }
 
   return (
-    <div className="template-color-1 spybody ac-inbio ac-gnomah ac-gnomah-app ac-hero-stage">
-      <SiteHeader loginRedirect="/gnomah" />
-      <main className="main-page-wrapper ac-gnomah-main">
-        <header className="ac-gn-top">
-          <div className="ac-gn-brand">
-            <Logo variant="mark" className="ac-gn-mark" />
-            <div>
-              <p className="ac-gn-kicker">Gnomah</p>
-              <h1 className="ac-gn-title">Climb Notes</h1>
+    <SiteChrome loginRedirect="/gnomah" mainClassName="ac-gnomah">
+      <div className="ac-service-page ac-gnomah ac-page-top" id="gnomah">
+        <div className="ac-service-stack">
+          <header className="ac-service-head">
+            <span className="ac-service-kicker">Studio</span>
+            <h1 className="ac-service-title">Gnomah</h1>
+            <div className="ac-service-lede-box">
+              <p className="ac-service-lede">
+                Choose a Climb Note to edit. The carousel is the library —
+                click a card to open the editor.
+              </p>
+              <p className="ac-service-lede ac-service-lede--last">
+                {libraryMeta}
+                {syncing ? " · syncing…" : ""}
+              </p>
+            </div>
+          </header>
+
+          <div className="ac-gn-toolbar">
+            <div className="ac-gn-search-wrap" ref={searchWrapRef}>
+              <label className="ac-gn-search">
+                <Search aria-hidden strokeWidth={2} size={16} />
+                <input
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setSearchOpen(true);
+                  }}
+                  onFocus={() => setSearchOpen(true)}
+                  onKeyDown={(e) => {
+                    if (!searchOpen && (e.key === "ArrowDown" || e.key === "Enter")) {
+                      setSearchOpen(true);
+                    }
+                    if (e.key === "Escape") {
+                      setSearchOpen(false);
+                      return;
+                    }
+                    if (!suggestions.length) return;
+                    if (e.key === "ArrowDown") {
+                      e.preventDefault();
+                      setSearchHi((i) => (i + 1) % suggestions.length);
+                    } else if (e.key === "ArrowUp") {
+                      e.preventDefault();
+                      setSearchHi(
+                        (i) => (i - 1 + suggestions.length) % suggestions.length,
+                      );
+                    } else if (e.key === "Enter") {
+                      e.preventDefault();
+                      const hit = suggestions[searchHi] ?? suggestions[0];
+                      if (hit) pickSearchHit(hit);
+                    }
+                  }}
+                  placeholder="Find a climb"
+                  autoComplete="off"
+                  role="combobox"
+                  aria-expanded={searchOpen && query.trim().length > 0}
+                  aria-controls="ac-gn-search-list"
+                  aria-autocomplete="list"
+                />
+              </label>
+              {searchOpen && query.trim() ? (
+                <ul
+                  id="ac-gn-search-list"
+                  className="ac-gn-suggest"
+                  role="listbox"
+                >
+                  {suggestions.length === 0 ? (
+                    <li className="ac-gn-suggest-empty">No matching climbs</li>
+                  ) : (
+                    suggestions.map((n, i) => (
+                      <li key={n.id} role="presentation">
+                        <button
+                          type="button"
+                          role="option"
+                          aria-selected={i === searchHi}
+                          className={
+                            i === searchHi
+                              ? "ac-gn-suggest-item is-hi"
+                              : "ac-gn-suggest-item"
+                          }
+                          onMouseEnter={() => setSearchHi(i)}
+                          onClick={() => pickSearchHit(n)}
+                        >
+                          <span className="ac-gn-suggest-num">CN-{n.number}</span>
+                          <span className="ac-gn-suggest-title">
+                            {n.title || "Untitled"}
+                          </span>
+                          <span
+                            className={`ac-gnomah-status ac-gnomah-status-${n.status}`}
+                          >
+                            {CLIMB_NOTE_STATUS_LABEL[n.status]}
+                          </span>
+                        </button>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              ) : null}
+            </div>
+            <div className="ac-gn-toolbar-actions">
+
+              <button
+                type="button"
+                className="ac-gn-action ac-gn-action--primary"
+                onClick={newNote}
+              >
+                New climb
+              </button>
+              <button
+                type="button"
+                className="ac-gn-action ac-gn-action--icon"
+                title="Refresh library"
+                aria-label="Refresh library"
+                disabled={loading || syncing}
+                onClick={() => void syncLibrary({ quiet: false })}
+              >
+                <RefreshCw
+                  aria-hidden
+                  strokeWidth={2}
+                  size={16}
+                  className={loading || syncing ? "ac-gn-spin" : undefined}
+                />
+              </button>
             </div>
           </div>
-          <p className="ac-gn-library-meta" title="Library source">
-            {libraryMeta}
-            {syncing ? " · syncing…" : ""}
-          </p>
-        </header>
 
-        {mode === "browse" ? (
-          <>
-            <div className="ac-gn-toolbar">
-              <div className="ac-gn-toolbar-left">
-                <label className="ac-gn-search">
-                  <Search aria-hidden strokeWidth={2} size={14} />
-                  <input
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Find a climb…"
-                    autoComplete="off"
-                  />
-                </label>
-                <button
-                  type="button"
-                  className="ac-gn-tool-btn"
-                  title="New Climb Note"
-                  aria-label="New Climb Note"
-                  onClick={newNote}
-                >
-                  <FilePlus2 aria-hidden strokeWidth={2} size={15} />
-                </button>
-                <button
-                  type="button"
-                  className="ac-gn-tool-btn"
-                  title="Refresh library (local vault + GitHub when configured)"
-                  aria-label="Refresh library"
-                  disabled={loading || syncing}
-                  onClick={() => void syncLibrary({ quiet: false })}
-                >
-                  <RefreshCw
-                    aria-hidden
-                    strokeWidth={2}
-                    size={15}
-                    className={loading || syncing ? "ac-gn-spin" : undefined}
-                  />
-                </button>
-                <span className="ac-gn-tool-sep" aria-hidden />
-                <button
-                  type="button"
-                  className="ac-gn-tool-btn"
-                  aria-label="Scroll earlier"
-                  onClick={() => scrollCarousel(-1)}
-                >
-                  <ChevronLeft aria-hidden strokeWidth={2} size={16} />
-                </button>
-                <button
-                  type="button"
-                  className="ac-gn-tool-btn"
-                  aria-label="Scroll older"
-                  onClick={() => scrollCarousel(1)}
-                >
-                  <ChevronRight aria-hidden strokeWidth={2} size={16} />
-                </button>
-              </div>
-            </div>
 
-            {loading && notes.length === 0 ? (
-              <p className="ac-gn-empty">Loading Climb Notes…</p>
-            ) : filtered.length === 0 ? (
-              <p className="ac-gn-empty">No climbs match this view.</p>
-            ) : (
+          {loading && notes.length === 0 ? (
+            <p className="ac-gn-empty">Loading Climb Notes…</p>
+          ) : filtered.length === 0 ? (
+            <p className="ac-gn-empty">No climbs yet.</p>
+          ) : (
+            <div className="ac-gn-rail">
+              <button
+                type="button"
+                className="ac-gn-rail-btn"
+                aria-label="Earlier notes"
+                onClick={() => scrollCarousel(-1)}
+              >
+                <ChevronLeft aria-hidden strokeWidth={2} size={20} />
+              </button>
               <div
                 className="ac-gn-carousel"
                 ref={carouselRef}
                 role="list"
-                aria-label="Climb Notes timeline"
+                aria-label="Climb Notes carousel"
               >
-                <button
-                  type="button"
-                  className="ac-gn-card ac-gn-card--new"
-                  onClick={newNote}
-                  aria-label="Create new Climb Note"
-                >
-                  <FilePlus2
-                    aria-hidden
-                    strokeWidth={1.75}
-                    className="ac-gn-card-new-icon"
-                  />
-                  <span className="ac-gn-card-new-title">New climb</span>
-                  <span className="ac-gn-card-new-sub">Start a note</span>
-                </button>
-
-                {filtered.map((n, i) => {
-                  const active = focused?.id === n.id;
-                  const folder = folderOf(n);
-                  return (
-                    <article
-                      key={n.id}
-                      role="listitem"
-                      ref={(el) => {
-                        if (el) cardRefs.current.set(n.id, el);
-                        else cardRefs.current.delete(n.id);
-                      }}
-                      className={[
-                        "ac-gn-card",
-                        active ? "is-focus" : "",
-                        `ac-gn-card--${n.status}`,
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                      onClick={() => selectCard(n)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          selectCard(n);
-                        }
-                      }}
-                      tabIndex={0}
-                    >
-                      <div className="ac-gn-card-top">
-                        <span className="ac-gn-card-num">{n.number}</span>
-                        <span
-                          className={`ac-gnomah-status ac-gnomah-status-${n.status}`}
-                        >
-                          {CLIMB_NOTE_STATUS_LABEL[n.status]}
-                        </span>
-                        <button
-                          type="button"
-                          className="ac-gn-card-edit"
-                          title={`Edit Climb Note ${n.number}`}
-                          aria-label={`Edit ${n.title || n.number}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            enterEdit(n);
-                          }}
-                        >
-                          <Edit3 aria-hidden strokeWidth={2} size={14} />
-                        </button>
-                        <button
-                          type="button"
-                          className="ac-gn-card-delete"
-                          title={`Delete Climb Note ${n.number}`}
-                          aria-label={`Delete ${n.title || n.number}`}
-                          disabled={saving}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            void onDeleteNote(n);
-                          }}
-                        >
-                          <Trash2 aria-hidden strokeWidth={2} size={14} />
-                        </button>
-                      </div>
-                      <h2 className="ac-gn-card-title">
-                        {n.title || "Untitled"}
-                      </h2>
-                      <p className="ac-gn-card-preview">
-                        {previewLine(n) || "No problem statement yet."}
-                      </p>
-                      <div className="ac-gn-card-foot">
-                        <time dateTime={n.date}>{n.date || "—"}</time>
-                        {n.onCanopy ? (
-                          <span
-                            className="ac-gn-card-canopy"
-                            title={
-                              n.canopyAt
-                                ? `Canopy go-live ${n.canopyAt}`
-                                : "On Canopy"
-                            }
-                          >
-                            {n.canopyAt &&
-                            Date.parse(n.canopyAt) > Date.now()
-                              ? "Canopy · scheduled"
-                              : "Canopy"}
-                          </span>
-                        ) : null}
-                        {folder ? (
-                          <span className="ac-gn-card-folder">{folder}</span>
-                        ) : null}
-                        <span className="ac-gn-card-idx" aria-hidden>
-                          {i + 1}/{filtered.length}
-                        </span>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            )}
-
-            {focused ? (
-              <section
-                className="ac-gn-focus"
-                aria-label={`Climb Note ${focused.number}`}
-              >
-                <div className="ac-gn-focus-head">
-                  <div>
-                    <p className="ac-gn-focus-kicker">
-                      Climb Note {focused.number}
-                      {focusFolder ? ` · ${focusFolder}` : ""}
-                    </p>
-                    <h2 className="ac-gn-focus-title">{focused.title}</h2>
-                  </div>
-                  <div className="ac-gn-focus-actions">
-                    <button
-                      type="button"
-                      className="ac-gn-icon-btn ac-gn-icon-btn--primary"
-                      onClick={() => enterEdit(focused)}
-                    >
-                      <Edit3 aria-hidden strokeWidth={2} size={14} />
-                      <span>Edit</span>
-                    </button>
-                    <button
-                      type="button"
-                      className="ac-gn-icon-btn"
-                      onClick={() => enterEdit(focused, { refresh: true })}
-                    >
-                      <RefreshCw aria-hidden strokeWidth={2} size={14} />
-                      <span>Refresh</span>
-                    </button>
-                    <button
-                      type="button"
-                      className="ac-gn-icon-btn ac-gn-icon-btn--danger"
-                      disabled={saving}
-                      onClick={() => void onDeleteNote(focused)}
-                    >
-                      <Trash2 aria-hidden strokeWidth={2} size={14} />
-                      <span>Delete</span>
-                    </button>
-                  </div>
-                </div>
-                <div className="ac-gn-focus-body">
-                  <div>
-                    <h3>Problem</h3>
-                    <p>{focused.problem || "—"}</p>
-                  </div>
-                  <div>
-                    <h3>Measure</h3>
-                    <p>{focused.measure || "—"}</p>
-                  </div>
-                  <div>
-                    <h3>Slice</h3>
-                    <p>{focused.slice || "—"}</p>
-                  </div>
-                  <div>
-                    <h3>Lesson</h3>
-                    <p>{focused.lesson || "—"}</p>
-                  </div>
-                </div>
-              </section>
-            ) : null}
-
-            <nav className="ac-gn-view-bar" aria-label="Timeline filters">
-              <div className="ac-gn-view-row" role="tablist">
-                {VIEW_FILTERS.map((f) => (
-                  <button
-                    key={f.key}
-                    type="button"
-                    role="tab"
-                    title={f.hint}
-                    aria-selected={view === f.key}
-                    className={
-                      view === f.key
-                        ? "ac-gn-view-btn is-active"
-                        : "ac-gn-view-btn"
-                    }
-                    onClick={() => setView(f.key)}
+                {filtered.map((n, i) => (
+                  <article
+                    key={n.id}
+                    role="listitem"
+                    ref={(el) => {
+                      if (el) cardRefs.current.set(n.id, el);
+                      else cardRefs.current.delete(n.id);
+                    }}
+                    className={[
+                      "ac-gn-card",
+                      form.id === n.id && mode === "edit" ? "is-focus" : "",
+                      `ac-gn-card--${n.status}`,
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                    onClick={() => selectCard(n)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        selectCard(n);
+                      }
+                    }}
+                    tabIndex={0}
                   >
-                    {f.label}
-                    <span className="ac-gn-view-n">
-                      {countView(notes, f.key)}
-                    </span>
-                  </button>
+                    <div className="ac-gn-card-top">
+                      <span className="ac-gn-card-num">CN-{n.number}</span>
+                      <span
+                        className={`ac-gnomah-status ac-gnomah-status-${n.status}`}
+                      >
+                        {CLIMB_NOTE_STATUS_LABEL[n.status]}
+                      </span>
+                    </div>
+                    <h2 className="ac-gn-card-title">{n.title || "Untitled"}</h2>
+                    <p className="ac-gn-card-preview">
+                      {previewLine(n) || "No problem statement yet."}
+                    </p>
+                    <div className="ac-gn-card-foot">
+                      <time dateTime={n.date}>{n.date || "—"}</time>
+                      {n.onCanopy ? (
+                        <span className="ac-gn-card-canopy">Canopy</span>
+                      ) : null}
+                      <span className="ac-gn-card-idx" aria-hidden>
+                        {i + 1}/{filtered.length}
+                      </span>
+                    </div>
+                  </article>
                 ))}
               </div>
-            </nav>
-          </>
-        ) : (
-          <section className="ac-gn-editor" aria-label="Edit Climb Note">
-            <div className="ac-gn-editor-bar">
               <button
                 type="button"
-                className="ac-gn-icon-btn"
-                onClick={exitEdit}
+                className="ac-gn-rail-btn"
+                aria-label="Later notes"
+                onClick={() => scrollCarousel(1)}
               >
-                <ChevronLeft aria-hidden strokeWidth={2} size={14} />
-                <span>Timeline</span>
+                <ChevronRight aria-hidden strokeWidth={2} size={20} />
               </button>
-              <div className="ac-gn-editor-id">
-                <span
-                  className={`ac-gnomah-status ac-gnomah-status-${form.status}`}
-                >
-                  {CLIMB_NOTE_STATUS_LABEL[form.status]}
-                </span>
-                <strong>
-                  {form.number ? `#${form.number}` : "New"}
-                  {form.title ? ` · ${form.title}` : ""}
-                </strong>
-              </div>
-              <div className="ac-gn-editor-actions">
-                <label className="ac-gn-state">
-                  <span className="visually-hidden">Climb Note state</span>
-                  <select
-                    value={form.status === "pending" ? "draft" : form.status}
-                    disabled={saving}
-                    title="Jump to any state — saves immediately"
-                    onChange={(e) =>
-                      void onStateChange(e.target.value as ClimbNoteStatus)
-                    }
-                  >
-                    {STATE_OPTIONS.map((o) => (
-                      <option key={o.value} value={o.value} title={o.hint}>
-                        {o.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <span
-                  className={`ac-gn-autosave ac-gn-autosave--${saveState}`}
-                  aria-live="polite"
-                >
-                  {saveState === "saving"
-                    ? "Saving…"
-                    : saveState === "saved"
-                      ? "Saved"
-                      : saveState === "error"
-                        ? "Save failed"
-                        : "Auto-save"}
-                </span>
-              </div>
             </div>
+          )}
 
-            <form
-              className="ac-gn-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                void persistForm(formRef.current, { quiet: false });
-              }}
-            >
-              <div className="ac-gn-form-meta">
-                <label>
-                  Number
-                  <input
-                    value={form.number}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, number: e.target.value }))
-                    }
-                    required
-                  />
-                </label>
-                <label>
-                  Date
-                  <input
-                    type="date"
-                    value={form.date}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, date: e.target.value }))
-                    }
-                    required
-                  />
-                </label>
-                <label className="ac-gn-grow">
-                  Tags
-                  <input
-                    value={form.tags}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, tags: e.target.value }))
-                    }
-                    placeholder="climb-note, product"
-                  />
-                </label>
-              </div>
+          {mode === "edit" ? (
 
-              <fieldset className="ac-gn-canopy-panel">
-                <legend>Canopy radar</legend>
-                <p className="ac-gn-canopy-hint">
-                  Journal uses <strong>Published</strong>. Canopy only shows
-                  notes you put on the radar — schedule when with the date
-                  picker.
-                </p>
-                <label className="ac-gn-canopy-toggle">
-                  <input
-                    type="checkbox"
-                    checked={form.onCanopy}
-                    disabled={saving}
-                    onChange={(e) =>
-                      setCanopySchedule({ onCanopy: e.target.checked })
-                    }
-                  />
-                  <span>Show on Canopy timeline</span>
-                </label>
-                <label className="ac-gn-canopy-when">
-                  Go live
-                  <input
-                    type="datetime-local"
-                    value={toDatetimeLocalValue(form.canopyAt || null)}
-                    disabled={saving || !form.onCanopy}
-                    onChange={(e) =>
-                      setCanopySchedule({
-                        onCanopy: true,
-                        canopyAt: fromDatetimeLocalValue(e.target.value),
-                      })
-                    }
-                  />
-                </label>
-                <div
-                  className="ac-gn-canopy-presets"
-                  role="group"
-                  aria-label="Schedule shortcuts"
-                >
+            <div className="ac-gn-modal" role="presentation">
+              <button
+                type="button"
+                className="ac-gn-modal-backdrop"
+                aria-label="Close editor"
+                onClick={exitEdit}
+              />
+              <section
+                className="ac-gn-modal-sheet"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Edit Climb Note"
+              >
+                <div className="ac-gn-editor-bar">
+                  <div className="ac-gn-editor-id">
+                    <span
+                      className={`ac-gnomah-status ac-gnomah-status-${form.status}`}
+                    >
+                      {CLIMB_NOTE_STATUS_LABEL[form.status]}
+                    </span>
+                    <strong>
+                      {form.number ? `CN-${form.number}` : "New climb"}
+                    </strong>
+                  </div>
+                  <span
+                    className={`ac-gn-autosave ac-gn-autosave--${saveState}`}
+                    aria-live="polite"
+                  >
+                    {saveState === "saving"
+                      ? "Saving…"
+                      : saveState === "saved"
+                        ? "Saved"
+                        : saveState === "error"
+                          ? "Save failed"
+                          : "Auto-save on"}
+                  </span>
                   <button
                     type="button"
-                    className="ac-gn-preset"
-                    disabled={saving}
-                    onClick={() => applyCanopyPreset("now")}
+                    className="ac-gn-modal-x"
+                    onClick={exitEdit}
+                    aria-label="Close editor"
                   >
-                    Now
-                  </button>
-                  <button
-                    type="button"
-                    className="ac-gn-preset"
-                    disabled={saving}
-                    onClick={() => applyCanopyPreset("plus1d")}
-                  >
-                    +1 day
-                  </button>
-                  <button
-                    type="button"
-                    className="ac-gn-preset"
-                    disabled={saving}
-                    onClick={() => applyCanopyPreset("monday")}
-                  >
-                    Next Mon 9:00
-                  </button>
-                  <button
-                    type="button"
-                    className="ac-gn-preset ac-gn-preset--quiet"
-                    disabled={saving || (!form.onCanopy && !form.canopyAt)}
-                    onClick={() => applyCanopyPreset("clear")}
-                  >
-                    Off radar
+                    <X aria-hidden strokeWidth={2} size={18} />
                   </button>
                 </div>
-                {form.onCanopy ? (
-                  <p className="ac-gn-canopy-status" aria-live="polite">
-                    {(() => {
-                      if (!form.canopyAt) {
-                        return "On Canopy as soon as you save (go-live = now).";
-                      }
-                      const t = Date.parse(form.canopyAt);
-                      if (Number.isNaN(t)) return "Check the go-live time.";
-                      if (t > Date.now()) {
-                        return `Scheduled for ${new Date(form.canopyAt).toLocaleString()} — hidden on Canopy until then.`;
-                      }
-                      return `Live on Canopy since ${new Date(form.canopyAt).toLocaleString()}.`;
-                    })()}
-                  </p>
-                ) : (
-                  <p className="ac-gn-canopy-status ac-gn-canopy-status--off">
-                    Journal only — not on the Canopy timeline.
-                  </p>
-                )}
-              </fieldset>
 
-              <label className="ac-gn-full">
-                Title
-                <input
-                  value={form.title}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, title: e.target.value }))
-                  }
-                  required
-                  placeholder="Climb Note title"
-                />
-              </label>
-              {(
-                [
-                  ["problem", "Problem", "What is true and hard?"],
-                  ["measure", "Measure", "How do we know it worked?"],
-                  ["slice", "Slice", "What thin vertical ships first?"],
-                  ["lesson", "Lesson", "What energy carries next?"],
-                ] as const
-              ).map(([key, label, ph]) => (
-                <label key={key} className="ac-gn-full">
-                  {label}
-                  <textarea
-                    rows={4}
-                    value={form[key]}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, [key]: e.target.value }))
-                    }
-                    placeholder={ph}
-                  />
-                </label>
-              ))}
-              <label className="ac-gn-full">
-                X citation URL
-                <input
-                  value={form.xUrl}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, xUrl: e.target.value }))
-                  }
-                  placeholder="https://x.com/…"
-                />
-              </label>
-            </form>
-          </section>
-        )}
-      </main>
-    </div>
+
+                <form
+                  className="ac-gn-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void persistForm(formRef.current, { quiet: false });
+                  }}
+                >
+                  <div className="ac-gn-form-main">
+                    <label className="ac-gn-full">
+                      Title
+                      <input
+                        value={form.title}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, title: e.target.value }))
+                        }
+                        required
+                        placeholder="What is this climb?"
+                      />
+                    </label>
+                    {(
+                      [
+                        ["problem", "01", "What’s stuck", "Name the real problem."],
+                        ["measure", "02", "How we know it moved", "A test you can check."],
+                        ["slice", "03", "Pitch", "The next safe pitch that can move the measure."],
+                        ["lesson", "04", "What we carry next", "What the next climb reuses."],
+                      ] as const
+                    ).map(([key, n, label, ph]) => (
+                      <label key={key} className="ac-gn-climb-field">
+                        <span className="ac-gn-climb-lab">
+                          <span className="ac-gn-climb-n">{n}</span>
+                          {label}
+                        </span>
+                        <textarea
+                          rows={4}
+                          value={form[key]}
+                          onChange={(e) =>
+                            setForm((f) => ({ ...f, [key]: e.target.value }))
+                          }
+                          placeholder={ph}
+                        />
+                      </label>
+                    ))}
+                  </div>
+
+                  <aside className="ac-gn-form-side">
+                    <label>
+                      Number
+                      <input
+                        value={form.number}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, number: e.target.value }))
+                        }
+                        required
+                        placeholder="000"
+                      />
+                    </label>
+                    <label>
+                      Date
+                      <input
+                        type="date"
+                        value={form.date}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, date: e.target.value }))
+                        }
+                        required
+                      />
+                    </label>
+                    <label>
+                      State
+                      <select
+                        value={form.status === "pending" ? "draft" : form.status}
+                        disabled={saving}
+                        onChange={(e) =>
+                          void onStateChange(e.target.value as ClimbNoteStatus)
+                        }
+                      >
+                        {STATE_OPTIONS.map((o) => (
+                          <option key={o.value} value={o.value} title={o.hint}>
+                            {o.label}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label>
+                      Tags
+                      <input
+                        value={form.tags}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, tags: e.target.value }))
+                        }
+                        placeholder="climb-note, product"
+                      />
+                    </label>
+                    <label>
+                      X post URL
+                      <input
+                        value={form.xUrl}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, xUrl: e.target.value }))
+                        }
+                        placeholder="https://x.com/…"
+                      />
+                    </label>
+                    <fieldset className="ac-gn-canopy-panel">
+                      <legend>Canopy</legend>
+                      <label className="ac-gn-canopy-toggle">
+                        <input
+                          type="checkbox"
+                          checked={form.onCanopy}
+                          disabled={saving}
+                          onChange={(e) =>
+                            setCanopySchedule({ onCanopy: e.target.checked })
+                          }
+                        />
+                        <span>Show on Canopy</span>
+                      </label>
+                      <label className="ac-gn-canopy-when">
+                        Go live
+                        <input
+                          type="datetime-local"
+                          value={toDatetimeLocalValue(form.canopyAt || null)}
+                          disabled={saving || !form.onCanopy}
+                          onChange={(e) =>
+                            setCanopySchedule({
+                              onCanopy: true,
+                              canopyAt: fromDatetimeLocalValue(e.target.value),
+                            })
+                          }
+                        />
+                      </label>
+                      <div className="ac-gn-canopy-presets" role="group">
+                        <button type="button" className="ac-gn-preset" disabled={saving} onClick={() => applyCanopyPreset("now")}>Now</button>
+                        <button type="button" className="ac-gn-preset" disabled={saving} onClick={() => applyCanopyPreset("plus1d")}>+1 day</button>
+                        <button type="button" className="ac-gn-preset" disabled={saving} onClick={() => applyCanopyPreset("monday")}>Mon 9:00</button>
+                        <button type="button" className="ac-gn-preset ac-gn-preset--quiet" disabled={saving || (!form.onCanopy && !form.canopyAt)} onClick={() => applyCanopyPreset("clear")}>Off</button>
+                      </div>
+                      {form.onCanopy ? (
+                        <p className="ac-gn-canopy-status">
+                          {!form.canopyAt
+                            ? "Goes live on save."
+                            : Date.parse(form.canopyAt) > Date.now()
+                              ? `Hidden until ${new Date(form.canopyAt).toLocaleString()}.`
+                              : `Live since ${new Date(form.canopyAt).toLocaleString()}.`}
+                        </p>
+                      ) : (
+                        <p className="ac-gn-canopy-status ac-gn-canopy-status--off">
+                          Journal only.
+                        </p>
+                      )}
+                    </fieldset>
+                  </aside>
+                </form>
+              </section>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </SiteChrome>
   );
 }

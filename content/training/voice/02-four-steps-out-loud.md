@@ -2,7 +2,7 @@
 
 **Tool:** Grok Voice (Luna)  
 **Time:** ~10 minutes  
-**Done when:** You can say Problem, Measure, Slice, Lesson without notes.
+**Done when:** You can say Problem, Measure, Pitch, Lesson without notes.
 
 ## Goal
 Make the climb muscle memory.
@@ -15,4 +15,4 @@ Make the climb muscle memory.
 
 ## Done when
 - You can list the four steps and one plain phrase for each.  
-- You have a spoken draft of Measure and Slice for your climb.
+- You have a spoken draft of Measure and Pitch for your climb.

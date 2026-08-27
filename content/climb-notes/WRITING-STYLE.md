@@ -67,8 +67,8 @@ How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same fou
 - Something a reader can **check** (open a page, see a result, count an action).
 - Not “better AI” — **observable**.
 
-### Slice
-- The smallest finished step for **this** note.
+### Pitch
+- The next safe rope length that can move the measure — not the summit.
 - One path. Not a roadmap.
 
 ### Lesson

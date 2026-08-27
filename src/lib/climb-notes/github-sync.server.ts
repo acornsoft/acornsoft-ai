@@ -100,7 +100,7 @@ function parseMdNote(
     date: String(data.date ?? ""),
     problem: section("Problem"),
     measure: section("Measure"),
-    slice: section("Slice"),
+    slice: section("Pitch") || section("Slice"),
     lesson: section("Lesson"),
     status,
     tags: Array.isArray(data.tags) ? (data.tags as string[]) : [],

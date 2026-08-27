@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { VoiceWhenSignedIn } from "./voice-access";
 import { ClimbNotesMark } from "./climb-notes-mark";
-import { SiteHeader } from "./site-chrome";
+import { SiteChrome } from "./site-chrome";
 import {
+
   climbNotes as staticClimbNotes,
   publishedClimbNotes as staticPublishedClimbNotes,
   formatClimbNoteCiteForX,
@@ -13,8 +14,8 @@ import {
   type ClimbNote,
 } from "./climb-notes-data";
 import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
-import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { authEnabled } from "@/lib/auth/client";
+
+
 
 const CLIMB_STEPS: {
   key: "problem" | "measure" | "slice" | "lesson";
@@ -25,7 +26,7 @@ const CLIMB_STEPS: {
 }[] = [
   { key: "problem", n: 1, label: "Problem", plain: "What's stuck", stage: "Basecamp" },
   { key: "measure", n: 2, label: "Measure", plain: "How we know it moved", stage: "Brief" },
-  { key: "slice", n: 3, label: "Slice", plain: "The small step", stage: "Route" },
+  { key: "slice", n: 3, label: "Pitch", plain: "The next safe pitch", stage: "Route" },
   { key: "lesson", n: 4, label: "Lesson", plain: "What we carry next", stage: "Ascent" },
 ];
 
@@ -61,16 +62,9 @@ function sortPublished(list: ClimbNote[]): ClimbNote[] {
     });
 }
 
-function NoteCard({
-  note,
-  signedIn,
-}: {
-  note: ClimbNote;
-  signedIn: boolean;
-}) {
+function NoteCard({ note }: { note: ClimbNote }) {
   const citeText = formatClimbNoteCiteForX(note);
   const isPublic = isPublicClimbNoteStatus(note.status);
-  // Guard: never render non-published on this page
   if (!isPublic) return null;
 
   const tags = note.tags?.filter(Boolean) ?? [];
@@ -88,23 +82,12 @@ function NoteCard({
           <h2 className="ac-cn-entry-title">{note.title}</h2>
           <div className="ac-cn-trail-gear" aria-label="Share actions">
             <span
-              className={[
-                "ac-cn-pill",
-                "ac-cn-pill--status",
-                "ac-cn-pill--published",
-                signedIn ? "is-editable" : "is-locked",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              title={
-                signedIn
-                  ? "Published — manage status in Gnomah"
-                  : "Published"
-              }
-              aria-disabled={!signedIn}
+              className="ac-cn-pill ac-cn-pill--status ac-cn-pill--published"
+              title="Published"
             >
               {statusLabel}
             </span>
+
             <a
               className="ac-cn-pill ac-cn-pill--x ac-cn-pill--action"
               href={xAction.href}
@@ -220,11 +203,10 @@ function NoteCard({
  * Draft / pending / approved / archived live in Gnomah (owner), never here.
  */
 export function ClimbNotesPage() {
-  const { user, isPending } = useCurrentUserState();
-  const signedIn = !authEnabled || (!isPending && !!user);
   const [notes, setNotes] = useState<ClimbNote[]>(() =>
     sortPublished(staticPublishedClimbNotes),
   );
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -264,85 +246,59 @@ export function ClimbNotesPage() {
   const visible = useMemo(() => sortPublished(notes), [notes]);
 
   return (
-    <div className="template-color-1 spybody ac-inbio ac-climb-notes ac-hero-stage">
-      <SiteHeader loginRedirect="/gnomah" />
-
-      <main className="main-page-wrapper cn-page ac-page-hero-main">
-        <section className="cn-hero rn-section-gap ac-page-top">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-10">
-                <div className="section-title text-left">
-                  <span className="subtitle">Studio energy</span>
-                  <h1 className="title cn-page-title">
-                    <ClimbNotesMark large />
-                  </h1>
-                  <p className="description" style={{ maxWidth: "40em" }}>
-                    Each Climb Note is one climb: four steps in order — what we
-                    write and how the climb runs.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="rn-section-gap" id="notes">
-          <div className="container">
-            <p className="ac-cn-public-banner">
-              Published Climb Notes only — trails anyone can follow.
-              {signedIn ? (
-                <>
-                  {" "}
-                  Unapproved work stays in{" "}
-                  <Link to="/gnomah" className="ac-cn-public-signin">
-                    Gnomah
-                  </Link>
-                  .
-                </>
-              ) : null}
-            </p>
-
-            {loading ? (
-              <p className="ac-cn-empty">Loading Climb Notes…</p>
-            ) : visible.length === 0 ? (
-              <p className="ac-cn-empty">No published Climb Notes yet.</p>
-            ) : (
-              <div className="ac-cn-list">
-                {visible.map((note) => (
-                  <NoteCard
-                    key={note.id}
-                    note={note}
-                    signedIn={signedIn}
-                  />
-                ))}
-              </div>
-            )}
-
-            <div className="ac-cn-footer-links">
-              <p>
-                Climb Notes™ hold the journal on this site. Canopy shows the
-                public journal on the live radar.
+    <SiteChrome loginRedirect="/gnomah" mainClassName="ac-climb-notes">
+      <div className="ac-service-page ac-climb-notes ac-page-top" id="notes">
+        <div className="ac-service-stack">
+          <header className="ac-service-head">
+            <span className="ac-service-kicker">Journal</span>
+            <h1 className="ac-service-title">
+              <ClimbNotesMark large />
+            </h1>
+            <div className="ac-service-lede-box">
+              <p className="ac-service-lede">
+                Each Climb Note is one climb: four steps in order — what we
+                write and how the climb runs.
               </p>
-              <div className="ac-hero-cta" style={{ marginTop: 24 }}>
-                <VoiceWhenSignedIn>
-                  <Link className="rn-btn ac-btn-maroon" to="/voice">
-                    <span>Talk to Luna</span>
-                  </Link>
-                </VoiceWhenSignedIn>
-                <Link className="rn-btn" to="/canopy">
-                  <span>Open Canopy</span>
+              <p className="ac-service-lede ac-service-lede--last">
+                Published trails anyone can follow. Drafts stay in the studio.
+              </p>
+            </div>
+          </header>
+
+          {loading ? (
+            <p className="ac-cn-empty">Loading Climb Notes…</p>
+          ) : visible.length === 0 ? (
+            <p className="ac-cn-empty">No published Climb Notes yet.</p>
+          ) : (
+            <div className="ac-cn-list">
+              {visible.map((note) => (
+                <NoteCard key={note.id} note={note} />
+              ))}
+            </div>
+          )}
+
+          <div className="ac-cn-footer-links">
+            <p>
+              Climb Notes™ hold the journal on this site. Canopy shows the
+              public journal on the live radar.
+            </p>
+            <div className="ac-hero-cta ac-cn-footer-actions">
+              <Link className="rn-btn" to="/canopy">
+                <span>Open Canopy</span>
+              </Link>
+              <VoiceWhenSignedIn>
+                <Link className="rn-btn ac-btn-maroon" to="/voice">
+                  <span>Talk to Luna</span>
                 </Link>
-                {signedIn ? (
-                  <Link className="rn-btn ac-btn-outline" to="/gnomah">
-                    <span>Open Gnomah</span>
-                  </Link>
-                ) : null}
-              </div>
+                <Link className="rn-btn ac-btn-outline" to="/gnomah">
+                  <span>Open Gnomah</span>
+                </Link>
+              </VoiceWhenSignedIn>
             </div>
           </div>
-        </section>
-      </main>
-    </div>
+        </div>
+      </div>
+    </SiteChrome>
   );
 }
+

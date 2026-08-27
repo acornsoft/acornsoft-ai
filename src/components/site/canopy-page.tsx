@@ -21,6 +21,8 @@ import {
   climbNotes as staticClimbNotes,
   isClimbNoteOnCanopy,
   climbNoteCanopySortKey,
+  climbNoteCanopyDisplayDate,
+
   climbNoteXActionUrl,
   climbNoteDetailUrl,
   type ClimbNote,
@@ -162,8 +164,9 @@ function journalToTimeline(notes: ClimbNote[]): TimelineEntry[] {
       const x = climbNoteXActionUrl(n);
       return withInferredSurface({
         id: `climb-note-${n.id}`,
-        date: n.date,
+        date: climbNoteCanopyDisplayDate(n),
         sortKey: climbNoteCanopySortKey(n),
+
         title: `Climb Note ${n.number} · ${n.title}`,
         body: body.length > 420 ? `${body.slice(0, 417)}…` : body,
         kind: "product",
@@ -307,30 +310,24 @@ export function CanopyPage() {
     [toLiveTimeline],
   );
 
-  /** Pull latest X → Canopy. force=true bypasses server cache. */
+  /** Load cached feed. force=true is the only path that spends X credits. */
   const refreshLiveFeed = useCallback(
     async (force = false) => {
       setLiveRefreshing(true);
       try {
         if (!force) {
-          try {
-            const res = await fetch("/canopy/live-feed.json", {
-              cache: "no-store",
-            });
-            if (res.ok) {
-              const data = (await res.json()) as LiveFeedFile;
-              applyLiveFeed(data);
-            }
-          } catch {
-            /* ignore */
+          const res = await fetch("/canopy/live-feed.json", {
+            cache: "no-store",
+          });
+          if (res.ok) {
+            const data = (await res.json()) as LiveFeedFile;
+            applyLiveFeed(data);
           }
+          return;
         }
 
-        const url = force
-          ? "/api/canopy/refresh?force=1"
-          : "/api/canopy/refresh";
-        const res = await fetch(url, {
-          method: force ? "POST" : "GET",
+        const res = await fetch("/api/canopy/refresh?force=1", {
+          method: "POST",
           cache: "no-store",
         });
         if (res.ok) {
@@ -338,6 +335,10 @@ export function CanopyPage() {
           applyLiveFeed(data);
           return data;
         }
+        setLiveMeta((m) => ({
+          ...m,
+          error: "Refresh failed — try again in a moment.",
+        }));
       } catch {
         setLiveMeta((m) => ({
           ...m,
@@ -351,24 +352,12 @@ export function CanopyPage() {
     [applyLiveFeed],
   );
 
-  // Load scheduled live feed cache; soft-refresh on an interval
+  // Cached feed only on visit — no automatic X pull.
   useEffect(() => {
-    let cancelled = false;
-    const run = async (force: boolean) => {
-      if (cancelled) return;
-      await refreshLiveFeed(force);
-    };
-    void run(false);
-    const id = window.setInterval(() => {
-      void run(false);
-    }, 15 * 60 * 1000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(id);
-    };
-    // Mount-only: refreshLiveFeed is stable enough for interval use
+    void refreshLiveFeed(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   useEffect(() => {
     let cancelled = false;
@@ -572,6 +561,10 @@ export function CanopyPage() {
                     {liveRefreshing ? "Refreshing…" : "Refresh live"}
                   </button>
                 </div>
+                {liveMeta.error ? (
+                  <p className="cn-live-error">{liveMeta.error}</p>
+                ) : null}
+
                 {visible.length === 0 ? (
                   <p className="cn-empty">No signals for this filter.</p>
                 ) : (

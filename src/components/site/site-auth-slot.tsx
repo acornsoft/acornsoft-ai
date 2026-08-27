@@ -67,9 +67,12 @@ export function SiteAuthSlot({
   const pillText = formatAuthLabel(label);
 
   return (
-    <div
+    <button
+      type="button"
       className={`ac-auth-slot ac-auth-user ${className}`.trim()}
-      title={pillText}
+      onClick={() => void signOut("/")}
+      title={`Log out · ${pillText}`}
+      aria-label={`Log out ${pillText}`}
     >
       {user.profileImageUrl ? (
         <img
@@ -85,15 +88,8 @@ export function SiteAuthSlot({
         </span>
       )}
       <span className="ac-auth-name">{pillText}</span>
-      <button
-        type="button"
-        className="ac-auth-signout"
-        onClick={() => void signOut("/")}
-        aria-label="Log out"
-      >
-        <LogOut className="ac-auth-signout-icon" aria-hidden strokeWidth={2.25} />
-        <span className="ac-auth-signout-label">Log out</span>
-      </button>
-    </div>
+      <LogOut className="ac-auth-signout-icon" aria-hidden strokeWidth={2.25} />
+    </button>
   );
 }
+

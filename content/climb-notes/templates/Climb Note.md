@@ -19,9 +19,9 @@ What’s stuck? Use plain words. Prefer a clearly defined problem, not a tool li
 
 How will we know it moved? Something a reader can check.
 
-## Slice
+## Pitch
 
-What is the small next step we will finish for this note?
+What is the next safe pitch that can move the measure?
 
 ## Lesson
 

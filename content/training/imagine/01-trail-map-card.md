@@ -8,7 +8,7 @@
 Make the climb visible for people who scan before they read.
 
 ## Do this
-1. Prompt Imagine for a **simple** trail diagram: four stations labeled Problem, Measure, Slice, Lesson.  
+1. Prompt Imagine for a **simple** trail diagram: four stations labeled Problem, Measure, Pitch, Lesson.  
 2. Keep text large. Dark background. One accent color. No clutter.  
 3. Save for use on a service page, social card, or training slide.  
 4. Caption on site: “How a Climb Note runs.”

@@ -268,7 +268,7 @@ function noteFromMarkdown(
     date: String(data.date ?? ""),
     problem: section(body, "Problem"),
     measure: section(body, "Measure"),
-    slice: section(body, "Slice"),
+    slice: section(body, "Pitch") || section(body, "Slice"),
     lesson: section(body, "Lesson"),
     status,
     version: reg?.version ?? 1,
@@ -643,7 +643,7 @@ ${note.problem}
 
 ${note.measure}
 
-## Slice
+## Pitch
 
 ${note.slice}
 
@@ -686,39 +686,60 @@ function writeRegistryFromDbNotes(notes: ClimbNote[]) {
     const notesMap: Record<string, RegistryNote> = {};
     for (const n of notes) {
       const prior = prev[n.id];
-      notesMap[n.id] = {
-        status: n.status,
-        version: n.version ?? 1,
-        submittedAt: n.submittedAt ?? null,
-        submittedBy: n.submittedBy ?? null,
-        approvedAt: n.approvedAt ?? null,
-        approvedBy: n.approvedBy ?? null,
-        publishedAt: n.publishedAt ?? null,
-        unpublishedAt: n.unpublishedAt ?? null,
-        approvalNote: n.approvalNote ?? null,
-        history: n.history ?? [],
-        onCanopy:
-          typeof n.onCanopy === "boolean"
-            ? n.onCanopy
-            : (prior?.onCanopy ?? false),
-        canopyAt:
-          n.canopyAt !== undefined
-            ? n.canopyAt
-            : (prior?.canopyAt ?? null),
-      };
+      notesMap[n.id] = registryEntryFromNote(n, prior);
     }
-    const payload = {
-      version: 1,
-      description:
-        "SharePoint-style publish control for Climb Notes. status=journal; onCanopy+canopyAt=Canopy timeline. Managed by Gnomah editor and CLI.",
-      notes: notesMap,
-    };
-    fs.mkdirSync(NOTES_DIR, { recursive: true });
-    fs.writeFileSync(REGISTRY_PATH, JSON.stringify(payload, null, 2) + "\n");
+    writeRegistryMap(notesMap);
   } catch {
     /* read-only host */
   }
 }
+
+function registryEntryFromNote(
+  n: ClimbNote,
+  prior?: RegistryNote,
+): RegistryNote {
+  return {
+    status: n.status,
+    version: n.version ?? 1,
+    submittedAt: n.submittedAt ?? null,
+    submittedBy: n.submittedBy ?? null,
+    approvedAt: n.approvedAt ?? null,
+    approvedBy: n.approvedBy ?? null,
+    publishedAt: n.publishedAt ?? null,
+    unpublishedAt: n.unpublishedAt ?? null,
+    approvalNote: n.approvalNote ?? null,
+    history: n.history ?? [],
+    onCanopy:
+      typeof n.onCanopy === "boolean"
+        ? n.onCanopy
+        : (prior?.onCanopy ?? false),
+    canopyAt:
+      n.canopyAt !== undefined ? n.canopyAt : (prior?.canopyAt ?? null),
+  };
+}
+
+/** Persist one note's status before any list/overlay so a save cannot be stomped. */
+function upsertRegistryNote(note: ClimbNote) {
+  try {
+    const prev = loadRegistry();
+    prev[note.id] = registryEntryFromNote(note, prev[note.id]);
+    writeRegistryMap(prev);
+  } catch {
+    /* read-only host */
+  }
+}
+
+function writeRegistryMap(notesMap: Record<string, RegistryNote>) {
+  const payload = {
+    version: 1,
+    description:
+      "SharePoint-style publish control for Climb Notes. status=journal; onCanopy+canopyAt=Canopy timeline. Managed by Gnomah editor and CLI.",
+    notes: notesMap,
+  };
+  fs.mkdirSync(NOTES_DIR, { recursive: true });
+  fs.writeFileSync(REGISTRY_PATH, JSON.stringify(payload, null, 2) + "\n");
+}
+
 
 export type SaveClimbNoteInput = {
   id?: string;
@@ -859,6 +880,9 @@ export async function saveClimbNote(
       : existing?.tags ?? ["climb-note"],
     sourceFile,
   };
+  // Registry is SoT for status. Write it before any list/overlay or the
+  // next read will paint the old "draft" back onto this save.
+  upsertRegistryNote(note);
   await upsertNoteRow(note, ownerUserId || null);
   const fileName = writeMarkdownMirror(note);
   if (fileName) {
@@ -868,15 +892,9 @@ export async function saveClimbNote(
       update climb_notes set source_file = ${fileName} where id = ${note.id}
     `;
   }
-  // Prefer this note's canopy fields when rewriting the registry
-  const all = (await listClimbNotesFromDb()).map((n) =>
-    n.id === note.id
-      ? { ...n, onCanopy: note.onCanopy, canopyAt: note.canopyAt }
-      : n,
-  );
-  writeRegistryFromDbNotes(all);
-  return (await getClimbNoteFromDb(note.id)) ?? note;
+  return note;
 }
+
 
 export async function setClimbNoteStatus(
   id: string,

@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as CanopyRouteImport } from './routes/canopy'
 import { Route as ClimbNotesRouteImport } from './routes/climb-notes'
 import { Route as CorporateRouteImport } from './routes/corporate'
+import { Route as FieldGuideRouteImport } from './routes/field-guide'
 import { Route as GnomahRouteImport } from './routes/gnomah'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MethodRouteImport } from './routes/method'
@@ -48,6 +49,11 @@ const ClimbNotesRoute = ClimbNotesRouteImport.update({
 const CorporateRoute = CorporateRouteImport.update({
   id: '/corporate',
   path: '/corporate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FieldGuideRoute = FieldGuideRouteImport.update({
+  id: '/field-guide',
+  path: '/field-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GnomahRoute = GnomahRouteImport.update({
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/canopy': typeof CanopyRoute
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
+  '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
   '/method': typeof MethodRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/canopy': typeof CanopyRoute
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
+  '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
   '/method': typeof MethodRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/canopy': typeof CanopyRoute
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
+  '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
   '/method': typeof MethodRoute
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/canopy'
     | '/climb-notes'
     | '/corporate'
+    | '/field-guide'
     | '/gnomah'
     | '/login'
     | '/method'
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
     | '/canopy'
     | '/climb-notes'
     | '/corporate'
+    | '/field-guide'
     | '/gnomah'
     | '/login'
     | '/method'
@@ -195,6 +206,7 @@ export interface FileRouteTypes {
     | '/canopy'
     | '/climb-notes'
     | '/corporate'
+    | '/field-guide'
     | '/gnomah'
     | '/login'
     | '/method'
@@ -213,6 +225,7 @@ export interface RootRouteChildren {
   CanopyRoute: typeof CanopyRoute
   ClimbNotesRoute: typeof ClimbNotesRoute
   CorporateRoute: typeof CorporateRoute
+  FieldGuideRoute: typeof FieldGuideRoute
   GnomahRoute: typeof GnomahRoute
   LoginRoute: typeof LoginRoute
   MethodRoute: typeof MethodRoute
@@ -260,6 +273,13 @@ declare module '@tanstack/react-router' {
       path: '/corporate'
       fullPath: '/corporate'
       preLoaderRoute: typeof CorporateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/field-guide': {
+      id: '/field-guide'
+      path: '/field-guide'
+      fullPath: '/field-guide'
+      preLoaderRoute: typeof FieldGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gnomah': {
@@ -341,6 +361,7 @@ const rootRouteChildren: RootRouteChildren = {
   CanopyRoute: CanopyRoute,
   ClimbNotesRoute: ClimbNotesRoute,
   CorporateRoute: CorporateRoute,
+  FieldGuideRoute: FieldGuideRoute,
   GnomahRoute: GnomahRoute,
   LoginRoute: LoginRoute,
   MethodRoute: MethodRoute,

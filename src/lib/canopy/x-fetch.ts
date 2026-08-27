@@ -45,6 +45,29 @@ type XTweet = {
 
 type XUser = { id: string; username: string; name?: string };
 
+function explainXError(status: number, body: string): string {
+  const t = body || "";
+  if (status === 402 || /credits depleted/i.test(t)) {
+    return "X API credits are empty. Add credits at developer.x.com, then Refresh live.";
+  }
+  if (status === 401 || status === 403) {
+    return "X rejected the Bearer Token. Open Settings (gear) and paste a fresh App-only Bearer.";
+  }
+  if (status === 429) {
+    return "X rate limit — wait a minute, then Refresh live.";
+  }
+  return `X API ${status}`;
+}
+
+function decodeHtml(s: string): string {
+  return s
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
 function formatDate(iso: string): string {
   try {
     return new Date(iso).toLocaleDateString("en-US", {
@@ -59,13 +82,16 @@ function formatDate(iso: string): string {
 }
 
 function titleFromText(text: string): string {
-  const clean = text.replace(/\s+/g, " ").trim();
+
+  const clean = decodeHtml(text.replace(/\s+/g, " ").trim());
+
   const first = clean.split(/(?<=[.!?])\s+/)[0] || clean;
   return first.length > 90 ? `${first.slice(0, 87)}…` : first;
 }
 
 function bodyFromText(text: string): string {
-  const clean = text.replace(/\s+/g, " ").trim();
+  const clean = decodeHtml(text.replace(/\s+/g, " ").trim());
+
   return clean.length > 320 ? `${clean.slice(0, 317)}…` : clean;
 }
 
@@ -117,8 +143,9 @@ async function searchRecent(
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`X API ${res.status}: ${text.slice(0, 240)}`);
+    throw new Error(explainXError(res.status, text));
   }
+
   const json = (await res.json()) as {
     data?: XTweet[];
     includes?: { users?: XUser[] };
@@ -141,8 +168,10 @@ async function resolveUserId(
     headers: { Authorization: `Bearer ${bearer}` },
   });
   if (!res.ok) {
-    throw new Error(`User lookup ${res.status}`);
+    const text = await res.text();
+    throw new Error(explainXError(res.status, text));
   }
+
   const json = (await res.json()) as { data?: { id: string } };
   if (!json.data?.id) throw new Error(`User not found: @${username}`);
   return json.data.id;
@@ -165,8 +194,9 @@ async function userTimeline(
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Timeline ${res.status}: ${text.slice(0, 200)}`);
+    throw new Error(explainXError(res.status, text));
   }
+
   const json = (await res.json()) as { data?: XTweet[] };
   return json.data ?? [];
 }
@@ -220,7 +250,8 @@ export async function fetchLiveFeedFromX(
       scheduleMinutes: interests.scheduleMinutes,
       entryCount: 0,
       error:
-        "Missing X API Bearer. Owner: sign in and save it under Gnomah → Private preferences, or set X_BEARER_TOKEN on the host.",
+        "No X Bearer Token on this site yet. Sign in → gear (Settings) → paste the App-only Bearer from developer.x.com (Keys and tokens). A console.x.ai key will not work.",
+
       entries: [],
     };
   }

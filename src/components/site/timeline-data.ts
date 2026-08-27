@@ -4,6 +4,8 @@ import {
   climbNotes,
   isClimbNoteOnCanopy,
   climbNoteCanopySortKey,
+  climbNoteCanopyDisplayDate,
+
   climbNoteXActionUrl,
   climbNoteDetailUrl,
 } from "./climb-notes-data";
@@ -1212,13 +1214,93 @@ export const grokStackAnchors: TimelineEntry[] = [
   },
 ];
 
+/**
+ * Official Grok / Build / Imagine / Voice launches that weekly X search
+ * will drop after 7 days. These stay on Canopy.
+ */
+export const stackLaunches: TimelineEntry[] = [
+  {
+    id: "launch-grok-46",
+    date: "August 12, 2026",
+    sortKey: "2026-08-12T15:32:11Z",
+    title: "Grok 4.6 is out",
+    body: "Frontier intelligence at the same price as 4.5. Live in Grok Build, Cursor, Grok Bot, and the API. Double included usage in Cursor and Grok Build for the first week.",
+    kind: "milestone",
+    actor: "xai",
+    surface: "grok",
+    source: "@SpaceXAI",
+    href: "https://x.ai/news/grok-4-6",
+    xId: "2087562800982077492",
+    standout: true,
+  },
+  {
+    id: "launch-imagine-edit-0808",
+    date: "August 8, 2026",
+    sortKey: "2026-08-08T18:00:00Z",
+    title: "Imagine image editing — major upgrade",
+    body: "Elon: major upgrade to Grok Imagine image editing. Professional usefulness, consumer fun, and ease of use are the stated focus.",
+    kind: "product",
+    actor: "xai",
+    surface: "imagine",
+    source: "@elonmusk",
+    href: "https://x.com/elonmusk/status/2086127247077843282",
+    xId: "2086127247077843282",
+
+  },
+  {
+    id: "launch-voice-connectors",
+    date: "August 5, 2026",
+    sortKey: "2026-08-05T19:18:48Z",
+    title: "Voice Mode · connectors",
+    body: "Connectors are live in Voice Mode. Ask Grok about email, meetings, or any existing connector by talking.",
+    kind: "product",
+    actor: "xai",
+    surface: "voice",
+    source: "@grok",
+    href: "https://x.com/grok/status/2085083115488260175",
+    xId: "2085083115488260175",
+    standout: true,
+  },
+  {
+    id: "launch-imagine-video-15",
+    date: "August 1, 2026",
+    sortKey: "2026-08-01T00:46:21Z",
+    title: "Imagine Video 1.5 · text-to-video, 1080p, references",
+    body: "Imagine Video 1.5 adds text-to-video, image and voice references, and native 1080p. Rolling out on web, apps, and the Imagine API.",
+    kind: "product",
+    actor: "xai",
+    surface: "imagine",
+    source: "@grok",
+    href: "https://x.ai/news/grok-imagine-video-1-5-references",
+    xId: "2083353607370416632",
+    standout: true,
+  },
+  {
+    id: "launch-grok-build-0801",
+    date: "August 1, 2026",
+    sortKey: "2026-08-01T04:16:02Z",
+    title: "Grok Build · x.ai/build",
+    body: "Elon: Grok Build can do almost anything you can think of. Official builder surface at x.ai/build.",
+    kind: "product",
+    actor: "build",
+    surface: "build",
+    source: "@elonmusk",
+    href: "https://x.ai/build",
+    xId: "2083406375955177911",
+    standout: true,
+  },
+];
+
 /** Newest first (desc by sortKey). History still includes founding day. */
+
 export function buildRadarTimeline(): TimelineEntry[] {
   const map = new Map<string, TimelineEntry>();
   for (const e of [
     ...originTimeline,
     ...grokStackAnchors,
+    ...stackLaunches,
     ...xFeednotes,
+
     ...grokBuildChangelogs,
     ...acornsoftNotes,
     ...advancedDevelopmentNotes,
@@ -1244,8 +1326,9 @@ function climbNotesTimelineEntries(): TimelineEntry[] {
       const x = climbNoteXActionUrl(n);
       return {
         id: `climb-note-${n.id}`,
-        date: n.date,
+        date: climbNoteCanopyDisplayDate(n),
         sortKey: climbNoteCanopySortKey(n),
+
         title: `Climb Note ${n.number} · ${n.title}`,
         body: body.length > 420 ? `${body.slice(0, 417)}…` : body,
         kind: "product",

@@ -69,7 +69,7 @@ Current catalog: **45** notes (3 engagement + 32 product + 10 foundation). Neste
 
 - Note files: `001 Title.md`, `002 Title.md` (top-level `*.md` in vault)
 - Template: `templates/Climb Note.md`
-- Required headings: `## Problem` · `## Measure` · `## Slice` · `## Lesson`
+- Required headings: `## Problem` · `## Measure` · `## Pitch` · `## Lesson` (legacy `## Slice` still reads)
 - Frontmatter: `id`, `number`, `title`, `date`, `status`, optional `tags`, `xUrl`
 - Do not edit `_publish-registry.json` by hand unless you know the shape—prefer the CLI
 

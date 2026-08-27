@@ -41,34 +41,64 @@ async function handle(request: Request): Promise<Response> {
     request.method === "POST" ||
     new URL(request.url).searchParams.get("force") === "1";
 
-  const scheduleMs = (interests.scheduleMinutes ?? 60) * 60 * 1000;
   const cached = globalCache.__canopyLiveFeed__;
-  if (
-    !force &&
-    cached &&
-    Date.now() - cached.at < scheduleMs &&
-    cached.data.entries.length > 0
-  ) {
-    return Response.json({
-      ...cached.data,
-      source: "cache" as const,
-    });
+
+  // GET / no force: serve last pull only — do not spend X credits.
+  if (!force) {
+    if (cached?.data) {
+      return Response.json({ ...cached.data, source: "cache" as const });
+    }
+    try {
+      const { readFile } = await import("node:fs/promises");
+      const { join } = await import("node:path");
+      const raw = await readFile(
+        join(process.cwd(), "public", "canopy", "live-feed.json"),
+        "utf8",
+      );
+      const data = JSON.parse(raw) as LiveFeedFile;
+      globalCache.__canopyLiveFeed__ = { at: Date.now(), data };
+      return Response.json({ ...data, source: "cache" as const });
+    } catch {
+      return Response.json({
+        updatedAt: new Date().toISOString(),
+        source: "empty",
+        scheduleMinutes: interests.scheduleMinutes,
+        entryCount: 0,
+        entries: [],
+        error: "No cached live feed yet. Sign in and click Refresh live.",
+      } satisfies LiveFeedFile);
+    }
   }
 
-  const data = await fetchLiveFeedFromX(interests);
+  const data = await fetchLiveFeedFromX(interests).catch((e) => {
+    const message = e instanceof Error ? e.message : "Refresh failed";
+    return {
+      updatedAt: new Date().toISOString(),
+      source: "error" as const,
+      scheduleMinutes: interests.scheduleMinutes,
+      entryCount: 0,
+      error: message,
+      entries: [],
+    } satisfies LiveFeedFile;
+  });
+
+
 
   globalCache.__canopyLiveFeed__ = { at: Date.now(), data };
 
-  // Best-effort disk write (local/dev). Ignore failures on read-only hosts.
-  try {
-    const { writeFile, mkdir } = await import("node:fs/promises");
-    const { join } = await import("node:path");
-    const out = join(process.cwd(), "public", "canopy", "live-feed.json");
-    await mkdir(join(process.cwd(), "public", "canopy"), { recursive: true });
-    await writeFile(out, JSON.stringify(data, null, 2) + "\n", "utf8");
-  } catch {
-    /* ignore */
+  // Best-effort disk write (local/dev). Never clobber a good cache with empty.
+  if (data.entries.length > 0) {
+    try {
+      const { writeFile, mkdir } = await import("node:fs/promises");
+      const { join } = await import("node:path");
+      const out = join(process.cwd(), "public", "canopy", "live-feed.json");
+      await mkdir(join(process.cwd(), "public", "canopy"), { recursive: true });
+      await writeFile(out, JSON.stringify(data, null, 2) + "\n", "utf8");
+    } catch {
+      /* ignore */
+    }
   }
+
 
   return Response.json(data);
 }
