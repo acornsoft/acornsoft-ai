@@ -18,7 +18,7 @@ const inbioCss = [
   "/inbio/assets/css/vendor/aos.css",
   "/inbio/assets/css/plugins/feature.css",
   "/inbio/assets/css/style.css",
-  "/inbio/acornsoft-overrides.css?v=field-guide-1",
+  "/inbio/acornsoft-overrides.css?v=type-source-1",
 ] as const;
 
 export const Route = createRootRouteWithContext()({
@@ -52,10 +52,16 @@ export const Route = createRootRouteWithContext()({
     ],
     links: [
       { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
       { rel: "stylesheet", href: appCss },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap",
       },
       ...inbioCss.map((href) => ({ rel: "stylesheet" as const, href })),
     ],

@@ -43,8 +43,7 @@
 /*==============================
  *  Utilities
 =================================*/
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+/* Fonts load from the document head (Source Sans 3 + Source Serif 4). */
 :root {
   --color-primary: #502000;
   --color-secondary: #f4f5f6;
