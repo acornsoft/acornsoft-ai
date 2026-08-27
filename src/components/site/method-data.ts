@@ -37,7 +37,7 @@ export const methodObjects = [
   },
   {
     name: "Climb Note",
-    blurb: "One finished climb: Problem → Measure → Pitch → Lesson.",
+    blurb: "One finished climb — the crossover: Problem → Measure → Pitch → Lesson.",
     where: "/climb-notes",
   },
   {
@@ -65,7 +65,7 @@ export const serviceClimbLinks: ServiceClimbLink[] = [
   },
   {
     service: "AI Strategy",
-    role: "Notes capture ranked problems, measures, and the chosen slice.",
+    role: "Notes capture ranked problems, measures, and the chosen pitch.",
   },
   {
     service: "Product Build",

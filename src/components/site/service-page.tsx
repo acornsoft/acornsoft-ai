@@ -186,19 +186,22 @@ export function ServicePage() {
             <div className="ac-service-lede-box">
               <p className="ac-service-lede">
                 Acornsoft helps people turn AI work into climbs they can finish
-                and reuse — not demos that die on a slide deck.
+                and reuse — not demos that die on a slide deck. Climb Notes™
+                are the crossover: the same four moves for someone who does
+                not write code and someone who does.
               </p>
               <p className="ac-service-lede">
                 In plain language, name{" "}
                 <strong>what’s stuck</strong>, how you’ll{" "}
                 <strong>know it moved</strong>, the{" "}
-                <strong>small step</strong> this week, and the{" "}
+                <strong>next safe pitch</strong> this week, and the{" "}
                 <strong>lesson</strong> you carry next time.
               </p>
               <p className="ac-service-lede">
-                That is the Mountaineering approach to AI-first solutioning.{" "}
+                That is the Mountaineering approach.{" "}
                 <strong>You climb</strong>, with{" "}
-                <strong>Luna as your Sherpa</strong> — not as a solo climber.
+                <strong>Luna as your Sherpa</strong>. Gnomah is our second
+                brain. Grok-based tools run the pitch. This is the way.
               </p>
               <p className="ac-service-lede">
                 Climb Notes are your trail map for the same path next week, or a

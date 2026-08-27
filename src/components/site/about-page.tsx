@@ -15,8 +15,8 @@ const aboutSections = [
 
 const principles = [
   {
-    title: "Climb Notes™ are the work",
-    body: "The difference maker is not a model alone. It is the written climb: problem, measure, pitch, lesson. Tools without notes fade.",
+    title: "Climb Notes™ are the crossover",
+    body: "The same four moves for someone who does not write code and someone who does. Problem, measure, pitch, lesson. Tools without notes fade.",
   },
   {
     title: "Name the constraints first",
@@ -137,14 +137,17 @@ export function AboutPage() {
             <h1 className="ac-service-title">We are Acornsoft</h1>
             <div className="ac-service-lede-box">
               <p className="ac-service-lede">
-                A New York–based, AI-first organization. We build production
-                systems via Climb Notes™ — software that has to work under real
-                load, with real users, and under real rules.
+                A New York–based, AI-first organization. Climb Notes™ are the
+                crossover from non-technical to technical — the same four
+                moves on both sides of the table. We build production systems
+                that have to work under real load, with real users, and under
+                real rules.
               </p>
               <p className="ac-service-lede">
-                We start from first principles: keep what is true and
-                measurable, drop what is not. Failure is how we succeed. We are
-                always trying to improve.
+                Gnomah is our second brain. Grok-based tools run the pitch.
+                That trail is how we aim for about twenty times a normal
+                cycle — and the journal is how we show it. Failure is how we
+                succeed. We are always trying to improve.
               </p>
               <p className="ac-service-lede ac-service-lede--last">
                 Small starts. Strong roots.
@@ -167,8 +170,9 @@ export function AboutPage() {
                 Artificial intelligence should run like durable infrastructure —
                 not a demo that breaks under traffic, audit, or edge cases. We
                 help teams climb from prototype to production with Climb Notes:
-                a clear problem, a clear metric, a thin slice that works, then
-                make it strong.
+                a clear problem, a clear metric, a thin pitch that works, then
+                make it strong. The note is the crossover — a shop owner and an
+                engineer can both follow it.
               </p>
               <p>
                 We aim for software people can open, trust, and own: small
@@ -284,10 +288,10 @@ export function AboutPage() {
                   {PERSONAL_SITE.ownerTitle}, Acornsoft
                 </p>
                 <p>
-                  Founded Acornsoft to turn Climb Notes™ into production
-                  systems — not slide decks. Based in New York. Clear problem,
-                  clear measure, next pitch that works, then strengthen under
-                  real load.
+                  Founded Acornsoft so Climb Notes™ cross the table — shop
+                  owner and engineer, same four moves — then become production
+                  systems, not slide decks. Based in New York. Gnomah is the
+                  second brain. Grok-based tools run the pitch.
                 </p>
                 <p className="ac-about-founder-note">{dualSiteNote}</p>
                 <div className="ac-about-founder-actions">

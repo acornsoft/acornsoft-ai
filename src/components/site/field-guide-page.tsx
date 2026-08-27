@@ -42,13 +42,15 @@ export function FieldGuidePage() {
             <h1 className="ac-service-title">Recipes for the climb</h1>
             <div className="ac-service-lede-box">
               <p className="ac-service-lede">
-                A recipe is a climb you can run again. A field guide is how you
-                know the terrain. These eight are the lingua franca — not a
-                demo, not a thread.
+                Climb Notes™ are the crossover — the same four moves for a
+                shop owner and an engineer. These eight recipes are that
+                lingua franca: not a demo, not a thread, not a translation
+                after the fact.
               </p>
               <p className="ac-service-lede ac-service-lede--last">
                 Read them in order the first time. After that, open the one
-                you are on.
+                you are on. Gnomah holds the studio. Published climbs land on
+                the journal.
               </p>
             </div>
           </header>

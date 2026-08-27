@@ -31,12 +31,12 @@ export const Route = createRootRouteWithContext()({
       },
       {
         title:
-          "Acornsoft — Building Production AI Solutions via Climb Notes",
+          "Acornsoft — Climb Notes™, the crossover from non-technical to technical",
       },
       {
         name: "description",
         content:
-          "Acornsoft is a New York–based AI-first organization. Building Production AI Solutions via Climb Notes—on Grok Build, Imagine, Voice, Agents, Skills, and Connectors.",
+          "Climb Notes™ are the crossover: the same four moves for someone who does not write code and someone who does. Gnomah is our second brain. Grok-based tools — this is the way.",
       },
 
       { name: "theme-color", content: "#502000" },
@@ -44,7 +44,7 @@ export const Route = createRootRouteWithContext()({
       {
         property: "og:description",
         content:
-          "New York–based AI-first organization. Building Production AI Solutions via Climb Notes.",
+          "Climb Notes™ are the crossover from non-technical to technical. Gnomah is our second brain. Grok-based tools — this is the way.",
 
       },
       { property: "og:type", content: "website" },
