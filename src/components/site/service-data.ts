@@ -35,10 +35,10 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Learn the Climb",
     assistance: "indirect",
     description:
-      "Indirect help first: learn the four shared words—problem, measure, slice, lesson—so AI work becomes a climb you can finish and reuse, not only a developer craft. You climb with Luna as your Sherpa; prior Climb Notes guide the next path—same mountain or a new one.",
+      "Indirect help first: learn the four shared words—problem, measure, pitch, lesson—so a shop owner and an engineer can follow the same climb. Climb Notes™ are that crossover, not only a developer craft. You climb with Luna as your Sherpa; prior notes guide the next path.",
     points: [
       "Climb Notes™ literacy for leaders, operators, creators, and builders",
-      "Walkthroughs and examples that make problem → measure → slice → lesson real",
+      "Walkthroughs and examples that make problem → measure → pitch → lesson real",
       "Path into Grok Voice with Luna (Ara) as your Sherpa — one voice on your climb",
       "Prior Climb Notes as guidelines for future climbs (same path or new)",
       "Content and journal trails people can re-ascend without us in the room",
@@ -120,7 +120,7 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Delivery with Climb Notes™",
     assistance: "both",
     description:
-      "Direct delivery and indirect enablement: Climb Notes structure the climb—problem, measure, slice, lesson—so every engagement leaves a trail the next team can re-ascend.",
+      "Direct delivery and indirect enablement: Climb Notes structure the climb—problem, measure, pitch, lesson—so a non-technical owner and a builder can follow the same trail.",
     points: [
       "Climb Notes as the delivery record (not optional theater)",
       "Thin vertical slices that prove value under real load",
@@ -249,13 +249,19 @@ export const serviceFaqs: ServiceFaq[] = [
     id: "what-is-climb-notes",
     defaultOrder: 0,
     q: "What is a Climb Note?",
-    a: "A Climb Note is one finished climb written so the next person can follow it. Four steps in order: Problem (what’s stuck), Measure (how we know it moved), Slice (the small step), and Lesson (what we carry next). Climb Notes are how we teach and deliver production AI—systems you can run and improve, not demos that vanish after a showcase.",
+    a: "A Climb Note is one finished climb written so the next person can follow it — whether they write code or not. Four steps in order: Problem (what’s stuck), Measure (how we know it moved), Pitch (the next safe rope length), and Lesson (what we carry next). That crossover is the point. Climb Notes are how we teach and deliver production AI — not demos that vanish after a showcase.",
+  },
+  {
+    id: "crossover",
+    defaultOrder: 1,
+    q: "Why do Climb Notes matter if I am not a developer?",
+    a: "Because the same four moves work on both sides of the table. A shop owner and an engineer can write the same note, and both can follow it. That crossover is the point. Gnomah is our second brain. Grok-based tools run the pitch. We use that trail to aim for about twenty times a normal cycle — and the journal is how we show it.",
   },
   {
     id: "mountaineering-approach",
     defaultOrder: 1,
     q: "What does “Mountaineering approach” actually mean?",
-    a: "Four plain steps on every Climb Note: what’s stuck (Problem), how you know it moved (Measure), the small step this week (Slice), and what you carry next time (Lesson). Luna is your Sherpa on Voice. Prior notes guide the next climb—same path or new. That is AI-first solutioning in everyday language, not a slide metaphor.",
+    a: "Four plain steps on every Climb Note: what’s stuck (Problem), how you know it moved (Measure), the next safe pitch (Pitch), and what you carry next time (Lesson). Same words for a shop owner and an engineer. Luna is your Sherpa on Voice. Gnomah is our second brain. Grok-based tools run the pitch. This is the way.",
   },
   {
     id: "how-help-use",

@@ -35,7 +35,7 @@ const teachingClimb = {
     },
     {
       n: "3",
-      label: "The small step",
+      label: "The next safe pitch",
       body: "One page: hours, service, and a single “Book” action. Nothing else this week.",
     },
     {
@@ -236,14 +236,14 @@ export function InbioPage() {
                         Luna as your Sherpa
                       </strong>{" "}
                       along the way. Past Climb Notes are your trail notes:
-                      guidelines for the next ascent. Some climbs continue on
-                      the same mountain path; others open a completely new path.
-                      The{" "}
+                      guidelines for the next ascent. The same four moves work
+                      for a shop owner and an engineer. That crossover is the
+                      point. The{" "}
                       <strong className="ac-story-em">
                         Mountaineering approach
                       </strong>{" "}
-                      makes AI-first solutioning usable as history — so you do
-                      not free-solo without a map.
+                      makes AI-first work usable as history — so you do not
+                      free-solo without a map.
                     </p>
                     <ul
                       className="ac-story-beats"
@@ -254,16 +254,16 @@ export function InbioPage() {
                         your pace
                       </li>
                       <li>
+                        <strong>The crossover</strong> — same four moves for
+                        people who do not write code and people who do
+                      </li>
+                      <li>
                         <strong>Luna as your Sherpa</strong> — guide on this
                         climb and the ones before
                       </li>
                       <li>
-                        <strong>Prior climbs</strong> — Climb Notes as
-                        guidelines for what comes next
-                      </li>
-                      <li>
-                        <strong>Same path or new</strong> — continue a mountain
-                        route, or start a fresh one
+                        <strong>Gnomah</strong> — our second brain; published
+                        notes land here as the trail
                       </li>
                     </ul>
                     <p className="ac-story-support">
@@ -300,16 +300,16 @@ export function InbioPage() {
                     aria-hidden={phase === "out"}
                   >
                     <p className="ac-story-kicker">
-                      Walkthrough · four moves · for everyone
+                      Walkthrough · four moves · both sides of the table
                     </p>
                     <h1 className="ac-story-headline ac-story-headline--md">
                       Four moves everyone can follow.
                     </h1>
                     <p className="ac-story-lede">
-                      You do not need a computer science degree. Name what is
-                      stuck, how you will know it moved, the small step this
-                      week, and the lesson you carry next time. That is a climb.
-                      The written note is the trail.
+                      You do not need a computer science degree. You do not need
+                      to hide the work from the people who ship it. Name what is
+                      stuck, how you will know it moved, the next safe pitch,
+                      and the lesson you carry. Same note. Both rooms.
                     </p>
 
                     <div className="ac-story-note">
@@ -364,10 +364,10 @@ export function InbioPage() {
                     aria-hidden={phase === "out"}
                   >
                     <p className="ac-story-kicker">
-                      Everyday language · Luna as your Sherpa
+                      The crossover · this is the way
                     </p>
                     <h1 className="ac-story-headline ac-story-headline--build">
-                      Climb Notes™ — the shared language for everyday AI
+                      Climb Notes™ — the shared language across the table
                     </h1>
                     <div className="hero-sub ac-story-with">
                       <span className="hero-with">with</span>
@@ -390,17 +390,17 @@ export function InbioPage() {
                       </span>
                     </div>
                     <p className="ac-story-lede ac-story-lede--center">
-                      Our zero-to-one play: Climb Notes become the common tongue
-                      for people who are not developers — so anyone can
-                      understand and use AI in daily life. Learn the metaphor,
-                      follow real examples, reuse prior climbs. Next: a{" "}
+                      Shop owner and engineer. Same four moves. That crossover
+                      is the point — not a translation layer after the fact.
+                      Gnomah is our second brain. Grok-based tools run the
+                      pitch. We use that trail to aim for about twenty times a
+                      normal cycle; the journal is how we show it. Next: a{" "}
                       <strong className="ac-story-em">voice-first</strong> path
                       where you talk to{" "}
                       <strong className="ac-story-em">
                         Luna as your Sherpa
                       </strong>{" "}
-                      — on this path or a new one — and she guides you to the
-                      Climb Notes that fit.
+                      and she guides you to the Climb Notes that fit.
                     </p>
                     <div className="ac-story-actions ac-story-actions--center">
                       <VoiceWhenSignedIn>

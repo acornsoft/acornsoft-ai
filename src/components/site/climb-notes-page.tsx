@@ -14,6 +14,7 @@ import {
   type ClimbNote,
 } from "./climb-notes-data";
 import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
+import { CROSSOVER, GNOMAH_BRAIN, TWENTY_X } from "./messaging";
 
 
 
@@ -255,12 +256,10 @@ export function ClimbNotesPage() {
               <ClimbNotesMark large />
             </h1>
             <div className="ac-service-lede-box">
-              <p className="ac-service-lede">
-                Each Climb Note is one climb: four steps in order — what we
-                write and how the climb runs.
-              </p>
+              <p className="ac-service-lede">{CROSSOVER}</p>
               <p className="ac-service-lede ac-service-lede--last">
-                Published trails anyone can follow. Drafts stay in the studio.
+                {GNOMAH_BRAIN} {TWENTY_X} Published trails anyone can follow.
+                Drafts stay in the studio.
               </p>
             </div>
           </header>
@@ -279,8 +278,8 @@ export function ClimbNotesPage() {
 
           <div className="ac-cn-footer-links">
             <p>
-              Climb Notes™ hold the journal on this site. Canopy shows the
-              public journal on the live radar.
+              Climb Notes™ are the crossover. Canopy shows the public journal
+              on the live radar. Gnomah holds the studio.
             </p>
             <div className="ac-hero-cta ac-cn-footer-actions">
               <Link className="rn-btn" to="/canopy">
