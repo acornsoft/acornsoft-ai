@@ -601,14 +601,21 @@ export function GnomahEditorPage() {
     setCanopySchedule({ onCanopy: true, canopyAt: when.toISOString() });
   }
 
-  if (isPending || needsReauth) {
-
+  if (needsReauth) {
     return (
       <SiteChrome loginRedirect="/gnomah">
         <div className="ac-service-page ac-gnomah ac-page-top">
-          <p className="ac-gn-empty">
-            {needsReauth ? "Redirecting to sign in…" : "Loading session…"}
-          </p>
+          <p className="ac-gn-empty">Redirecting to sign in…</p>
+        </div>
+      </SiteChrome>
+    );
+  }
+
+  if (isPending && !user) {
+    return (
+      <SiteChrome loginRedirect="/gnomah">
+        <div className="ac-service-page ac-gnomah ac-page-top">
+          <p className="ac-gn-empty">Loading session…</p>
         </div>
       </SiteChrome>
     );

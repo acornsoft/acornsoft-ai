@@ -1,6 +1,7 @@
 import { genericOAuthClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import { GROK_PROVIDERS } from "./providers";
+import { clearSessionMemory } from "./session-memory";
 
 /**
  * Better Auth client for this React SPA (browser-side).
@@ -11,9 +12,17 @@ import { GROK_PROVIDERS } from "./providers";
  * bearer token instead (captured from the popup, see `signIn`). The `onRequest`
  * hook attaches that token when present; when deployed (cookie auth) no token
  * is stored, so nothing changes.
+ *
+ * refetchOnWindowFocus is OFF. The live preview iframe loses/gains visibility
+ * constantly; the default (true) re-ran /get-session and the header treated
+ * that as sign-out — Voice, Method, Gnomah, chip, and gear blinked.
  */
 export const authClient = createAuthClient({
   plugins: [genericOAuthClient()],
+  sessionOptions: {
+    refetchOnWindowFocus: false,
+    refetchWhenOffline: false,
+  },
   fetchOptions: {
     onRequest(ctx) {
       const token = getBearerToken();
@@ -113,6 +122,7 @@ export async function signIn(
     }
   }
   setBearerToken(null);
+  clearSessionMemory();
 
   if (inLivePreview()) {
     if (!popup) throw new Error("Pop-up blocked — allow pop-ups for sign-in");
@@ -202,6 +212,7 @@ function waitForPopupToken(popup: Window): Promise<string | null> {
 
 /** Sign out of THIS app's local session, clear the preview token, then redirect. */
 export async function signOut(redirectTo = "/"): Promise<void> {
+  clearSessionMemory();
   try {
     await authClient.signOut();
   } finally {

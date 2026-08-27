@@ -28,6 +28,9 @@ function formatAuthLabel(raw: string): string {
 /**
  * Top-bar auth control — standard Log in / account chip.
  * Sign-in lives on Climb Notes (and login → Gnomah). X is chosen on the login page.
+ *
+ * User wins over pending. A background get-session must not swap this chip
+ * for the pulsing placeholder — that was the logged-in flicker.
  */
 export function SiteAuthSlot({
   loginRedirect = "/gnomah",

@@ -14,8 +14,8 @@ export function PersonalSiteBridge({
   variant?: Variant;
   className?: string;
 }) {
-  const { user, isPending } = useCurrentUserState();
-  if (isPending || !user) return null;
+  const { user } = useCurrentUserState();
+  if (!user) return null;
 
   if (variant === "footer") {
     return (

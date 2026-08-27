@@ -9,6 +9,7 @@ import { Link } from "@tanstack/react-router";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { authEnabled } from "@/lib/auth/client";
 import { getVoiceAccess } from "@/lib/auth/voice-access";
+import { sessionMemory } from "@/lib/auth/session-memory";
 
 /** Grok Voice entry for Acornsoft sessions. */
 export const VOICE_URL = "https://grok.x.ai/";
@@ -43,6 +44,15 @@ export const SHERPA_GUIDE = "Luna";
 
 export const VOICE_OPEN_LABEL = "ACORNSOFT is OPEN";
 
+function rememberedVoiceAllowed(userId: string | null): boolean {
+  return Boolean(
+    userId &&
+      sessionMemory.voice &&
+      sessionMemory.voice.userId === userId &&
+      sessionMemory.voice.allowed,
+  );
+}
+
 /** Voice UI is hidden until the visitor is signed in. */
 export function useVoiceVisible(): {
   visible: boolean;
@@ -60,8 +70,8 @@ export function useVoiceVisible(): {
 
 /** Renders children only when signed in (hides Voice entry points when logged out). */
 export function VoiceWhenSignedIn({ children }: { children: ReactNode }) {
-  const { visible, isPending } = useVoiceVisible();
-  if (isPending || !visible) return null;
+  const { visible } = useVoiceVisible();
+  if (!visible) return null;
   return <>{children}</>;
 }
 
@@ -73,32 +83,39 @@ export function useVoiceAccessState(): {
   const { user, isPending: sessionPending } = useCurrentUserState();
   const userId = user?.id ?? null;
   const isDev = Boolean(user?.isDevFallback);
-  const [allowed, setAllowed] = useState(false);
+  const [allowed, setAllowed] = useState(() => rememberedVoiceAllowed(userId));
   const [checking, setChecking] = useState(false);
-  const knownId = useRef<string | null>(null);
+  const knownId = useRef<string | null>(
+    rememberedVoiceAllowed(userId) ? userId : null,
+  );
 
   useEffect(() => {
     if (sessionPending) return;
     if (!authEnabled) {
       knownId.current = userId;
+      if (userId) sessionMemory.voice = { userId, allowed: true };
       setAllowed(true);
       setChecking(false);
       return;
     }
     if (!userId) {
       knownId.current = null;
+      sessionMemory.voice = null;
       setAllowed(false);
       setChecking(false);
       return;
     }
     if (isDev) {
       knownId.current = userId;
+      sessionMemory.voice = { userId, allowed: true };
       setAllowed(true);
       setChecking(false);
       return;
     }
-    if (knownId.current === userId) {
-      // Same person — do not unmount OPEN on a parent re-render.
+    if (knownId.current === userId || rememberedVoiceAllowed(userId)) {
+      knownId.current = userId;
+      setAllowed(true);
+      setChecking(false);
       return;
     }
     let cancelled = false;
@@ -106,8 +123,10 @@ export function useVoiceAccessState(): {
     void getVoiceAccess()
       .then((r) => {
         if (cancelled) return;
+        const ok = Boolean(r.allowed);
         knownId.current = userId;
-        setAllowed(Boolean(r.allowed));
+        sessionMemory.voice = { userId, allowed: ok };
+        setAllowed(ok);
       })
       .catch(() => {
         if (cancelled) return;
@@ -121,9 +140,11 @@ export function useVoiceAccessState(): {
     };
   }, [userId, sessionPending, isDev]);
 
+  const cached = rememberedVoiceAllowed(userId);
+  const visibleAllowed = allowed || cached;
   return {
-    allowed,
-    isPending: sessionPending || (checking && !allowed),
+    allowed: visibleAllowed,
+    isPending: sessionPending || (checking && !visibleAllowed),
     signedIn: Boolean(userId),
   };
 }
@@ -214,8 +235,8 @@ export function VoicePageLink({
   className?: string;
   children?: ReactNode;
 }) {
-  const { visible, isPending } = useVoiceVisible();
-  if (isPending || !visible) return null;
+  const { visible } = useVoiceVisible();
+  if (!visible) return null;
   return (
     <Link className={className} to="/voice">
       {children}

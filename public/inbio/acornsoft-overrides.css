@@ -20955,4 +20955,24 @@ samp,
   letter-spacing: 0;
 }
 
+/* ============================================================
+   LOGGED-IN CHROME — no fade, no pulse, no layout jump
+   Header remounts per page. Signed-in controls must appear
+   as if they never left.
+   ============================================================ */
+.ac-site-header .ac-site-actions,
+.ac-site-header .ac-auth-user,
+.ac-site-header .ac-settings-btn,
+.ac-site-header .ac-voice-open {
+  animation: none !important;
+  transition: none !important;
+}
+.ac-site-header .ac-auth-avatar {
+  background: rgba(255, 255, 255, 0.08);
+}
+.ac-auth-slot-pending {
+  animation: none !important;
+  opacity: 0.4;
+}
+
 
