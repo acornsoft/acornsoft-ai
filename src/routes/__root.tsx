@@ -21,51 +21,78 @@ const inbioCss = [
   "/inbio/acornsoft-overrides.css?v=type-source-2",
 ] as const;
 
+/** Public host for absolute share-card URLs. Omit tags when unknown. */
+function shareHost(): string | undefined {
+  if (typeof process === "undefined") return undefined;
+  const raw = (
+    process.env.VERCEL_URL ||
+    process.env.BETTER_AUTH_URL ||
+    ""
+  ).trim();
+  const host = raw.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  return host || undefined;
+}
+
 export const Route = createRootRouteWithContext()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
-      },
-      {
-        title:
-          "Acornsoft — Climb Notes™, the crossover from non-technical to technical",
-      },
-      {
-        name: "description",
-        content:
-          "Climb Notes™ are the crossover: the same four moves for someone who does not write code and someone who does. Gnomah is our second brain. Grok-based tools — this is the way.",
-      },
+  head: () => {
+    const host = shareHost();
+    const ogImage = host ? `https://${host}/og.jpg` : undefined;
+    const xBanner = host ? `https://${host}/x-banner.jpg` : undefined;
+    return {
+      meta: [
+        { charSet: "utf-8" },
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1",
+        },
+        {
+          title:
+            "Acornsoft — Climb Notes™, the crossover from non-technical to technical",
+        },
+        {
+          name: "description",
+          content:
+            "Climb Notes™ are the crossover: the same four moves for someone who does not write code and someone who does. Gnomah is our second brain. Grok-based tools — this is the way.",
+        },
 
-      { name: "theme-color", content: "#502000" },
-      { property: "og:title", content: "Acornsoft" },
-      {
-        property: "og:description",
-        content:
-          "Climb Notes™ are the crossover from non-technical to technical. Gnomah is our second brain. Grok-based tools — this is the way.",
-
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com",
-        crossOrigin: "anonymous",
-      },
-      { rel: "stylesheet", href: appCss },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap",
-      },
-      ...inbioCss.map((href) => ({ rel: "stylesheet" as const, href })),
-    ],
-  }),
+        { name: "theme-color", content: "#502000" },
+        { property: "og:title", content: "Acornsoft" },
+        {
+          property: "og:description",
+          content:
+            "Climb Notes™ are the crossover from non-technical to technical. Gnomah is our second brain. Grok-based tools — this is the way.",
+        },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(ogImage
+          ? [
+              { property: "og:image", content: ogImage },
+              { property: "og:image:width", content: "1200" },
+              { property: "og:image:height", content: "630" },
+              { name: "twitter:image", content: ogImage },
+            ]
+          : []),
+        ...(xBanner
+          ? [{ property: "x:game:image", content: xBanner }]
+          : []),
+      ],
+      links: [
+        { rel: "icon", href: "/favicon.png", type: "image/png" },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossOrigin: "anonymous",
+        },
+        { rel: "stylesheet", href: appCss },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap",
+        },
+        ...inbioCss.map((href) => ({ rel: "stylesheet" as const, href })),
+      ],
+    };
+  },
   component: RootComponent,
   shellComponent: RootDocument,
 });
