@@ -40,6 +40,37 @@ export function SiteAuthSlot({
 
   if (!authEnabled) return null;
 
+  if (user) {
+    const label = (user.displayName ?? "Account").trim() || "Account";
+    const pillText = formatAuthLabel(label);
+
+    return (
+      <button
+        type="button"
+        className={`ac-auth-slot ac-auth-user ${className}`.trim()}
+        onClick={() => void signOut("/")}
+        title={`Log out · ${pillText}`}
+        aria-label={`Log out ${pillText}`}
+      >
+        {user.profileImageUrl ? (
+          <img
+            src={user.profileImageUrl}
+            alt=""
+            className="ac-auth-avatar"
+            width={28}
+            height={28}
+          />
+        ) : (
+          <span className="ac-auth-avatar ac-auth-avatar-fallback" aria-hidden>
+            {label.charAt(0).toUpperCase()}
+          </span>
+        )}
+        <span className="ac-auth-name">{pillText}</span>
+        <LogOut className="ac-auth-signout-icon" aria-hidden strokeWidth={2.25} />
+      </button>
+    );
+  }
+
   if (isPending) {
     return (
       <span
@@ -49,47 +80,15 @@ export function SiteAuthSlot({
     );
   }
 
-  if (!user) {
-    return (
-      <Link
-        to="/login"
-        search={{ redirect: loginRedirect }}
-        className={`ac-auth-slot ac-auth-signin ${className}`.trim()}
-        aria-label="Log in"
-      >
-        <LogIn className="ac-auth-signin-icon" aria-hidden strokeWidth={2.25} />
-        <span className="ac-auth-signin-label">Log in</span>
-      </Link>
-    );
-  }
-
-  const label = (user.displayName ?? "Account").trim() || "Account";
-  const pillText = formatAuthLabel(label);
-
   return (
-    <button
-      type="button"
-      className={`ac-auth-slot ac-auth-user ${className}`.trim()}
-      onClick={() => void signOut("/")}
-      title={`Log out · ${pillText}`}
-      aria-label={`Log out ${pillText}`}
+    <Link
+      to="/login"
+      search={{ redirect: loginRedirect }}
+      className={`ac-auth-slot ac-auth-signin ${className}`.trim()}
+      aria-label="Log in"
     >
-      {user.profileImageUrl ? (
-        <img
-          src={user.profileImageUrl}
-          alt=""
-          className="ac-auth-avatar"
-          width={28}
-          height={28}
-        />
-      ) : (
-        <span className="ac-auth-avatar ac-auth-avatar-fallback" aria-hidden>
-          {label.charAt(0).toUpperCase()}
-        </span>
-      )}
-      <span className="ac-auth-name">{pillText}</span>
-      <LogOut className="ac-auth-signout-icon" aria-hidden strokeWidth={2.25} />
-    </button>
+      <LogIn className="ac-auth-signin-icon" aria-hidden strokeWidth={2.25} />
+      <span className="ac-auth-signin-label">Log in</span>
+    </Link>
   );
 }
-

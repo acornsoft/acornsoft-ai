@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useRef,
   useState,
   type CSSProperties,
   type ReactNode,
@@ -49,7 +50,7 @@ export function useVoiceVisible(): {
   signedIn: boolean;
 } {
   const { user, isPending } = useCurrentUserState();
-  const signedIn = !isPending && !!user;
+  const signedIn = !!user;
   return {
     visible: signedIn,
     isPending,
@@ -70,34 +71,47 @@ export function useVoiceAccessState(): {
   signedIn: boolean;
 } {
   const { user, isPending: sessionPending } = useCurrentUserState();
+  const userId = user?.id ?? null;
+  const isDev = Boolean(user?.isDevFallback);
   const [allowed, setAllowed] = useState(false);
   const [checking, setChecking] = useState(false);
+  const knownId = useRef<string | null>(null);
 
   useEffect(() => {
     if (sessionPending) return;
     if (!authEnabled) {
+      knownId.current = userId;
       setAllowed(true);
       setChecking(false);
       return;
     }
-    if (!user) {
+    if (!userId) {
+      knownId.current = null;
       setAllowed(false);
       setChecking(false);
       return;
     }
-    if (user.isDevFallback) {
+    if (isDev) {
+      knownId.current = userId;
       setAllowed(true);
       setChecking(false);
+      return;
+    }
+    if (knownId.current === userId) {
+      // Same person — do not unmount OPEN on a parent re-render.
       return;
     }
     let cancelled = false;
     setChecking(true);
     void getVoiceAccess()
       .then((r) => {
-        if (!cancelled) setAllowed(Boolean(r.allowed));
+        if (cancelled) return;
+        knownId.current = userId;
+        setAllowed(Boolean(r.allowed));
       })
       .catch(() => {
-        if (!cancelled) setAllowed(false);
+        if (cancelled) return;
+        // Transient miss: keep the last answer so the header does not blink.
       })
       .finally(() => {
         if (!cancelled) setChecking(false);
@@ -105,12 +119,12 @@ export function useVoiceAccessState(): {
     return () => {
       cancelled = true;
     };
-  }, [user, sessionPending]);
+  }, [userId, sessionPending, isDev]);
 
   return {
     allowed,
-    isPending: sessionPending || checking,
-    signedIn: Boolean(user),
+    isPending: sessionPending || (checking && !allowed),
+    signedIn: Boolean(userId),
   };
 }
 
