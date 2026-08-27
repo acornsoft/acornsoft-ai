@@ -22,28 +22,29 @@ export const interestsConfig = {
       actor: "build" as const,
       kind: "changelog" as const,
       query:
-        '("Grok Build" OR GrokBuild) (from:elonmusk OR from:xai OR from:XFreeze OR from:SpaceXAI) (changelog OR release OR update OR CLI OR workflow OR plugin OR agent OR v0. OR publish)',
+        '("Grok Build" OR GrokBuild) (from:elonmusk OR from:xai OR from:grok OR from:XFreeze OR from:SpaceXAI) (changelog OR release OR update OR CLI OR workflow OR plugin OR agent OR v0. OR v1. OR publish)',
     },
     {
       id: "imagine",
       actor: "xai" as const,
       kind: "feednote" as const,
       query:
-        '(from:elonmusk OR from:xai OR from:SpaceXAI) ("Grok Imagine" OR Imagine) (image OR video OR template OR edit OR restyle OR creative OR emoji OR merch OR render)',
+        '(from:elonmusk OR from:xai OR from:grok OR from:SpaceXAI) ("Grok Imagine" OR Imagine) (image OR video OR template OR edit OR restyle OR creative OR 1080p OR reference OR render)',
     },
     {
       id: "voice",
       actor: "xai" as const,
       kind: "feednote" as const,
       query:
-        '(from:elonmusk OR from:xai OR from:SpaceXAI) ("Grok Voice" OR "Think Fast" OR Voice) (agent OR speech OR audio OR dictation OR builder OR telephony OR Tau)',
+        '(from:elonmusk OR from:xai OR from:grok OR from:SpaceXAI) ("Grok Voice" OR "Think Fast" OR "Voice Mode" OR Voice) (agent OR speech OR audio OR connector OR dictation OR builder OR telephony OR Tau)',
     },
     {
       id: "org-xai",
       actor: "xai" as const,
       kind: "feednote" as const,
       query:
-        "(from:elonmusk OR from:xai OR from:SpaceXAI) (Grok OR xAI OR SpaceXAI OR Colossus OR model)",
+        "(from:elonmusk OR from:xai OR from:grok OR from:SpaceXAI) (Grok OR xAI OR SpaceXAI OR Colossus OR model)",
+
     },
     {
       id: "org-spacex",

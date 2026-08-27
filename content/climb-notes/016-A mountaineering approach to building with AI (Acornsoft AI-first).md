@@ -2,10 +2,10 @@
 id: cn-016
 number: "000"
 title: From tools to a problem you can finish
-date: 2026-07-31
+date: 2026-07-21
 status: published
 onCanopy: true
-canopyAt: 2026-08-10T19:14:56.598Z
+canopyAt: 2026-08-12T21:00:55.172Z
 tags:
   - climb-note
   - product

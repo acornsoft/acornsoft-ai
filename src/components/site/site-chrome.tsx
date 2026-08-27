@@ -2,6 +2,8 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { Logo } from "./logo";
 import { SiteAuthSlot } from "./site-auth-slot";
+import { OwnerSettings } from "./owner-settings";
+
 import {
   VoiceHeaderButton,
   VoiceLink,
@@ -27,7 +29,9 @@ function pageTitle(pathname: string): string {
   if (pathname.startsWith("/method")) return "Method";
   if (pathname.startsWith("/climb-notes")) return "Climb Notes";
   if (pathname.startsWith("/voice")) return "Voice";
+  if (pathname.startsWith("/field-guide")) return "Field Guide";
   if (pathname.startsWith("/canopy")) return "Canopy";
+
   if (pathname.startsWith("/gnomah")) return "Gnomah";
   if (pathname.startsWith("/corporate")) return "Corporate";
   if (pathname.startsWith("/login")) return "Sign in";
@@ -196,7 +200,9 @@ export function SiteHeader({
 
           <div className="ac-site-actions">
             <VoiceHeaderButton className="rn-btn ac-voice-open ac-site-voice-btn ac-site-voice-btn--desktop" />
+            <OwnerSettings />
             <SiteAuthSlot loginRedirect={loginRedirect} />
+
             <button
               type="button"
               className="ac-site-menu-btn"
@@ -251,8 +257,10 @@ export function SiteHeader({
             </ul>
           </nav>
           <div className="ac-mobile-panel-foot">
+            <OwnerSettings />
             <SiteAuthSlot loginRedirect={loginRedirect} />
           </div>
+
         </div>
       </div>
     </>

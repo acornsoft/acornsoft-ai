@@ -207,7 +207,7 @@ export function ServicePage() {
                 build, systems, delivery).
               </p>
               <p className="ac-service-lede ac-service-lede--last">
-                Start with one slice. Stack as the climb demands.
+                Start with one pitch. Stack as the climb demands.
               </p>
             </div>
           </header>

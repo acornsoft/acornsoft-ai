@@ -37,11 +37,17 @@ export const methodObjects = [
   },
   {
     name: "Climb Note",
-    blurb: "One finished climb: Problem → Measure → Slice → Lesson.",
+    blurb: "One finished climb: Problem → Measure → Pitch → Lesson.",
     where: "/climb-notes",
   },
   {
+    name: "Field Guide",
+    blurb: "Eight recipes. The lingua franca for the climb.",
+    where: "/field-guide",
+  },
+  {
     name: "Training module",
+
     blurb: "Short practice with Voice, Imagine, or Grok Build.",
     where: "#training",
   },

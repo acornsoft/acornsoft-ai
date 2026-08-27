@@ -108,13 +108,30 @@ export function isClimbNoteOnCanopy(
   return true;
 }
 
-/** Sort / display time for Canopy: scheduled go-live, else publish, else date. */
+/** Sort / display time for Canopy: when it was published. */
 export function climbNoteCanopySortKey(
   note: Pick<ClimbNote, "canopyAt" | "publishedAt" | "date">,
 ): string {
-  const raw = note.canopyAt || note.publishedAt || note.date || "1970-01-01";
+  const raw = note.publishedAt || note.canopyAt || note.date || "1970-01-01";
+  const t = Date.parse(String(raw));
+  if (!Number.isNaN(t)) return new Date(t).toISOString();
   return String(raw).slice(0, 19);
 }
+
+/** Visible Canopy date — published day, not the editorial note date. */
+export function climbNoteCanopyDisplayDate(
+  note: Pick<ClimbNote, "canopyAt" | "publishedAt" | "date">,
+): string {
+  const raw = note.publishedAt || note.canopyAt || note.date;
+  const t = Date.parse(String(raw ?? ""));
+  if (Number.isNaN(t)) return String(note.date || "");
+  return new Date(t).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 
 const noteModules = import.meta.glob("../../../content/climb-notes/**/*.md", {
   query: "?raw",
@@ -257,7 +274,7 @@ function parseNote(path: string, raw: string): ClimbNote | null {
     date: String(data.date ?? ""),
     problem: section(body, "Problem"),
     measure: section(body, "Measure"),
-    slice: section(body, "Slice"),
+    slice: section(body, "Pitch") || section(body, "Slice"),
     lesson: section(body, "Lesson"),
     status: pub.status,
     frontmatterStatus,
