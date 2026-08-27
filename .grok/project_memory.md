@@ -7,4 +7,5 @@
 - First 5 consumer Climb Notes drafted; Note 1 promoted to lead = Someday life that never starts [2026-08-09]
 - Committed to acornsoft/gnomah main: foundation/Climb-Notes-00, foundation/Climb-Notes-01, foundation/Climb-Notes-Studio-Sequencing-Core-Principle; README indexed [2026-08-09]
 - Core principle locked: productize the path not the hours; sequence 0+1 → education 2–5 → studio spine 6–9 → developers 10 → one offer → repeatable delivery → agents on catalog [2026-08-09]
-- Locked marketing: Climb Notes are the crossover non-technical ↔ technical (same four moves). Gnomah = second brain. Grok-based tools. ~20× is proven in the journal, not a slide. SoT: src/components/site/messaging.ts [2026-08-27]
+- Locked marketing: Climb Notes are the crossover non-technical ↔ technical (same four moves). Gnomah is our second brain. Grok-based tools. ~20× is proven in the journal, not a slide. SoT: src/components/site/messaging.ts [2026-08-27]
+- Logged-in flicker: Better Auth refetchOnWindowFocus + per-page header remount treated session recheck as sign-out. Fix: sessionMemory (user + voice) until explicit sign-out; refetchOnWindowFocus off [2026-08-27]

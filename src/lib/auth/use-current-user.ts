@@ -1,5 +1,6 @@
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { authClient, authEnabled } from "./client";
+import { sessionMemory } from "./session-memory";
 
 /** Normalized user shape used across the app, auth on or off. */
 export type AppUser = {
@@ -43,8 +44,9 @@ export type CurrentUserState = {
  *                            (cookie when deployed; bearer in live preview).
  *   - Auth disabled (`VITE_AUTH_ENABLED=false`) -> `DEV_USER`, never pending.
  *
- * `isPending` is INITIAL load only. A refetch that still has a session must not
- * flip pending — that was the logged-in header flicker (Voice, Gnomah, chip).
+ * `isPending` is INITIAL load only. A refetch, a 401 blip, or a header remount
+ * must not look like sign-out — that was the logged-in flicker (Voice, Gnomah,
+ * Method, chip, gear). Identity is remembered in `sessionMemory` until sign-out.
  *
  * Protect a route by waiting out `isPending` before acting on `user` —
  * redirecting on `user: null` alone bounces signed-in visitors to sign-in on
@@ -61,8 +63,13 @@ export type CurrentUserState = {
 export function useCurrentUserState(): CurrentUserState {
   if (!authEnabled) return { user: DEV_USER, isPending: false };
   // eslint-disable-next-line react-hooks/rules-of-hooks -- authEnabled is constant for the app's lifetime
-  const { data, isPending } = authClient.useSession();
-  const raw = data?.user;
+  const session = authClient.useSession();
+  const raw = session.data?.user;
+  const isPending = Boolean(session.isPending);
+  const isRefetching = Boolean(
+    "isRefetching" in session &&
+      (session as { isRefetching?: boolean }).isRefetching,
+  );
   // eslint-disable-next-line react-hooks/rules-of-hooks -- paired with useSession above
   const user = useMemo<AppUser | null>(() => {
     if (!raw) return null;
@@ -74,15 +81,12 @@ export function useCurrentUserState(): CurrentUserState {
       isDevFallback: false,
     };
   }, [raw?.id, raw?.name, raw?.email, raw?.image]);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const lastUser = useRef<AppUser | null>(null);
-  if (user) lastUser.current = user;
-  else if (!isPending) lastUser.current = null;
-  const stableUser = user ?? lastUser.current;
+  if (user) sessionMemory.user = user;
+  const stableUser = user ?? sessionMemory.user;
   return {
     user: stableUser,
-    // Keep the chip / Voice / Gnomah mounted while a background refetch runs.
-    isPending: Boolean(isPending) && !stableUser,
+    // Keep chrome mounted while a background refetch runs, even across remounts.
+    isPending: isPending && !isRefetching && !stableUser,
   };
 }
 
