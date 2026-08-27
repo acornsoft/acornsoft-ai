@@ -141,8 +141,8 @@ export function SiteHeader({
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = useActivePath();
-  const { user, isPending } = useCurrentUserState();
-  const showGnomah = !isPending && !!user;
+  const { user } = useCurrentUserState();
+  const showGnomah = !!user;
   const showMethod = showGnomah; // signed-in only for now; rework later
   const title = pageTitle(pathname);
 

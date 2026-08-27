@@ -1,3 +1,4 @@
+import { useMemo, useRef } from "react";
 import { authClient, authEnabled } from "./client";
 
 /** Normalized user shape used across the app, auth on or off. */
@@ -42,6 +43,9 @@ export type CurrentUserState = {
  *                            (cookie when deployed; bearer in live preview).
  *   - Auth disabled (`VITE_AUTH_ENABLED=false`) -> `DEV_USER`, never pending.
  *
+ * `isPending` is INITIAL load only. A refetch that still has a session must not
+ * flip pending — that was the logged-in header flicker (Voice, Gnomah, chip).
+ *
  * Protect a route by waiting out `isPending` before acting on `user` —
  * redirecting on `user: null` alone bounces signed-in visitors to sign-in on
  * every hard reload:
@@ -58,18 +62,27 @@ export function useCurrentUserState(): CurrentUserState {
   if (!authEnabled) return { user: DEV_USER, isPending: false };
   // eslint-disable-next-line react-hooks/rules-of-hooks -- authEnabled is constant for the app's lifetime
   const { data, isPending } = authClient.useSession();
-  const user = data?.user;
+  const raw = data?.user;
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- paired with useSession above
+  const user = useMemo<AppUser | null>(() => {
+    if (!raw) return null;
+    return {
+      id: raw.id,
+      displayName: raw.name ?? null,
+      primaryEmail: raw.email ?? null,
+      profileImageUrl: raw.image ?? null,
+      isDevFallback: false,
+    };
+  }, [raw?.id, raw?.name, raw?.email, raw?.image]);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const lastUser = useRef<AppUser | null>(null);
+  if (user) lastUser.current = user;
+  else if (!isPending) lastUser.current = null;
+  const stableUser = user ?? lastUser.current;
   return {
-    user: user
-      ? {
-          id: user.id,
-          displayName: user.name ?? null,
-          primaryEmail: user.email ?? null,
-          profileImageUrl: user.image ?? null,
-          isDevFallback: false,
-        }
-      : null,
-    isPending,
+    user: stableUser,
+    // Keep the chip / Voice / Gnomah mounted while a background refetch runs.
+    isPending: Boolean(isPending) && !stableUser,
   };
 }
 

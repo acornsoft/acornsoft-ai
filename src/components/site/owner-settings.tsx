@@ -5,7 +5,7 @@ import { OwnerRadarPrefs } from "./owner-radar-prefs";
 
 /** Gear in the header when signed in — private prefs live here, not on Gnomah. */
 export function OwnerSettings() {
-  const { user, isPending } = useCurrentUserState();
+  const { user } = useCurrentUserState();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export function OwnerSettings() {
     };
   }, [open]);
 
-  if (isPending || !user) return null;
+  if (!user) return null;
 
   return (
     <>
