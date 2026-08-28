@@ -14,7 +14,7 @@ Confirm each line. If not, finish that item first.
 <table border="0" cellpadding="2" cellspacing="0">
 <tr>
 <td align="left">✓</td>
-<td align="left"><small><strong>Luna Foundry Multiagent</strong> is installed and enabled (Marketplace or VSIX)—prefer stamp <strong>1.0.26239</strong></small></td>
+<td align="left"><small><strong>Luna Foundry Multiagent</strong> is installed and enabled (Marketplace or VSIX)—prefer stamp <strong>1.0.26242</strong></small></td>
 </tr>
 <tr>
 <td align="left">✓</td>
