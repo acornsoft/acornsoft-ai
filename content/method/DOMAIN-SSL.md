@@ -21,3 +21,5 @@ Vercel issues and renews Let’s Encrypt. Do not upload a private key into this 
 Subdomain `unofficial-covid-report.acornsoft.ai` already has its own Vercel cert.
 
 `BETTER_AUTH_URL` on production: `https://www.acornsoft.ai`
+
+Login from www sends `Origin: https://www.acornsoft.ai`. If this env is a `*.vercel.app` URL, Better Auth returns **Invalid origin**. Trusted origins in the app now include www; still set the env so OAuth callbacks land on www.
