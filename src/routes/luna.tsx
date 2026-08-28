@@ -9,7 +9,7 @@ export const Route = createFileRoute("/luna")({
       {
         name: "description",
         content:
-          "Luna is your Sherpa. Climb Notes are the trail. Install the extension; the docs ship in the package.",
+          "Luna is your Sherpa. Climb Notes are the trail. Onboarding lives here — same pack as the extension.",
       },
     ],
   }),
