@@ -44,6 +44,7 @@ import {
   PREVIEW_CLIENT_ID,
   PREVIEW_CLIENT_SECRET,
 } from "./preview";
+import { CANONICAL_ORIGIN, PRODUCTION_ORIGINS } from "@/lib/site-origin";
 
 // Kick (and share) PGLite bootstrap as soon as the auth server module loads.
 void ensureDbReady();
@@ -92,7 +93,12 @@ export const authConfigured =
 const vercelPublicUrl = env("VERCEL_URL")
   ? `https://${env("VERCEL_URL")!.replace(/^https?:\/\//, "")}`
   : undefined;
-const explicitBaseURL = env("BETTER_AUTH_URL") ?? vercelPublicUrl;
+// Custom domain is the public origin. A Vercel BETTER_AUTH_URL would make
+// login from www fail with "Invalid origin" and send OAuth back to *.vercel.app.
+const explicitBaseURL =
+  env("VERCEL_ENV") === "production"
+    ? CANONICAL_ORIGIN
+    : (env("BETTER_AUTH_URL") ?? vercelPublicUrl);
 // Explicit `string[]` (not a readonly tuple) — Better Auth's DynamicBaseURLConfig
 // requires a mutable `allowedHosts: string[]`.
 const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
@@ -116,15 +122,19 @@ const baseURL = explicitBaseURL ?? {
 
 // Origins Better Auth accepts on credentialed POSTs (sign-up/sign-in, etc.).
 // Missing entries here surface as FORBIDDEN "Invalid origin".
-const trustedOrigins: string[] = explicitBaseURL
-  ? [explicitBaseURL, ...LOCAL_DEV_ORIGINS]
-  : [
-      // Host wildcards (matched against Origin's host)
-      ...previewAllowedHosts,
-      // Full-origin wildcards (matched against Origin)
-      ...previewAllowedHosts.flatMap((host) => [`https://${host}`, `http://${host}`]),
-      ...LOCAL_DEV_ORIGINS,
-    ];
+const trustedOrigins: string[] = [
+  ...(explicitBaseURL
+    ? [explicitBaseURL]
+    : [
+        ...previewAllowedHosts,
+        ...previewAllowedHosts.flatMap((host) => [
+          `https://${host}`,
+          `http://${host}`,
+        ]),
+      ]),
+  ...PRODUCTION_ORIGINS,
+  ...LOCAL_DEV_ORIGINS,
+].filter((v, i, a) => Boolean(v) && a.indexOf(v) === i);
 
 const databaseUrl = env("DATABASE_URL");
 
