@@ -1,6 +1,6 @@
 import { lunaHrefForOnboardingFile } from "./luna-docs";
 
-const ONBOARDING = import.meta.glob("/content/luna/*.md", {
+const ONBOARDING = import.meta.glob("/docs/onboarding/*.md", {
   query: "?raw",
   import: "default",
   eager: true,
