@@ -22104,11 +22104,49 @@ body .ac-story-slide--build .hero-with {
   font-size: 20px !important;
   margin: 8px 0 10px !important;
 }
+.ac-luna-doc-body h3 {
+  color: #ffcc66 !important;
+  font-size: 16px !important;
+  margin: 18px 0 8px !important;
+}
 .ac-luna-doc-body ol,
+.ac-luna-doc-body ul,
 .ac-luna-doc-body p {
   color: #e8edf4 !important;
   font-size: 16px !important;
-  line-height: 1.5 !important;
+  line-height: 1.55 !important;
+}
+.ac-luna-doc-body ul,
+.ac-luna-doc-body ol {
+  padding-left: 1.2em !important;
+  margin: 0 0 16px !important;
+}
+.ac-luna-doc-body li {
+  margin: 0 0 8px !important;
+}
+.ac-luna-plain-list {
+  list-style: disc !important;
+}
+.ac-luna-doc-body table {
+  display: none !important;
+}
+.ac-luna-doc-body pre {
+  overflow-x: auto !important;
+  padding: 12px 14px !important;
+  border-radius: 10px !important;
+  background: rgba(0,0,0,0.35) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: #e8edf4 !important;
+  font-size: 13px !important;
+}
+.ac-luna-doc-body code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.92em !important;
+}
+.ac-luna-doc-body hr {
+  border: 0 !important;
+  border-top: 1px solid rgba(255,255,255,0.12) !important;
+  margin: 22px 0 !important;
 }
 .ac-luna-doc-body a {
   color: #ffcc66 !important;

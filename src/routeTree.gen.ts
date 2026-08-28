@@ -25,8 +25,11 @@ import { Route as ProceduresRouteImport } from './routes/procedures'
 import { Route as ServiceRouteImport } from './routes/service'
 import { Route as StartRouteImport } from './routes/start'
 import { Route as VoiceRouteImport } from './routes/voice'
+import { Route as DocsOnboardingRouteImport } from './routes/docs/onboarding'
+import { Route as LunaSlugRouteImport } from './routes/luna/$slug'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiCanopyRefreshRouteImport } from './routes/api/canopy/refresh'
+import { Route as DocsOnboardingSplatRouteImport } from './routes/docs/onboarding/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -108,6 +111,16 @@ const VoiceRoute = VoiceRouteImport.update({
   path: '/voice',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsOnboardingRoute = DocsOnboardingRouteImport.update({
+  id: '/docs/onboarding',
+  path: '/docs/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LunaSlugRoute = LunaSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => LunaRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -117,6 +130,11 @@ const ApiCanopyRefreshRoute = ApiCanopyRefreshRouteImport.update({
   id: '/api/canopy/refresh',
   path: '/api/canopy/refresh',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DocsOnboardingSplatRoute = DocsOnboardingSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => DocsOnboardingRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -128,7 +146,7 @@ export interface FileRoutesByFullPath {
   '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
-  '/luna': typeof LunaRoute
+  '/luna': typeof LunaRouteWithChildren
   '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
@@ -136,8 +154,11 @@ export interface FileRoutesByFullPath {
   '/service': typeof ServiceRoute
   '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
+  '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
+  '/luna/$slug': typeof LunaSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
+  '/docs/onboarding/$': typeof DocsOnboardingSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -148,7 +169,7 @@ export interface FileRoutesByTo {
   '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
-  '/luna': typeof LunaRoute
+  '/luna': typeof LunaRouteWithChildren
   '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
@@ -156,8 +177,11 @@ export interface FileRoutesByTo {
   '/service': typeof ServiceRoute
   '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
+  '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
+  '/luna/$slug': typeof LunaSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
+  '/docs/onboarding/$': typeof DocsOnboardingSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -169,7 +193,7 @@ export interface FileRoutesById {
   '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
-  '/luna': typeof LunaRoute
+  '/luna': typeof LunaRouteWithChildren
   '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
@@ -177,8 +201,11 @@ export interface FileRoutesById {
   '/service': typeof ServiceRoute
   '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
+  '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
+  '/luna/$slug': typeof LunaSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
+  '/docs/onboarding/$': typeof DocsOnboardingSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -199,8 +226,11 @@ export interface FileRouteTypes {
     | '/service'
     | '/start'
     | '/voice'
+    | '/docs/onboarding'
+    | '/luna/$slug'
     | '/api/auth/$'
     | '/api/canopy/refresh'
+    | '/docs/onboarding/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -219,8 +249,11 @@ export interface FileRouteTypes {
     | '/service'
     | '/start'
     | '/voice'
+    | '/docs/onboarding'
+    | '/luna/$slug'
     | '/api/auth/$'
     | '/api/canopy/refresh'
+    | '/docs/onboarding/$'
   id:
     | '__root__'
     | '/'
@@ -239,8 +272,11 @@ export interface FileRouteTypes {
     | '/service'
     | '/start'
     | '/voice'
+    | '/docs/onboarding'
+    | '/luna/$slug'
     | '/api/auth/$'
     | '/api/canopy/refresh'
+    | '/docs/onboarding/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -252,7 +288,7 @@ export interface RootRouteChildren {
   FieldGuideRoute: typeof FieldGuideRoute
   GnomahRoute: typeof GnomahRoute
   LoginRoute: typeof LoginRoute
-  LunaRoute: typeof LunaRoute
+  LunaRoute: typeof LunaRouteWithChildren
   MethodRoute: typeof MethodRoute
   PoliciesRoute: typeof PoliciesRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -260,6 +296,7 @@ export interface RootRouteChildren {
   ServiceRoute: typeof ServiceRoute
   StartRoute: typeof StartRoute
   VoiceRoute: typeof VoiceRoute
+  DocsOnboardingRoute: typeof DocsOnboardingRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiCanopyRefreshRoute: typeof ApiCanopyRefreshRoute
 }
@@ -378,6 +415,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VoiceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/onboarding': {
+      id: '/docs/onboarding'
+      path: '/docs/onboarding'
+      fullPath: '/docs/onboarding'
+      preLoaderRoute: typeof DocsOnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/luna/$slug': {
+      id: '/luna/$slug'
+      path: '/$slug'
+      fullPath: '/luna/$slug'
+      preLoaderRoute: typeof LunaSlugRouteImport
+      parentRoute: typeof LunaRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -392,8 +443,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCanopyRefreshRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/onboarding/$': {
+      id: '/docs/onboarding/$'
+      path: '/$'
+      fullPath: '/docs/onboarding/$'
+      preLoaderRoute: typeof DocsOnboardingSplatRouteImport
+      parentRoute: typeof DocsOnboardingRoute
+    }
   }
 }
+
+interface LunaRouteChildren {
+  LunaSlugRoute: typeof LunaSlugRoute
+}
+
+const LunaRouteChildren: LunaRouteChildren = {
+  LunaSlugRoute: LunaSlugRoute,
+}
+
+const LunaRouteWithChildren = LunaRoute._addFileChildren(LunaRouteChildren)
+
+interface DocsOnboardingRouteChildren {
+  DocsOnboardingSplatRoute: typeof DocsOnboardingSplatRoute
+}
+
+const DocsOnboardingRouteChildren: DocsOnboardingRouteChildren = {
+  DocsOnboardingSplatRoute: DocsOnboardingSplatRoute,
+}
+
+const DocsOnboardingRouteWithChildren = DocsOnboardingRoute._addFileChildren(
+  DocsOnboardingRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -404,7 +484,7 @@ const rootRouteChildren: RootRouteChildren = {
   FieldGuideRoute: FieldGuideRoute,
   GnomahRoute: GnomahRoute,
   LoginRoute: LoginRoute,
-  LunaRoute: LunaRoute,
+  LunaRoute: LunaRouteWithChildren,
   MethodRoute: MethodRoute,
   PoliciesRoute: PoliciesRoute,
   PrivacyRoute: PrivacyRoute,
@@ -412,18 +492,10 @@ const rootRouteChildren: RootRouteChildren = {
   ServiceRoute: ServiceRoute,
   StartRoute: StartRoute,
   VoiceRoute: VoiceRoute,
+  DocsOnboardingRoute: DocsOnboardingRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiCanopyRefreshRoute: ApiCanopyRefreshRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

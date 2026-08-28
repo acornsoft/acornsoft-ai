@@ -11,6 +11,61 @@
       "has": [{ "type": "host", "value": "acornsoft.ai" }],
       "destination": "https://www.acornsoft.ai/:path*",
       "permanent": true
+    },
+    {
+      "source": "/docs/onboarding",
+      "destination": "/luna",
+      "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/README.md",
+      "destination": "/luna",
+      "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/01-grok-build.md",
+      "destination": "/luna/grok-build",
+      "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/02-github-copilot.md",
+      "destination": "/luna/copilot",
+      "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/03-cursor.md",
+      "destination": "/luna/cursor",
+      "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/04-claude.md",
+      "destination": "/luna/claude",
+      "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/SECURITY-PRIVACY-ETHICS.md",
+      "destination": "/luna/security",
+      "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/VISUAL-GUIDE.md",
+      "destination": "/luna/visual-guide",
+      "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/SURFACE-REQUIREMENTS.md",
+      "destination": "/luna/surface",
+      "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/GROK-KEYBINDINGS-VS-CODE.md",
+      "destination": "/luna/grok-keys",
+      "permanent": true
+    },
+    {
+      "source": "/SUPPORT.md",
+      "destination": "/luna/support",
+      "permanent": true
     }
   ],
   "headers": [
