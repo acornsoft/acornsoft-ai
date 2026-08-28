@@ -22,6 +22,7 @@ import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProceduresRouteImport } from './routes/procedures'
 import { Route as ServiceRouteImport } from './routes/service'
+import { Route as StartRouteImport } from './routes/start'
 import { Route as VoiceRouteImport } from './routes/voice'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiCanopyRefreshRouteImport } from './routes/api/canopy/refresh'
@@ -91,6 +92,11 @@ const ServiceRoute = ServiceRouteImport.update({
   path: '/service',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StartRoute = StartRouteImport.update({
+  id: '/start',
+  path: '/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VoiceRoute = VoiceRouteImport.update({
   id: '/voice',
   path: '/voice',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/procedures': typeof ProceduresRoute
   '/service': typeof ServiceRoute
+  '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/procedures': typeof ProceduresRoute
   '/service': typeof ServiceRoute
+  '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/procedures': typeof ProceduresRoute
   '/service': typeof ServiceRoute
+  '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/procedures'
     | '/service'
+    | '/start'
     | '/voice'
     | '/api/auth/$'
     | '/api/canopy/refresh'
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/procedures'
     | '/service'
+    | '/start'
     | '/voice'
     | '/api/auth/$'
     | '/api/canopy/refresh'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/procedures'
     | '/service'
+    | '/start'
     | '/voice'
     | '/api/auth/$'
     | '/api/canopy/refresh'
@@ -233,6 +245,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProceduresRoute: typeof ProceduresRoute
   ServiceRoute: typeof ServiceRoute
+  StartRoute: typeof StartRoute
   VoiceRoute: typeof VoiceRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiCanopyRefreshRoute: typeof ApiCanopyRefreshRoute
@@ -331,6 +344,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/start': {
+      id: '/start'
+      path: '/start'
+      fullPath: '/start'
+      preLoaderRoute: typeof StartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/voice': {
       id: '/voice'
       path: '/voice'
@@ -369,6 +389,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProceduresRoute: ProceduresRoute,
   ServiceRoute: ServiceRoute,
+  StartRoute: StartRoute,
   VoiceRoute: VoiceRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiCanopyRefreshRoute: ApiCanopyRefreshRoute,

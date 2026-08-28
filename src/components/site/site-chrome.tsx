@@ -4,11 +4,6 @@ import { Logo } from "./logo";
 import { SiteAuthSlot } from "./site-auth-slot";
 import { OwnerSettings } from "./owner-settings";
 
-import {
-  VoiceHeaderButton,
-  VoiceLink,
-  useVoiceAccessState,
-} from "./voice-access";
 import { primaryNav } from "./site-nav";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { SiteFooter } from "./site-footer";
@@ -25,11 +20,12 @@ function isActivePath(pathname: string, to: string) {
 function pageTitle(pathname: string): string {
   if (pathname === "/") return "Home";
   if (pathname.startsWith("/about")) return "About";
-  if (pathname.startsWith("/service")) return "Service";
+  if (pathname.startsWith("/service")) return "Services";
   if (pathname.startsWith("/method")) return "Method";
   if (pathname.startsWith("/climb-notes")) return "Climb Notes";
   if (pathname.startsWith("/voice")) return "Voice";
   if (pathname.startsWith("/field-guide")) return "Field Guide";
+  if (pathname.startsWith("/start")) return "Send a note";
   if (pathname.startsWith("/canopy")) return "Canopy";
 
   if (pathname.startsWith("/gnomah")) return "Gnomah";
@@ -51,7 +47,6 @@ function NavLinks({
   showMethod?: boolean;
 }) {
   const pathname = useActivePath();
-  const voice = useVoiceAccessState();
 
   const links = primaryNav.filter((item) => {
     if ("authOnly" in item && item.authOnly) {
@@ -102,16 +97,6 @@ function NavLinks({
           >
             Gnomah
           </Link>
-        </li>
-      ) : null}
-      {mobile && voice.allowed ? (
-        <li className="ac-nav-item">
-          <VoiceLink
-            className="ac-nav-link ac-nav-link--mobile ac-voice-open"
-            onClick={onNavigate}
-          >
-            ACORNSOFT is OPEN
-          </VoiceLink>
         </li>
       ) : null}
     </>
@@ -199,7 +184,9 @@ export function SiteHeader({
           </nav>
 
           <div className="ac-site-actions">
-            <VoiceHeaderButton className="rn-btn ac-voice-open ac-site-voice-btn ac-site-voice-btn--desktop" />
+            <Link to="/start" className="ac-start-cta">
+              Send a note
+            </Link>
             <OwnerSettings />
             <SiteAuthSlot loginRedirect={loginRedirect} />
 
@@ -257,6 +244,13 @@ export function SiteHeader({
             </ul>
           </nav>
           <div className="ac-mobile-panel-foot">
+            <Link
+              to="/start"
+              className="ac-start-cta ac-start-cta--mobile"
+              onClick={() => setMenuOpen(false)}
+            >
+              Send a Climb Note
+            </Link>
             <OwnerSettings />
             <SiteAuthSlot loginRedirect={loginRedirect} />
           </div>

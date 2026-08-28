@@ -20,6 +20,40 @@ export const TOOL_LABEL: Record<RecipeTool, string> = {
   voice: "Voice",
 };
 
+/** Short teach-in for the tool chips. Hover / focus / tap. */
+export const TOOL_EXPLAIN: Record<
+  RecipeTool,
+  { kicker: string; what: string; how: string }
+> = {
+  none: {
+    kicker: "Field",
+    what: "No Grok tool yet. Just the four moves.",
+    how: "Shop owner and engineer use the same note. Current work and every future climb start here: Problem, Measure, Pitch, Lesson — before anyone opens a demo.",
+  },
+  grok: {
+    kicker: "Grok",
+    what: "Grok is the working partner on the Climb Note.",
+    how: "Ask it from the whole note, not from a blank chat. The note is the brief.",
+  },
+  build: {
+    kicker: "Grok Build",
+    what: "Build consumes the entire Climb Note — not just the pitch.",
+    how: "Problem, Measure, Pitch, and Lesson go in together. That is the brief for this site, Gnomah, and every future product: one vertical you can fail safely. The journal is the ~20× proof.",
+  },
+  imagine: {
+    kicker: "Imagine",
+    what: "Imagine is how we animate the solution.",
+    how: "The note already named what moved. Imagine makes that move visible — motion someone can watch, now and on the next climb. A still is a frame. Animation is the pitch happening.",
+  },
+  voice: {
+    kicker: "Voice",
+    what: "Voice lends a voice to the solution.",
+    how: "The Climb Note is the script. Voice lets the solution speak — shop owner and engineer hear the same four moves. Luna can still guide. The product itself gets a voice.",
+  },
+};
+
+export const TOOL_LEGEND: RecipeTool[] = ["none", "build", "imagine", "voice"];
+
 export const fieldRecipes: FieldRecipe[] = [
   {
     id: "name-the-problem",
@@ -76,12 +110,12 @@ export const fieldRecipes: FieldRecipe[] = [
   {
     id: "build-the-slice",
     number: "05",
-    title: "Use Grok Build on the pitch",
-    when: "The pitch is software, a site, or a working artifact.",
+    title: "Give Grok Build the whole Climb Note",
+    when: "The note is written. The pitch is software, a site, or a working artifact.",
     steps: [
-      "Give Build the problem and the measure first.",
+      "Hand Build the entire Climb Note — Problem, Measure, Pitch, Lesson.",
+      "Do not feed it the pitch alone.",
       "Ask for one vertical that can fail safely.",
-      "Do not start with a demo. Start with the note.",
     ],
     doneWhen: "There is a running thing you can measure, not a slide.",
     tool: "build",
@@ -89,27 +123,27 @@ export const fieldRecipes: FieldRecipe[] = [
   {
     id: "see-it",
     number: "06",
-    title: "Use Imagine when you must see it",
-    when: "Words are not enough to judge the pitch.",
+    title: "Use Imagine to animate the solution",
+    when: "The note needs to move — not just a still.",
     steps: [
-      "Describe the thing, not the mood.",
+      "Animate the solution so someone can watch the pitch happen.",
       "Generate once. Edit the part that is wrong.",
-      "Keep the image next to the measure, not instead of it.",
+      "Keep the motion next to the measure, not instead of it.",
     ],
-    doneWhen: "A person can point at the picture and the measure together.",
+    doneWhen: "A person can watch it move and know the measure.",
     tool: "imagine",
   },
   {
     id: "talk-the-climb",
     number: "07",
-    title: "Use Voice when your hands are on the work",
-    when: "Typing would stop the climb.",
+    title: "Use Voice to lend a voice to the solution",
+    when: "The solution should speak, not only sit on a page.",
     steps: [
-      "Say the problem out loud.",
-      "Ask Luna for the next step, not a speech.",
-      "Write the lesson after you hang up.",
+      "Give the solution a voice someone can hear.",
+      "Keep it on the Climb Note — same four moves, spoken.",
+      "Write the lesson after they have heard it.",
     ],
-    doneWhen: "The climb moved. The note is updated.",
+    doneWhen: "The solution can speak. The note still holds the trail.",
     tool: "voice",
   },
   {

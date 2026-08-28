@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/lib/auth/provider";
 import { ScrollToTop } from "@/components/site/scroll-to-top";
+import { VoiceOpenDock } from "@/components/site/voice-access";
 import { bootstrapAnalytics } from "@/lib/analytics/client";
 import appCss from "../styles.css?url";
 
@@ -18,7 +19,7 @@ const inbioCss = [
   "/inbio/assets/css/vendor/aos.css",
   "/inbio/assets/css/plugins/feature.css",
   "/inbio/assets/css/style.css",
-  "/inbio/acornsoft-overrides.css?v=type-source-2",
+  "/inbio/acornsoft-overrides.css?v=type-source-10",
 ] as const;
 
 /** Public host for absolute share-card URLs. Omit tags when unknown. */
@@ -87,7 +88,7 @@ export const Route = createRootRouteWithContext()({
         { rel: "stylesheet", href: appCss },
         {
           rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap",
+          href: "https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&display=swap",
         },
         ...inbioCss.map((href) => ({ rel: "stylesheet" as const, href })),
       ],
@@ -105,6 +106,7 @@ function RootComponent() {
   return (
     <AuthProvider>
       <Outlet />
+      <VoiceOpenDock />
       <ScrollToTop />
     </AuthProvider>
   );
