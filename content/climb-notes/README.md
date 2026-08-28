@@ -7,6 +7,8 @@
 **Publish gate:** `_publish-registry.json` (SharePoint-style lifecycle).  
 **Automation:** `npm run climb-notes:sync` / `npm run climb-notes:watch`
 
+**Public beats (Luna Foundry Multiagent):** Base Camp → Route → Waypoint → Summit. Same names on the site, the notes, and the extension.
+
 ## Lifecycle (pull in / pull out)
 
 | Status | Public journal | Studio library |
@@ -53,7 +55,7 @@ npm run climb-notes:publish -- status cn-001
 | --- | --- |
 | `engagement/` | Client / engagement climbs |
 | `product/` | Product / abstract / ADO / MacroFlow climbs |
-| `foundation/` | Consumer Basecamp pack + studio path notes |
+| `foundation/` | Consumer Base Camp pack + studio path notes |
 | `archive/` | Reserved |
 
 Current catalog: **45** notes (3 engagement + 32 product + 10 foundation). Nested `*.md` files load into Gnomah.
@@ -62,14 +64,14 @@ Current catalog: **45** notes (3 engagement + 32 product + 10 foundation). Neste
 
 | IDs | Role | Public |
 | --- | --- | --- |
-| cn-101 … cn-105 | Consumer Basecamp (everyday problems; **101 is flagship**) | Published |
+| cn-101 … cn-105 | Consumer Base Camp (everyday climbs; **101 is flagship**) | Draft (journal stays 000 only) |
 | cn-106 … cn-110 | Acornsoft studio path (rat race → AI-first studio) | Draft |
 
 ## File rules
 
 - Note files: `001 Title.md`, `002 Title.md` (top-level `*.md` in vault)
 - Template: `templates/Climb Note.md`
-- Required headings: `## Problem` · `## Measure` · `## Pitch` · `## Lesson` (legacy `## Slice` still reads)
+- Required headings: `## Base Camp` · `## Route` · `## Waypoint` · `## Summit` (legacy `## Problem` / `## Measure` / `## Pitch` / `## Slice` / `## Lesson` still reads)
 - Frontmatter: `id`, `number`, `title`, `date`, `status`, optional `tags`, `xUrl`
 - Do not edit `_publish-registry.json` by hand unless you know the shape—prefer the CLI
 

@@ -26,7 +26,8 @@ export type TimelineActor =
   | "acornsoft"
   | "tesla"
   | "spacex"
-  | "research";
+  | "research"
+  | "signal";
 
 /**
  * Grok product surface on Canopy — Imaging (Imagine), Voice, Grok, Grok Build.
@@ -981,7 +982,7 @@ export const advancedDevelopmentNotes: TimelineEntry[] = [
     date: "July 29, 2026",
     sortKey: "2026-07-29T17:55:15Z",
     title: "Advanced Development · Unofficial COVID Report",
-    body: "Live research app contribution: interactive primary-document report. Built to be opened and explored—not a slide deck.",
+    body: "Live research app contribution: interactive primary-document report. Built to be opened and explored.",
     kind: "product",
     actor: "research",
     standout: true,
@@ -1019,7 +1020,7 @@ export const acornsoftNotes: TimelineEntry[] = [
     date: "Commerce · shipped",
     sortKey: "2025-11-01T12:00:00Z",
     title: "Dropshipping site — shipped",
-    body: "Built and launched a full dropshipping storefront: product catalog, cart and checkout, and the operational wiring to fulfill orders. Real commerce work—live paths customers could complete, not a demo theme.",
+    body: "Built and launched a full dropshipping storefront: product catalog, cart and checkout, and the operational wiring to fulfill orders. Live paths customers could complete.",
     kind: "product",
     actor: "acornsoft",
     source: "Work · Acornsoft",
@@ -1075,13 +1076,13 @@ export const acornsoftNotes: TimelineEntry[] = [
     kind: "product",
     actor: "acornsoft",
     source: "Work · Acornsoft",
-    href: "https://unofficial-covid-report.grok.me/",
+    href: "https://unofficial-covid-report.acornsoft.ai/",
     xHref: buildWorkXComposeUrl({
       id: "unofficial-covid-report",
       title: "Unofficial COVID Report — launched",
       blurb:
         "Independent plain-language COVID signals when official channels lagged. Educational reporting surface.",
-      siteUrl: "https://unofficial-covid-report.grok.me/",
+      siteUrl: "https://unofficial-covid-report.acornsoft.ai/",
       tags: ["#Acornsoft", "#BuildInPublic", "#OpenData"],
     }),
     xLabel: "Schedule on X →",
@@ -1291,6 +1292,33 @@ export const stackLaunches: TimelineEntry[] = [
   },
 ];
 
+/** Tool-builder signals we keep on the radar even between live pulls. */
+export const signalNotes: TimelineEntry[] = [
+  {
+    id: "dr-dsa-explorer",
+    date: "August 28, 2026",
+    sortKey: "2026-08-28T07:58:17Z",
+    title: "DSA Explorer ships",
+    body: "@DataRepublican put a year’s research on one map: org, person, project — walk the ties. USASpending and nonprofit graphs were the warm-up. This is the tool-builder on fire. DataRepublican v2.0 is next.",
+    kind: "product",
+    actor: "signal",
+    standout: true,
+    source: "@DataRepublican",
+    href: "https://datarepublican.com/dsa-explorer/",
+  },
+  {
+    id: "dr-unelected",
+    date: "August 28, 2026",
+    sortKey: "2026-08-28T07:58:18Z",
+    title: "Unelected — October 13",
+    body: "Jennica Pounds and Joshua Lisec. The book behind the maps. Passage Press.",
+    kind: "milestone",
+    actor: "signal",
+    source: "@DataRepublican",
+    href: "https://www.amazon.com/Unelected-Jennica-Pounds/dp/B0GGYQNWHJ",
+  },
+];
+
 /** Newest first (desc by sortKey). History still includes founding day. */
 
 export function buildRadarTimeline(): TimelineEntry[] {
@@ -1306,6 +1334,7 @@ export function buildRadarTimeline(): TimelineEntry[] {
     ...advancedDevelopmentNotes,
     ...spacexNotes,
     ...teslaNotes,
+    ...signalNotes,
     ...climbNotesTimelineEntries(),
   ]) {
     map.set(e.id, withInferredSurface(e));

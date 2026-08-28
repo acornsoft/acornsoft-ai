@@ -11,30 +11,18 @@ async function shot(page, file, width, height, out) {
   await page.evaluate(async () => {
     await document.fonts.ready;
   });
-  await page.waitForTimeout(120);
+  await page.waitForTimeout(200);
   await page.screenshot({
     path: out,
     type: "jpeg",
-    quality: 88,
+    quality: 90,
     clip: { x: 0, y: 0, width, height },
   });
 }
 
 const browser = await chromium.launch();
-const page = await browser.newPage({ deviceScaleFactor: 1 });
-await shot(
-  page,
-  "og.html",
-  1200,
-  630,
-  "/workspace/public/og.jpg",
-);
-await shot(
-  page,
-  "banner.html",
-  2400,
-  528,
-  "/workspace/public/x-banner.jpg",
-);
+const page = await browser.newPage({ deviceScaleFactor: 2 });
+await shot(page, "og.html", 1200, 630, "/workspace/public/og.jpg");
+await shot(page, "banner.html", 1500, 500, "/workspace/public/x-banner.jpg");
 await browser.close();
 console.log("wrote public/og.jpg and public/x-banner.jpg");

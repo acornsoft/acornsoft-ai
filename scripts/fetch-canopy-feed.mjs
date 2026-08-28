@@ -5,7 +5,7 @@
  * Radar subscriptions: user timelines (e.g. @acornsoftai) via X API user timeline.
  * Topic queries: recent search.
  *
- *   npm run canopy:fetch
+ * Cadence: once a week. Do not cron this hourly.
  * Env: X_BEARER_TOKEN (required), CANOPY_OUT optional
  */
 
@@ -20,6 +20,7 @@ const OUT =
   process.env.CANOPY_OUT ||
   path.join(ROOT, "public", "canopy", "live-feed.json");
 const DRY = process.argv.includes("--dry-run");
+const FORCE = process.argv.includes("--force");
 
 function log(...m) {
   console.log("[canopy:fetch]", ...m);
@@ -114,6 +115,22 @@ async function searchRecent(bearer, query, maxResults) {
 
 async function main() {
   const interests = loadInterests();
+  const interval = interests.scheduleMinutes ?? 10080;
+
+  if (!FORCE && fs.existsSync(OUT)) {
+    try {
+      const prev = JSON.parse(fs.readFileSync(OUT, "utf8"));
+      const updated = Date.parse(prev.updatedAt);
+      if (Number.isFinite(updated) && Date.now() < updated + interval * 60_000) {
+        const next = new Date(updated + interval * 60_000).toISOString();
+        log("weekly window closed; next pull", next, "(pass --force to override)");
+        return;
+      }
+    } catch {
+      /* pull */
+    }
+  }
+
   const bearer =
     process.env.X_BEARER_TOKEN ||
     process.env.TWITTER_BEARER_TOKEN ||
@@ -124,7 +141,7 @@ async function main() {
     const stub = {
       updatedAt: new Date().toISOString(),
       source: "empty",
-      scheduleMinutes: interests.scheduleMinutes ?? 60,
+      scheduleMinutes: interests.scheduleMinutes ?? 10080,
       entryCount: 0,
       error:
         "Missing X_BEARER_TOKEN. Set App-only Bearer to pull @acornsoftai Radar + topic queries.",
@@ -213,7 +230,7 @@ async function main() {
   const payload = {
     updatedAt: new Date().toISOString(),
     source: errors.length && !entries.length ? "error" : "x-api-v2",
-    scheduleMinutes: interests.scheduleMinutes ?? 60,
+    scheduleMinutes: interests.scheduleMinutes ?? 10080,
     entryCount: entries.length,
     subscriptions: pulledSubs,
     error: errors.length ? errors.join(" | ") : undefined,

@@ -12,6 +12,7 @@ import {
   SHERPA_LINE,
   useVoiceVisible,
 } from "./voice-access";
+import { LUNA_SHERPA, LUNA_SHERPA_PLAIN, PLATFORM } from "./messaging";
 
 /**
  * Voice-first destination — only for signed-in visitors.
@@ -35,8 +36,8 @@ export function VoicePage() {
             ) : !signedIn ? (
               <>
                 <p className="ac-voice-page-lede">
-                  Voice with Luna (Ara) is available when you are signed in.
-                  Sign in with X to open Grok Voice and the on-site guide for{" "}
+                  {LUNA_SHERPA} {PLATFORM} Sign in with X to walk with her
+                  on Grok Voice — she follows your{" "}
                   <ClimbNotesMark />.
                 </p>
                 <div className="ac-voice-page-cta">
@@ -55,12 +56,11 @@ export function VoicePage() {
             ) : (
               <>
                 <p className="ac-voice-page-lede">
-                  A voice-first path into <ClimbNotesMark /> — for everyone
-                  learning the mountaineering metaphor, not only developers.{" "}
-                  <strong>Luna and Ara are one and the same</strong>: your Sherpa
-                  on <strong>{VOICE_LABEL}</strong>. Describe a problem or
-                  business goal in plain language; she guides you to the right
-                  trail.
+                  {LUNA_SHERPA_PLAIN}{" "}
+                  <strong>Luna and Ara are one and the same</strong> on{" "}
+                  <strong>{VOICE_LABEL}</strong>. {PLATFORM} Describe what’s
+                  stuck in plain language; she guides you from your{" "}
+                  <ClimbNotesMark />.
                 </p>
                 <div className="ac-voice-page-cta">
                   <a

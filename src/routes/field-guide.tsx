@@ -9,7 +9,7 @@ export const Route = createFileRoute("/field-guide")({
       {
         name: "description",
         content:
-          "Eight recipes. Climb Notes™ are the crossover from non-technical to technical: Problem, Measure, Pitch, Lesson. Then Grok Build, Imagine, and Voice.",
+          "Nine short how-tos. Write down what’s stuck. Agents find, build, show, and talk you through it.",
       },
     ],
   }),

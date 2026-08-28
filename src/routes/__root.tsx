@@ -10,6 +10,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { ScrollToTop } from "@/components/site/scroll-to-top";
 import { VoiceOpenDock } from "@/components/site/voice-access";
 import { bootstrapAnalytics } from "@/lib/analytics/client";
+import { CANONICAL_HOST } from "@/lib/site-origin";
 import appCss from "../styles.css?url";
 
 const inbioCss = [
@@ -19,12 +20,13 @@ const inbioCss = [
   "/inbio/assets/css/vendor/aos.css",
   "/inbio/assets/css/plugins/feature.css",
   "/inbio/assets/css/style.css",
-  "/inbio/acornsoft-overrides.css?v=type-source-10",
+  "/inbio/acornsoft-overrides.css?v=luna-help-1",
 ] as const;
 
 /** Public host for absolute share-card URLs. Omit tags when unknown. */
 function shareHost(): string | undefined {
   if (typeof process === "undefined") return undefined;
+  if (process.env.VERCEL_ENV === "production") return CANONICAL_HOST;
   const raw = (
     process.env.VERCEL_URL ||
     process.env.BETTER_AUTH_URL ||
@@ -47,13 +49,12 @@ export const Route = createRootRouteWithContext()({
           content: "width=device-width, initial-scale=1",
         },
         {
-          title:
-            "Acornsoft — Climb Notes™, the crossover from non-technical to technical",
+          title: "Acornsoft — write down what’s stuck. We build from that.",
         },
         {
           name: "description",
           content:
-            "Climb Notes™ are the crossover: the same four moves for someone who does not write code and someone who does. Gnomah is our second brain. Grok-based tools — this is the way.",
+            "Tell us what’s stuck in four answers. We turn it over to an agent who can fix it. No code required.",
         },
 
         { name: "theme-color", content: "#502000" },
@@ -61,7 +62,7 @@ export const Route = createRootRouteWithContext()({
         {
           property: "og:description",
           content:
-            "Climb Notes™ are the crossover from non-technical to technical. Gnomah is our second brain. Grok-based tools — this is the way.",
+            "Tell us what’s stuck. We turn it over to an agent who can fix it.",
         },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },

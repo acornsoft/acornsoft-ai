@@ -5,89 +5,66 @@
     <link rel="stylesheet" href="../share-fonts/fonts.css" />
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body { width: 1200px; height: 630px; overflow: hidden; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; background: #120806; }
       .card {
         width: 1200px;
         height: 630px;
         position: relative;
-        background: #1a100c url("./og-bg.jpg") 68% 40% / cover no-repeat;
+        background:
+          radial-gradient(ellipse 80% 70% at 70% 18%, rgba(128, 0, 32, 0.55), transparent 58%),
+          radial-gradient(ellipse 50% 40% at 20% 80%, rgba(80, 32, 0, 0.45), transparent 60%),
+          linear-gradient(165deg, #2a0c0c 0%, #120806 48%, #1a0a08 100%);
         font-family: "Source Sans 3", "Liberation Sans", sans-serif;
         color: #f4efe6;
       }
-      .wash {
+      svg.mountains {
         position: absolute;
-        inset: 0;
-        background:
-          linear-gradient(
-            90deg,
-            rgba(18, 8, 6, 0.92) 0%,
-            rgba(28, 10, 8, 0.78) 34%,
-            rgba(28, 10, 8, 0.28) 58%,
-            rgba(28, 10, 8, 0.08) 100%
-          ),
-          linear-gradient(
-            180deg,
-            rgba(18, 8, 6, 0.18) 0%,
-            transparent 28%,
-            rgba(18, 8, 6, 0.35) 100%
-          );
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 1200px;
+        height: 280px;
       }
       .copy {
         position: relative;
-        z-index: 1;
+        z-index: 2;
         height: 100%;
-        padding: 64px 72px 56px;
+        padding: 72px 80px 80px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        max-width: 640px;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        margin-bottom: 28px;
+        justify-content: flex-start;
       }
       .brand img {
-        height: 36px;
+        height: 32px;
         width: auto;
-        filter: brightness(1.35) saturate(1.1);
-      }
-      .kicker {
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 0.32em;
-        text-transform: uppercase;
-        color: #ffcc66;
+        filter: brightness(1.4) saturate(1.15);
+        margin-bottom: 36px;
       }
       .rule {
-        width: 48px;
+        width: 40px;
         height: 2px;
         background: #ff9900;
         margin: 0 0 22px;
       }
       h1 {
         font-family: "Source Serif 4", "Liberation Serif", Georgia, serif;
-        font-size: 78px;
+        font-size: 72px;
         font-weight: 600;
         line-height: 0.95;
         letter-spacing: -0.03em;
         color: #fff8ee;
-        margin: 0 0 18px;
-        text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+        margin: 0 0 16px;
       }
       .lede {
-        font-size: 24px;
+        font-size: 26px;
         font-weight: 400;
-        line-height: 1.32;
         color: #e8edf4;
-        max-width: 520px;
-        margin-bottom: 28px;
+        margin-bottom: 22px;
       }
       .moves {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 600;
-        letter-spacing: 0.14em;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
         color: #ffcc66;
       }
@@ -95,15 +72,18 @@
   </head>
   <body>
     <article class="card">
-      <div class="wash"></div>
+      <svg class="mountains" viewBox="0 0 1200 280" aria-hidden="true">
+        <path fill="#2a1010" d="M0 280 V168 L140 128 L260 170 L420 72 L560 150 L720 96 L860 158 L1020 84 L1200 140 V280 Z" />
+        <path fill="#1a0a0a" d="M0 280 V198 L180 160 L320 200 L480 128 L640 188 L820 142 L980 190 L1200 156 V280 Z" />
+        <path fill="none" stroke="#ffcc66" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M0 214 L120 188 L240 202 L390 148 L530 186 L690 152 L840 184 L990 150 L1200 176" opacity="0.85" />
+        <circle cx="420" cy="72" r="4" fill="#ffcc66" />
+      </svg>
       <div class="copy">
-        <div class="brand">
-          <span class="kicker">Acornsoft</span>
-        </div>
+        <div class="brand"><img src="./logo.png" alt="Acornsoft" /></div>
         <div class="rule"></div>
         <h1>Climb Notes</h1>
-        <p class="lede">The crossover from non-technical to technical.</p>
-        <p class="moves">Problem · Measure · Pitch · Lesson</p>
+        <p class="lede">Write down what’s stuck.</p>
+        <p class="moves">Base Camp · Route · Waypoint · Summit</p>
       </div>
     </article>
   </body>

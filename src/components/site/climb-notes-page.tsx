@@ -14,7 +14,7 @@ import {
   type ClimbNote,
 } from "./climb-notes-data";
 import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
-import { CROSSOVER, GNOMAH_BRAIN, TWENTY_X } from "./messaging";
+import { CROSSOVER, GNOMAH_BRAIN, TWENTY_X, CLIMB_BEATS } from "./messaging";
 
 
 
@@ -24,12 +24,13 @@ const CLIMB_STEPS: {
   label: string;
   plain: string;
   stage: string;
-}[] = [
-  { key: "problem", n: 1, label: "Problem", plain: "What's stuck", stage: "Basecamp" },
-  { key: "measure", n: 2, label: "Measure", plain: "How we know it moved", stage: "Brief" },
-  { key: "slice", n: 3, label: "Pitch", plain: "The next safe pitch", stage: "Route" },
-  { key: "lesson", n: 4, label: "Lesson", plain: "What we carry next", stage: "Ascent" },
-];
+}[] = CLIMB_BEATS.map((beat) => ({
+  key: beat.key,
+  n: beat.n,
+  label: beat.label,
+  plain: beat.plain,
+  stage: beat.stage,
+}));
 
 function formatMetaDate(value?: string | null | unknown): string {
   if (value == null || value === "") return "—";
@@ -278,8 +279,8 @@ export function ClimbNotesPage() {
 
           <div className="ac-cn-footer-links">
             <p>
-              Climb Notes™ are the crossover. Canopy shows the public journal
-              on the live radar. Gnomah holds the studio.
+              Climb Notes™ use the same four beats. Canopy shows the public
+              journal on the live radar. Gnomah holds the studio.
             </p>
             <div className="ac-hero-cta ac-cn-footer-actions">
               <Link className="rn-btn" to="/canopy">

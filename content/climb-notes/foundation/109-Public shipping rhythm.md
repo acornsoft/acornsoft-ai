@@ -12,18 +12,14 @@ tags:
 xUrl:
 ---
 
-## Problem
-
+## Base Camp
 Private genius does not build trust. A studio that never ships in public stays invisible — and the team never practices finishing. The corporate habit of “internal only” kills the very proof a boutique needs.
 
-## Measure
-
+## Route
 A steady public cadence: Climb Notes, walkthroughs, and short X citations on a rhythm the team can keep without heroics.
 
-## Slice
-
+## Waypoint
 Pick the cadence (for example one published Climb Note and one short public lesson per week). Protect it like a client deadline. Review what shipped every Friday.
 
-## Lesson
-
+## Summit
 Public shipping is how a studio becomes real to strangers — and how the team learns that done beats perfect in the fog.

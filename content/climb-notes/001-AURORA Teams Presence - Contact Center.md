@@ -12,18 +12,14 @@ tags:
 xUrl: 
 ---
 
-## Problem
-
+## Base Camp
 AURORA Teams Presence / Contact Center is an open climb under the engagement lane. Define a measurable slice that can fail safely and be improved in front of the team that owns it.
 
-## Measure
-
+## Route
 Need to sanitize the code to se a Notification-based approach AND polling, but favors registered notifications.
 
-## Pitch
-
+## Waypoint
 Need to setup Azure Commerical cloud App Registration
 
-## Lesson
-
+## Summit
 Getting to a runnable unit with the new App Registration

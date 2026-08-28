@@ -27,7 +27,12 @@ import {
   climbNoteDetailUrl,
   type ClimbNote,
 } from "./climb-notes-data";
-import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
+import {
+  formatNextPull,
+  nextPullIso,
+  pullIsDue,
+  PULL_INTERVAL_MINUTES,
+} from "@/lib/canopy/cadence";
 
 
 const kindLabel: Record<TimelineKind, string> = {
@@ -45,6 +50,7 @@ const actorLabel: Record<TimelineActor, string> = {
   tesla: "Tesla",
   spacex: "SpaceX",
   research: "Advanced Development",
+  signal: "DataRepublican",
 };
 
 type FilterKey =
@@ -58,7 +64,7 @@ type FilterOption = {
   key: FilterKey;
   label: string;
   count: number;
-  tone: "default" | "build" | "acornsoft" | "xai" | "grok" | "imagine" | "voice";
+  tone: "default" | "build" | "acornsoft" | "xai" | "grok" | "imagine" | "voice" | "signal";
   group: "stack" | "org" | "all";
 };
 
@@ -204,6 +210,7 @@ function buildFilterOptions(items: TimelineEntry[]): FilterOption[] {
 
   const org = (
     [
+      { key: "actor:signal", label: "DataRepublican", count: actorCounts.get("signal") ?? 0, tone: "signal", group: "org" },
       { key: "actor:acornsoft", label: "Our Work", count: actorCounts.get("acornsoft") ?? 0, tone: "default", group: "org" },
       { key: "lane:climb-notes", label: "Climb Notes", count: climbLane, tone: "default", group: "org" },
       { key: "actor:research", label: "Advanced Development", count: actorCounts.get("research") ?? 0, tone: "default", group: "org" },
@@ -218,13 +225,14 @@ function buildFilterOptions(items: TimelineEntry[]): FilterOption[] {
 
 function filterTone(
   filters: FilterKey[],
-): "default" | "build" | "acornsoft" | "xai" | "grok" | "imagine" | "voice" {
+): "default" | "build" | "acornsoft" | "xai" | "grok" | "imagine" | "voice" | "signal" {
   if (filters.includes("surface:grok")) return "grok";
   if (filters.includes("surface:imagine")) return "imagine";
   if (filters.includes("surface:voice")) return "voice";
   if (filters.includes("kind:changelog") || filters.includes("actor:build")) return "build";
   if (filters.includes("actor:acornsoft") || filters.includes("lane:climb-notes")) return "acornsoft";
   if (filters.includes("actor:xai")) return "xai";
+  if (filters.includes("actor:signal")) return "signal";
   return "default";
 }
 
@@ -240,6 +248,7 @@ function blipStyle(
     acornsoft: [20, 70],
     research: [70, 120],
     tesla: [120, 170],
+    signal: [170, 200],
   };
   const [a0, a1] = sector[entry.actor];
   const span = a1 - a0;
@@ -276,6 +285,8 @@ export function CanopyPage() {
     source?: string;
     error?: string;
     entryCount?: number;
+    nextPullAt?: string;
+    scheduleMinutes?: number;
   }>({});
   const [liveRefreshing, setLiveRefreshing] = useState(false);
 
@@ -303,6 +314,13 @@ export function CanopyPage() {
         source: data.source,
         error: data.error,
         entryCount: data.entryCount ?? data.entries?.length ?? 0,
+        nextPullAt:
+          data.nextPullAt ??
+          nextPullIso(
+            data.updatedAt,
+            data.scheduleMinutes || PULL_INTERVAL_MINUTES,
+          ),
+        scheduleMinutes: data.scheduleMinutes || PULL_INTERVAL_MINUTES,
       });
       // Always replace with server truth (including empty when offline)
       setLiveEntries((data.entries || []).map(toLiveTimeline));
@@ -330,15 +348,9 @@ export function CanopyPage() {
           method: "POST",
           cache: "no-store",
         });
-        if (res.ok) {
-          const data = (await res.json()) as LiveFeedFile;
-          applyLiveFeed(data);
-          return data;
-        }
-        setLiveMeta((m) => ({
-          ...m,
-          error: "Refresh failed — try again in a moment.",
-        }));
+        const data = (await res.json()) as LiveFeedFile;
+        applyLiveFeed(data);
+        return data;
       } catch {
         setLiveMeta((m) => ({
           ...m,
@@ -461,6 +473,7 @@ export function CanopyPage() {
       tesla: 0,
       spacex: 0,
       research: 0,
+      signal: 0,
     };
     for (const i of items) c[i.actor] += 1;
     return c;
@@ -475,6 +488,7 @@ export function CanopyPage() {
       tesla: [],
       spacex: [],
       research: [],
+      signal: [],
     };
     for (const e of pool) byActor[e.actor].push(e);
     return pool.map((entry) => {
@@ -507,6 +521,10 @@ export function CanopyPage() {
   }, [pulse, visible, focusId]);
 
   const tone = filterTone(filters);
+  const liveDue = pullIsDue(
+    liveMeta.updatedAt,
+    liveMeta.scheduleMinutes || PULL_INTERVAL_MINUTES,
+  );
 
   return (
     <div className="template-color-1 spybody ac-inbio ac-canopy ac-hero-stage">
@@ -551,14 +569,19 @@ export function CanopyPage() {
                   <button
                     type="button"
                     className="cn-live-refresh"
-                    disabled={liveRefreshing}
+                    disabled={liveRefreshing || !liveDue}
                     onClick={() => void refreshLiveFeed(true)}
                     title={
-                      liveMeta.error ||
-                      "Pull latest posts from configured X sources"
+                      liveDue
+                        ? "One X API pull per week. Spends credits."
+                        : `Credits saved. Next window ${formatNextPull(liveMeta.nextPullAt)}`
                     }
                   >
-                    {liveRefreshing ? "Refreshing…" : "Refresh live"}
+                    {liveRefreshing
+                      ? "Pulling…"
+                      : liveDue
+                        ? "Weekly pull"
+                        : `Next ${formatNextPull(liveMeta.nextPullAt)}`}
                   </button>
                 </div>
                 {liveMeta.error ? (

@@ -4,7 +4,8 @@ export type LiveFeedActor =
   | "acornsoft"
   | "tesla"
   | "spacex"
-  | "research";
+  | "research"
+  | "signal";
 
 export type LiveFeedKind =
   | "origin"
@@ -34,5 +35,7 @@ export type LiveFeedFile = {
   scheduleMinutes: number;
   entryCount: number;
   error?: string;
+  /** When the next X API pull is allowed (weekly window). */
+  nextPullAt?: string;
   entries: LiveFeedEntry[];
 };

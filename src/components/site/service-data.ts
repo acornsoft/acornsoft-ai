@@ -35,10 +35,10 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Learn the Climb",
     assistance: "indirect",
     description:
-      "Indirect help first: learn the four shared words—problem, measure, pitch, lesson—so a shop owner and an engineer can follow the same climb. Climb Notes™ are that crossover, not only a developer craft. You climb with Luna as your Sherpa; prior notes guide the next path.",
+      "Learn the four beats so a shop owner and an engineer can follow the same climb. You climb with Luna as your Sherpa. Prior notes guide the next path.",
     points: [
       "Climb Notes™ literacy for leaders, operators, creators, and builders",
-      "Walkthroughs and examples that make problem → measure → pitch → lesson real",
+      "Walkthroughs and examples that make Base Camp → Route → Waypoint → Summit real",
       "Path into Grok Voice with Luna (Ara) as your Sherpa — one voice on your climb",
       "Prior Climb Notes as guidelines for future climbs (same path or new)",
       "Content and journal trails people can re-ascend without us in the room",
@@ -64,7 +64,7 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Product Build",
     assistance: "direct",
     description:
-      "A thin vertical you can ship: the app, the data path, and the glue that keeps a model useful for real users.",
+      "A small step you can ship: the app, the data path, and the glue that keeps a model useful for real users.",
     points: [
       "End-to-end product slices you can ship and operate",
       "Interfaces that match how teams already work",
@@ -78,7 +78,7 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Model Systems",
     assistance: "direct",
     description:
-      "Retrieval, evaluation, guardrails, and monitoring. The model is one part of a system—not the whole product.",
+      "Retrieval, evaluation, guardrails, and monitoring. The model is one part of a system.",
     points: [
       "Retrieval and tool wiring with sourceable answers",
       "Evaluation harnesses and regression checks before release",
@@ -120,10 +120,10 @@ export const serviceCatalog: ServiceItem[] = [
     title: "Delivery with Climb Notes™",
     assistance: "both",
     description:
-      "Direct delivery and indirect enablement: Climb Notes structure the climb—problem, measure, pitch, lesson—so a non-technical owner and a builder can follow the same trail.",
+      "Direct delivery and teaching: Climb Notes structure the climb—Base Camp, Route, Waypoint, Summit—so a shop owner and a builder can follow the same trail.",
     points: [
-      "Climb Notes as the delivery record (not optional theater)",
-      "Thin vertical slices that prove value under real load",
+      "Climb Notes as the delivery record",
+      "Small steps that prove value under real load",
       "Publish and measure loops with explicit owners",
       "Lessons written back so the next climb starts smarter",
     ],
@@ -153,9 +153,9 @@ export const baselineServices: ServiceItem[] = [
     assistance: "both",
     composedFrom: ["learn-the-climb", "delivery-climb-notes"],
     description:
-      "Does: teach you to write one finished AI job as Problem → Measure → Slice → Lesson. Why: without that, tools pile up and you cannot tell if the work got better.",
+      "Does: teach you to write one finished AI job as Base Camp → Route → Waypoint → Summit. Why: without that, tools pile up and you cannot tell if the work got better.",
     points: [
-      "The four-step template",
+      "The four-beat template",
       "Public notes you can copy",
       "Voice with Luna to walk a note",
       "The same write-up used when we do paid work",
@@ -181,7 +181,7 @@ export const baselineServices: ServiceItem[] = [
     title: "Product Build",
     assistance: "direct",
     description:
-      "Does: ship one working slice — screen, login, data, model, deploy. Why: a demo is not a product. Users cannot use a slide.",
+      "Does: ship one working slice — screen, login, data, model, deploy. Why: users can open it and use it.",
     points: [
       "A running slice in your workflow",
       "The repo and how to run it",
@@ -249,31 +249,31 @@ export const serviceFaqs: ServiceFaq[] = [
     id: "what-is-climb-notes",
     defaultOrder: 0,
     q: "What is a Climb Note?",
-    a: "A Climb Note is one finished climb written so the next person can follow it — whether they write code or not. Four steps in order: Problem (what’s stuck), Measure (how we know it moved), Pitch (the next safe rope length), and Lesson (what we carry next). That crossover is the point. Climb Notes are how we teach and deliver production AI — not demos that vanish after a showcase.",
+    a: "A Climb Note is one finished climb written so the next person can follow it. Four beats in order: Base Camp (are we fit to leave?), Route (one objective, success marks, not today), Waypoint (check the map; hold or go), and Summit (build, prove, evidence home). Climb Notes are how we teach and deliver working AI.",
   },
   {
     id: "crossover",
     defaultOrder: 1,
     q: "Why do Climb Notes matter if I am not a developer?",
-    a: "Because the same four moves work on both sides of the table. A shop owner and an engineer can write the same note, and both can follow it. That crossover is the point. Gnomah is our second brain. Grok-based tools run the pitch. We use that trail to aim for about twenty times a normal cycle — and the journal is how we show it.",
+    a: "The same four beats work on both sides of the table. A shop owner and an engineer can write the same note, and both can follow it. Gnomah holds the climbs. Grok-based tools run the step. We use that trail to aim for about twenty times a normal cycle. The journal is how we show it.",
   },
   {
     id: "mountaineering-approach",
     defaultOrder: 1,
-    q: "What does “Mountaineering approach” actually mean?",
-    a: "Four plain steps on every Climb Note: what’s stuck (Problem), how you know it moved (Measure), the next safe pitch (Pitch), and what you carry next time (Lesson). Same words for a shop owner and an engineer. Luna is your Sherpa on Voice. Gnomah is our second brain. Grok-based tools run the pitch. This is the way.",
+    q: "What does “Mountaineering approach” mean?",
+    a: "Four plain beats on every Climb Note: Base Camp (are we fit to leave?), Route (one objective and success marks), Waypoint (hold or go), and Summit (build, prove, evidence home). Same words for a shop owner and an engineer. Luna is your Sherpa on Voice. Gnomah holds the climbs. Grok-based tools run the step.",
   },
   {
     id: "how-help-use",
     defaultOrder: 2,
     q: "How do you help people use it?",
-    a: "Through Climb Notes™, walkthroughs, and Grok Voice with Luna (Ara) as your Sherpa—indirect help anyone can follow. Paid work then applies the same four steps on your mountain: strategy, build, systems, automation, and trust, with a trail map you keep.",
+    a: "Through Climb Notes™, walkthroughs, and Grok Voice with Luna (Ara) as your Sherpa—indirect help anyone can follow. Paid work then applies the same four beats on your mountain: strategy, build, systems, automation, and trust, with a trail map you keep.",
   },
   {
     id: "direct-vs-indirect",
     defaultOrder: 3,
     q: "What is direct versus indirect assistance?",
-    a: "Indirect: education, public Climb Notes, and guided Voice so you climb with a map—not alone without history. Direct: we help on strategy, product build, model systems, automation, and trust for your specific mountain. Delivery is not a seventh service—it is Climb Notes running through every engagement.",
+    a: "Indirect: education, public Climb Notes, and guided Voice so you climb with a map. Direct: we help on strategy, product build, model systems, automation, and trust for your mountain. Delivery is Climb Notes running through every engagement.",
   },
   {
     id: "kinds-of-projects",
@@ -285,7 +285,7 @@ export const serviceFaqs: ServiceFaq[] = [
     id: "engagements-start",
     defaultOrder: 5,
     q: "How do engagements start?",
-    a: "Often with Learn the Climb or a short discovery slice: one problem, one measure, one thin vertical. If that works, we stack Strategy, Product Build, Model Systems, Trust and Safety, or Automation as the climb demands—modular, not a large fixed program by default.",
+    a: "Often with Learn the Climb or a short discovery: one peak, one measure, one small step. If that works, we add Strategy, Product Build, Model Systems, Trust and Safety, or Automation as the climb demands.",
   },
   {
     id: "one-card",
@@ -296,7 +296,7 @@ export const serviceFaqs: ServiceFaq[] = [
   {
     id: "six-baseline",
     defaultOrder: 7,
-    q: "Why six services, not seven?",
-    a: "Six is the public baseline: Learn the Climb, Strategy, Product Build, Model Systems, Trust and Safety, and Automation. Delivery with Climb Notes is how those six run—the trail inside Learn the Climb and every paid engagement—not a separate seventh offer. The full catalog is still kept so nothing is thrown away.",
+    q: "Why six services?",
+    a: "Six is the public baseline: Learn the Climb, Strategy, Product Build, Model Systems, Trust and Safety, and Automation. Delivery with Climb Notes is how those six run: the trail inside Learn the Climb and every paid engagement.",
   },
 ];

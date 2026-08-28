@@ -11,18 +11,18 @@ tags:
 xUrl:
 ---
 
-## Problem
+## Base Camp
 
-The choice sits open. School, move, job, repair, relationship, big purchase. You keep “thinking about it” — which mostly means replaying the same two fears without new information. The drag itself becomes heavier than either option.
+The choice sits open. School, move, job, repair, relationship, big purchase. You keep “thinking about it,” which mostly means replaying the same two fears. That is who you are on this trip: stuck in fog. You are not fit to leave until you can name what staying undecided is costing.
 
-## Measure
+## Route
 
-Within seven days the decision is either made, deliberately parked with a reopen date, or broken into one smaller decision you can finish this week.
+One summit: within seven days the decision is made, parked with a reopen date, or broken into one smaller decision. Success: one of those three is written down. Not today: a lifetime commitment.
 
-## Slice
+## Waypoint
 
-Climb Note the decision. Problem = what staying undecided is costing. Measure = made / parked / sliced by a date you write down. Slice = one fact to gather, one person to ask, or one reversible trial — not a lifetime commitment. Lesson = which fear was noise and which was signal.
+Check the map. The drag itself is now heavier than either option. Recover: stop replaying the same two fears. Hold or go: go — Climb Note the decision.
 
-## Lesson
+## Summit
 
-Undecided is still a path — usually the worst one. Naming the climb turns fog into a pitch you can finish.
+Gather one fact, ask one person, or run one reversible trial. Proof: made, parked, or due by a date you wrote down. Undecided is still a path — usually the worst one. Evidence home, not another week of fog.

@@ -86,7 +86,6 @@ function parseMdNote(
   };
   const id = String(data.id ?? "").trim();
   if (!id) return null;
-  const base = filePath.split("/").pop() ?? filePath;
   const statusRaw = String(data.status ?? "draft").toLowerCase();
   const status = (
     ["draft", "pending", "approved", "published", "archived"] as const
@@ -98,17 +97,17 @@ function parseMdNote(
     number: String(data.number ?? "").replace(/"/g, ""),
     title: String(data.title ?? "Untitled"),
     date: String(data.date ?? ""),
-    problem: section("Problem"),
-    measure: section("Measure"),
-    slice: section("Pitch") || section("Slice"),
-    lesson: section("Lesson"),
+    problem: section("Base Camp") || section("Problem"),
+    measure: section("Route") || section("Measure"),
+    slice: section("Waypoint") || section("Pitch") || section("Slice"),
+    lesson: section("Summit") || section("Lesson"),
     status,
     tags: Array.isArray(data.tags) ? (data.tags as string[]) : [],
     xUrl:
       typeof data.xUrl === "string" && data.xUrl.length > 0
         ? data.xUrl
         : undefined,
-    sourceFile: base,
+    sourceFile: filePath.replace(/\\/g, "/"),
   };
 }
 
@@ -191,7 +190,7 @@ export async function fetchClimbNotesFromGithub(): Promise<{
           });
           if (!r.ok) return null;
           const text = await r.text();
-          return parseMdNote(f.path, text);
+          return parseMdNote(f.path.slice(rootPath.length + 1), text);
         }),
       );
       for (const n of parts) if (n) notes.push(n);

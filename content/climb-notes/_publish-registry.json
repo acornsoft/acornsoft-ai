@@ -4,14 +4,14 @@
   "notes": {
     "cn-016": {
       "status": "published",
-      "version": 2,
+      "version": 5,
       "submittedAt": "2026-07-31T12:00:00.000Z",
       "submittedBy": "acornsoft",
       "approvedAt": "2026-08-10T19:14:52.444Z",
       "approvedBy": "acornsoftai",
       "publishedAt": "2026-08-10T19:14:56.598Z",
       "unpublishedAt": null,
-      "approvalNote": "First public Climb Note SoT — mountaineering approach.",
+      "approvalNote": "First public Climb Note SoT \u2014 mountaineering approach.",
       "history": [
         {
           "at": "2026-07-31T12:00:00.000Z",
@@ -32,25 +32,25 @@
           "at": "2026-08-01T13:52:20.185Z",
           "action": "set:draft",
           "by": "acornsoftai",
-          "note": "State → draft (was published)"
+          "note": "State \u2192 draft (was published)"
         },
         {
           "at": "2026-08-10T19:14:52.444Z",
           "action": "set:approved",
           "by": "acornsoftai",
-          "note": "State → approved (was draft)"
+          "note": "State \u2192 approved (was draft)"
         },
         {
           "at": "2026-08-10T19:14:56.598Z",
           "action": "set:published",
           "by": "acornsoftai",
-          "note": "State → published (was approved)"
+          "note": "State \u2192 published (was approved)"
         },
         {
           "at": "2026-08-11T12:00:00.000Z",
           "action": "editorial:number",
           "by": "acornsoftai",
-          "note": "Display number set to 000 — origin Climb Note all others build on (id remains cn-016)"
+          "note": "Display number set to 000 \u2014 origin Climb Note all others build on (id remains cn-016)"
         },
         {
           "at": "2026-08-12T21:00:34.592Z",
@@ -86,6 +86,24 @@
           "at": "2026-08-12T21:02:28.771Z",
           "action": "save",
           "by": "acornsoftai"
+        },
+        {
+          "at": "2026-08-28T16:00:00.000Z",
+          "action": "editorial:luna-26240",
+          "by": "acornsoftai",
+          "note": "Align origin note to Luna Foundry 1.0.26240 \u2014 Pitch heading; mountain first, kit second; Base Camp \u2192 Route \u2192 Waypoint \u2192 Summit"
+        },
+        {
+          "at": "2026-08-28T16:40:00.000Z",
+          "action": "editorial:luna-beats",
+          "by": "acornsoftai",
+          "note": "Public headings and jobs = Luna mountain: Base Camp, Route, Waypoint, Summit (no Problem/Measure/Pitch/Lesson as move names)"
+        },
+        {
+          "at": "2026-08-28T16:50:00.000Z",
+          "action": "editorial:luna-jobs",
+          "by": "acornsoftai",
+          "note": "Origin 000 body runs Luna jobs: fit to leave, one objective + success + not today, hold or go, evidence home"
         }
       ],
       "onCanopy": true,
@@ -163,7 +181,7 @@
     },
     "cn-105": {
       "status": "draft",
-      "version": 1,
+      "version": 3,
       "submittedAt": null,
       "submittedBy": null,
       "approvedAt": null,
@@ -177,6 +195,18 @@
           "action": "set:draft",
           "by": "acornsoft",
           "note": "Public journal: only origin Climb Note 000 (id cn-016) for now"
+        },
+        {
+          "at": "2026-08-28T16:12:00.000Z",
+          "action": "editorial:luna-26240",
+          "by": "acornsoftai",
+          "note": "Consumer pack Pitch pass \u2014 Slice heading and body aligned to Luna 1.0.26240 mountain beats; still draft"
+        },
+        {
+          "at": "2026-08-28T16:40:00.000Z",
+          "action": "editorial:luna-beats",
+          "by": "acornsoftai",
+          "note": "Public headings and jobs = Luna mountain: Base Camp, Route, Waypoint, Summit (no Problem/Measure/Pitch/Lesson as move names)"
         }
       ],
       "onCanopy": false,
@@ -184,7 +214,7 @@
     },
     "cn-104": {
       "status": "draft",
-      "version": 1,
+      "version": 3,
       "submittedAt": null,
       "submittedBy": null,
       "approvedAt": null,
@@ -198,6 +228,18 @@
           "action": "set:draft",
           "by": "acornsoft",
           "note": "Public journal: only origin Climb Note 000 (id cn-016) for now"
+        },
+        {
+          "at": "2026-08-28T16:12:00.000Z",
+          "action": "editorial:luna-26240",
+          "by": "acornsoftai",
+          "note": "Consumer pack Pitch pass \u2014 Slice heading and body aligned to Luna 1.0.26240 mountain beats; still draft"
+        },
+        {
+          "at": "2026-08-28T16:40:00.000Z",
+          "action": "editorial:luna-beats",
+          "by": "acornsoftai",
+          "note": "Public headings and jobs = Luna mountain: Base Camp, Route, Waypoint, Summit (no Problem/Measure/Pitch/Lesson as move names)"
         }
       ],
       "onCanopy": false,
@@ -205,7 +247,7 @@
     },
     "cn-103": {
       "status": "draft",
-      "version": 1,
+      "version": 3,
       "submittedAt": null,
       "submittedBy": null,
       "approvedAt": null,
@@ -219,6 +261,18 @@
           "action": "set:draft",
           "by": "acornsoft",
           "note": "Public journal: only origin Climb Note 000 (id cn-016) for now"
+        },
+        {
+          "at": "2026-08-28T16:12:00.000Z",
+          "action": "editorial:luna-26240",
+          "by": "acornsoftai",
+          "note": "Consumer pack Pitch pass \u2014 Slice heading and body aligned to Luna 1.0.26240 mountain beats; still draft"
+        },
+        {
+          "at": "2026-08-28T16:40:00.000Z",
+          "action": "editorial:luna-beats",
+          "by": "acornsoftai",
+          "note": "Public headings and jobs = Luna mountain: Base Camp, Route, Waypoint, Summit (no Problem/Measure/Pitch/Lesson as move names)"
         }
       ],
       "onCanopy": false,
@@ -226,7 +280,7 @@
     },
     "cn-102": {
       "status": "draft",
-      "version": 1,
+      "version": 3,
       "submittedAt": null,
       "submittedBy": null,
       "approvedAt": null,
@@ -240,6 +294,18 @@
           "action": "set:draft",
           "by": "acornsoft",
           "note": "Public journal: only origin Climb Note 000 (id cn-016) for now"
+        },
+        {
+          "at": "2026-08-28T16:12:00.000Z",
+          "action": "editorial:luna-26240",
+          "by": "acornsoftai",
+          "note": "Consumer pack Pitch pass \u2014 Slice heading and body aligned to Luna 1.0.26240 mountain beats; still draft"
+        },
+        {
+          "at": "2026-08-28T16:40:00.000Z",
+          "action": "editorial:luna-beats",
+          "by": "acornsoftai",
+          "note": "Public headings and jobs = Luna mountain: Base Camp, Route, Waypoint, Summit (no Problem/Measure/Pitch/Lesson as move names)"
         }
       ],
       "onCanopy": false,
@@ -247,7 +313,7 @@
     },
     "cn-101": {
       "status": "draft",
-      "version": 1,
+      "version": 3,
       "submittedAt": null,
       "submittedBy": null,
       "approvedAt": null,
@@ -260,7 +326,19 @@
           "at": "2026-08-10T20:11:14.932Z",
           "action": "set:draft",
           "by": "acornsoftai",
-          "note": "State → draft (was published)"
+          "note": "State \u2192 draft (was published)"
+        },
+        {
+          "at": "2026-08-28T16:12:00.000Z",
+          "action": "editorial:luna-26240",
+          "by": "acornsoftai",
+          "note": "Consumer pack Pitch pass \u2014 Slice heading and body aligned to Luna 1.0.26240 mountain beats; still draft"
+        },
+        {
+          "at": "2026-08-28T16:40:00.000Z",
+          "action": "editorial:luna-beats",
+          "by": "acornsoftai",
+          "note": "Public headings and jobs = Luna mountain: Base Camp, Route, Waypoint, Summit (no Problem/Measure/Pitch/Lesson as move names)"
         }
       ],
       "onCanopy": false,
@@ -527,7 +605,7 @@
       "approvedBy": null,
       "publishedAt": null,
       "unpublishedAt": null,
-      "approvalNote": "Example product climb — Teams Presence (four moves filled)",
+      "approvalNote": "Example product climb \u2014 Teams Presence (four moves filled)",
       "history": [
         {
           "at": "2026-08-10T20:41:37.262Z",
@@ -750,19 +828,19 @@
           "at": "2026-08-12T20:59:38.838Z",
           "action": "set:approved",
           "by": "acornsoftai",
-          "note": "State → approved (was draft)"
+          "note": "State \u2192 approved (was draft)"
         },
         {
           "at": "2026-08-12T21:00:01.593Z",
           "action": "set:published",
           "by": "acornsoftai",
-          "note": "State → published (was approved)"
+          "note": "State \u2192 published (was approved)"
         },
         {
           "at": "2026-08-27T21:03:55.001Z",
           "action": "set:draft",
           "by": "acornsoftai",
-          "note": "State → draft (was published)"
+          "note": "State \u2192 draft (was published)"
         }
       ],
       "onCanopy": true,
@@ -783,7 +861,7 @@
           "at": "2026-08-28T12:35:32.451Z",
           "action": "set:pending",
           "by": "Test Climber <climber@example.com>",
-          "note": "State → pending (was draft)"
+          "note": "State \u2192 pending (was draft)"
         }
       ],
       "onCanopy": false,

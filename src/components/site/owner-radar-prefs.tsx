@@ -181,9 +181,10 @@ export function OwnerRadarPrefs() {
       </div>
 
       <ul className="ac-owner-prefs-notes">
+        <li>Radar pulls X <strong>once a week</strong>. Page loads never hit the API.</li>
         <li>Only @acornsoftai (owner, signed in with X) can set or clear this.</li>
         <li>Stored encrypted with a server key — not readable from the browser or public APIs.</li>
-        <li>Used only server-side to run Canopy Radar queries.</li>
+        <li>Used only server-side for the weekly Canopy Radar pull.</li>
         <li>
           Host env <code>X_BEARER_TOKEN</code> still wins if set (ops override).
         </li>

@@ -266,10 +266,13 @@ function noteFromMarkdown(
     number: String(data.number ?? "").replace(/"/g, ""),
     title: String(data.title ?? "Untitled"),
     date: String(data.date ?? ""),
-    problem: section(body, "Problem"),
-    measure: section(body, "Measure"),
-    slice: section(body, "Pitch") || section(body, "Slice"),
-    lesson: section(body, "Lesson"),
+    problem: section(body, "Base Camp") || section(body, "Problem"),
+    measure: section(body, "Route") || section(body, "Measure"),
+    slice:
+      section(body, "Waypoint") ||
+      section(body, "Pitch") ||
+      section(body, "Slice"),
+    lesson: section(body, "Summit") || section(body, "Lesson"),
     status,
     version: reg?.version ?? 1,
     submittedAt: reg?.submittedAt ?? null,
@@ -291,10 +294,13 @@ function noteFromMarkdown(
   };
 }
 
+function isNestedVaultPath(p: string): boolean {
+  return /(?:^|[/\\])(product|foundation|engagement)[/\\]/.test(p);
+}
+
 function readMarkdownSeeds(): ClimbNote[] {
   const registry = loadRegistry();
-  const notes: ClimbNote[] = [];
-  const seen = new Set<string>();
+  const byId = new Map<string, ClimbNote>();
 
   const collectFile = (file: string, raw: string) => {
     const base = file.split(/[/\\]/).pop() ?? file;
@@ -307,9 +313,10 @@ function readMarkdownSeeds(): ClimbNote[] {
       return;
     }
     const note = noteFromMarkdown(base, raw, registry);
-    if (note && !seen.has(note.id)) {
-      notes.push(note);
-      seen.add(note.id);
+    if (!note) return;
+    const existing = byId.get(note.id);
+    if (!existing || isNestedVaultPath(file)) {
+      byId.set(note.id, note);
     }
   };
 
@@ -336,7 +343,7 @@ function readMarkdownSeeds(): ClimbNote[] {
     collectFile(globPath, raw);
   }
 
-  return notes.sort((a, b) => a.number.localeCompare(b.number));
+  return [...byId.values()].sort((a, b) => a.number.localeCompare(b.number));
 }
 
 async function upsertNoteRow(note: ClimbNote, ownerUserId?: string | null) {
@@ -401,7 +408,9 @@ async function upsertNoteRow(note: ClimbNote, ownerUserId?: string | null) {
 }
 
 /** Insert seed only if missing — never clobber editor state. */
-async function insertNoteRowIfMissing(note: ClimbNote) {
+async function insertNoteRowIfMissing(note: ClimbNote): Promise<boolean> {
+  const existing = await getClimbNoteFromDb(note.id);
+  if (existing) return false;
   const sql = await getSql();
   await sql`
     insert into climb_notes (
@@ -438,6 +447,9 @@ async function insertNoteRowIfMissing(note: ClimbNote) {
     )
     on conflict (id) do nothing
   `;
+  const wrote = await getClimbNoteFromDb(note.id);
+  if (wrote) writeMarkdownMirror(wrote);
+  return Boolean(wrote);
 }
 
 export async function ensureClimbNotesSeeded(): Promise<void> {
@@ -455,8 +467,16 @@ export async function ensureClimbNotesSeeded(): Promise<void> {
       console.warn(`[climb-notes] seed insert failed for ${note.id}`, err);
     }
   }
-  // Refresh listed notes' body fields from vault (000 origin / cn-016; 017 draft example)
-  await refreshDraftSeedBodies(seeds, ["cn-016", "cn-017"]).catch(() => {});
+  // Refresh SoT / consumer-pack bodies from vault (000 origin; 017 example; 101–105 consumer)
+  await refreshDraftSeedBodies(seeds, [
+    "cn-016",
+    "cn-017",
+    "cn-101",
+    "cn-102",
+    "cn-103",
+    "cn-104",
+    "cn-105",
+  ]).catch(() => {});
 }
 
 /** Update body fields for listed IDs from current markdown seeds (content sync). */
@@ -517,8 +537,8 @@ export async function syncClimbNotesLibrary(): Promise<LibrarySyncResult> {
       source = `local + ${meta.repo}`;
       for (const note of notes) {
         try {
-          await insertNoteRowIfMissing(note);
-          githubInserted += 1; // counts attempts; conflict no-ops
+          const inserted = await insertNoteRowIfMissing(note);
+          if (inserted) githubInserted += 1;
         } catch {
           /* skip */
         }
@@ -584,6 +604,16 @@ export async function listClimbNotesFromDb(opts?: {
   return sortNotes(seeds);
 }
 
+/** Next CN number in the library (001, 002, …). */
+export async function nextClimbNoteNumber(): Promise<string> {
+  const list = await listClimbNotesFromDb();
+  const max = list
+    .map((n) => parseInt(n.number, 10))
+    .filter((x) => !Number.isNaN(x))
+    .reduce((a, b) => Math.max(a, b), 0);
+  return String(max + 1).padStart(3, "0");
+}
+
 /** Align DB status/publish columns with registry when they diverge. */
 async function syncDbStatusFromRegistry(
   _notes: ClimbNote[],
@@ -635,19 +665,19 @@ ${tags || "  - climb-note"}
 xUrl: ${note.xUrl ?? ""}
 ---
 
-## Problem
+## Base Camp
 
 ${note.problem}
 
-## Measure
+## Route
 
 ${note.measure}
 
-## Pitch
+## Waypoint
 
 ${note.slice}
 
-## Lesson
+## Summit
 
 ${note.lesson}
 `;
@@ -755,6 +785,7 @@ export type SaveClimbNoteInput = {
   xUrl?: string | null;
   onCanopy?: boolean;
   canopyAt?: string | null;
+  sourceFile?: string;
 };
 
 export async function saveClimbNote(
@@ -773,6 +804,7 @@ export async function saveClimbNote(
   let version = existing?.version ?? 1;
   const at = new Date().toISOString();
   const sourceFile =
+    input.sourceFile?.trim() ||
     existing?.sourceFile ||
     `${String(input.number).replace(/\D/g, "").padStart(3, "0")} ${input.title.trim() || "Climb Note"}.md`;
 

@@ -11,27 +11,29 @@
 
 A Climb Note is **one climb** written so the next person (or future you) can follow it.
 
-It always has four steps:
+It always has four beats — same names as Luna Foundry Multiagent:
 
-| Step | Plain name | Question it answers |
-| --- | --- | --- |
-| **Problem** | What’s stuck | What is wrong, in clear words? |
-| **Measure** | How we know it moved | How will we know we made progress? |
-| **Slice** | The small step | What is the smallest useful step we will finish? |
-| **Lesson** | What we carry next | What do we keep for the next climb? |
+| Beat | Question it answers |
+| --- | --- |
+| **Base Camp** | Are we fit to leave? Gear, weather, rules of the mountain, who we are on this trip. |
+| **Route** | One summit objective, clear success marks, what we are not climbing today. |
+| **Waypoint** | Check the map. Stop, look around, recover if needed, then decide: hold or go. |
+| **Summit** | The rope team moves: build, prove, bring evidence home — not just a story of the attempt. |
 
-How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same four steps in order — not a second essay.
+How the climb **runs** is these four beats in order — not a second essay. Do not name MacroFlow, Constitution, Clarify, or Workforce on public notes.
+
+Locked line: **mountain first, kit second.** Luna is the Sherpa. Proof at the summit.
 
 ---
 
 ## Voice
 
-- **You / we** when it helps the reader feel the problem.
+- **You / we** when it helps the reader feel the climb.
 - **Active voice.** Prefer “We publish the note” over “The note is published.”
 - **Present tense** for ongoing truth; past for what already shipped.
 - **Honest.** Failure is tuition. Do not sell magic.
 - **No free solo.** Do not invent scope that is not in the note.
-- **Mountaineering metaphor — light touch.** Use path, climb, trail, basecamp when they clarify. Drop them when they decorate.
+- **Mountaineering metaphor — light touch.** Use path, climb, trail, Base Camp, Route, Waypoint, Summit when they clarify. Drop them when they decorate.
 
 ---
 
@@ -41,13 +43,13 @@ How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same fou
 2. **Common words over jargon.** If a term is required (e.g. model, agent), define it by use in the next line — not with a glossary dump.
 3. **Prefer short words.**  
    - “get better over time” not “compound”  
-   - “small next step” not “thin vertical” (unless studio-only)  
+   - “small next step” not “thin vertical”  
    - “most people get lost” not “cannot navigate the stack”
 4. **Avoid stacked metaphors.** Do not mix rafts, stacks, free solos, and product jargon in one breath.
 5. **Avoid fluff.** Cut “leverage,” “solutioning,” “synergy,” “best-in-class,” “revolutionize.”
 6. **Numbers and names when real.** Prefer “under five seconds” over “fast.” Prefer product names only when the reader needs them.
 7. **No unexplained acronyms.** First use: full phrase, then short form if needed.
-8. **Commands are fine** in Slice (“Name one problem. Write the measure.”).
+8. **Commands are fine** in Waypoint (“Check the map. Hold or go.”).
 
 ---
 
@@ -55,24 +57,26 @@ How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same fou
 
 ### Title
 - Names the climb, not the whole company.
-- Prefer concrete outcomes: *From tools to a problem you can finish*.
+- Prefer concrete outcomes: *From tools to a peak you can finish*.
 - Avoid long subtitles in parentheses when the card already shows “Climb Note 000.”
 
-### Problem
-- Start with what is **wrong for people**, not with the tool list.
-- If tools are the issue: *starts with tools, not with a clearly defined problem…*
-- End so the reader feels: “That is my situation.”
+### Base Camp
+- Who we are on this trip. Gear. Weather. Rules of the mountain.
+- End so the reader knows: are we fit to leave?
 
-### Measure
-- Something a reader can **check** (open a page, see a result, count an action).
-- Not “better AI” — **observable**.
+### Route
+- One summit objective.
+- Success marks a stranger can check.
+- What we are **not** climbing today.
 
-### Pitch
-- The next safe rope length that can move the measure — not the summit.
-- One path. Not a roadmap.
+### Waypoint
+- Check the map. Stop. Recover if needed.
+- Then decide: **hold** or **go**.
+- Not the build itself — that is Summit.
 
-### Lesson
-- Reusable truth in one or two short lines.
+### Summit
+- The rope team moves: build, prove, bring evidence home.
+- Not just a story of the attempt.
 - Can end with a kicker: *Small starts. Strong roots.*
 
 ---
@@ -84,9 +88,15 @@ How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same fou
 | tool raft / stack / boil the ocean | many tools / people get lost / too much at once |
 | leverage / solutioning | use / solve / build |
 | compound (unless finance) | get better over time / build on last week |
-| characterization / MacroFlow (public) | the climb / four steps / how the climb runs |
-| demo-as-progress | finished slice + written lesson |
-| walls of tags and process talk | plain problem first |
+| characterization / MacroFlow (public) | the climb / four beats / Base Camp → Route → Waypoint → Summit |
+| Problem / Measure / Pitch / Slice / Lesson *(as headings)* | Base Camp / Route / Waypoint / Summit |
+| “not X, it’s Y” / “not a slide” / “not a blank page” | say the thing |
+| this is the way | drop it |
+| crossover / second brain / thin vertical | same four beats / Gnomah holds the climbs / small step |
+| actually / quickly / quietly | cut the -ly |
+| free solo as contrast | say the trail |
+| demo-as-progress | finished step + evidence home |
+| walls of tags and process talk | Base Camp first |
 
 ---
 
@@ -95,10 +105,10 @@ How the climb **runs** (Basecamp → Brief → Route → Ascent) is the same fou
 | Field | Aim |
 | --- | --- |
 | Title | ≤ ~8 words when possible |
-| Problem | 2–5 short sentences |
-| Measure | 1–3 sentences |
-| Slice | 1–4 sentences or a short numbered list |
-| Lesson | 1–3 sentences |
+| Base Camp | 2–5 short sentences |
+| Route | 1–3 sentences |
+| Waypoint | 1–4 sentences or a short numbered list |
+| Summit | 1–3 sentences |
 
 X citation: even shorter. Site holds the full note; X points at it.
 
@@ -110,27 +120,27 @@ X citation: even shorter. Site holds the full note; X points at it.
 | --- | --- |
 | **Public journal / Canopy / X** | Strict plain language. No internal process slang. |
 | **Studio library / Gnomah drafts** | May name systems (ADO, Gnomah, Luna) but still short and clear. |
-| **Before publish** | Read the Problem out loud. If you stumble, rewrite. |
+| **Before publish** | Read Base Camp out loud. If you stumble, rewrite. |
 
 ---
 
 ## Quick checklist before publish
 
 - [ ] Title is concrete  
-- [ ] Problem names a **clearly defined** stuck state  
-- [ ] Measure is checkable  
-- [ ] Slice is small enough to finish  
-- [ ] Lesson is reusable without the tools list  
+- [ ] Base Camp names who we are and whether we are fit to leave  
+- [ ] Route has one objective, success marks, and a not-today  
+- [ ] Waypoint is a hold-or-go, not the whole build  
+- [ ] Summit brings evidence home  
 - [ ] Average reader understands every sentence  
 - [ ] No “raft / stack / free solo” pile-up  
-- [ ] Four headings only: Problem · Measure · Slice · Lesson  
+- [ ] Four headings only: Base Camp · Route · Waypoint · Summit  
 
 ---
 
-## Example (good Problem)
+## Example (good Base Camp)
 
-> Building with AI usually starts with tools, not with a clearly defined problem you can finish and write down. People collect many models, agents, apps, prompts, and platforms. Without a clearly defined problem, a measure of progress, a small next step, and a lesson, most people get lost. The work does not get better over time.
+> We are people who build with AI and get lost in tools. Gear multiplies: models, agents, apps, prompts, and platforms. The rule of this mountain is mountain first, kit second. Luna is the Sherpa. She brings the map. You keep judgment. We are fit to leave when we can name a peak in everyday language.
 
-## Example (good Lesson)
+## Example (good Summit)
 
-> Climb Notes start with a clearly defined problem you can finish — not with more tools. The written climb is the difference maker—not the model alone. Small starts. Strong roots.
+> The rope team publishes Climb Note 000. Proof: four beats on the public journal. Mountain first, kit second. Small starts. Strong roots.

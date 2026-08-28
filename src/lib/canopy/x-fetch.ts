@@ -2,8 +2,7 @@
  * X API v2 recent search → Canopy live feed entries.
  * Requires X_BEARER_TOKEN (App-only Bearer). Runs on a schedule or on-demand.
  *
- * Cost note: recent search is billed per X API plan. Default schedule is
- * hourly with capped results per interest query — keep queries tight.
+ * Cost note: one pull per week (see cadence.ts). Do not loop this on page load.
  */
 
 import type { LiveFeedActor, LiveFeedEntry, LiveFeedFile, LiveFeedKind } from "./types";
@@ -109,6 +108,10 @@ function mapTweet(
     actor = "acornsoft";
     kind = "feednote";
   }
+  if (username.toLowerCase() === "@datarepublican") {
+    actor = "signal";
+    kind = "feednote";
+  }
   return {
     id: `live-x-${tweet.id}`,
     date: formatDate(created),
@@ -120,9 +123,10 @@ function mapTweet(
     source: username,
     href: user?.username
       ? `https://x.com/${user.username}/status/${tweet.id}`
-      : `https://x.com/i/web/status/${tweet.id}`,
+      : undefined,
     xId: tweet.id,
     live: true,
+    standout: username.toLowerCase() === "@datarepublican" ? true : undefined,
   };
 }
 

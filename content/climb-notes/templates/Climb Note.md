@@ -10,19 +10,20 @@ xUrl:
 ---
 
 <!-- Writing: WRITING-STYLE.md · Public publish: STE-CHECKLIST.md -->
+<!-- Public beats (Luna): Base Camp → Route → Waypoint → Summit -->
 
-## Problem
+## Base Camp
 
-What’s stuck? Use plain words. Prefer a clearly defined problem, not a tool list.
+Are we fit to leave? Gear, weather, rules of the mountain, who we are on this trip.
 
-## Measure
+## Route
 
-How will we know it moved? Something a reader can check.
+One summit objective. Clear success marks. What we are not climbing today.
 
-## Pitch
+## Waypoint
 
-What is the next safe pitch that can move the measure?
+Check the map. Stop, look around, recover if needed, then decide: hold or go.
 
-## Lesson
+## Summit
 
-What do we carry to the next climb? Short. Reusable. No jargon pile-up.
+The rope team moves: build, prove, bring evidence home — not just a story of the attempt.
