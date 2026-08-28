@@ -1,7 +1,7 @@
 {
-  "scheduleMinutes": 60,
+  "scheduleMinutes": 10080,
   "maxResultsPerQuery": 25,
-  "comment": "Priority order: (1) @acornsoftai Radar subscription, (2) Grok Build, (3) Imagine, (4) Voice, (5) Elon orgs (xAI/SpaceXAI, SpaceX, Tesla, Grok model). Subscriptions run first; queries follow array order.",
+  "comment": "One X pull per week (scheduleMinutes 10080). Priority: (1) @acornsoftai, (2) @DataRepublican, (3) Grok Build, (4) Imagine, (5) Voice, (6) Elon orgs.",
   "subscriptions": [
     {
       "id": "radar-acornsoftai",
@@ -11,7 +11,17 @@
       "maxResults": 40,
       "label": "Acornsoft Radar",
       "standout": true,
-      "note": "Priority 1 — every @acornsoftai post (Climb Notes, Advanced Development, studio) lands on Canopy."
+      "note": "Priority 1 — every @acornsoftai post lands on Canopy."
+    },
+    {
+      "id": "radar-datarepublican",
+      "username": "DataRepublican",
+      "actor": "signal",
+      "kind": "feednote",
+      "maxResults": 30,
+      "label": "DataRepublican",
+      "standout": true,
+      "note": "Priority 2 — tool-builder signals: USASpending, nonprofit graphs, DSA Explorer, v2."
     }
   ],
   "queries": [

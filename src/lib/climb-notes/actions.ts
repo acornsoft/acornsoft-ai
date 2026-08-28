@@ -142,12 +142,12 @@ export type IntakePayload = {
   lesson: string;
   name: string;
   email: string;
-  /** Honeypot — must stay empty. */
-  company?: string;
+  /** Honeypot — must stay empty. Do not name this company (browsers autofill it). */
+  hp_fax?: string;
 };
 
 export type IntakeResult =
-  | { ok: true }
+  | { ok: true; id: string; number: string }
   | { ok: false; error: string };
 
 function clean(s: unknown, max: number): string {
@@ -160,8 +160,8 @@ function clean(s: unknown, max: number): string {
 export const submitPublicClimbNoteAction = createServerFn({ method: "POST" })
   .validator((data: IntakePayload) => data)
   .handler(async ({ data }): Promise<IntakeResult> => {
-    if (clean(data.company, 80)) {
-      return { ok: true };
+    if (clean(data.hp_fax, 80)) {
+      return { ok: true, id: "", number: "" };
     }
     const problem = clean(data.problem, 2000);
     const measure = clean(data.measure, 2000);
@@ -174,7 +174,7 @@ export const submitPublicClimbNoteAction = createServerFn({ method: "POST" })
       return {
         ok: false,
         error:
-          "Name what’s stuck, how you’ll know it moved, and the next safe pitch — a few sentences each.",
+          "Name Base Camp, Route, and Waypoint — a few sentences each.",
       };
     }
     if (name.length < 2) {
@@ -184,28 +184,35 @@ export const submitPublicClimbNoteAction = createServerFn({ method: "POST" })
       return { ok: false, error: "We need a real email so we can reach you." };
     }
     try {
-      const { saveClimbNote } = await import("./store.server");
-      const stamp = Date.now().toString(36);
-      const id = `cn-in-${stamp}`;
-      const number = String(900 + (Date.now() % 99)).padStart(3, "0");
+      const { saveClimbNote, nextClimbNoteNumber } = await import(
+        "./store.server"
+      );
+      const number = await nextClimbNoteNumber();
+      const id = `cn-${number}`;
+      const from = `${name} <${email}>`;
+      const safeTitle = (title || problem.slice(0, 72))
+        .replace(/[^\w\s-]+/g, "")
+        .trim()
+        .replace(/\s+/g, " ");
       await saveClimbNote(
         {
           id,
           number,
           title: title || problem.slice(0, 72),
           date: new Date().toISOString().slice(0, 10),
-          status: "pending",
-          problem,
+          status: "draft",
+          problem: `${problem}\n\nFrom ${from}.`,
           measure,
           slice,
-          lesson: lesson || "To be written after the pitch runs.",
-          tags: ["intake", "0-1"],
+          lesson: lesson || "",
+          tags: ["climb-note", "intake"],
           onCanopy: false,
+          sourceFile: `inbox/${number} ${safeTitle || "Climb Note"}.md`,
         },
         "",
-        `${name} <${email}>`,
+        from,
       );
-      return { ok: true };
+      return { ok: true, id, number };
     } catch {
       return {
         ok: false,

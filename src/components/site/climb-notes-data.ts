@@ -7,6 +7,8 @@
  * Canopy timeline: published + onCanopy true (+ canopyAt not in the future).
  */
 
+import { CANONICAL_ORIGIN } from "@/lib/site-origin";
+
 export type ClimbNoteStatus =
   | "draft"
   | "pending"
@@ -334,7 +336,7 @@ export function countByStatus(
 
 export function formatClimbNoteCiteForX(
   note: ClimbNote,
-  siteOrigin = "https://acornsoft.ai",
+  siteOrigin = CANONICAL_ORIGIN,
 ): string {
   const detailUrl = climbNoteDetailUrl(note, siteOrigin);
   const oneLine =
@@ -350,7 +352,7 @@ ${detailUrl}`;
 /** Canonical public URL for the long-form Climb Note on the site. */
 export function climbNoteDetailUrl(
   note: Pick<ClimbNote, "id">,
-  siteOrigin = "https://acornsoft.ai",
+  siteOrigin = CANONICAL_ORIGIN,
 ): string {
   const base = siteOrigin.replace(/\/$/, "");
   return `${base}/climb-notes#${note.id}`;
@@ -363,7 +365,7 @@ export function climbNoteDetailUrl(
  */
 export function buildClimbNoteXComposeUrl(
   note: ClimbNote,
-  siteOrigin = "https://acornsoft.ai",
+  siteOrigin = CANONICAL_ORIGIN,
 ): string {
   const detailUrl = climbNoteDetailUrl(note, siteOrigin);
   // Keep under ~280 with t.co link budget
@@ -391,7 +393,7 @@ export function buildClimbNoteXComposeUrl(
 /** Prefer live post URL; otherwise X compose with site deep link. */
 export function climbNoteXActionUrl(
   note: ClimbNote,
-  siteOrigin = "https://acornsoft.ai",
+  siteOrigin = CANONICAL_ORIGIN,
 ): { href: string; label: string; kind: "live" | "compose" } {
   if (note.xUrl && /^https?:\/\//i.test(note.xUrl)) {
     return { href: note.xUrl, label: "Open on X", kind: "live" };

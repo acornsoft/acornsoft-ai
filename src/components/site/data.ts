@@ -35,7 +35,7 @@ export const services: {
     icon: Brain,
     title: "AI product strategy",
     description:
-      "Find the highest-leverage use cases, define success metrics, and chart a path from pilot to production.",
+      "Find the uses that matter most, define success, and chart a path from first try to a system you can run.",
   },
   {
     icon: Code2,
@@ -101,7 +101,7 @@ export const portfolio = [
     category: "Analytics",
     summary:
       "Independent reporting site that gathered and presented COVID-related signals in plain language—fast updates when official channels lagged.",
-    href: "https://unofficial-covid-report.grok.me/",
+    href: "https://unofficial-covid-report.acornsoft.ai/",
   },
   {
     id: "atlas",

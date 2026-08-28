@@ -65,7 +65,7 @@ const services = [
   {
     icon: "fa-html5",
     title: "AI product strategy",
-    text: "Find the highest-leverage use cases and define success metrics.",
+    text: "Find the uses that matter most and define success.",
   },
   {
     icon: "fa-paint-brush",
@@ -268,7 +268,7 @@ const posts = [
     title: "How we scope a two-week prototype",
     img: "/baristra/img/blog2.jpg",
     excerpt:
-      "Pick one workflow, one success metric, and ship a vertical slice your team can judge honestly.",
+      "Pick one workflow, one success mark, and ship a small step your team can judge honestly.",
   },
   {
     date: "13 Mar 2026",
@@ -496,8 +496,8 @@ export function BaristraPage() {
                       </p>
                       <p className="text-2">
                         Our approach is practical: pick a sharp problem, measure
-                        what good looks like, ship a thin vertical slice, then
-                        harden it. Small starts. Strong roots.
+                        what good looks like, ship a small step, then harden it.
+                        Small starts. Strong roots.
                       </p>
                       <a className="about-link-1" href="#service">
                         Learn more

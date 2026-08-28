@@ -1,11 +1,11 @@
 ---
 id: cn-016
 number: "000"
-title: From tools to a problem you can finish
+title: From tools to a peak you can finish
 date: 2026-07-31
 status: published
 onCanopy: true
-canopyAt: 2026-08-10T19:14:56.598Z
+canopyAt: 2026-08-12T21:00:55.172Z
 tags:
   - climb-note
   - product
@@ -16,18 +16,18 @@ tags:
 xUrl: 
 ---
 
-## Problem
+## Base Camp
 
-Building with AI usually starts with tools, not with a clearly defined problem you can finish and write down. People collect many models, agents, apps, prompts, and platforms. Without a clearly defined problem, a measure of progress, a small next step, and a lesson, most people get lost. The work does not get better over time.
+We are people who build with AI and get lost in tools. Gear multiplies: models, agents, apps, prompts, and platforms. The rule of this mountain is mountain first, kit second. Luna is the Sherpa. She brings the map. You keep judgment. We are fit to leave when we can name a peak in everyday language.
 
-## Measure
+## Route
 
-A reader can open this Climb Note, see a clearly defined problem in everyday language, and follow what we finished—without mastering every tool first.
+One summit: publish Climb Note 000 as the origin trail all later notes build on. Success: a stranger can follow Base Camp, Route, Waypoint, and Summit with no dump of tools on page one. Not today: a product catalog, a tool review, or ritual names on the public page.
 
-## Slice
+## Waypoint
 
-Publish Climb Note 000 as the first public Climb Note — the origin trail all later notes build on: tools only become a climb when the problem is clearly defined, measured, sliced, and taught.
+Check the map. The four beats exist; the origin is not yet that story. Recover: drop tool-first language. Hold or go: go.
 
-## Lesson
+## Summit
 
-Climb Notes start with a clearly defined problem you can finish — not with more tools. The written climb is the difference maker—not the model alone. Small starts. Strong roots.
+The rope team publishes Climb Note 000. Proof: four beats on the public journal. Mountain first, kit second. Luna as Sherpa. Small starts. Strong roots.

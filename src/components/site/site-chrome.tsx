@@ -2,7 +2,6 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { Logo } from "./logo";
 import { SiteAuthSlot } from "./site-auth-slot";
-import { OwnerSettings } from "./owner-settings";
 
 import { primaryNav } from "./site-nav";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
@@ -25,9 +24,9 @@ function pageTitle(pathname: string): string {
   if (pathname.startsWith("/climb-notes")) return "Climb Notes";
   if (pathname.startsWith("/voice")) return "Voice";
   if (pathname.startsWith("/field-guide")) return "Field Guide";
+  if (pathname.startsWith("/luna")) return "Luna";
   if (pathname.startsWith("/start")) return "Send a note";
   if (pathname.startsWith("/canopy")) return "Canopy";
-
   if (pathname.startsWith("/gnomah")) return "Gnomah";
   if (pathname.startsWith("/corporate")) return "Corporate";
   if (pathname.startsWith("/login")) return "Sign in";
@@ -37,21 +36,16 @@ function pageTitle(pathname: string): string {
 function NavLinks({
   onNavigate,
   mobile = false,
-  showGnomah = false,
-  showMethod = false,
+  showStudio = false,
 }: {
   onNavigate?: () => void;
   mobile?: boolean;
-  showGnomah?: boolean;
-  /** Method hub — signed-in only for now (will rework later). */
-  showMethod?: boolean;
+  showStudio?: boolean;
 }) {
   const pathname = useActivePath();
 
   const links = primaryNav.filter((item) => {
-    if ("authOnly" in item && item.authOnly) {
-      return item.to === "/method" ? showMethod : showGnomah;
-    }
+    if ("authOnly" in item && item.authOnly) return showStudio;
     return true;
   });
 
@@ -79,25 +73,37 @@ function NavLinks({
           </li>
         );
       })}
-      {showGnomah ? (
-        <li className="ac-nav-item">
-          <Link
-            className={[
-              "ac-nav-link",
-              mobile ? "ac-nav-link--mobile" : "",
-              isActivePath(pathname, "/gnomah") ? "is-active" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            to="/gnomah"
-            onClick={onNavigate}
-            aria-current={
-              isActivePath(pathname, "/gnomah") ? "page" : undefined
-            }
-          >
-            Gnomah
-          </Link>
-        </li>
+      {showStudio && mobile ? (
+        <>
+          <li className="ac-nav-item">
+            <Link
+              className={[
+                "ac-nav-link ac-nav-link--mobile",
+                isActivePath(pathname, "/gnomah") ? "is-active" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              to="/gnomah"
+              onClick={onNavigate}
+            >
+              Gnomah
+            </Link>
+          </li>
+          <li className="ac-nav-item">
+            <Link
+              className={[
+                "ac-nav-link ac-nav-link--mobile",
+                isActivePath(pathname, "/method") ? "is-active" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              to="/method"
+              onClick={onNavigate}
+            >
+              Method
+            </Link>
+          </li>
+        </>
       ) : null}
     </>
   );
@@ -127,8 +133,7 @@ export function SiteHeader({
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = useActivePath();
   const { user } = useCurrentUserState();
-  const showGnomah = !!user;
-  const showMethod = showGnomah; // signed-in only for now; rework later
+  const showStudio = !!user;
   const title = pageTitle(pathname);
 
   useEffect(() => {
@@ -179,7 +184,7 @@ export function SiteHeader({
 
           <nav className="ac-site-nav ac-site-nav--desktop" aria-label="Primary">
             <ul className="ac-site-nav-list">
-              <NavLinks showGnomah={showGnomah} showMethod={showMethod} />
+              <NavLinks showStudio={showStudio} />
             </ul>
           </nav>
 
@@ -187,7 +192,6 @@ export function SiteHeader({
             <Link to="/start" className="ac-start-cta">
               Send a note
             </Link>
-            <OwnerSettings />
             <SiteAuthSlot loginRedirect={loginRedirect} />
 
             <button
@@ -237,8 +241,7 @@ export function SiteHeader({
             <ul className="ac-site-nav-list ac-site-nav-list--mobile">
               <NavLinks
                 mobile
-                showGnomah={showGnomah}
-                showMethod={showMethod}
+                showStudio={showStudio}
                 onNavigate={() => setMenuOpen(false)}
               />
             </ul>
@@ -251,7 +254,6 @@ export function SiteHeader({
             >
               Send a Climb Note
             </Link>
-            <OwnerSettings />
             <SiteAuthSlot loginRedirect={loginRedirect} />
           </div>
 

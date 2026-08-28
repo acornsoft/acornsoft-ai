@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { SiteChrome } from "./site-chrome";
+import { ViewportTip } from "./viewport-tip";
 import {
   fieldRecipes,
   TOOL_EXPLAIN,
@@ -18,18 +19,14 @@ function RecipeToolChip({
 }) {
   const explain = TOOL_EXPLAIN[tool];
   return (
-    <button
-      type="button"
+    <ViewportTip
       className={`ac-recipe-tool ac-recipe-tool--${tool}`}
-      aria-describedby={tipId}
+      tipClassName="ac-recipe-tip"
+      tipId={tipId}
+      label={TOOL_LABEL[tool]}
     >
-      {TOOL_LABEL[tool]}
-      <span className="ac-recipe-tip" id={tipId} role="tooltip">
-        <span className="ac-recipe-tip-k">{explain.kicker}</span>
-        <span className="ac-recipe-tip-what">{explain.what}</span>
-        <span className="ac-recipe-tip-how">{explain.how}</span>
-      </span>
-    </button>
+      <span className="ac-recipe-tip-what">{explain.what}</span>
+    </ViewportTip>
   );
 }
 
@@ -64,29 +61,29 @@ export function FieldGuidePage() {
         <div className="ac-service-stack">
           <header className="ac-service-head">
             <span className="ac-service-kicker">Field guide</span>
-            <h1 className="ac-service-title">Recipes for the climb</h1>
+            <div className="ac-fg-title-row">
+              <h1 className="ac-service-title">Recipes for the climb</h1>
+              <ul className="ac-recipe-legend" aria-label="The agents">
+                {TOOL_LEGEND.map((tool) => (
+                  <li key={tool}>
+                    <RecipeToolChip
+                      tool={tool}
+                      tipId={`fg-tip-legend-${tool}`}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
             <div className="ac-service-lede-box">
               <p className="ac-service-lede">
-                Climb Notes™ are the journal — finished climbs, published.
-                This is the field manual: eight short recipes so a shop
-                owner and an engineer can take the same next pitch.
+                Finished write-ups live in the journal. This page is how to
+                write one: nine short how-tos. You and whoever builds it use
+                the same answers.
               </p>
               <p className="ac-service-lede ac-service-lede--last">
-                We build this way now, and we will keep building this way.
-                Climb Note first. Tool second. Hover a chip — that is the
-                kit.
+                Write it first. Agents second.
               </p>
             </div>
-            <ul className="ac-recipe-legend" aria-label="The kit">
-              {TOOL_LEGEND.map((tool) => (
-                <li key={tool}>
-                  <RecipeToolChip
-                    tool={tool}
-                    tipId={`fg-tip-legend-${tool}`}
-                  />
-                </li>
-              ))}
-            </ul>
           </header>
 
           <div className="ac-recipe-list">

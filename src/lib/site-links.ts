@@ -10,6 +10,8 @@
  * Override the published org origin with VITE_PUBLIC_SITE_URL when known.
  */
 
+import { CANONICAL_ORIGIN } from "./site-origin";
+
 export const PERSONAL_SITE = {
   origin: "https://blaszyk.us",
   /** Primary work biography entry (SPA often lands on HomeConsulting). */
@@ -28,7 +30,15 @@ export function publicSiteOrigin(): string | undefined {
       : undefined;
   if (fromEnv?.trim()) return fromEnv.replace(/\/$/, "");
   if (typeof window !== "undefined" && window.location?.origin) {
-    return window.location.origin;
+    const origin = window.location.origin.replace(/\/$/, "");
+    if (origin.includes("localhost") || origin.includes("127.0.0.1")) {
+      return origin;
+    }
+    if (origin.includes("acornsoft.ai")) return CANONICAL_ORIGIN;
+    return origin;
+  }
+  if (typeof process !== "undefined" && process.env?.VERCEL_ENV === "production") {
+    return CANONICAL_ORIGIN;
   }
   return undefined;
 }

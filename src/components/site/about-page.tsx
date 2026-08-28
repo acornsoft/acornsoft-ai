@@ -15,8 +15,8 @@ const aboutSections = [
 
 const principles = [
   {
-    title: "Climb Notes™ are the crossover",
-    body: "The same four moves for someone who does not write code and someone who does. Problem, measure, pitch, lesson. Tools without notes fade.",
+    title: "Climb Notes™ use the same four beats",
+    body: "The same four beats for a shop owner and an engineer. Base Camp, Route, Waypoint, Summit. Tools without notes fade.",
   },
   {
     title: "Name the constraints first",
@@ -32,18 +32,18 @@ const principles = [
   },
   {
     title: "Check assumptions in production",
-    body: "Live systems change the problem. First principles is a loop, not a one-time slide. Update the note when reality moves.",
+    body: "Live systems change the problem. First principles is a loop. Update the note when reality moves.",
   },
   {
     title: "Treat failure as tuition",
-    body: "A miss maps the real problem. Write it down. We succeed by learning fast — not by pretending we never miss.",
+    body: "A miss maps the real problem. Write it down. We learn fast.",
   },
 ] as const;
 
 const beliefs = [
   {
     title: "Failure is how we succeed",
-    body: "When a pitch fails, we learn what production needs — then we climb again.",
+    body: "When a step fails, we learn what production needs — then we climb again.",
   },
   {
     title: "Truth before theater",
@@ -51,11 +51,11 @@ const beliefs = [
   },
   {
     title: "People stay accountable",
-    body: "Automation is a tool with clear handoffs — not a way to drop ownership.",
+    body: "Automation is a tool with clear handoffs. People stay on the hook.",
   },
   {
     title: "Privacy and proper usage come first",
-    body: "They shape the design. They are not patches after launch.",
+    body: "They shape the design from the start.",
   },
   {
     title: "The record is the boss",
@@ -67,7 +67,7 @@ const beliefs = [
   },
   {
     title: "Small starts, strong roots",
-    body: "One sharp workflow beats a vague platform promise.",
+    body: "One sharp workflow beats a vague promise.",
   },
   {
     title: "Mars-facing, Earth-proven",
@@ -79,7 +79,7 @@ const charter = [
   "Define success before you build.",
   "Keep only what the problem requires.",
   "Make it safe, private, and operable — or refuse it.",
-  "Write assumptions. Write failures. Improve the next pitch.",
+  "Write assumptions. Write failures. Improve the next step.",
   "People stay accountable. Machines do not own risk.",
   "Contact is Voice. No form theater.",
   "Name other brands honestly. Never claim their voice.",
@@ -138,15 +138,14 @@ export function AboutPage() {
             <div className="ac-service-lede-box">
               <p className="ac-service-lede">
                 A New York–based, AI-first organization. Climb Notes™ are the
-                crossover from non-technical to technical — the same four
-                moves on both sides of the table. We build production systems
-                that have to work under real load, with real users, and under
-                real rules.
+                same four beats for a shop owner and an engineer. We build
+                systems that have to work under real load, with real users, and
+                under real rules.
               </p>
               <p className="ac-service-lede">
-                Gnomah is our second brain. Grok-based tools run the pitch.
+                Gnomah holds the climbs. Grok-based tools run the step.
                 That trail is how we aim for about twenty times a normal
-                cycle — and the journal is how we show it. Failure is how we
+                cycle. The journal is how we show it. Failure is how we
                 succeed. We are always trying to improve.
               </p>
               <p className="ac-service-lede ac-service-lede--last">
@@ -163,16 +162,15 @@ export function AboutPage() {
           >
             <span className="ac-service-kicker">Vision</span>
             <h2 className="ac-about-h2" id="company-vision-heading">
-              Production, not a demo that dies
+              Software that holds under load
             </h2>
             <div className="ac-about-prose">
               <p>
-                Artificial intelligence should run like durable infrastructure —
-                not a demo that breaks under traffic, audit, or edge cases. We
-                help teams climb from prototype to production with Climb Notes:
-                a clear problem, a clear metric, a thin pitch that works, then
-                make it strong. The note is the crossover — a shop owner and an
-                engineer can both follow it.
+                Artificial intelligence should keep working when traffic,
+                audits, or edge cases hit. We help teams climb from a first
+                try to a system they can run, with Climb Notes: a named peak,
+                a clear measure, a small step that works, then make it strong.
+                A shop owner and an engineer can both follow the note.
               </p>
               <p>
                 We aim for software people can open, trust, and own: small
@@ -289,9 +287,9 @@ export function AboutPage() {
                 </p>
                 <p>
                   Founded Acornsoft so Climb Notes™ cross the table — shop
-                  owner and engineer, same four moves — then become production
-                  systems, not slide decks. Based in New York. Gnomah is the
-                  second brain. Grok-based tools run the pitch.
+                  owner and engineer, same four beats — then become systems
+                  people can run. Based in New York. Gnomah holds the climbs.
+                  Grok-based tools run the step.
                 </p>
                 <p className="ac-about-founder-note">{dualSiteNote}</p>
                 <div className="ac-about-founder-actions">

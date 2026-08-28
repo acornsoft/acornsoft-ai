@@ -1,9 +1,10 @@
 /**
  * Canopy Radar interests — pure TS module (no JSON) so Nitro always bundles it.
- * Priority: @acornsoftai → Grok Build → Imagine → Voice → Elon orgs.
+ * Cadence: one X API pull per week (scheduleMinutes = 10080).
+ * Priority: @acornsoftai → @DataRepublican → Grok Build → Imagine → Voice → Elon orgs.
  */
 export const interestsConfig = {
-  scheduleMinutes: 60,
+  scheduleMinutes: 10080,
   maxResultsPerQuery: 25,
   subscriptions: [
     {
@@ -13,6 +14,15 @@ export const interestsConfig = {
       kind: "feednote" as const,
       maxResults: 40,
       label: "Acornsoft Radar",
+      standout: true,
+    },
+    {
+      id: "radar-datarepublican",
+      username: "DataRepublican",
+      actor: "signal" as const,
+      kind: "feednote" as const,
+      maxResults: 30,
+      label: "DataRepublican",
       standout: true,
     },
   ],

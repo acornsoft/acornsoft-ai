@@ -61,19 +61,19 @@ const INTENTS: {
   {
     id: "explain-climb",
     label: "Walk me through",
-    prompt: "Walk me through problem, measure, slice, and lesson.",
+    prompt: "Walk me through Base Camp, Route, Waypoint, and Summit.",
   },
 ];
 
 const LUNA_REPLIES: Record<VoiceIntentId, string> = {
   "learn-metaphor":
-    "Think of AI work as a mountain. Climb Notes are the trail map — so your whole team shares the same route, not just the technical climbers.",
+    "Think of AI work as a mountain. Climb Notes are the trail map, so the whole team shares the same route.",
   "find-note":
     "Tell me what you’re trying to improve — customers, operations, or a product decision — and I’ll point you to published Climb Notes that fit.",
   "business-problem":
-    "Start with the hard thing in plain language. We’ll pick one thin vertical, a way to know it worked, and a slice you can ship this week.",
+    "Start with the hard thing in plain language. We’ll pick one small step, a way to know it worked, and something you can ship this week.",
   "explain-climb":
-    "Problem: what’s hard. Measure: how you’ll know. Slice: what ships next. Lesson: what the next person reuses. Four moves. Everyone can follow.",
+    "Base Camp: are we fit to leave? Route: one objective and success marks. Waypoint: check the map, then hold or go. Summit: build, prove, bring evidence home. Four beats. Everyone can follow.",
 };
 
 type SpeechRecognitionLike = {
@@ -230,7 +230,7 @@ export function VoiceFirstPatternLegend() {
     {
       icon: Mic,
       title: "One obvious talk control",
-      body: "A single large mic — not buried in a toolbar. Tap to talk; tap again to stop.",
+      body: "A single large mic. Tap to talk; tap again to stop.",
     },
     {
       icon: MessageCircle,
@@ -240,17 +240,17 @@ export function VoiceFirstPatternLegend() {
     {
       icon: Sparkles,
       title: "Guided prompts",
-      body: "Everyday chips teach the metaphor before free speech — masses first, power users later.",
+      body: "Everyday chips teach the climb before free speech.",
     },
     {
       icon: Keyboard,
-      title: "Type is a peer, not a fallback shame",
-      body: "Text entry sits beside the mic when speech isn’t available or preferred.",
+      title: "Type sits beside the mic",
+      body: "Text entry is there when speech isn’t available or preferred.",
     },
     {
       icon: Mountain,
       title: "Climb Notes as destinations",
-      body: "Luna routes people to journal trails — not raw model output alone.",
+      body: "Luna routes people to journal trails.",
     },
     {
       icon: Volume2,
@@ -267,8 +267,8 @@ export function VoiceFirstPatternLegend() {
           Patterns for {SHERPA_LINE}
         </h2>
         <p className="ac-voice-patterns-lede">
-          Designed for everyone learning the Climb Notes metaphor — not only
-          developers. <strong>Luna and Ara are one and the same</strong> —{" "}
+          Designed for everyone learning Climb Notes.{" "}
+          <strong>Luna and Ara are one and the same</strong> —{" "}
           <strong>{VOICE_LABEL}</strong>
           . Voice leads; sight and text stay first-class.
         </p>

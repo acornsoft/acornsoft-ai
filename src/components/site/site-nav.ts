@@ -5,13 +5,11 @@
  * About sits last. Logo already returns Home.
  */
 export const primaryNav = [
-  { to: "/", label: "Home" },
   { to: "/climb-notes", label: "Climb Notes" },
   { to: "/field-guide", label: "Field Guide" },
+  { to: "/luna", label: "Luna" },
   { to: "/canopy", label: "Canopy" },
   { to: "/service", label: "Services" },
-  /** Studio map — rework later; signed-in only for now */
-  { to: "/method", label: "Method", authOnly: true as const },
   { to: "/about", label: "About" },
 ] as const;
 

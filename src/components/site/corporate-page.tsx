@@ -200,7 +200,7 @@ export function CorporatePage() {
                   <p>
                     We do not invent case studies or testimonials. “Production”
                     means systems intended to run under real load with owners and
-                    measures—not a demo alone.
+                    measures.
                   </p>
                   <h3>Multiplanetary ethos</h3>
                   <p>

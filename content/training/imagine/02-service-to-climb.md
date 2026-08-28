@@ -9,7 +9,7 @@ Connect “what we sell” to “what we write.”
 
 ## Do this
 1. Pick one service (e.g. Product Build).  
-2. Imagine a two-panel image: left = service action, right = Climb Note page (P/M/S/L).  
+2. Imagine a two-panel image: left = service action, right = Climb Note page (Base Camp / Route / Waypoint / Summit).  
 3. Title: “Every climb leaves a trail.”  
 4. Use on `/service` long-form or X as a still with a link to the site.
 

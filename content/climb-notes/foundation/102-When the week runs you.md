@@ -11,18 +11,18 @@ tags:
 xUrl:
 ---
 
-## Problem
+## Base Camp
 
-Monday already feels behind. Messages pile up. The calendar fills itself. By Thursday you are reacting to other people’s urgencies and your own priorities are still on the sticky note you wrote last Sunday. The week is running you — not the other way around.
+Monday already feels behind. Messages pile up. The calendar fills itself. That is who you are on this trip: a person whose week is running them. You are not fit to leave until you can name the pattern that usually steals the week.
 
-## Measure
+## Route
 
-By Friday you can name three things that mattered this week that you chose on purpose — not three fires you put out for someone else.
+One summit: by Friday you can name three things that mattered that you chose on purpose. Success: three chosen wins — not three fires you put out for someone else. Not today: a perfect calendar, or a new productivity system.
 
-## Slice
+## Waypoint
 
-Sunday night or Monday morning: write one Climb Note for the week. Problem = the pattern that usually steals the week. Measure = three chosen wins. Slice = the single move that protects those three (a blocked hour, a hard no, a first task before the inbox). Lesson = what to keep next week.
+Check the map on Sunday night or Monday morning. Recover if last week left no notes. Hold or go: go — write one Climb Note for this week.
 
-## Lesson
+## Summit
 
-A week without a trail map will always fill itself with other people’s climbs. Your Climb Note is the map — short, plain, reusable.
+Write the four beats. Proof: a blocked hour, a hard no, or a first task before the inbox that protects those three wins. A week without a trail map will always fill itself with other people’s climbs.

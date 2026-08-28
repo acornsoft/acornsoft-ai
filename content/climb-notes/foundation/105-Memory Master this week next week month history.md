@@ -12,27 +12,18 @@ tags:
 xUrl:
 ---
 
-## Problem
+## Base Camp
 
-Your mind is a crowded trailhead. Birthdays, bills, promises, “I should call,” the thing the doctor said, what you told yourself last spring. Some of it is this week. Some is next week. Some is this month. Some is history you only need when a moment jogs it — and by then you have already forgotten the detail that would have helped.
+Your mind is a crowded trailhead. Birthdays, bills, promises, “I should call,” the thing the doctor said, what you told yourself last spring. That is who you are on this trip: a person holding too much in the head. You are not fit to leave until the holds have a place besides worry.
 
-You do not need another app that screams. You need a memory jog that respects time: what matters now, what is coming, what this month holds, and how to pull the right piece of the past when life asks for it.
+## Route
 
-## Measure
+One summit: one short Memory Master note you can open without digging through messages. Success: you can answer four questions — this week, next week, this month, and what from the past this moment should remember. Not today: another app that screams, or a complete archive of everything you ever knew.
 
-You can open one short Memory Master note and answer four questions without digging through messages: What am I holding this week? What is already on the path next week? What must not slip this month? What from the past should this moment remember?
+## Waypoint
 
-## Slice
+Check the map. Some of it is this week. Some is next week. Some is this month. Some is history you only need when a moment jogs it. Recover: drop what has finished. Hold or go: go — keep four lanes in one Climb Note.
 
-Keep four lanes in one Climb Note (or four linked notes — same idea):
+## Summit
 
-1. **This week** — active holds, promises, must-not-forget.
-2. **Next week** — what is already scheduled or likely to land.
-3. **This month** — bills, events, check-ins, seasonal things.
-4. **History jog** — short triggers: who, when, why it mattered — so a name or date can bring the rest back.
-
-Refresh on a rhythm you can keep (Sunday night works for many people). When something finishes, move it or drop it. When something repeats yearly, leave a history jog.
-
-## Lesson
-
-Memory is a mountain of prior climbs. Memory Master is the trail log: not everything you ever knew — the right note at the right elevation. This week, next week, this month, and history when you need the path you already walked.
+Write the four lanes. Refresh on a rhythm you can keep (Sunday night works for many people). Proof: the right note at the right elevation — this week, next week, this month, and history when you need the path you already walked.

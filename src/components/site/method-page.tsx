@@ -94,8 +94,8 @@ export function MethodPage() {
           <div className="container">
             <h2 className="ac-method-h2">How services use Climb Notes</h2>
             <p className="ac-method-sub">
-              Every paid climb ends with a Climb Note — or an update to an
-              existing one. No free solo.
+              Every paid climb ends with a Climb Note, or an update to an
+              existing one.
             </p>
             <ul className="ac-method-service-list">
               {serviceClimbLinks.map((row) => (

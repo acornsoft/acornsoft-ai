@@ -186,33 +186,21 @@ export function ServicePage() {
 
             <div className="ac-service-lede-box">
               <p className="ac-service-lede">
-                Acornsoft helps people turn AI work into climbs they can finish
-                and reuse — not demos that die on a slide deck. Climb Notes™
-                are the crossover: the same four moves for someone who does
-                not write code and someone who does.
+                We help you turn what’s stuck into something you can finish
+                and use again.
               </p>
               <p className="ac-service-lede">
-                In plain language, name{" "}
-                <strong>what’s stuck</strong>, how you’ll{" "}
-                <strong>know it moved</strong>, the{" "}
-                <strong>next safe pitch</strong> this week, and the{" "}
-                <strong>lesson</strong> you carry next time.
-              </p>
-              <p className="ac-service-lede">
-                That is the Mountaineering approach.{" "}
-                <strong>You climb</strong>, with{" "}
-                <strong>Luna as your Sherpa</strong>. Gnomah is our second
-                brain. Grok-based tools run the pitch. This is the way.
-              </p>
-              <p className="ac-service-lede">
-                Climb Notes are your trail map for the same path next week, or a
-                new one. We offer <strong>indirect</strong> help (journal,
-                walkthroughs, Voice) and <strong>direct</strong> help (strategy,
-                build, systems, delivery).
+                In plain words, name{" "}
+                <strong>Base Camp</strong> (are we fit to leave?), the{" "}
+                <strong>Route</strong> (one objective and success marks), the{" "}
+                <strong>Waypoint</strong> (hold or go), and the{" "}
+                <strong>Summit</strong> (build, prove, evidence home).
               </p>
               <p className="ac-service-lede ac-service-lede--last">
-                Start with one Climb Note. Send it. We build from that
-                brief — your need to real software, near real time.
+                Send that write-up. Luna is your Sherpa. She walks with
+                you, follows the note, and Gnomah remembers the climb.
+                Acornsoft builds with voice and agents. We
+                build from what you send.
               </p>
             </div>
             <p className="ac-start-inline">

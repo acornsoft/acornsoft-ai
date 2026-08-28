@@ -12,18 +12,14 @@ tags:
 xUrl:
 ---
 
-## Problem
-
+## Base Camp
 The enterprise ladder rewards endurance more than ownership. Good people stay because the paycheck is steady and the calendar is full — not because the work still feeds a life they chose. “Someday studio” stays a fantasy while the rat race sets the pace.
 
-## Measure
-
+## Route
 A written exit-and-build path exists: what you stop carrying, what one offer funds the first twelve months, and what “thriving” means in calendar hours — not slogans.
 
-## Slice
-
+## Waypoint
 Climb Note the leave: problem (why staying costs more than money), measure (hours and income floor you will not go below), slice (first public proof and first paid path), lesson (what corporate taught you that the studio keeps).
 
-## Lesson
-
+## Summit
 You do not escape a rat race by wishing. You climb out with a map — and Climb Notes are how the map stays honest.

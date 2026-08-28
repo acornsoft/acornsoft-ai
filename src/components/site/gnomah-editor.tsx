@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Link, Navigate } from "@tanstack/react-router";
+import { Link, Navigate, useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 import {
   ChevronLeft,
@@ -31,6 +31,7 @@ import {
 
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { authEnabled, signOut } from "@/lib/auth/client";
+import { CLIMB_BEATS } from "./messaging";
 
 type DraftForm = {
   id: string;
@@ -152,9 +153,22 @@ function noteRecencyKey(n: ClimbNote): string {
   );
 }
 
-function previewLine(n: ClimbNote): string {
-  return (n.problem || n.measure || n.slice || n.lesson || "").slice(0, 140);
+function noteLane(n: ClimbNote): "intake" | "product" | "foundation" | "engagement" {
+  if (n.tags?.includes("intake")) return "intake";
+  const f = (n.sourceFile || "").replace(/\\/g, "/");
+  if (f.includes("/foundation/") || f.startsWith("foundation/")) return "foundation";
+  if (f.includes("/engagement/") || f.startsWith("engagement/")) return "engagement";
+  if (f.includes("/inbox/") || f.startsWith("inbox/")) return "intake";
+  return "product";
 }
+
+const LANES = [
+  { id: "all", label: "All" },
+  { id: "intake", label: "Inbox" },
+  { id: "product", label: "Product" },
+  { id: "foundation", label: "Foundation" },
+  { id: "engagement", label: "Engagement" },
+] as const;
 
 function noteSearchHay(n: ClimbNote): string {
   return [
@@ -208,6 +222,10 @@ function isOwnerForbiddenError(err: unknown): boolean {
 
 export function GnomahEditorPage() {
   const { user, isPending } = useCurrentUserState();
+  const search = useSearch({ from: "/gnomah", shouldThrow: false }) as
+    | { note?: string }
+    | undefined;
+  const openNoteId = search?.note;
   const [notes, setNotes] = useState<ClimbNote[]>([]);
   const [focusId, setFocusId] = useState<string | null>(null);
   const [form, setForm] = useState<DraftForm>(emptyForm());
@@ -217,7 +235,7 @@ export function GnomahEditorPage() {
   const [forbidden, setForbidden] = useState(false);
   const [forbidMsg, setForbidMsg] = useState<string | null>(null);
   const [needsReauth, setNeedsReauth] = useState(false);
-  const [query, setQuery] = useState("");
+  const [lane, setLane] = useState<(typeof LANES)[number]["id"]>("all");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchHi, setSearchHi] = useState(0);
 
@@ -289,6 +307,9 @@ export function GnomahEditorPage() {
         );
         setNotes(sorted);
         setFocusId((prev) => {
+          if (openNoteId && sorted.some((n) => n.id === openNoteId)) {
+            return openNoteId;
+          }
           if (prev && sorted.some((n) => n.id === prev)) return prev;
           return sorted[0]?.id ?? null;
         });
@@ -309,7 +330,7 @@ export function GnomahEditorPage() {
         if (!opts?.quiet) setLoading(false);
       }
     },
-    [handleAuthFailure],
+    [handleAuthFailure, openNoteId],
   );
 
   /** Local vault re-scan + optional GitHub Gnomah pull. */
@@ -365,13 +386,15 @@ export function GnomahEditorPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return notes;
-    return notes
+    const byLane =
+      lane === "all" ? notes : notes.filter((n) => noteLane(n) === lane);
+    if (!q) return byLane;
+    return byLane
       .map((n) => ({ n, s: searchScore(n, q) }))
       .filter((x) => x.s > 0)
       .sort((a, b) => b.s - a.s || a.n.number.localeCompare(b.n.number))
       .map((x) => x.n);
-  }, [notes, query]);
+  }, [notes, query, lane]);
 
   const suggestions = useMemo(() => filtered.slice(0, 8), [filtered]);
 
@@ -757,6 +780,27 @@ export function GnomahEditorPage() {
               ) : null}
             </div>
             <div className="ac-gn-toolbar-actions">
+              <div className="ac-gn-lanes" role="tablist" aria-label="Lanes">
+                {LANES.map((l) => (
+                  <button
+                    key={l.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={lane === l.id}
+                    className={
+                      lane === l.id
+                        ? "ac-gn-lane is-active"
+                        : "ac-gn-lane"
+                    }
+                    onClick={() => setLane(l.id)}
+                  >
+                    {l.label}
+                    {l.id === "intake"
+                      ? ` ${notes.filter((n) => noteLane(n) === "intake").length}`
+                      : ""}
+                  </button>
+                ))}
+              </div>
 
               <button
                 type="button"
@@ -931,26 +975,24 @@ export function GnomahEditorPage() {
                         placeholder="What is this climb?"
                       />
                     </label>
-                    {(
-                      [
-                        ["problem", "01", "What’s stuck", "Name the real problem."],
-                        ["measure", "02", "How we know it moved", "A test you can check."],
-                        ["slice", "03", "Pitch", "The next safe pitch that can move the measure."],
-                        ["lesson", "04", "What we carry next", "What the next climb reuses."],
-                      ] as const
-                    ).map(([key, n, label, ph]) => (
-                      <label key={key} className="ac-gn-climb-field">
+                    {CLIMB_BEATS.map((beat) => (
+                      <label key={beat.key} className="ac-gn-climb-field">
                         <span className="ac-gn-climb-lab">
-                          <span className="ac-gn-climb-n">{n}</span>
-                          {label}
+                          <span className="ac-gn-climb-n">
+                            {String(beat.n).padStart(2, "0")}
+                          </span>
+                          {beat.label}
                         </span>
                         <textarea
                           rows={4}
-                          value={form[key]}
+                          value={form[beat.key]}
                           onChange={(e) =>
-                            setForm((f) => ({ ...f, [key]: e.target.value }))
+                            setForm((f) => ({
+                              ...f,
+                              [beat.key]: e.target.value,
+                            }))
                           }
-                          placeholder={ph}
+                          placeholder={`${beat.plain} — ${beat.hint}`}
                         />
                       </label>
                     ))}

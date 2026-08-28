@@ -11,18 +11,14 @@ tags:
 xUrl: 
 ---
 
-## Problem
-
+## Base Camp
 People find the shop online then leave.
 
-## Measure
-
+## Route
 Five bookings start on the site in two weeks.
 
-## Pitch
-
+## Waypoint
 One page with hours and a Book action.
 
-## Lesson
-
+## Summit
 To be written after the pitch runs.

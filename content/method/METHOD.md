@@ -11,7 +11,7 @@ Long-form always lives on **acornsoft.ai**. X is a short cite with a link back. 
 | Object | What it is | Where |
 | --- | --- | --- |
 | **Service** | An offer (strategy, build, trust, …) | `/service` + optional long page later |
-| **Climb Note** | One finished climb: Problem → Measure → Slice → Lesson | `/climb-notes` |
+| **Climb Note** | One finished climb: Base Camp → Route → Waypoint → Summit | `/climb-notes` |
 | **Training module** | Short practice with a tool (Voice / Imagine / Build) | `/method#training` |
 | **X post** | Hook + link to the site | X → site URL |
 
@@ -23,12 +23,12 @@ Long-form always lives on **acornsoft.ai**. X is a short cite with a link back. 
 
 | Service | Climb Notes role |
 | --- | --- |
-| Learn the Climb | Read public notes; practice the four steps; Voice with Luna |
-| AI Strategy | Notes capture ranked problems, measures, and the chosen slice |
+| Learn the Climb | Read public notes; practice the four beats; Voice with Luna |
+| AI Strategy | Notes capture ranked Base Camps, routes, and the chosen waypoint |
 | Product Build | Each shippable vertical leaves a Climb Note |
 | Model Systems | Eval, guardrails, and ops lessons are written as notes |
-| Trust and Safety | Checkpoints and fallbacks recorded as measure + lesson |
-| Automation | Agent boundaries and escalations written as slice + lesson |
+| Trust and Safety | Checkpoints and fallbacks recorded as route + summit |
+| Automation | Agent boundaries and escalations written as waypoint + summit |
 | Delivery with Climb Notes | Notes **are** the delivery record |
 
 **Rule:** every paid climb ends with a Climb Note (or an explicit update to an existing one). No free solo.
@@ -38,10 +38,10 @@ Long-form always lives on **acornsoft.ai**. X is a short cite with a link back. 
 ## 3. Use an existing Climb Note
 
 1. Open **Climb Notes** (public journal) or **Canopy** (public radar).  
-2. Read in order: Problem → Measure → Slice → Lesson.  
-3. Reuse the **lesson** on your next climb (same path or new).  
+2. Read in order: Base Camp → Route → Waypoint → Summit.  
+3. Reuse the **summit** evidence on your next climb (same path or new).  
 4. Optional: open the **X** short cite for share — detail stays on site.  
-5. Optional: **Voice** with Luna to walk the same four steps out loud.
+5. Optional: **Voice** with Luna to walk the same four beats out loud.
 
 **Do not** treat a note as a demo script. Treat it as a trail map.
 
@@ -60,7 +60,7 @@ Long-form always lives on **acornsoft.ai**. X is a short cite with a link back. 
 
 ### Request (public)
 
-Send: **what’s stuck**, **who it helps**, **related service** (if any), **new or update**, **target note id** if update.
+Send: **are we fit to leave**, **who it helps**, **related service** (if any), **new or update**, **target note id** if update.
 
 ### Update (studio)
 
@@ -68,7 +68,7 @@ Edit vault markdown or Gnomah → same four headings → version bump in registr
 
 ### New note (studio)
 
-Number → title → four steps → STE checklist for public → submit → approve → publish → optional Canopy / X.
+Number → title → four beats → STE checklist for public → submit → approve → publish → optional Canopy / X.
 
 ---
 
@@ -78,9 +78,9 @@ Three tool tracks. Each module is short: goal, do this, done when.
 
 | Track | Tool | Purpose |
 | --- | --- | --- |
-| **Voice** | Grok Voice + Luna | Say the climb out loud; guided four steps |
+| **Voice** | Grok Voice + Luna | Say the climb out loud; guided four beats |
 | **Imagine** | Grok Imagine | Visual trail maps, cards, diagrams for teaching |
-| **Build** | Grok Build | Ship a thin slice; leave a Climb Note |
+| **Build** | Grok Build | Ship the next step; leave a Climb Note |
 
 Curriculum lives under `content/training/` and on `/method#training`.
 
@@ -99,7 +99,7 @@ Write once on acornsoft.ai
 
 ## 7. Success check
 
-- [ ] Reader can name the four steps without jargon  
+- [ ] Reader can name the four beats without jargon  
 - [ ] Each service points at how Climb Notes show up  
 - [ ] Request path is obvious for new/update  
 - [ ] At least one training module per tool (Voice, Imagine, Build)  

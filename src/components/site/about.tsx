@@ -43,10 +43,9 @@ export function About() {
               real compliance constraints.
             </p>
             <p>
-              Our approach is deliberately practical: pick a sharp problem,
-              measure what good looks like, ship a thin vertical slice, then
-              harden it. The result is AI that earns its place in the workflow,
-              not another experiment that gathers dust.
+              Our approach is practical: pick a sharp problem, measure what
+              good looks like, ship a small step, then harden it. The result
+              is AI that earns its place in the workflow.
             </p>
             <a
               href="#services"

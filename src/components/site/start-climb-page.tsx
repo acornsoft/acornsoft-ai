@@ -2,42 +2,26 @@ import { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { SiteChrome } from "./site-chrome";
 import { submitPublicClimbNoteAction } from "@/lib/climb-notes/actions";
-import { CROSSOVER, ZERO_TO_ONE } from "./messaging";
+import { ZERO_TO_ONE_PLAIN, CLIMB_BEATS } from "./messaging";
 
-const MOVES = [
-  {
-    key: "problem" as const,
-    n: "1",
-    label: "What’s stuck",
-    hint: "One sentence. Who feels it.",
-    placeholder:
-      "People find the shop online, then call or leave. The site does not turn a visit into a booking.",
-  },
-  {
-    key: "measure" as const,
-    n: "2",
-    label: "How we know it moved",
-    hint: "A test you can see, not a feeling.",
-    placeholder:
-      "In two weeks, at least five bookings start on the site — not on the phone.",
-  },
-  {
-    key: "slice" as const,
-    n: "3",
-    label: "The next safe pitch",
-    hint: "The next rope length — not the summit.",
-    placeholder:
-      "One page: hours, service, and a single “Book” action. Nothing else this week.",
-  },
-  {
-    key: "lesson" as const,
-    n: "4",
-    label: "What we carry next",
-    hint: "Fine if you don’t know yet. We’ll write it after the pitch runs.",
-    placeholder:
-      "One obvious next step beats a pretty site with five paths.",
-  },
-] as const;
+const PLACEHOLDERS: Record<(typeof CLIMB_BEATS)[number]["key"], string> = {
+  problem:
+    "You are the person at tax time. Papers live in email, a drawer, and the camera roll. Weather: dread and a late start. Rule: one place to look. Fit to leave when you can say that out loud.",
+  measure:
+    "One summit: by March 1 you open one place and in ten minutes know what’s in, what’s missing, and what you likely owe or get back. Success: those three answers. Not today: filing the return for you.",
+  slice:
+    "Check the map. The pile is still scattered. Recover if last year ran late. Hold or go: go — write this down and hand it to an agent.",
+  lesson:
+    "The rope team builds one page you can open. Proof: you confirm what’s in, what’s missing, and the number.",
+};
+
+const MOVES = CLIMB_BEATS.map((beat) => ({
+  key: beat.key,
+  n: String(beat.n),
+  label: beat.label,
+  hint: `${beat.plain} — ${beat.hint}`,
+  placeholder: PLACEHOLDERS[beat.key],
+}));
 
 type Fields = {
   problem: string;
@@ -47,7 +31,7 @@ type Fields = {
   title: string;
   name: string;
   email: string;
-  company: string;
+  hp_fax: string;
 };
 
 const EMPTY: Fields = {
@@ -58,7 +42,7 @@ const EMPTY: Fields = {
   title: "",
   name: "",
   email: "",
-  company: "",
+  hp_fax: "",
 };
 
 export function StartClimbPage() {
@@ -66,6 +50,9 @@ export function StartClimbPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
+  const [sentNote, setSentNote] = useState<{ id: string; number: string } | null>(
+    null,
+  );
 
   function set<K extends keyof Fields>(key: K, value: string) {
     setFields((prev) => ({ ...prev, [key]: value }));
@@ -78,6 +65,11 @@ export function StartClimbPage() {
     try {
       const result = await submitPublicClimbNoteAction({ data: fields });
       if (result.ok) {
+        setSentNote(
+          result.id && result.number
+            ? { id: result.id, number: result.number }
+            : null,
+        );
         setSent(true);
         setFields(EMPTY);
       } else {
@@ -94,46 +86,72 @@ export function StartClimbPage() {
     <SiteChrome loginRedirect="/start">
       <div className="ac-service-page ac-start-climb ac-page-top">
         <div className="ac-service-stack">
+          {sent ? (
+            <section className="ac-start-received" role="status">
+              <span className="ac-start-received-k">Received</span>
+              <h1 className="ac-start-received-title">
+                We have your write-up.
+              </h1>
+              <p className="ac-start-received-lede">
+                {sentNote?.number
+                  ? `It’s in Gnomah as CN-${sentNote.number} (draft).`
+                  : "We’ll reach you at the email you left."}
+              </p>
+              <ol className="ac-start-received-next">
+                <li>
+                  <span>1</span>
+                  It’s on the Climb Notes list
+                </li>
+                <li>
+                  <span>2</span>
+                  We put agents on it
+                </li>
+                <li>
+                  <span>3</span>
+                  You get a note back
+                </li>
+              </ol>
+              <div className="ac-start-received-actions">
+                <Link
+                  className="rn-btn ac-btn-maroon"
+                  to="/gnomah"
+                  search={
+                    sentNote?.id ? { note: sentNote.id } : undefined
+                  }
+                >
+                  <span>
+                    {sentNote?.number
+                      ? `Open CN-${sentNote.number}`
+                      : "Open Gnomah"}
+                  </span>
+                </Link>
+                <button
+                  type="button"
+                  className="rn-btn ac-btn-outline"
+                  onClick={() => {
+                    setSent(false);
+                    setSentNote(null);
+                  }}
+                >
+                  <span>Send another</span>
+                </button>
+              </div>
+            </section>
+          ) : (
+            <>
           <header className="ac-service-head">
-            <span className="ac-service-kicker">0 → 1</span>
+            <span className="ac-service-kicker">First step</span>
             <h1 className="ac-service-title">
-              Craft a Climb Note. We build from it.
+              Tell us what’s stuck. We’ll build from that.
             </h1>
             <div className="ac-service-lede-box">
-              <p className="ac-service-lede">{ZERO_TO_ONE}</p>
               <p className="ac-service-lede ac-service-lede--last">
-                {CROSSOVER} You do not need to write code. Fill the four
-                moves. Send. That is the brief — Grok Build consumes the
-                whole note, Imagine animates it, Voice lends it a voice.
+                Four answers. No code. We turn it into something you can
+                use.
               </p>
             </div>
           </header>
 
-          {sent ? (
-            <div className="ac-start-done" role="status">
-              <p className="ac-start-done-k">Received</p>
-              <h2 className="ac-start-done-title">
-                We have your Climb Note.
-              </h2>
-              <p>
-                This is the brief. We build your specific solution from
-                these four moves — not from a meeting, not from a slide.
-                We’ll reach you at the email you left.
-              </p>
-              <p>
-                <button
-                  type="button"
-                  className="rn-btn ac-btn-maroon"
-                  onClick={() => setSent(false)}
-                >
-                  <span>Send another</span>
-                </button>
-                <Link className="rn-btn ac-btn-outline" to="/field-guide">
-                  <span>Read the field guide</span>
-                </Link>
-              </p>
-            </div>
-          ) : (
             <form className="ac-start-form" onSubmit={onSubmit} noValidate>
               <ol className="ac-start-moves">
                 {MOVES.map((move) => (
@@ -194,12 +212,12 @@ export function StartClimbPage() {
                   />
                 </label>
                 <label className="ac-start-hp" aria-hidden="true">
-                  Company
+                  Fax
                   <input
                     type="text"
-                    name="company"
-                    value={fields.company}
-                    onChange={(ev) => set("company", ev.target.value)}
+                    name="hp_fax"
+                    value={fields.hp_fax}
+                    onChange={(ev) => set("hp_fax", ev.target.value)}
                     tabIndex={-1}
                     autoComplete="off"
                   />
@@ -221,12 +239,12 @@ export function StartClimbPage() {
                   <span>{busy ? "Sending…" : "Send to Acornsoft"}</span>
                 </button>
                 <p className="ac-start-fine">
-                  Pending in the studio — not published. We build from this
-                  note.{" "}
-                  <Link to="/field-guide">Need the recipes first?</Link>
+                  We keep this private until you say otherwise.{" "}
+                  <Link to="/field-guide">Want the how-tos first?</Link>
                 </p>
               </div>
             </form>
+            </>
           )}
         </div>
       </div>

@@ -17,6 +17,7 @@ import { Route as CorporateRouteImport } from './routes/corporate'
 import { Route as FieldGuideRouteImport } from './routes/field-guide'
 import { Route as GnomahRouteImport } from './routes/gnomah'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LunaRouteImport } from './routes/luna'
 import { Route as MethodRouteImport } from './routes/method'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -65,6 +66,11 @@ const GnomahRoute = GnomahRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LunaRoute = LunaRouteImport.update({
+  id: '/luna',
+  path: '/luna',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MethodRoute = MethodRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
+  '/luna': typeof LunaRoute
   '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
+  '/luna': typeof LunaRoute
   '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
+  '/luna': typeof LunaRoute
   '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/field-guide'
     | '/gnomah'
     | '/login'
+    | '/luna'
     | '/method'
     | '/policies'
     | '/privacy'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/field-guide'
     | '/gnomah'
     | '/login'
+    | '/luna'
     | '/method'
     | '/policies'
     | '/privacy'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/field-guide'
     | '/gnomah'
     | '/login'
+    | '/luna'
     | '/method'
     | '/policies'
     | '/privacy'
@@ -240,6 +252,7 @@ export interface RootRouteChildren {
   FieldGuideRoute: typeof FieldGuideRoute
   GnomahRoute: typeof GnomahRoute
   LoginRoute: typeof LoginRoute
+  LunaRoute: typeof LunaRoute
   MethodRoute: typeof MethodRoute
   PoliciesRoute: typeof PoliciesRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -307,6 +320,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/luna': {
+      id: '/luna'
+      path: '/luna'
+      fullPath: '/luna'
+      preLoaderRoute: typeof LunaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/method': {
@@ -384,6 +404,7 @@ const rootRouteChildren: RootRouteChildren = {
   FieldGuideRoute: FieldGuideRoute,
   GnomahRoute: GnomahRoute,
   LoginRoute: LoginRoute,
+  LunaRoute: LunaRoute,
   MethodRoute: MethodRoute,
   PoliciesRoute: PoliciesRoute,
   PrivacyRoute: PrivacyRoute,
