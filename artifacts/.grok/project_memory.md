@@ -1,0 +1,2 @@
+- Climb Notes consumer Basecamp pack started: everyday-life problems (not tech-framed); Memory Master climb note added (this week / next week / month / history jog) [2026-08-05]
+- Home story caro

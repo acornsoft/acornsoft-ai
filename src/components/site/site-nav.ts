@@ -9,7 +9,7 @@ export const primaryNav = [
   { to: "/climb-notes", label: "Climb Notes" },
   { to: "/field-guide", label: "Field Guide" },
   { to: "/canopy", label: "Canopy" },
-  { to: "/service", label: "Service" },
+  { to: "/service", label: "Services" },
   /** Studio map — rework later; signed-in only for now */
   { to: "/method", label: "Method", authOnly: true as const },
   { to: "/about", label: "About" },
@@ -21,7 +21,7 @@ export const footerNav = [
   { to: "/climb-notes", label: "Climb Notes", climbMark: true },
   { to: "/field-guide", label: "Field Guide" },
   { to: "/canopy", label: "Canopy" },
-  { to: "/service", label: "Service" },
+  { to: "/service", label: "Services" },
   { to: "/about", label: "About" },
   { to: "/corporate", label: "Corporate" },
 ] as const;

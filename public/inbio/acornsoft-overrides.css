@@ -20724,11 +20724,13 @@ body:has(.ac-service-page) .ac-about-top-fab {
   border-radius: 14px !important;
   border: 1px solid rgba(255,255,255,0.10) !important;
   background: rgba(0,0,0,0.28) !important;
+  overflow: visible !important;
+  position: relative !important;
 }
 .ac-field-guide .ac-recipe-head {
   display: flex !important;
-  flex-wrap: wrap !important;
-  align-items: flex-start !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
   gap: 10px 14px !important;
   margin-bottom: 12px !important;
 }
@@ -20739,10 +20741,12 @@ body:has(.ac-service-page) .ac-about-top-fab {
   display: grid !important;
   place-items: center !important;
   border-radius: 999px !important;
-  background: #155dfc !important;
-  color: #fff !important;
+  background: #800020 !important;
+  color: #ffcc66 !important;
+  font-family: var(--font-ui) !important;
   font-size: 13px !important;
-  font-weight: 800 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
 }
 .ac-field-guide .ac-recipe-titles {
   flex: 1 1 200px !important;
@@ -20750,8 +20754,11 @@ body:has(.ac-service-page) .ac-about-top-fab {
 }
 .ac-field-guide .ac-recipe-title {
   margin: 0 0 4px !important;
-  font-size: 1.25rem !important;
+  font-family: var(--font-ui) !important;
+  font-size: 22px !important;
+  font-weight: 650 !important;
   line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
   color: #fff !important;
 }
 .ac-field-guide .ac-recipe-when {
@@ -20762,17 +20769,44 @@ body:has(.ac-service-page) .ac-about-top-fab {
 .ac-field-guide .ac-recipe-tool {
   margin-left: auto !important;
   align-self: center !important;
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  cursor: help !important;
+  width: auto !important;
+  max-width: max-content !important;
+  min-width: 0 !important;
+  min-height: 26px !important;
+  height: auto !important;
   padding: 5px 10px !important;
   border-radius: 999px !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
+  border: 0 !important;
+  font-family: var(--font-ui) !important;
   font-size: 11px !important;
-  letter-spacing: 0.06em !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
   text-transform: uppercase !important;
-  color: #e8edf4 !important;
+  background: #f4efe6 !important;
+  color: #800020 !important;
 }
-.ac-field-guide .ac-recipe-tool--build { border-color: rgba(255,153,0,0.45) !important; color: #ffb020 !important; }
-.ac-field-guide .ac-recipe-tool--imagine { border-color: rgba(180,140,255,0.45) !important; color: #d4c2ff !important; }
-.ac-field-guide .ac-recipe-tool--voice { border-color: rgba(80,200,180,0.45) !important; color: #8eecc8 !important; }
+.ac-field-guide .ac-recipe-tool--build {
+  background: #ff9900 !important;
+  color: #1a100c !important;
+}
+.ac-field-guide .ac-recipe-tool--imagine {
+  background: #d4c2ff !important;
+  color: #1a1030 !important;
+}
+.ac-field-guide .ac-recipe-tool--voice {
+  background: #8eecc8 !important;
+  color: #06281c !important;
+}
 .ac-field-guide .ac-recipe-steps {
   margin: 0 0 12px !important;
   padding: 0 0 0 1.15rem !important;
@@ -20804,7 +20838,8 @@ body:has(.ac-service-page) .ac-about-top-fab {
 }
 .ac-field-guide .ac-field-guide-foot a { color: #ffb020 !important; }
 @media (max-width: 640px) {
-  .ac-field-guide .ac-recipe-tool { margin-left: 46px !important; }
+  .ac-field-guide .ac-recipe-head { flex-wrap: wrap !important; }
+  .ac-field-guide .ac-recipe-tool { margin-left: auto !important; }
 }
 
 /* ============================================================
@@ -20838,29 +20873,28 @@ body.ac-hero-static .ac-global-hero-photo,
 }
 
 /* ============================================================
-   TYPE 2026 — Whitney stand-in (last block wins)
-   Whitney / WhitneyK is a licensed Hoefler face. We cannot
-   embed it without the kit. Source Sans 3 is the closest
-   honest humanist sans for screen (same job Whitney was
-   drawn for: wayfinding + editorial). Source Serif 4 is
-   the Climb Note / page-title voice — a field guide, not a
-   ThemeForest template.
+   TYPE — two faces only (last block wins)
+   UI: Source Sans 3. Display: Bricolage Grotesque.
+   No serif. Template leftovers remap here. Icon fonts stay.
    ============================================================ */
 :root {
   --font-ui: "Source Sans 3", "Source Sans Pro", ui-sans-serif, system-ui,
     sans-serif;
-  --font-display: "Source Serif 4", "Source Serif Pro", "Iowan Old Style",
-    Georgia, "Times New Roman", serif;
+  --font-display: "Bricolage Grotesque", "Source Sans 3", ui-sans-serif,
+    system-ui, sans-serif;
   --font-primary: var(--font-ui);
   --font-secondary: var(--font-ui);
+  --bs-font-sans-serif: var(--font-ui);
 }
 
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  font-family: var(--font-ui) !important;
 }
 
+html,
 body,
 body.template-color-1,
 body.ac-inbio,
@@ -20869,6 +20903,11 @@ body.ac-has-global-hero {
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   font-synthesis: none;
   letter-spacing: -0.011em;
+}
+
+/* Remap every leftover template family (Poppins, Montserrat, Raleway, …). */
+body * {
+  font-family: var(--font-ui) !important;
 }
 
 p,
@@ -20892,28 +20931,45 @@ button,
 .subtitle,
 .hero-with,
 .cd-words-wrapper,
-.cd-words-wrapper b {
+.cd-words-wrapper b,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-ui) !important;
 }
 
-/* Display serif: page titles + journal titles only */
-.ac-hero-center h1.title,
-.ac-hero-center .hero-title,
-.hero-title,
-h1.cd-headline,
-.ac-story-headline,
-.ac-service-title,
-.ac-cn-entry-title,
-.ac-recipe-title,
-.ac-gn-title,
-.ac-gn-focus-title,
-.ac-gn-card-title,
-.ac-about-h2,
-.section-title .title {
+/* Display serif: page titles + journal titles. Not every heading.
+   body h1 beats body * (0,0,2 vs 0,0,1). */
+body h1,
+body h2,
+body .ac-hero-center h1.title,
+body .ac-hero-center .hero-title,
+body .hero-title,
+body h1.cd-headline,
+body .ac-story-headline,
+body .ac-service-title,
+body .ac-cn-entry-title,
+body .ac-gn-title,
+body .ac-gn-focus-title,
+body .ac-gn-card-title,
+body .ac-about-h2,
+body .ac-about-founder-name,
+body .section-title .title,
+body .title {
   font-family: var(--font-display) !important;
   font-optical-sizing: auto;
   font-feature-settings: "kern" 1, "liga" 1, "onum" 0;
   letter-spacing: -0.02em;
+}
+
+/* Field Guide is the manual, not the journal — protocol stays sans. */
+body .ac-field-guide h2,
+body .ac-field-guide .ac-recipe-title {
+  font-family: var(--font-ui) !important;
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
 }
 
 .ac-hero-center h1.title,
@@ -20925,35 +20981,26 @@ h1.cd-headline,
 .ac-service-kicker,
 .subtitle,
 .hero-with {
+  font-family: var(--font-ui) !important;
   letter-spacing: 0.12em;
   font-weight: 600;
 }
 
-/* Do not restyle icon fonts or code */
-[class^="feather-"],
-[class*=" feather-"],
-.feather,
-code,
-kbd,
-pre,
-samp,
-.ac-mono {
-  font-family: inherit;
-}
-code,
-kbd,
-pre,
-samp,
-.ac-mono {
+body code,
+body kbd,
+body pre,
+body samp,
+body .ac-mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
   letter-spacing: 0;
 }
-[class^="feather-"],
-[class*=" feather-"],
-.feather {
+body [class^="feather-"],
+body [class*=" feather-"],
+body .feather {
   font-family: "feather" !important;
   letter-spacing: 0;
 }
+
 
 /* ============================================================
    LOGGED-IN CHROME — no fade, no pulse, no layout jump
@@ -20974,5 +21021,446 @@ samp,
   animation: none !important;
   opacity: 0.4;
 }
+
+/* ============================================================
+   ACORNSOFT is OPEN — lower-left shop sign
+   Gold lamp + maroon plate. Slow glow, not a flicker pulse.
+   Header no longer carries this control.
+   ============================================================ */
+.ac-voice-dock {
+  position: fixed !important;
+  left: max(16px, env(safe-area-inset-left, 0px)) !important;
+  bottom: max(16px, env(safe-area-inset-bottom, 0px)) !important;
+  right: auto !important;
+  top: auto !important;
+  z-index: 1180 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  padding: 10px 16px 10px 12px !important;
+  border-radius: 999px !important;
+  border: 1px solid #ff9900 !important;
+  background: linear-gradient(
+    180deg,
+    #a00028 0%,
+    #6a001c 55%,
+    #4a0014 100%
+  ) !important;
+  color: #ffcc66 !important;
+  font-family: var(--font-ui, "Source Sans 3", sans-serif) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.07em !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 153, 0, 0.22),
+    0 8px 22px rgba(40, 0, 10, 0.45),
+    0 0 28px rgba(255, 153, 0, 0.22) !important;
+  animation: ac-open-sign 3.2s ease-in-out infinite !important;
+}
+.ac-voice-dock:hover,
+.ac-voice-dock:focus-visible {
+  color: #ffe199 !important;
+  border-color: #ffcc66 !important;
+  background: linear-gradient(
+    180deg,
+    #b80030 0%,
+    #7a0020 55%,
+    #560018 100%
+  ) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 204, 102, 0.4),
+    0 10px 26px rgba(40, 0, 10, 0.5),
+    0 0 36px rgba(255, 153, 0, 0.38) !important;
+}
+.ac-voice-dock:focus-visible {
+  outline: 2px solid #ffcc66 !important;
+  outline-offset: 3px !important;
+}
+.ac-voice-dock-lamp {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #ffcc66;
+  box-shadow: 0 0 8px #ff9900, 0 0 2px #fff3;
+  animation: ac-open-lamp 2.4s ease-in-out infinite;
+}
+.ac-voice-dock-label {
+  color: inherit !important;
+}
+@keyframes ac-open-sign {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(255, 153, 0, 0.22),
+      0 8px 22px rgba(40, 0, 10, 0.45),
+      0 0 22px rgba(255, 153, 0, 0.16);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(255, 204, 102, 0.4),
+      0 8px 22px rgba(40, 0, 10, 0.45),
+      0 0 34px rgba(255, 153, 0, 0.38);
+  }
+}
+@keyframes ac-open-lamp {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.92);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ac-voice-dock,
+  .ac-voice-dock-lamp {
+    animation: none !important;
+  }
+}
+@media (max-width: 575px) {
+  .ac-voice-dock {
+    padding: 9px 13px 9px 11px !important;
+    font-size: 11px !important;
+    letter-spacing: 0.05em !important;
+  }
+}
+
+/* Field Guide tool chips — filled + teach-in, last wins */
+.ac-field-guide .ac-recipe-tool {
+  position: relative !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  cursor: help !important;
+  width: auto !important;
+  max-width: max-content !important;
+  min-width: 0 !important;
+  flex: 0 0 auto !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  min-height: 26px !important;
+  height: auto !important;
+  padding: 5px 10px !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+  background: #f4efe6 !important;
+  color: #800020 !important;
+}
+.ac-field-guide .ac-recipe-tool--build {
+  background: #ff9900 !important;
+  color: #1a100c !important;
+}
+.ac-field-guide .ac-recipe-tool--imagine {
+  background: #d4c2ff !important;
+  color: #1a1030 !important;
+}
+.ac-field-guide .ac-recipe-tool--voice {
+  background: #8eecc8 !important;
+  color: #06281c !important;
+}
+.ac-field-guide .ac-recipe-legend {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  list-style: none !important;
+  margin: 18px 0 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  z-index: 6 !important;
+}
+.ac-field-guide .ac-recipe-legend li {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+  position: relative !important;
+}
+.ac-field-guide .ac-recipe-legend .ac-recipe-tool {
+  margin-left: 0 !important;
+}
+.ac-field-guide .ac-recipe-tip {
+  position: absolute !important;
+  right: 0 !important;
+  top: calc(100% + 10px) !important;
+  width: min(340px, 78vw) !important;
+  padding: 14px 16px 15px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 153, 0, 0.45) !important;
+  background: #1a100c !important;
+  color: #f4efe6 !important;
+  text-align: left !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(4px) !important;
+  transition: opacity 0.12s ease, transform 0.12s ease, visibility 0.12s !important;
+  z-index: 40 !important;
+  white-space: normal !important;
+}
+.ac-field-guide .ac-recipe-legend .ac-recipe-tip {
+  right: auto !important;
+  left: 0 !important;
+}
+.ac-field-guide .ac-recipe-tip-k {
+  display: block !important;
+  margin-bottom: 6px !important;
+  color: #ffcc66 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+}
+.ac-field-guide .ac-recipe-tip-what {
+  display: block !important;
+  margin-bottom: 8px !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 650 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+}
+.ac-field-guide .ac-recipe-tip-how {
+  display: block !important;
+  color: #c8d0da !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+.ac-field-guide .ac-recipe-tool:hover,
+.ac-field-guide .ac-recipe-tool:focus,
+.ac-field-guide .ac-recipe-tool:focus-visible {
+  outline: 2px solid #ffcc66 !important;
+  outline-offset: 2px !important;
+}
+.ac-field-guide .ac-recipe-tool:hover .ac-recipe-tip,
+.ac-field-guide .ac-recipe-tool:focus .ac-recipe-tip,
+.ac-field-guide .ac-recipe-tool:focus-visible .ac-recipe-tip {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
+.ac-field-guide .ac-recipe:hover,
+.ac-field-guide .ac-recipe:focus-within {
+  z-index: 5 !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ac-field-guide .ac-recipe-tip {
+    transition: none !important;
+  }
+}
+
+/* Header 0→1 CTA */
+.ac-start-cta {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  max-width: max-content !important;
+  height: 34px !important;
+  padding: 0 14px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: #800020 !important;
+  color: #ffcc66 !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+.ac-start-cta:hover,
+.ac-start-cta:focus {
+  color: #fff8ee !important;
+  background: #a00028 !important;
+}
+.ac-start-cta--mobile {
+  height: 44px !important;
+  width: 100% !important;
+  max-width: none !important;
+  font-size: 13px !important;
+  margin-bottom: 12px !important;
+}
+
+/* 0→1 intake */
+.ac-start-form,
+.ac-start-done {
+  width: 100% !important;
+  max-width: 40rem !important;
+}
+.ac-start-moves {
+  list-style: none !important;
+  margin: 0 0 28px !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+}
+.ac-start-move {
+  margin: 0 !important;
+  padding: 16px 18px 14px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  background: rgba(0,0,0,0.28) !important;
+}
+.ac-start-move label {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  margin-bottom: 10px !important;
+}
+.ac-start-n {
+  flex: 0 0 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  background: #800020 !important;
+  color: #ffcc66 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  display: grid !important;
+  place-items: center !important;
+}
+.ac-start-move-copy {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+.ac-start-move-label {
+  color: #fff !important;
+  font-size: 16px !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.01em !important;
+}
+.ac-start-move-hint {
+  color: #c4cfde !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+}
+.ac-start-move textarea,
+.ac-start-meta input {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 10px 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  background: rgba(8,8,14,0.55) !important;
+  color: #f4efe6 !important;
+  font-family: var(--font-ui) !important;
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+  height: auto !important;
+  resize: vertical !important;
+}
+.ac-start-move textarea:focus,
+.ac-start-meta input:focus {
+  outline: 2px solid #ffcc66 !important;
+  outline-offset: 1px !important;
+  border-color: #ff9900 !important;
+}
+.ac-start-meta {
+  display: grid !important;
+  gap: 14px !important;
+  margin-bottom: 20px !important;
+}
+.ac-start-meta label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  color: #e8edf4 !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+}
+.ac-start-hp {
+  position: absolute !important;
+  left: -9999px !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+.ac-start-error {
+  color: #ffcc66 !important;
+  margin: 0 0 14px !important;
+  font-size: 14px !important;
+}
+.ac-start-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 14px 18px !important;
+}
+.ac-start-actions .rn-btn {
+  width: auto !important;
+}
+.ac-start-fine {
+  margin: 0 !important;
+  color: #c4cfde !important;
+  font-size: 13px !important;
+}
+.ac-start-fine a {
+  color: #ffb020 !important;
+}
+.ac-start-done {
+  padding: 22px 22px 18px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,153,0,0.35) !important;
+  background: rgba(0,0,0,0.28) !important;
+}
+.ac-start-done-k {
+  margin: 0 0 8px !important;
+  color: #ffcc66 !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+}
+.ac-start-done-title {
+  margin: 0 0 10px !important;
+  color: #fff !important;
+  font-size: 28px !important;
+  font-family: var(--font-display) !important;
+}
+.ac-start-done p {
+  color: #e8edf4 !important;
+}
+.ac-start-done .rn-btn {
+  width: auto !important;
+  margin-right: 10px !important;
+  margin-top: 8px !important;
+}
+.ac-start-inline {
+  margin: 18px 0 0 !important;
+}
+.ac-start-inline .rn-btn {
+  width: auto !important;
+}
+@media (max-width: 720px) {
+  .ac-site-header .ac-start-cta:not(.ac-start-cta--mobile) {
+    display: none !important;
+  }
+}
+
+
+
+
 
 

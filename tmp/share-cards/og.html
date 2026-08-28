@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../share-fonts/fonts.css" />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+      .card {
+        width: 1200px;
+        height: 630px;
+        position: relative;
+        background: #1a100c url("./og-bg.jpg") 68% 40% / cover no-repeat;
+        font-family: "Source Sans 3", "Liberation Sans", sans-serif;
+        color: #f4efe6;
+      }
+      .wash {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(
+            90deg,
+            rgba(18, 8, 6, 0.92) 0%,
+            rgba(28, 10, 8, 0.78) 34%,
+            rgba(28, 10, 8, 0.28) 58%,
+            rgba(28, 10, 8, 0.08) 100%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(18, 8, 6, 0.18) 0%,
+            transparent 28%,
+            rgba(18, 8, 6, 0.35) 100%
+          );
+      }
+      .copy {
+        position: relative;
+        z-index: 1;
+        height: 100%;
+        padding: 64px 72px 56px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 640px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+      .brand img {
+        height: 36px;
+        width: auto;
+        filter: brightness(1.35) saturate(1.1);
+      }
+      .kicker {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: #ffcc66;
+      }
+      .rule {
+        width: 48px;
+        height: 2px;
+        background: #ff9900;
+        margin: 0 0 22px;
+      }
+      h1 {
+        font-family: "Source Serif 4", "Liberation Serif", Georgia, serif;
+        font-size: 78px;
+        font-weight: 600;
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+        color: #fff8ee;
+        margin: 0 0 18px;
+        text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+      }
+      .lede {
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 1.32;
+        color: #e8edf4;
+        max-width: 520px;
+        margin-bottom: 28px;
+      }
+      .moves {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #ffcc66;
+      }
+    </style>
+  </head>
+  <body>
+    <article class="card">
+      <div class="wash"></div>
+      <div class="copy">
+        <div class="brand">
+          <span class="kicker">Acornsoft</span>
+        </div>
+        <div class="rule"></div>
+        <h1>Climb Notes</h1>
+        <p class="lede">The crossover from non-technical to technical.</p>
+        <p class="moves">Problem · Measure · Pitch · Lesson</p>
+      </div>
+    </article>
+  </body>
+</html>

@@ -1,4 +1,5 @@
 import { useEffect, useId, useState } from "react";
+import { Link } from "@tanstack/react-router";
 
 import { SiteChrome } from "./site-chrome";
 import { VoiceCta, VoiceWhenSignedIn } from "./voice-access";
@@ -210,9 +211,15 @@ export function ServicePage() {
                 build, systems, delivery).
               </p>
               <p className="ac-service-lede ac-service-lede--last">
-                Start with one pitch. Stack as the climb demands.
+                Start with one Climb Note. Send it. We build from that
+                brief — your need to real software, near real time.
               </p>
             </div>
+            <p className="ac-start-inline">
+              <Link className="rn-btn ac-btn-maroon" to="/start">
+                <span>Send a Climb Note</span>
+              </Link>
+            </p>
           </header>
 
           <ServiceCatalog />

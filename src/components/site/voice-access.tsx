@@ -227,6 +227,25 @@ export function VoiceHeaderButton({
   );
 }
 
+/** Fixed lower-left OPEN sign — signed-in Voice, every page. */
+export function VoiceOpenDock() {
+  const { allowed, isPending } = useVoiceAccessState();
+  if (isPending || !allowed) return null;
+  return (
+    <a
+      className="ac-voice-dock"
+      href={VOICE_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={VOICE_LABEL}
+      aria-label={`${VOICE_OPEN_LABEL} — ${VOICE_LABEL}`}
+    >
+      <span className="ac-voice-dock-lamp" aria-hidden />
+      <span className="ac-voice-dock-label">{VOICE_OPEN_LABEL}</span>
+    </a>
+  );
+}
+
 /** Internal /voice link — only when signed in. */
 export function VoicePageLink({
   className,

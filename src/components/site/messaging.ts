@@ -22,3 +22,7 @@ export const THE_WAY =
 
 export const TWENTY_X =
   "We use that trail to aim for about twenty times a normal build cycle. The journal is the proof — not a slide.";
+
+/** 0→1: a layperson crafts a Climb Note; we turn it into software. */
+export const ZERO_TO_ONE =
+  "Craft your problem as a Climb Note. Send it to Acornsoft. We build your specific solution — real software, near real time.";

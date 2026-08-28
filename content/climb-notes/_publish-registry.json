@@ -736,14 +736,14 @@
       "canopyAt": null
     },
     "cn-001": {
-      "status": "published",
+      "status": "draft",
       "version": 2,
       "submittedAt": null,
       "submittedBy": null,
       "approvedAt": "2026-08-12T20:59:38.838Z",
       "approvedBy": "acornsoftai",
       "publishedAt": "2026-08-12T21:00:01.593Z",
-      "unpublishedAt": null,
+      "unpublishedAt": "2026-08-27T21:03:55.001Z",
       "approvalNote": null,
       "history": [
         {
@@ -757,10 +757,37 @@
           "action": "set:published",
           "by": "acornsoftai",
           "note": "State → published (was approved)"
+        },
+        {
+          "at": "2026-08-27T21:03:55.001Z",
+          "action": "set:draft",
+          "by": "acornsoftai",
+          "note": "State → draft (was published)"
         }
       ],
       "onCanopy": true,
       "canopyAt": "2026-08-12T20:55:58.065Z"
+    },
+    "cn-in-mtcxpzzn": {
+      "status": "pending",
+      "version": 1,
+      "submittedAt": "2026-08-28T12:35:32.451Z",
+      "submittedBy": "Test Climber <climber@example.com>",
+      "approvedAt": null,
+      "approvedBy": null,
+      "publishedAt": null,
+      "unpublishedAt": null,
+      "approvalNote": null,
+      "history": [
+        {
+          "at": "2026-08-28T12:35:32.451Z",
+          "action": "set:pending",
+          "by": "Test Climber <climber@example.com>",
+          "note": "State → pending (was draft)"
+        }
+      ],
+      "onCanopy": false,
+      "canopyAt": null
     }
   }
 }

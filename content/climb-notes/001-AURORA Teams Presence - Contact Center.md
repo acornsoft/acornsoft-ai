@@ -3,7 +3,7 @@ id: cn-001
 number: "001"
 title: AURORA Teams Presence / Contact Center
 date: 2026-08-12
-status: published
+status: draft
 onCanopy: true
 canopyAt: 2026-08-12T20:55:58.065Z
 tags:
@@ -20,7 +20,7 @@ AURORA Teams Presence / Contact Center is an open climb under the engagement lan
 
 Need to sanitize the code to se a Notification-based approach AND polling, but favors registered notifications.
 
-## Slice
+## Pitch
 
 Need to setup Azure Commerical cloud App Registration
 

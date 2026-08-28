@@ -133,3 +133,83 @@ export const refreshClimbNotesLibrary = createServerFn({ method: "POST" })
     const { syncClimbNotesLibrary } = await import("./store.server");
     return syncClimbNotesLibrary();
   });
+
+export type IntakePayload = {
+  title?: string;
+  problem: string;
+  measure: string;
+  slice: string;
+  lesson: string;
+  name: string;
+  email: string;
+  /** Honeypot — must stay empty. */
+  company?: string;
+};
+
+export type IntakeResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+function clean(s: unknown, max: number): string {
+  return String(s ?? "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, max);
+}
+
+export const submitPublicClimbNoteAction = createServerFn({ method: "POST" })
+  .validator((data: IntakePayload) => data)
+  .handler(async ({ data }): Promise<IntakeResult> => {
+    if (clean(data.company, 80)) {
+      return { ok: true };
+    }
+    const problem = clean(data.problem, 2000);
+    const measure = clean(data.measure, 2000);
+    const slice = clean(data.slice, 2000);
+    const lesson = clean(data.lesson, 2000);
+    const name = clean(data.name, 80);
+    const email = clean(data.email, 120).toLowerCase();
+    const title = clean(data.title, 120);
+    if (problem.length < 8 || measure.length < 8 || slice.length < 8) {
+      return {
+        ok: false,
+        error:
+          "Name what’s stuck, how you’ll know it moved, and the next safe pitch — a few sentences each.",
+      };
+    }
+    if (name.length < 2) {
+      return { ok: false, error: "Tell us who to build this for." };
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return { ok: false, error: "We need a real email so we can reach you." };
+    }
+    try {
+      const { saveClimbNote } = await import("./store.server");
+      const stamp = Date.now().toString(36);
+      const id = `cn-in-${stamp}`;
+      const number = String(900 + (Date.now() % 99)).padStart(3, "0");
+      await saveClimbNote(
+        {
+          id,
+          number,
+          title: title || problem.slice(0, 72),
+          date: new Date().toISOString().slice(0, 10),
+          status: "pending",
+          problem,
+          measure,
+          slice,
+          lesson: lesson || "To be written after the pitch runs.",
+          tags: ["intake", "0-1"],
+          onCanopy: false,
+        },
+        "",
+        `${name} <${email}>`,
+      );
+      return { ok: true };
+    } catch {
+      return {
+        ok: false,
+        error: "Could not file the note. Try again, or email hello@acornsoft.ai.",
+      };
+    }
+  });

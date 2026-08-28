@@ -279,16 +279,16 @@ export function InbioPage() {
                       </VoiceWhenSignedIn>
                     </p>
                     <div className="ac-story-actions">
+                      <Link className="rn-btn ac-btn-maroon" to="/start">
+                        <span>Send a Climb Note</span>
+                      </Link>
                       <button
                         type="button"
-                        className="rn-btn ac-btn-maroon"
+                        className="rn-btn ac-btn-outline"
                         onClick={() => go(1)}
                       >
                         <span>See a walkthrough</span>
                       </button>
-                      <Link className="rn-btn ac-btn-outline" to="/climb-notes">
-                        <span>Open Climb Notes</span>
-                      </Link>
                     </div>
                   </article>
                 ) : null}
@@ -342,16 +342,12 @@ export function InbioPage() {
                     </div>
 
                     <div className="ac-story-actions">
-                      <Link className="rn-btn ac-btn-maroon" to="/climb-notes">
+                      <Link className="rn-btn ac-btn-maroon" to="/start">
+                        <span>Send yours</span>
+                      </Link>
+                      <Link className="rn-btn ac-btn-outline" to="/climb-notes">
                         <span>See the journal</span>
                       </Link>
-                      <button
-                        type="button"
-                        className="rn-btn ac-btn-outline"
-                        onClick={() => go(1)}
-                      >
-                        <span>Meet the path ahead</span>
-                      </button>
                     </div>
 
                   </article>
@@ -403,16 +399,16 @@ export function InbioPage() {
                       and she guides you to the Climb Notes that fit.
                     </p>
                     <div className="ac-story-actions ac-story-actions--center">
+                      <Link className="rn-btn ac-btn-maroon" to="/start">
+                        <span>Send a Climb Note</span>
+                      </Link>
                       <VoiceWhenSignedIn>
-                        <Link className="rn-btn ac-btn-maroon" to="/voice">
+                        <Link className="rn-btn ac-btn-outline" to="/voice">
                           <span>Talk to Luna</span>
                         </Link>
                       </VoiceWhenSignedIn>
                       <Link className="rn-btn ac-btn-outline" to="/service">
                         <span>Explore services</span>
-                      </Link>
-                      <Link className="rn-btn ac-btn-outline" to="/climb-notes">
-                        <span>Open Climb Notes</span>
                       </Link>
                     </div>
                   </article>

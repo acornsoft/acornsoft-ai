@@ -43,7 +43,7 @@
 /*==============================
  *  Utilities
 =================================*/
-/* Fonts load from the document head (Source Sans 3 + Source Serif 4). */
+/* Fonts load from the document head (Source Sans 3 + Bricolage Grotesque). */
 :root {
   --color-primary: #502000;
   --color-secondary: #f4f5f6;
@@ -99,8 +99,8 @@
   --s-extra-bold: 800;
   --s-black: 900;
   --transition: 0.4s;
-  --font-primary: "Poppins", sans-serif;
-  --font-secondary: "Montserrat", sans-serif;
+  --font-primary: "Source Sans 3", "Source Sans Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-secondary: "Source Sans 3", "Source Sans Pro", ui-sans-serif, system-ui, sans-serif;
   --font-size-b1: 18px;
   --font-size-b2: 22px;
   --font-size-b3: 14px;
@@ -623,7 +623,7 @@ cite,
 }
 
 var {
-  font-family: "Poppins", sans-serif;
+  font-family: var(--font-primary);
 }
 
 /*---------------------------
@@ -5435,7 +5435,7 @@ ins {
 }
 
 pre {
-  font-family: "Raleway", sans-serif;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: var(--font-size-b3);
   margin: 10px 0;
   overflow: auto;
@@ -11830,7 +11830,7 @@ p.has-drop-cap:not(:focus):first-letter {
   line-height: 0.78;
   margin: 4px 15px 0 0;
   text-transform: uppercase;
-  font-family: georgia, serif;
+  font-family: var(--font-secondary);
   font-style: normal;
   font-weight: 400;
   color: var(--color-heading);
@@ -11876,7 +11876,7 @@ p.has-drop-cap:not(:focus):first-letter {
   font-size: 21px;
   font-weight: 700;
   letter-spacing: 21px;
-  font-family: georgia, serif;
+  font-family: var(--font-secondary);
 }
 .hr-dots-area .wp-block-separator.is-style-dots {
   background: 0 0;
@@ -12952,7 +12952,7 @@ figcaption {
   width: 400px;
   height: 200px;
   color: white;
-  font-family: "Raleway";
+  font-family: var(--font-primary);
   font-size: 2.5rem;
 }
 
