@@ -78,68 +78,8 @@ export const skills = [
   { name: "Cloud & DevOps", level: 85 },
 ] as const;
 
-export const portfolio = [
-  {
-    id: "dropshipping",
-    title: "Dropshipping site",
-    category: "Product",
-    summary:
-      "End-to-end commerce storefront: catalog, cart, checkout, and fulfillment wiring for a dropshipping operation—shipped as a real store, not a mock.",
-    href: "https://blaszyk.us/",
-  },
-  {
-    id: "sals-barbershop",
-    title: "Sal’s Barbershop",
-    category: "Product",
-    summary:
-      "Local business web presence for Sal’s Barbershop—clear services, hours, and contact so customers can find the chair without the phone tag.",
-    href: "https://blaszyk.us/",
-  },
-  {
-    id: "unofficial-covid-report",
-    title: "Unofficial COVID Report",
-    category: "Analytics",
-    summary:
-      "Independent reporting site that gathered and presented COVID-related signals in plain language—fast updates when official channels lagged.",
-    href: "https://unofficial-covid-report.acornsoft.ai/",
-  },
-  {
-    id: "atlas",
-    title: "Atlas Research Desk",
-    category: "Product",
-    summary: "Internal research agent that cites sources and drafts briefs in minutes.",
-  },
-  {
-    id: "hearth",
-    title: "Hearth Support Copilot",
-    category: "Automation",
-    summary: "Ticket triage and reply drafts that cut first-response time by half.",
-  },
-  {
-    id: "ledger",
-    title: "Ledger Insights",
-    category: "Analytics",
-    summary: "Natural-language queries over finance data with auditable SQL underneath.",
-  },
-  {
-    id: "north",
-    title: "Northbound Onboarding",
-    category: "Product",
-    summary: "Guided AI onboarding that personalizes setup for every new customer.",
-  },
-  {
-    id: "signal",
-    title: "Signal Review",
-    category: "Safety",
-    summary: "Content moderation stack with human-in-the-loop escalation paths.",
-  },
-  {
-    id: "forge",
-    title: "Forge Knowledge Base",
-    category: "Automation",
-    summary: "RAG system that keeps engineering docs answerable and up to date.",
-  },
-] as const;
+/** @deprecated Use `WORKS` in `@/lib/works`. Kept empty so leftover Work UI cannot leak demos. */
+export const portfolio = [] as const;
 
 export const portfolioFilters = [
   "All",

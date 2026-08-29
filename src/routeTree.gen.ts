@@ -25,6 +25,7 @@ import { Route as ProceduresRouteImport } from './routes/procedures'
 import { Route as ServiceRouteImport } from './routes/service'
 import { Route as StartRouteImport } from './routes/start'
 import { Route as VoiceRouteImport } from './routes/voice'
+import { Route as WorkRouteImport } from './routes/work'
 import { Route as DocsOnboardingRouteImport } from './routes/docs/onboarding'
 import { Route as LunaIndexRouteImport } from './routes/luna/index'
 import { Route as LunaSlugRouteImport } from './routes/luna/$slug'
@@ -112,6 +113,11 @@ const VoiceRoute = VoiceRouteImport.update({
   path: '/voice',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkRoute = WorkRouteImport.update({
+  id: '/work',
+  path: '/work',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DocsOnboardingRoute = DocsOnboardingRouteImport.update({
   id: '/docs/onboarding',
   path: '/docs/onboarding',
@@ -160,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/service': typeof ServiceRoute
   '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
+  '/work': typeof WorkRoute
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
   '/luna/$slug': typeof LunaSlugRoute
   '/luna/': typeof LunaIndexRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/service': typeof ServiceRoute
   '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
+  '/work': typeof WorkRoute
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
   '/luna/$slug': typeof LunaSlugRoute
   '/luna': typeof LunaIndexRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/service': typeof ServiceRoute
   '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
+  '/work': typeof WorkRoute
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
   '/luna/$slug': typeof LunaSlugRoute
   '/luna/': typeof LunaIndexRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/service'
     | '/start'
     | '/voice'
+    | '/work'
     | '/docs/onboarding'
     | '/luna/$slug'
     | '/luna/'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/service'
     | '/start'
     | '/voice'
+    | '/work'
     | '/docs/onboarding'
     | '/luna/$slug'
     | '/luna'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/service'
     | '/start'
     | '/voice'
+    | '/work'
     | '/docs/onboarding'
     | '/luna/$slug'
     | '/luna/'
@@ -306,6 +318,7 @@ export interface RootRouteChildren {
   ServiceRoute: typeof ServiceRoute
   StartRoute: typeof StartRoute
   VoiceRoute: typeof VoiceRoute
+  WorkRoute: typeof WorkRoute
   DocsOnboardingRoute: typeof DocsOnboardingRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiCanopyRefreshRoute: typeof ApiCanopyRefreshRoute
@@ -425,6 +438,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VoiceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/work': {
+      id: '/work'
+      path: '/work'
+      fullPath: '/work'
+      preLoaderRoute: typeof WorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/docs/onboarding': {
       id: '/docs/onboarding'
       path: '/docs/onboarding'
@@ -511,6 +531,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServiceRoute: ServiceRoute,
   StartRoute: StartRoute,
   VoiceRoute: VoiceRoute,
+  WorkRoute: WorkRoute,
   DocsOnboardingRoute: DocsOnboardingRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiCanopyRefreshRoute: ApiCanopyRefreshRoute,

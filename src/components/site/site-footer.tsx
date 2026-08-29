@@ -1,10 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { PersonalSiteBridge } from "./personal-site-bridge";
-import { SignedIn } from "@/lib/auth/gates";
 
 /**
  * Fixed legal / ethos footer — quiet, centered, beats Inbio global link CSS.
- * blaszyk.us only appears once someone is signed in.
+ * blaszyk.us is public: HQ and the work record are one team.
  */
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -21,12 +20,10 @@ export function SiteFooter() {
             |
           </span>
           <Link to="/procedures">Procedures</Link>
-          <SignedIn>
-            <span className="ac-site-footer-pipe" aria-hidden="true">
-              |
-            </span>
-            <PersonalSiteBridge variant="footer" />
-          </SignedIn>
+          <span className="ac-site-footer-pipe" aria-hidden="true">
+            |
+          </span>
+          <PersonalSiteBridge variant="footer" />
         </nav>
         <p className="ac-site-footer-meta">
           {`© ${year} Acornsoft  ·  Multiplanetary ambition  ·  Independent builders`}

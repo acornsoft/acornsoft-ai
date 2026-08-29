@@ -9,7 +9,6 @@ import {
   climbNoteXActionUrl,
   climbNoteDetailUrl,
 } from "./climb-notes-data";
-import { buildWorkXComposeUrl } from "@/lib/work-x";
 
 
 export type TimelineKind =
@@ -1010,88 +1009,10 @@ export const acornsoftNotes: TimelineEntry[] = [
     date: "July 2026",
     sortKey: "2026-07-15T12:00:00Z",
     title: "Studio lane on Canopy",
-    body: "Acornsoft studio signals share the spine with Advanced Development research. Research standouts use the Advanced Development filter and gold standout cards.",
+    body: "Acornsoft studio signals share the spine with Advanced Development research. Developed solutions live on Works (signed in). Research standouts use the Advanced Development filter and gold standout cards.",
     kind: "milestone",
     actor: "acornsoft",
     source: "Acornsoft",
-  },
-  {
-    id: "as-work-dropshipping",
-    date: "Commerce · shipped",
-    sortKey: "2025-11-01T12:00:00Z",
-    title: "Dropshipping site — shipped",
-    body: "Built and launched a full dropshipping storefront: product catalog, cart and checkout, and the operational wiring to fulfill orders. Live paths customers could complete.",
-    kind: "product",
-    actor: "acornsoft",
-    source: "Work · Acornsoft",
-    href: "https://blaszyk.us/",
-    xHref: buildWorkXComposeUrl({
-      id: "dropshipping",
-      title: "Dropshipping site — shipped",
-      blurb:
-        "Full storefront: catalog, cart, checkout, fulfillment wiring. Production commerce, not a mock.",
-      siteUrl: "https://blaszyk.us/",
-      tags: ["#Acornsoft", "#BuildInPublic", "#Commerce"],
-    }),
-    xLabel: "Schedule on X →",
-    standout: true,
-    bullets: [
-      "Catalog → cart → checkout path",
-      "Fulfillment-ready operations wiring",
-      "Production storefront, not a mock",
-    ],
-  },
-  {
-    id: "as-work-sals-barbershop",
-    date: "Local business · shipped",
-    sortKey: "2025-10-15T12:00:00Z",
-    title: "Sal’s Barbershop — web presence",
-    body: "Designed and shipped the web presence for Sal’s Barbershop so neighbors could find services, hours, and how to book without phone tag. Small-business site with a clear job: get people into the chair.",
-    kind: "product",
-    actor: "acornsoft",
-    source: "Work · Acornsoft",
-    href: "https://blaszyk.us/",
-    xHref: buildWorkXComposeUrl({
-      id: "sals-barbershop",
-      title: "Sal’s Barbershop — web presence",
-      blurb:
-        "Local barbershop site: services, hours, contact — get people into the chair without phone tag.",
-      siteUrl: "https://blaszyk.us/",
-      tags: ["#Acornsoft", "#BuildInPublic", "#SmallBusiness"],
-    }),
-    xLabel: "Schedule on X →",
-    standout: true,
-    bullets: [
-      "Services and hours that read in seconds",
-      "Contact path built for walk-ins and regulars",
-      "Local business, production ready",
-    ],
-  },
-  {
-    id: "as-work-unofficial-covid-report",
-    date: "Public information · shipped",
-    sortKey: "2025-10-01T12:00:00Z",
-    title: "Unofficial COVID Report — launched",
-    body: "Built the Unofficial COVID Report: an independent site that collected and presented pandemic signals in plain language when official updates lagged. Fast publishing, readable layout, focus on what people needed to know next.",
-    kind: "product",
-    actor: "acornsoft",
-    source: "Work · Acornsoft",
-    href: "https://unofficial-covid-report.acornsoft.ai/",
-    xHref: buildWorkXComposeUrl({
-      id: "unofficial-covid-report",
-      title: "Unofficial COVID Report — launched",
-      blurb:
-        "Independent plain-language COVID signals when official channels lagged. Educational reporting surface.",
-      siteUrl: "https://unofficial-covid-report.acornsoft.ai/",
-      tags: ["#Acornsoft", "#BuildInPublic", "#OpenData"],
-    }),
-    xLabel: "Schedule on X →",
-    standout: true,
-    bullets: [
-      "Independent reporting surface",
-      "Plain-language updates under pressure",
-      "Ship when the news cycle would not wait",
-    ],
   },
 ];
 

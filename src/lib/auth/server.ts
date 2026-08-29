@@ -44,7 +44,12 @@ import {
   PREVIEW_CLIENT_ID,
   PREVIEW_CLIENT_SECRET,
 } from "./preview";
-import { CANONICAL_ORIGIN, PRODUCTION_ORIGINS } from "@/lib/site-origin";
+import {
+  APEX_HOST,
+  CANONICAL_HOST,
+  CANONICAL_ORIGIN,
+  PRODUCTION_ORIGINS,
+} from "@/lib/site-origin";
 
 // Kick (and share) PGLite bootstrap as soon as the auth server module loads.
 void ensureDbReady();
@@ -93,48 +98,84 @@ export const authConfigured =
 const vercelPublicUrl = env("VERCEL_URL")
   ? `https://${env("VERCEL_URL")!.replace(/^https?:\/\//, "")}`
   : undefined;
-// Custom domain is the public origin. A Vercel BETTER_AUTH_URL would make
-// login from www fail with "Invalid origin" and send OAuth back to *.vercel.app.
-const explicitBaseURL =
-  env("VERCEL_ENV") === "production"
-    ? CANONICAL_ORIGIN
-    : (env("BETTER_AUTH_URL") ?? vercelPublicUrl);
-// Explicit `string[]` (not a readonly tuple) — Better Auth's DynamicBaseURLConfig
-// requires a mutable `allowedHosts: string[]`.
+const betterAuthUrl = env("BETTER_AUTH_URL")?.replace(/\/$/, "");
 const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
-// Local `npm run dev` (port 8080 contract). Browsers may send Origin as any of
-// these for the same server — trusting only `localhost` rejects `127.0.0.1` and
-// breaks email/password with "Invalid origin".
 const LOCAL_DEV_ORIGINS: string[] = [
   "http://localhost:8080",
   "http://127.0.0.1:8080",
   "http://[::1]:8080",
 ];
-const baseURL = explicitBaseURL ?? {
-  // Include loopback hosts so dynamic baseURL resolves for local email/password
-  // (not only the preview wildcard).
-  allowedHosts: [...previewAllowedHosts, "localhost", "127.0.0.1", "[::1]"],
-  // `auto` → trust both http:// and https:// expansions of allowedHosts
-  // (preview is https; local dev is http).
-  protocol: "auto" as const,
-  fallback: "http://localhost:8080",
-};
 
-// Origins Better Auth accepts on credentialed POSTs (sign-up/sign-in, etc.).
-// Missing entries here surface as FORBIDDEN "Invalid origin".
-const trustedOrigins: string[] = [
-  ...(explicitBaseURL
-    ? [explicitBaseURL]
-    : [
+const hostedOnPlatform = Boolean(
+  env("VERCEL_ENV") ||
+    env("VERCEL_URL") ||
+    betterAuthUrl?.includes("grok.me") ||
+    betterAuthUrl?.includes("vercel.app") ||
+    betterAuthUrl?.includes("acornsoft.ai"),
+);
+
+/**
+ * Derive Better Auth baseURL from the request Host so login on
+ * www.acornsoft.ai does not mint a callback on *.grok.me (that mismatch
+ * is "Invalid origin" once the browser already has cookies on www).
+ */
+const baseURL = hostedOnPlatform
+  ? {
+      allowedHosts: [
+        CANONICAL_HOST,
+        APEX_HOST,
+        "*.grok.me",
+        "*.vercel.app",
         ...previewAllowedHosts,
-        ...previewAllowedHosts.flatMap((host) => [
-          `https://${host}`,
-          `http://${host}`,
-        ]),
-      ]),
-  ...PRODUCTION_ORIGINS,
-  ...LOCAL_DEV_ORIGINS,
-].filter((v, i, a) => Boolean(v) && a.indexOf(v) === i);
+      ],
+      protocol: "https" as const,
+      fallback: CANONICAL_ORIGIN,
+    }
+  : {
+      allowedHosts: [...previewAllowedHosts, "localhost", "127.0.0.1", "[::1]"],
+      protocol: "auto" as const,
+      fallback: "http://localhost:8080",
+    };
+
+function isPrivateLanDevOrigin(origin: string): boolean {
+  try {
+    const u = new URL(origin);
+    if (u.protocol !== "http:") return false;
+    if (u.port !== "8080") return false;
+    const h = u.hostname;
+    if (h === "localhost" || h === "127.0.0.1" || h === "[::1]") return true;
+    const m = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(h);
+    if (!m) return false;
+    const a = Number(m[1]);
+    const b = Number(m[2]);
+    if (a === 10) return true;
+    if (a === 192 && b === 168) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Origins Better Auth accepts on credentialed POSTs. A missing www origin
+ * while the platform baseURL is *.grok.me is the production "Invalid origin".
+ */
+const trustedOrigins = async (request?: Request): Promise<string[]> => {
+  const extra: string[] = [
+    ...PRODUCTION_ORIGINS,
+    ...LOCAL_DEV_ORIGINS,
+    "https://*.grok.me",
+    "https://*.vercel.app",
+    "https://*.grok-sandbox.com",
+    "http://*.grok-sandbox.com",
+  ];
+  if (vercelPublicUrl) extra.push(vercelPublicUrl);
+  if (betterAuthUrl) extra.push(betterAuthUrl);
+  const origin = request?.headers.get("origin")?.trim() ?? "";
+  if (origin && isPrivateLanDevOrigin(origin)) extra.push(origin);
+  return extra.filter((v, i, a) => Boolean(v) && a.indexOf(v) === i);
+};
 
 const databaseUrl = env("DATABASE_URL");
 

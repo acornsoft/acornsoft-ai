@@ -22166,6 +22166,91 @@ body .ac-story-slide--build .hero-with {
   }
 }
 
+.ac-works-status {
+  color: #c8d0da !important;
+  font-size: 16px !important;
+  padding: 24px 0 !important;
+}
+.ac-works-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 16px !important;
+  margin: 8px 0 40px !important;
+}
+@media (min-width: 768px) {
+  .ac-works-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+.ac-work-card {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 220px !important;
+  padding: 20px 22px 18px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(0, 0, 0, 0.28) !important;
+}
+.ac-work-card-top {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px 12px !important;
+  margin-bottom: 12px !important;
+}
+.ac-work-card-num {
+  font-size: 12px !important;
+  letter-spacing: 0.08em !important;
+  color: #ffcc66 !important;
+}
+.ac-work-card-kicker {
+  font-size: 12px !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: #c8d0da !important;
+}
+.ac-work-card-ridge {
+  margin-left: auto !important;
+  font-size: 12px !important;
+  color: #e8edf4 !important;
+}
+.ac-work-card-title {
+  margin: 0 0 8px !important;
+  font-size: 20px !important;
+  color: #fff8ee !important;
+  line-height: 1.25 !important;
+}
+.ac-work-card-lede {
+  margin: 0 0 16px !important;
+  flex: 1 !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  color: #e8edf4 !important;
+}
+.ac-work-card-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-height: 44px !important;
+  color: #ffcc66 !important;
+  font-size: 14px !important;
+  text-decoration: none !important;
+}
+.ac-work-card-link:hover {
+  text-decoration: underline !important;
+}
+.ac-work-card-pending {
+  margin: 0 !important;
+  font-size: 14px !important;
+  color: #c8d0da !important;
+}
+.ac-work-card-index {
+  margin-top: 12px !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  color: rgba(200, 208, 218, 0.7) !important;
+}
+
 
 
 

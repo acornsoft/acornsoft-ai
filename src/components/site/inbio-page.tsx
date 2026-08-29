@@ -149,11 +149,11 @@ const teachingClimbs = [
   {
     id: "website",
     tab: "Website",
-    tip: "Grok Build. A COVID timeline from origin to now — one site, claims next to the record. Live: unofficial-covid-report.acornsoft.ai",
+    tip: "Grok Build. A COVID timeline from origin to now — one site, claims next to the record.",
     kicker: "Teaching climb",
     title: "COVID claims were a pile. Nobody could walk back to origin.",
     close:
-      "The pile was the problem. Grok Build is the site. Live: unofficial-covid-report.acornsoft.ai",
+      "The pile was the problem. Grok Build is the site.",
     moves: [
       {
         n: "1",

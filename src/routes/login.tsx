@@ -50,6 +50,8 @@ function LoginPage() {
       : "/gnomah";
   const forGnomah =
     safeRedirect === "/gnomah" || safeRedirect.startsWith("/gnomah?");
+  const forWorks =
+    safeRedirect === "/work" || safeRedirect.startsWith("/work?");
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -94,10 +96,16 @@ function LoginPage() {
                   <strong>X credentials</strong> only for owner{" "}
                   <span className="ac-login-handle">@acornsoftai</span>.
                 </>
+              ) : forWorks ? (
+                <>
+                  <strong>Works</strong> lists developed solutions. Sign in to
+                  view them. Gnomah publishing stays gated to{" "}
+                  <span className="ac-login-handle">@acornsoftai</span>.
+                </>
               ) : (
                 <>
-                  Sign in with <strong>X</strong> to unlock owner tools. Gnomah
-                  and Climb Notes publishing stay gated to{" "}
+                  Sign in with <strong>X</strong> to unlock signed-in surfaces.
+                  Gnomah and Climb Notes publishing stay gated to{" "}
                   <span className="ac-login-handle">@acornsoftai</span>.
                 </>
               )}
@@ -140,8 +148,9 @@ function LoginPage() {
                     <strong>@acornsoftai</strong> before any Climb Notes edit.
                   </li>
                   <li>
-                    After success you land in <strong>Gnomah</strong> (or return to
-                    Climb Notes). Gnomah appears in the top nav while signed in.
+                    After success you return to the page you asked for.{" "}
+                    <strong>Works</strong> appears in the top nav while signed
+                    in. Gnomah stays owner-only.
                   </li>
                   <li>
                     Google can create a session for display tools, but it cannot
