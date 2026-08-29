@@ -22236,6 +22236,13 @@ body .ac-story-slide--build .hero-with {
   font-size: 14px !important;
   text-decoration: none !important;
 }
+a.ac-work-card {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+a.ac-work-card:hover {
+  border-color: rgba(255, 204, 102, 0.45) !important;
+}
 .ac-work-card-link:hover {
   text-decoration: underline !important;
 }
