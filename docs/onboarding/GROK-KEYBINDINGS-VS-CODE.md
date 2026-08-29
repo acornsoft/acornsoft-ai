@@ -120,10 +120,10 @@ Beyond keybinds — what makes “Grok inside VS Code” feel first-class for re
 | Icons rocket vs terminal | Yes |
 | Install / verify Grok CLI hub | Yes |
 | Install Luna Grok plugin | Yes |
-| Setup Unified Workspace → shell `$HOME/etc` | Yes |
+| Setup → shell `$HOME/etc` | Yes |
 | Profile heal on activation | Yes |
 
-### High value (status for 1.0.26239)
+### High value (status for 1.0.26243)
 
 | # | Convenience | Why | Status |
 |---|-------------|-----|--------|

@@ -38,7 +38,7 @@ If you are already using **Grok Build**, **GitHub Copilot**, **Cursor**, or **Cl
 
 1. **Install** [Luna Foundry Multiagent](https://marketplace.visualstudio.com/items?itemName=acornsoft.luna-foundry-multiagent) in **VS Code** or **Cursor**.  
 2. **Open** the project folder that *is* this climb.  
-3. Command Palette → **Luna: Setup Unified Workspace (Copilot / Cursor / Grok)** → **Yes, Unify Now** → open a **new** terminal so camp (`.github/`, optional shell at `$HOME/etc`) can settle.  
+3. Command Palette → **Luna: Setup (Copilot / Cursor / Grok)** → **Set up** → open a **new** terminal so camp (`.github/`, optional shell at `$HOME/etc`) can settle.  
 
 Then open **your** trail map above. Each one is the same pack that ships in the extension. The initial climb captures a skill or feature wish with Luna — [send a Climb Note](/start) if you want it on this site. No GitHub required.
 

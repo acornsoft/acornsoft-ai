@@ -26,6 +26,7 @@ import { Route as ServiceRouteImport } from './routes/service'
 import { Route as StartRouteImport } from './routes/start'
 import { Route as VoiceRouteImport } from './routes/voice'
 import { Route as DocsOnboardingRouteImport } from './routes/docs/onboarding'
+import { Route as LunaIndexRouteImport } from './routes/luna/index'
 import { Route as LunaSlugRouteImport } from './routes/luna/$slug'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiCanopyRefreshRouteImport } from './routes/api/canopy/refresh'
@@ -116,6 +117,11 @@ const DocsOnboardingRoute = DocsOnboardingRouteImport.update({
   path: '/docs/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LunaIndexRoute = LunaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LunaRoute,
+} as any)
 const LunaSlugRoute = LunaSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -156,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/voice': typeof VoiceRoute
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
   '/luna/$slug': typeof LunaSlugRoute
+  '/luna/': typeof LunaIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
   '/docs/onboarding/$': typeof DocsOnboardingSplatRoute
@@ -169,7 +176,6 @@ export interface FileRoutesByTo {
   '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
-  '/luna': typeof LunaRouteWithChildren
   '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
@@ -179,6 +185,7 @@ export interface FileRoutesByTo {
   '/voice': typeof VoiceRoute
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
   '/luna/$slug': typeof LunaSlugRoute
+  '/luna': typeof LunaIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
   '/docs/onboarding/$': typeof DocsOnboardingSplatRoute
@@ -203,6 +210,7 @@ export interface FileRoutesById {
   '/voice': typeof VoiceRoute
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
   '/luna/$slug': typeof LunaSlugRoute
+  '/luna/': typeof LunaIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
   '/docs/onboarding/$': typeof DocsOnboardingSplatRoute
@@ -228,6 +236,7 @@ export interface FileRouteTypes {
     | '/voice'
     | '/docs/onboarding'
     | '/luna/$slug'
+    | '/luna/'
     | '/api/auth/$'
     | '/api/canopy/refresh'
     | '/docs/onboarding/$'
@@ -241,7 +250,6 @@ export interface FileRouteTypes {
     | '/field-guide'
     | '/gnomah'
     | '/login'
-    | '/luna'
     | '/method'
     | '/policies'
     | '/privacy'
@@ -251,6 +259,7 @@ export interface FileRouteTypes {
     | '/voice'
     | '/docs/onboarding'
     | '/luna/$slug'
+    | '/luna'
     | '/api/auth/$'
     | '/api/canopy/refresh'
     | '/docs/onboarding/$'
@@ -274,6 +283,7 @@ export interface FileRouteTypes {
     | '/voice'
     | '/docs/onboarding'
     | '/luna/$slug'
+    | '/luna/'
     | '/api/auth/$'
     | '/api/canopy/refresh'
     | '/docs/onboarding/$'
@@ -422,6 +432,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsOnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/luna/': {
+      id: '/luna/'
+      path: '/'
+      fullPath: '/luna/'
+      preLoaderRoute: typeof LunaIndexRouteImport
+      parentRoute: typeof LunaRoute
+    }
     '/luna/$slug': {
       id: '/luna/$slug'
       path: '/$slug'
@@ -455,10 +472,12 @@ declare module '@tanstack/react-router' {
 
 interface LunaRouteChildren {
   LunaSlugRoute: typeof LunaSlugRoute
+  LunaIndexRoute: typeof LunaIndexRoute
 }
 
 const LunaRouteChildren: LunaRouteChildren = {
   LunaSlugRoute: LunaSlugRoute,
+  LunaIndexRoute: LunaIndexRoute,
 }
 
 const LunaRouteWithChildren = LunaRoute._addFileChildren(LunaRouteChildren)
@@ -499,3 +518,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
