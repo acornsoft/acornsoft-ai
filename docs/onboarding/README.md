@@ -1,45 +1,34 @@
-# Luna onboarding (public site + git)
-
-These are the **same trail maps** as Luna Foundry Multiagent (`docs/onboarding/` in the VSIX).
-
-| Git file | Live page |
-|----------|-----------|
-| this README | https://www.acornsoft.ai/luna |
-| `01-grok-build.md` | https://www.acornsoft.ai/luna/grok-build |
-| `02-github-copilot.md` | https://www.acornsoft.ai/luna/copilot |
-| `03-cursor.md` | https://www.acornsoft.ai/luna/cursor |
-| `04-claude.md` | https://www.acornsoft.ai/luna/claude |
-| `SECURITY-PRIVACY-ETHICS.md` | https://www.acornsoft.ai/luna/security |
-| `VISUAL-GUIDE.md` | https://www.acornsoft.ai/luna/visual-guide |
-| `SURFACE-REQUIREMENTS.md` | https://www.acornsoft.ai/luna/surface |
-| `GROK-KEYBINDINGS-VS-CODE.md` | https://www.acornsoft.ai/luna/grok-keys |
-| `SUPPORT.md` | https://www.acornsoft.ai/luna/support |
-
-Site routes load these files from `docs/onboarding/`.
-
----
-
 # Start the climb
 
 You have a **summit**—something worth arriving at. **Climb Notes** teach the same idea: mountain first, kit second. **Luna** is your **Sherpa**—guidelines, direction, tools, waypoints, and planning. You keep the compass.
 
 Along the route she walks you through **MacroFlow**:
 
-- **Base Camp** — Fit to leave? Gear, weather, rules.
-- **Route** — One objective and what “arrived” means.
-- **Waypoint** — Check the map. Recover if needed; hold or go.
-- **Summit** — Move with the rope team; bring proof home.
+- **Base Camp** — Fit to leave? Gear, weather, rules.  
+- **Route** — One objective and what “arrived” means.  
+- **Waypoint** — Check the map. Recover if needed; hold or go.  
+- **Summit** — Move with the rope team; bring proof home.  
 
 ---
 
 ## You already have a climbing partner
 
-Pick the trail map that matches how you work today (full agent-capable plan, not a free teaser):
+If you are already using **Grok Build**, **GitHub Copilot**, **Cursor**, or **Claude** as a serious day-to-day partner—not a free teaser account—you are the person this is for. Luna does not ask you to switch tribes. It puts the same Climb Notes rhythm on the partner you already trust.
 
-- **Grok Build** → [3 steps](/luna/grok-build)
-- **GitHub Copilot** → [3 steps](/luna/copilot)
-- **Cursor** → [3 steps](/luna/cursor)
-- **Claude** → [3 steps](/luna/claude)
+**Once for every climber:** install [Luna Foundry Multiagent](https://marketplace.visualstudio.com/items?itemName=acornsoft.luna-foundry-multiagent) → open the project that *is* this climb → **Luna: Setup** → **Set up** → optionally **Finish with Grok** → open a **new** terminal if needed.  
+**Then only your ridge** (about three steps):
+
+- **I work in Grok Build** (SuperGrok or X Premium+) — TUI plus a side shell for proof.  
+  → **[Trail map: Grok Build](/luna/grok-build)**
+
+- **I work in GitHub Copilot** (Pro or your company’s seat) — Chat agents and editor handoffs.  
+  → **[Trail map: Copilot](/luna/copilot)**
+
+- **I work in Cursor** (Pro with Agent) — Agent / Composer and the shared pack.  
+  → **[Trail map: Cursor](/luna/cursor)**
+
+- **I work with Claude** (Pro) — same pack through project files and instructions.  
+  → **[Trail map: Claude](/luna/claude)**
 
 **No paid partner yet?** Free chat will not carry a MacroFlow climb. **Strongly recommended:** **[SuperGrok](https://grok.com/supergrok)** (~**$30/month**) for **Grok Build**—our primary ridge—then the [Grok Build trail map](/luna/grok-build). X Premium+ also includes Grok Build if that is already your world.
 
@@ -47,9 +36,9 @@ Pick the trail map that matches how you work today (full agent-capable plan, not
 
 ## First three steps (every climber)
 
-1. **Install** [Luna Foundry Multiagent](https://marketplace.visualstudio.com/items?itemName=acornsoft.luna-foundry-multiagent) in **VS Code** or **Cursor**.
-2. **Open** the project folder that *is* this climb.
-3. Command Palette → **Luna: Setup Unified Workspace (Copilot / Cursor / Grok)** → **Yes, Unify Now** → open a **new** terminal so camp (`.github/`, optional shell at `$HOME/etc`) can settle.
+1. **Install** [Luna Foundry Multiagent](https://marketplace.visualstudio.com/items?itemName=acornsoft.luna-foundry-multiagent) in **VS Code** or **Cursor**.  
+2. **Open** the project folder that *is* this climb.  
+3. Command Palette → **Luna: Setup Unified Workspace (Copilot / Cursor / Grok)** → **Yes, Unify Now** → open a **new** terminal so camp (`.github/`, optional shell at `$HOME/etc`) can settle.  
 
 Then open **your** trail map above. Each one is the same pack that ships in the extension. The initial climb captures a skill or feature wish with Luna — [send a Climb Note](/start) if you want it on this site. No GitHub required.
 
@@ -59,10 +48,10 @@ Then open **your** trail map above. Each one is the same pack that ships in the 
 
 ## Safety and still images
 
-- [Visual guide](/luna/visual-guide)
-- [Security](/luna/security) — before client summits
-- [Surface requirements](/luna/surface)
-- [Grok keys in VS Code](/luna/grok-keys)
-- [Feedback](/luna/support)
+- [Visual guide](/luna/visual-guide)  
+- [Security](/luna/security) — before client summits  
+- [Surface requirements](/luna/surface)  
+- [Grok keys in VS Code](/luna/grok-keys)  
+- [Feedback](/luna/support) · [Field guide](/field-guide)  
 
 Each trail map walks the same ritual: **Base Camp → Route → Waypoint → Summit → proof**.

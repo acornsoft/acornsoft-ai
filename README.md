@@ -4,9 +4,9 @@ Public site for Acornsoft: Climb Notes, Field Guide, Canopy, Gnomah studio, and 
 
 ## Luna onboarding (look here)
 
-Markdown lives in **`docs/onboarding/`** — same names as the VS Code / Grok pack.
+The **story** (ridge-by-ridge, three steps) is `docs/onboarding/README.md`, served at **https://www.acornsoft.ai/luna**.
 
-Served at **https://www.acornsoft.ai/luna**.
+Markdown lives in **`docs/onboarding/`** — same names as the VS Code / Grok pack.
 
 | Trail | File | URL |
 |-------|------|-----|
