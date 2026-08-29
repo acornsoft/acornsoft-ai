@@ -22151,6 +22151,15 @@ body .ac-story-slide--build .hero-with {
 .ac-luna-doc-body a {
   color: #ffcc66 !important;
 }
+.ac-luna-doc-body img,
+.ac-luna-figure img {
+  max-width: min(100%, 720px);
+  height: auto;
+  display: block;
+  margin: 16px 0 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
 @media (max-width: 800px) {
   .ac-luna-beats {
     grid-template-columns: 1fr 1fr !important;

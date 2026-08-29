@@ -6,7 +6,7 @@ Help ships **inside this install**. You do not need GitHub (or a clone) to read 
 
 | Pack | Where help lives |
 |------|------------------|
-| VS Code / Cursor extension (VSIX) | `docs/onboarding/` · `docs/OPERATOR-REFERENCE.md` · this file |
+| VS Code / Cursor extension (VSIX) | `docs/onboarding/` · this file |
 | Grok Build plugin | `docs/onboarding/` inside the plugin directory |
 
 Public trail maps (same story as the pack):
@@ -18,7 +18,7 @@ Public trail maps (same story as the pack):
 - Claude: https://www.acornsoft.ai/luna/claude
 - Security before client data: https://www.acornsoft.ai/luna/security
 
-In-pack: [README.md](./README.md) · [docs/OPERATOR-REFERENCE.md](./docs/OPERATOR-REFERENCE.md) · [CHANGELOG.md](./CHANGELOG.md) · [docs/onboarding/SECURITY-PRIVACY-ETHICS.md](./docs/onboarding/SECURITY-PRIVACY-ETHICS.md).
+In-pack: [README.md](./README.md) · [CHANGELOG.md](./CHANGELOG.md) · [docs/onboarding/SECURITY-PRIVACY-ETHICS.md](./docs/onboarding/SECURITY-PRIVACY-ETHICS.md).
 
 ## Feedback (in-product)
 

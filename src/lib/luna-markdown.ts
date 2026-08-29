@@ -1,10 +1,17 @@
 import { lunaHrefForOnboardingFile } from "./luna-docs";
 
-const ONBOARDING = import.meta.glob("/docs/onboarding/*.md", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-}) as Record<string, string>;
+const ONBOARDING = {
+  ...import.meta.glob("/docs/onboarding/*.md", {
+    query: "?raw",
+    import: "default",
+    eager: true,
+  }),
+  ...import.meta.glob("../../docs/onboarding/*.md", {
+    query: "?raw",
+    import: "default",
+    eager: true,
+  }),
+} as Record<string, string>;
 
 export function loadLunaMarkdown(file: string): string {
   const key = Object.keys(ONBOARDING).find((k) => k.endsWith(`/${file}`));
@@ -12,9 +19,37 @@ export function loadLunaMarkdown(file: string): string {
   return rewriteOnboardingLinks(ONBOARDING[key] ?? "");
 }
 
+function publicAssetUrl(path: string): string {
+  const name = (path.split("?")[0] ?? path).split("/").pop() ?? "";
+  if (/\.(png|jpe?g|gif|webp)$/i.test(name)) {
+    return `/images/luna/${name}`;
+  }
+  return path;
+}
+
+function isSafePublicUrl(url: string): boolean {
+  return (
+    url.startsWith("/images/luna/") ||
+    url.startsWith("/luna") ||
+    url.startsWith("/start") ||
+    url.startsWith("/field-guide") ||
+    url.startsWith("https://www.acornsoft.ai/") ||
+    url.startsWith("https://marketplace.visualstudio.com/") ||
+    url.startsWith("https://grok.com/")
+  );
+}
+
 /** Extension-relative links become public /luna trails. */
 export function rewriteOnboardingLinks(md: string): string {
-  return md.replace(
+  let out = md.replace(
+    /src=(["'])(?:\.\.\/)*(?:docs\/onboarding\/)?assets\//g,
+    "src=$1/images/luna/",
+  );
+  out = out.replace(
+    /\]\((?:\.\.\/)*(?:docs\/onboarding\/)?assets\//g,
+    "](/images/luna/",
+  );
+  out = out.replace(
     /\]\((?:\.\.\/)*((?:docs\/onboarding\/)?[^)\s]+)\)/g,
     (full, target: string) => {
       const name = target.split("/").pop() ?? target;
@@ -24,18 +59,49 @@ export function rewriteOnboardingLinks(md: string): string {
       return full;
     },
   );
+  return out;
 }
 
 function escapeHtml(s: string): string {
   return s
-    .replace(/&/g, "&")
-    .replace(/</g, "<")
-    .replace(/>/g, ">")
-    .replace(/"/g, """);
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function imgHtml(src: string, alt: string): string {
+  let url = src.trim();
+  if (url.includes("assets/") || url.startsWith("./")) {
+    url = publicAssetUrl(url);
+  }
+  if (!isSafePublicUrl(url) && url.startsWith("/images/")) {
+    url = publicAssetUrl(url);
+  }
+  if (!isSafePublicUrl(url)) return "";
+  return `<p class="ac-luna-figure"><img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" /></p>`;
+}
+
+function lineToImg(line: string): string | null {
+  const trimmed = line.trim();
+  const md = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+  if (md) return imgHtml(md[2], md[1]);
+  if (!/^<img\b/i.test(trimmed)) return null;
+  const src = trimmed.match(/src=["']([^"']+)["']/i)?.[1];
+  const alt = trimmed.match(/alt=["']([^"']*)["']/i)?.[1] ?? "";
+  if (!src) return null;
+  return imgHtml(src, alt);
 }
 
 function inline(s: string): string {
   let out = escapeHtml(s);
+  out = out.replace(
+    /!\[([^\]]*)\]\((https?:[^)\s]+|\/[^)\s]*)\)/g,
+    (_m, alt: string, src: string) => {
+      const html = imgHtml(src, alt);
+      return html.replace(/^<p class="ac-luna-figure">/, "").replace(/<\/p>$/, "");
+    },
+  );
   out = out.replace(
     /\[([^\]]+)\]\((https?:[^)\s]+|\/[^)\s]*)\)/g,
     '<a href="$2">$1</a>',
@@ -108,9 +174,27 @@ export function lunaMarkdownToHtml(md: string): string {
       continue;
     }
 
-    if (/^\s*\|.+\|\s*$/.test(line) || (line.includes("|") && lines[i + 1] && /^[\s|:-]+$/.test(lines[i + 1]))) {
+    if (/^\s*<\/?div\b/i.test(line) || /^\s*<\/div>\s*$/i.test(line)) {
+      i += 1;
+      continue;
+    }
+
+    const img = lineToImg(line);
+    if (img) {
+      html.push(img);
+      i += 1;
+      continue;
+    }
+
+    if (
+      /^\s*\|.+\|\s*$/.test(line) ||
+      (line.includes("|") && lines[i + 1] && /^[\s|:-]+$/.test(lines[i + 1]))
+    ) {
       const block: string[] = [];
-      while (i < lines.length && (lines[i].includes("|") || /^[\s|:-]+$/.test(lines[i]))) {
+      while (
+        i < lines.length &&
+        (lines[i].includes("|") || /^[\s|:-]+$/.test(lines[i]))
+      ) {
         if (!lines[i].trim()) break;
         block.push(lines[i]);
         i += 1;
@@ -136,8 +220,20 @@ export function lunaMarkdownToHtml(md: string): string {
     if (/^\s*[-*]\s+/.test(line) || /^\s*\d+\.\s+/.test(line)) {
       const ordered = /^\s*\d+\.\s+/.test(line);
       const items: string[] = [];
-      while (i < lines.length && (/^\s*[-*]\s+/.test(lines[i]) || /^\s*\d+\.\s+/.test(lines[i]))) {
-        items.push(`<li>${inline(lines[i].replace(/^\s*(?:[-*]|\d+\.)\s+/, ""))}</li>`);
+      while (
+        i < lines.length &&
+        (/^\s*[-*]\s+/.test(lines[i]) || /^\s*\d+\.\s+/.test(lines[i]))
+      ) {
+        const imgItem = lineToImg(
+          lines[i].replace(/^\s*(?:[-*]|\d+\.)\s+/, ""),
+        );
+        if (imgItem) {
+          items.push(`<li>${imgItem}</li>`);
+        } else {
+          items.push(
+            `<li>${inline(lines[i].replace(/^\s*(?:[-*]|\d+\.)\s+/, ""))}</li>`,
+          );
+        }
         i += 1;
       }
       html.push(ordered ? `<ol>${items.join("")}</ol>` : `<ul>${items.join("")}</ul>`);
@@ -159,7 +255,9 @@ export function lunaMarkdownToHtml(md: string): string {
       !/^\s*[-*]\s+/.test(lines[i]) &&
       !/^\s*\d+\.\s+/.test(lines[i]) &&
       !/^---+\s*$/.test(lines[i]) &&
-      !lines[i].includes("|")
+      !lines[i].includes("|") &&
+      !lineToImg(lines[i]) &&
+      !/^\s*<\/?div\b/i.test(lines[i])
     ) {
       para.push(lines[i]);
       i += 1;

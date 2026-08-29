@@ -8,55 +8,30 @@ For people who already work in **GitHub Copilot** day to day (Pro or a company s
 
 Confirm each line. If not, finish that item first.
 
-<div align="center">
-
-<table border="0" cellpadding="2" cellspacing="0">
-<tr>
-<td align="left">✓</td>
-<td align="left"><small><strong>Luna Foundry Multiagent</strong> is installed and enabled in VS Code (or Cursor if that is your host)—prefer stamp <strong>1.0.26239</strong></small></td>
-</tr>
-<tr>
-<td align="left">✓</td>
-<td align="left"><small>A <strong>project folder</strong> is open that <em>is</em> this climb</small></td>
-</tr>
-<tr>
-<td align="left">✓</td>
-<td align="left"><small><strong>GitHub Copilot</strong> and <strong>Copilot Chat</strong> are signed in</small></td>
-</tr>
-<tr>
-<td align="left">✓</td>
-<td align="left"><small>Plan can run <strong>sustained Chat / custom agents</strong> (Pro or org seat—not free-only teaser limits)</small></td>
-</tr>
-<tr>
-<td align="left">✓</td>
-<td align="left"><small>Command Palette shows <strong>Luna:</strong> commands</small></td>
-</tr>
-<tr>
-<td align="left">✓</td>
-<td align="left"><small>A few quiet minutes; <strong>no secrets</strong> in Chat</small></td>
-</tr>
-</table>
-
-</div>
+- **Luna Foundry Multiagent** is installed and enabled in VS Code (or Cursor if that is your host)—prefer stamp **1.0.26243**
+- A **project folder** is open that *is* this climb
+- **GitHub Copilot** and **Copilot Chat** are signed in
+- Plan can run **sustained Chat / custom agents** (Pro or org seat—not free-only teaser limits)
+- Command Palette shows **Luna:** commands
+- A few quiet minutes; **no secrets** in Chat
 
 **Command you will use**
 
 | Type this | Full title |
 |-----------|------------|
-| `Setup Unified` | **Luna: Setup Unified Workspace (Copilot / Cursor / Grok)** |
+| `Setup` | **Luna: Setup (Copilot / Cursor / Grok)** |
 
-Optional later (only if you also use Grok Build): [Grok Build trail](./01-grok-build.md) + [TUI-UI-TEST-CASES.md](./TUI-UI-TEST-CASES.md).
 
 ---
 
 ## Step 1 - Establish Camp
 
-<img src="./assets/trail-set-camp-setup.jpg" alt="Establish camp — Setup Unified Workspace" width="50%" />
+![Establish camp — Luna Setup](/images/luna/trail-set-camp-setup.jpg)
 
 1. Confirm **Copilot Chat** opens and is signed in.  
-2. Command Palette → **Luna: Setup Unified Workspace (Copilot / Cursor / Grok)**.  
+2. Command Palette → **Luna: Setup (Copilot / Cursor / Grok)**.  
    - Multi-root: pick the **climb root**.  
-   - Choose **Yes, Unify Now**.  
+   - Choose **Set up**.  
 3. What Setup actually does for you:  
    - Deploys **`.github/skills`**, **`.github/agents`**, and related instructions into the workspace.  
    - Agents on disk: **Luna**, **BaseCamp**, **Route**, **Summit**.  
@@ -168,8 +143,6 @@ Done.
 | Waypoint before claiming done | Skip proof |
 | File wishes with trail section **Copilot** | Paste secrets into issue bodies |
 
-Full dual-surface gates: [TUI-UI-TEST-CASES.md](./TUI-UI-TEST-CASES.md) Series D (MA-04, MA-05) · [DUAL-MACHINE-TEST-MATRIX.md](./DUAL-MACHINE-TEST-MATRIX.md).
 
 ---
 
-[← All trail maps](./README.md) · [Security](./SECURITY-PRIVACY-ETHICS.md) · [Main story](../../README.md) · [Support](../../SUPPORT.md) · [Command reference](../OPERATOR-REFERENCE.md)
