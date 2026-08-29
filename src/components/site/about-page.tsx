@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { SiteChrome } from "./site-chrome";
-import { VoiceCta, VoiceWhenSignedIn, useVoiceVisible } from "./voice-access";
+import { VoiceCta, VoiceWhenSignedIn } from "./voice-access";
 
 import { PERSONAL_SITE, dualSiteNote } from "@/lib/site-links";
 
@@ -88,15 +88,10 @@ const charter = [
 
 export function AboutPage() {
   const [activeId, setActiveId] = useState<string>(aboutSections[0].id);
-  const { visible: signedIn } = useVoiceVisible();
-  const navSections = signedIn
-    ? aboutSections
-    : aboutSections.filter((s) => s.id !== "founder");
+  const navSections = aboutSections;
 
   useEffect(() => {
-    const ids = signedIn
-      ? aboutSections
-      : aboutSections.filter((s) => s.id !== "founder");
+    const ids = aboutSections;
     const onScroll = () => {
       const offset = 120;
       let current = ids[0].id;
@@ -110,7 +105,7 @@ export function AboutPage() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [signedIn]);
+  }, []);
 
   return (
     <SiteChrome loginRedirect="/about">
@@ -253,7 +248,6 @@ export function AboutPage() {
             </ol>
           </section>
 
-          <VoiceWhenSignedIn>
           <section
             className="ac-about-sec ac-about-founder"
             id="founder"
@@ -299,18 +293,19 @@ export function AboutPage() {
                     target="_blank"
                     rel="noopener noreferrer me"
                   >
-                    <span>Personal work bio · {PERSONAL_SITE.label}</span>
+                    <span>Work record · {PERSONAL_SITE.label}</span>
                   </a>
+                  <VoiceWhenSignedIn>
                   <VoiceCta
                     className="rn-btn ac-btn-outline"
                     outline
                     label="ACORNSOFT is OPEN"
                   />
+                  </VoiceWhenSignedIn>
                 </div>
               </div>
             </div>
           </section>
-          </VoiceWhenSignedIn>
           </div>
         </div>
       </div>

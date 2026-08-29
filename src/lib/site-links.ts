@@ -44,4 +44,4 @@ export function publicSiteOrigin(): string | undefined {
 }
 
 export const dualSiteNote =
-  "Acornsoft is the organization product surface. Personal work history, resume, and enterprise portfolio live on blaszyk.us.";
+  "Acornsoft is HQ. Luna Foundry Multiagent is the kit. The work record — resume, customers, contact — lives on blaszyk.us.";

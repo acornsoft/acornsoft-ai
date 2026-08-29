@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { SiteHeader } from "./site-chrome";
 import { ClimbNotesMark } from "./climb-notes-mark";
 import { VoiceLink, useVoiceAccessState } from "./voice-access";
-import { SignedIn } from "@/lib/auth/gates";
 
 const sections = [
   { id: "identity", label: "Identity" },
@@ -55,19 +54,18 @@ export function CorporatePage() {
                     <strong>Acornsoft</strong> is a New York–based AI-first
                     organization. Public surfaces include this site, Climb Notes,
                     Canopy, and the X account @acornsoftai.
-                    <SignedIn>
-                      {" "}
-                      The founder’s personal work biography, resume, and
-                      enterprise portfolio live at{" "}
-                      <a
-                        href="https://blaszyk.us/"
-                        target="_blank"
-                        rel="noopener noreferrer me"
-                      >
-                        blaszyk.us
-                      </a>
-                      —a separate personal site, not this organization surface.
-                    </SignedIn>
+                    {" "}
+                    The founder’s work record — resume and enterprise customers —
+                    is a quiet reference at{" "}
+                    <a
+                      href="https://blaszyk.us/"
+                      target="_blank"
+                      rel="noopener noreferrer me"
+                    >
+                      blaszyk.us
+                    </a>
+                    . Developed solutions live on this site, behind sign-in
+                    until promoted.
 
 
                   </p>

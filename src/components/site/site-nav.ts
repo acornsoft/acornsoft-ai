@@ -9,6 +9,7 @@ export const primaryNav = [
   { to: "/field-guide", label: "Field Guide" },
   { to: "/luna", label: "Luna" },
   { to: "/canopy", label: "Canopy" },
+  { to: "/work", label: "Works", authOnly: true },
   { to: "/service", label: "Services" },
   { to: "/about", label: "About" },
 ] as const;
