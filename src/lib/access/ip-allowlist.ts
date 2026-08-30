@@ -117,9 +117,16 @@ function isLoopback(ip: string): boolean {
   return (n >>> 24) === 127;
 }
 
+function firstHop(raw: string | undefined): string | null {
+  if (!raw) return null;
+  const first = raw.split(",")[0]?.trim();
+  return first ? stripIpv4Mapped(first) : null;
+}
+
 /**
  * Pick client IP from headers (Vercel / proxies).
- * Prefer left-most x-forwarded-for when trustProxy.
+ * On Vercel, prefer platform headers (x-vercel-forwarded-for, x-real-ip)
+ * over client-supplied X-Forwarded-For, which a caller can spoof.
  */
 export function clientIpFromHeaders(
   headers: Headers | Record<string, string | string[] | undefined>,
@@ -135,18 +142,24 @@ export function clientIpFromHeaders(
   };
 
   if (trustProxy) {
-    const xff = get("x-forwarded-for") ?? get("X-Forwarded-For");
-    if (xff) {
-      const first = xff.split(",")[0]?.trim();
-      if (first) return stripIpv4Mapped(first);
+    const onVercel = Boolean(
+      env("VERCEL") ||
+        env("VERCEL_ENV") ||
+        get("x-vercel-id") ||
+        get("x-vercel-forwarded-for"),
+    );
+    if (onVercel) {
+      const vercel = firstHop(get("x-vercel-forwarded-for"));
+      if (vercel) return vercel;
+      const real = get("x-real-ip") ?? get("X-Real-Ip");
+      if (real) return stripIpv4Mapped(real.trim());
     }
+    const xff = firstHop(get("x-forwarded-for") ?? get("X-Forwarded-For"));
+    if (xff) return xff;
     const real = get("x-real-ip") ?? get("X-Real-Ip");
     if (real) return stripIpv4Mapped(real.trim());
-    const vercel = get("x-vercel-forwarded-for");
-    if (vercel) {
-      const first = vercel.split(",")[0]?.trim();
-      if (first) return stripIpv4Mapped(first);
-    }
+    const vercel = firstHop(get("x-vercel-forwarded-for"));
+    if (vercel) return vercel;
   }
 
   return null;
