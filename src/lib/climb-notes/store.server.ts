@@ -51,3 +51,12 @@ const BUNDLED_NOTE_MD = import.meta.glob("/content/climb-notes/**/*.md", {
   import: "default",
   eager: true,
 }) as Record<string, string>;
+
+const BUNDLED_REGISTRY = import.meta.glob(
+  "/content/climb-notes/_publish-registry.json",
+  {
+    query: "?raw",
+    import: "default",
+    eager: true,
+  },
+) as Record<string, string>;
