@@ -21,6 +21,7 @@ const inbioCss = [
   "/inbio/assets/css/plugins/feature.css",
   "/inbio/assets/css/style.css",
   "/inbio/acornsoft-overrides.css?v=luna-help-3",
+  "/inbio/slide3-center.css?v=1",
 ] as const;
 
 /** Public host for absolute share-card URLs. Omit tags when unknown. */
