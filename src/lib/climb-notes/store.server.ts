@@ -60,3 +60,43 @@ const BUNDLED_REGISTRY = import.meta.glob(
     eager: true,
   },
 ) as Record<string, string>;
+
+type NoteRow = {
+  id: string;
+  number: string;
+  title: string;
+  note_date: string;
+  status: string;
+  problem: string;
+  measure: string;
+  slice: string;
+  lesson: string;
+  tags: string | null;
+  x_url: string | null;
+  version: number | null;
+  submitted_at: string | null;
+  submitted_by: string | null;
+  approved_at: string | null;
+  approved_by: string | null;
+  published_at: string | null;
+  unpublished_at: string | null;
+  approval_note: string | null;
+  history: string | null;
+  source_file: string | null;
+  owner_user_id: string | null;
+};
+
+type RegistryNote = {
+  status?: string;
+  version?: number;
+  submittedAt?: string | null;
+  submittedBy?: string | null;
+  approvedAt?: string | null;
+  approvedBy?: string | null;
+  publishedAt?: string | null;
+  unpublishedAt?: string | null;
+  approvalNote?: string | null;
+  history?: ClimbNotePublishHistory[];
+  onCanopy?: boolean;
+  canopyAt?: string | null;
+};
