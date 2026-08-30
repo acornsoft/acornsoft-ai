@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import { createFileRoute } from "@tanstack/react-router";
 import { fetchLiveFeedFromX, type InterestsConfig } from "@/lib/canopy/x-fetch";
 import type { LiveFeedFile } from "@/lib/canopy/types";
@@ -9,9 +10,10 @@ import {
 } from "@/lib/canopy/cadence";
 
 /**
- * Weekly live feed. GET never spends X credits.
- * POST spends credits only when the weekly window is open, or with CRON_SECRET
- * (Grok Bot / scheduled job).
+ * Weekly live feed.
+ * Unauthenticated GET never spends X credits (cache / empty only).
+ * Spend (weekly pull) requires CRON_SECRET via Authorization: Bearer or x-cron-secret.
+ * Vercel cron is GET /api/canopy/refresh and sends Bearer CRON_SECRET when that env is set.
  */
 
 const globalCache = globalThis as typeof globalThis & {
@@ -30,13 +32,20 @@ function withCadence(data: LiveFeedFile, source?: LiveFeedFile["source"]): LiveF
   };
 }
 
+function safeEqual(a: string, b: string): boolean {
+  const left = Buffer.from(a);
+  const right = Buffer.from(b);
+  if (left.length !== right.length) return false;
+  return timingSafeEqual(left, right);
+}
+
 function authorizedCron(request: Request): boolean {
   const secret = process.env.CRON_SECRET?.trim();
   if (!secret) return false;
   const header = request.headers.get("authorization") || "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : "";
   const alt = request.headers.get("x-cron-secret") || "";
-  return token === secret || alt === secret;
+  return (token.length > 0 && safeEqual(token, secret)) || (alt.length > 0 && safeEqual(alt, secret));
 }
 
 async function readDiskCache(): Promise<LiveFeedFile | null> {
@@ -63,13 +72,12 @@ async function handle(request: Request): Promise<Response> {
   }
 
   const cron = authorizedCron(request);
-  const force =
-    request.method === "POST" ||
-    new URL(request.url).searchParams.get("force") === "1";
+  const force = new URL(request.url).searchParams.get("force") === "1";
+  const wantsSpend = request.method === "POST" || force || cron;
 
   const cached = await lastPull();
 
-  if (!force) {
+  if (!wantsSpend) {
     if (cached) {
       globalCache.__canopyLiveFeed__ ??= { at: Date.now(), data: cached };
       return Response.json(withCadence(cached, "cache"));
@@ -85,8 +93,12 @@ async function handle(request: Request): Promise<Response> {
     } satisfies LiveFeedFile);
   }
 
+  if (!cron) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   const due = pullIsDue(cached?.updatedAt, interval);
-  if (!due && !cron) {
+  if (!due && !force) {
     const held = withCadence(cached ?? {
       updatedAt: new Date().toISOString(),
       source: "cache",
