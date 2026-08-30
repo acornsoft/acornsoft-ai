@@ -51,12 +51,14 @@ export const listPublishedClimbNotes = createServerFn({ method: "GET" }).handler
 
 /**
  * Full library (draft / pending / approved / archived).
- * Requires a signed-in session. Prefer listClimbNotesForEditor for Gnomah.
+ * Owner-only. Prefer listClimbNotesForEditor for Gnomah.
  * Not used by the public Climb Notes journal (published only).
  */
 export const listAllClimbNotesPublic = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
-  .handler(async (): Promise<ClimbNote[]> => {
+  .handler(async ({ context }): Promise<ClimbNote[]> => {
+    const { assertClimbNotesOwner } = await import("./owner.server");
+    await assertClimbNotesOwner(context.userId);
     const { listClimbNotesFromDb } = await import("./store.server");
     return listClimbNotesFromDb({ publishedOnly: false });
   });
