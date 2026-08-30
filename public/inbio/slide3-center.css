@@ -1,0 +1,44 @@
+/* Slide 3 — last-wins. Center headline wrap + with/word rows.
+   acornsoft-overrides.css later left-rags the h1, so the first
+   full-width line looks centered and the rest sit left. */
+
+.ac-story-slide--build .ac-story-kicker,
+.ac-story-slide--build .ac-story-headline,
+.ac-story-slide--build .ac-story-headline--build {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.ac-story-slide--build .ac-story-headline--build .ac-story-hline {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+}
+
+.ac-story .ac-story-slide--build .hero-sub.ac-story-with,
+.ac-story-slide--build .hero-sub.ac-story-with {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.ac-story-slide--build .hero-with,
+.ac-story-slide--build .cd-words-wrapper.hero-slide,
+.ac-story-slide--build .cd-words-wrapper.hero-slide b,
+.ac-story-slide--build .cd-words-wrapper.hero-slide b.is-visible {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+}

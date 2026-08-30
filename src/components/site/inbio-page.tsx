@@ -500,7 +500,8 @@ export function InbioPage() {
                   >
                     <p className="ac-story-kicker">The workforce</p>
                     <h1 className="ac-story-headline ac-story-headline--build">
-                      You provide the Climb Note. We supply the workforce.
+                      <span className="ac-story-hline">You provide the Climb Note.</span>
+                      <span className="ac-story-hline">We supply the workforce.</span>
                     </h1>
                     <div className="hero-sub ac-story-with">
                       <span className="hero-with">with</span>
