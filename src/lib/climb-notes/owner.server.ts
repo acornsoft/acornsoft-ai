@@ -4,11 +4,11 @@
  * Enforcement chain (every mutation and editor list):
  * 1. Caller must already be signed in (authMiddleware → verified session user id).
  * 2. That user must have a linked X account (provider id grok-x / twitter / x).
- * 3. The X identity must match OWNER_X_HANDLES (default: acornsoftai), OR a known
- *    display-name alias of that handle (e.g. Blaze → @acornsoftai), OR the
+ * 3. The X identity must match OWNER_X_HANDLES (default: acornsoftai), OR the
  *    Better Auth user id / X account id must be on an explicit env allowlist.
  *
- * Sign-in alone is not enough. Google (or any non-X identity) cannot open Gnomah.
+ * Display names are not an authorization signal. Sign-in alone is not enough.
+ * Google (or any non-X identity) cannot open Gnomah.
  * A prior climb_notes_owner row is only a claim log — access is re-checked each time.
  */
 import { getSql } from "@/lib/db";
@@ -20,16 +20,6 @@ import {
 
 /** X handles allowed to edit Climb Notes (no @). Primary gate. */
 export const OWNER_X_HANDLES = ["acornsoftai"] as const;
-
-/**
- * Display-name aliases for owner handles (same person).
- * X often shows a profile name (Blaze) while the handle is @acornsoftai.
- * When the broker only returns the display name, we still match the owner.
- */
-export const OWNER_DISPLAY_ALIASES: Record<string, (typeof OWNER_X_HANDLES)[number]> =
-  {
-    blaze: "acornsoftai",
-  };
 
 export class ForbiddenOwnerError extends Error {
   readonly status = 403;
@@ -84,7 +74,6 @@ export function isXProvider(providerId: string): boolean {
   const p = providerId.toLowerCase().trim();
   if (!p) return false;
   if (p === "twitter" || p === "x" || p === "grok-x") return true;
-  // Broker local ids are typically "grok-x"; never match bare "x" inside other names
   if (p.startsWith("grok-x") || p.endsWith("-twitter") || p.startsWith("twitter-")) {
     return true;
   }
@@ -101,32 +90,16 @@ function matchesOwnerHandle(candidate: string): string | null {
 }
 
 /**
- * Match handle OR known display alias (Blaze → acornsoftai).
+ * Match canonical X handle only (not display name).
  * Returns the canonical owner handle when matched.
  */
 export function matchesOwnerIdentity(candidate: string): string | null {
-  const byHandle = matchesOwnerHandle(candidate);
-  if (byHandle) return byHandle;
-
-  const n = normalizeHandle(candidate);
-  if (!n) return null;
-
-  const aliasTarget = OWNER_DISPLAY_ALIASES[n];
-  if (aliasTarget) return aliasTarget;
-
-  // Multi-word names: first token only if it is a known alias (e.g. "Blaze AI")
-  const first = n.split(/[^a-z0-9_]+/)[0];
-  if (first && OWNER_DISPLAY_ALIASES[first]) {
-    return OWNER_DISPLAY_ALIASES[first];
-  }
-
-  return null;
+  return matchesOwnerHandle(candidate);
 }
 
 /**
- * Derive identity candidates from X-linked fields + display name.
- * Display name is kept so aliases like Blaze still match when the broker
- * did not send preferred_username.
+ * Derive identity candidates from X-linked handle-shaped fields.
+ * Display names are ignored.
  */
 function xIdentityCandidates(
   user: UserRow,
@@ -136,21 +109,17 @@ function xIdentityCandidates(
   const push = (v: string | null | undefined) => {
     if (!v) return;
     const n = normalizeHandle(v);
-    if (n && !out.includes(n)) out.push(n);
-    // Also keep original-ish for alias map (already normalized)
+    if (n && looksLikeHandle(n) && !out.includes(n)) out.push(n);
   };
 
-  // Preferred: user.name after mapProfileToUser maps preferred_username
   push(user.name);
 
-  // Synthetic X emails often use handle as local-part (e.g. acornsoftai@…)
   if (user.email) {
     const local = user.email.split("@")[0];
     push(local);
   }
 
   for (const a of xAccounts) {
-    // accountId is numeric for many X flows — only keep handle-shaped ids
     if (looksLikeHandle(a.accountId)) push(a.accountId);
   }
 
@@ -176,13 +145,11 @@ export async function assertClimbNotesOwner(userId: string): Promise<{
   userId: string;
   handle: string;
 }> {
-  // Auth off + local PGLite: allow the shared dev user so the editor is usable offline.
   if (!authConfigured && userId === DEV_USER_ID) {
     await recordOwnerClaim(userId, "dev-user");
     return { userId, handle: "dev-user" };
   }
 
-  // Explicit Better Auth user id allowlist (ops override; still re-checked each call).
   if (envOwnerUserIds().includes(userId)) {
     await recordOwnerClaim(userId, "env-allowlist");
     return { userId, handle: "env-allowlist" };
@@ -195,8 +162,6 @@ export async function assertClimbNotesOwner(userId: string): Promise<{
   `;
   const user = users[0];
   if (!user) {
-    // Session token resolved to an id that is not in the DB (preview restart,
-    // rotated secret, or cookie-cache ghost). Force re-login — not "forbidden owner".
     throw new UnauthorizedError(
       "Session expired. Sign in again with X as @acornsoftai.",
     );
@@ -215,7 +180,6 @@ export async function assertClimbNotesOwner(userId: string): Promise<{
     );
   }
 
-  // Numeric X account id allowlist (when handle is not available from the broker).
   const allowedXIds = new Set(envOwnerXAccountIds().map((s) => s.toLowerCase()));
   if (allowedXIds.size > 0) {
     for (const a of xAccounts) {
@@ -235,7 +199,7 @@ export async function assertClimbNotesOwner(userId: string): Promise<{
 
   if (!matched) {
     throw new ForbiddenOwnerError(
-      "This X account is not the Acornsoft owner. Sign in with @acornsoftai (profile name Blaze is fine when that account is linked).",
+      "This X account is not the Acornsoft owner. Sign in with @acornsoftai.",
     );
   }
 

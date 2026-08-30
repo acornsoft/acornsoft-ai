@@ -23,7 +23,7 @@
  *   - Explicitly off (`VITE_AUTH_ENABLED=false`): no providers; per-user server
  *     functions fall back to a dev user (see `verify.server.ts`).
  *
- * NEVER import this from client code — it pulls in `pg` + the preview secret +
+ * NEVER import this from client code — it pulls in `pg` +
  * server-only Better Auth internals. The client uses `@/lib/auth/client`;
  * components read the user via `@/lib/auth/use-current-user`; server functions get
  * a verified id via `@/lib/auth/middleware`.
@@ -42,7 +42,6 @@ import {
   GROK_ISSUER_DEFAULT,
   PREVIEW_ALLOWED_HOSTS,
   PREVIEW_CLIENT_ID,
-  PREVIEW_CLIENT_SECRET,
 } from "./preview";
 import {
   APEX_HOST,
@@ -78,12 +77,13 @@ const env = (key: string): string | undefined => {
 // provisions auth; set it to "false" to force auth off everywhere (dev user).
 const authDisabled = env("VITE_AUTH_ENABLED") === "false";
 
-// Broker federation creds: the deployer injects a per-app client when deployed;
-// otherwise fall back to the shared live-preview client, which the broker accepts
-// for any `*.grok-sandbox.com` callback (see `./preview`).
+// Broker federation creds: the deployer injects a per-app client when deployed.
+// Client secret is env-only (GROK_AUTH_CLIENT_SECRET, or
+// GROK_PREVIEW_CLIENT_SECRET as an alias). No hardcoded fallback.
 const grokIssuer = env("GROK_AUTH_ISSUER") ?? GROK_ISSUER_DEFAULT;
 const grokClientId = env("GROK_AUTH_CLIENT_ID") ?? PREVIEW_CLIENT_ID;
-const grokClientSecret = env("GROK_AUTH_CLIENT_SECRET") ?? PREVIEW_CLIENT_SECRET;
+const grokClientSecret =
+  env("GROK_AUTH_CLIENT_SECRET") ?? env("GROK_PREVIEW_CLIENT_SECRET");
 
 /** True when federated sign-in is active (real auth is enforced). */
 export const authConfigured =
