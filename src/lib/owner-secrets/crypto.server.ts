@@ -19,19 +19,32 @@ function env(key: string): string | undefined {
   return v || undefined;
 }
 
+function isProductionLike(): boolean {
+  const vercel = (env("VERCEL_ENV") ?? "").toLowerCase();
+  if (vercel === "production" || vercel === "preview") return true;
+  return Boolean(env("DATABASE_URL"));
+}
+
 /**
  * Derive a stable 32-byte key from the strongest available server secret.
  * Prefer OWNER_SECRETS_KEY; fall back to BETTER_AUTH_SECRET / AUTH_SECRET.
+ * Production and any DATABASE_URL deploy fail closed if none are set.
  */
 export function getSecretsMasterKey(): Buffer {
   const material =
     env("OWNER_SECRETS_KEY") ||
     env("BETTER_AUTH_SECRET") ||
-    env("AUTH_SECRET") ||
-    // Preview-only fallback so local PGLite can still encrypt; production
-    // must set a real secret via BETTER_AUTH_SECRET / OWNER_SECRETS_KEY.
-    "REDACTED";
-  // scrypt with fixed salt namespace — per-deployment secret is the pepper
+    env("AUTH_SECRET");
+  if (!material) {
+    if (isProductionLike()) {
+      throw new Error(
+        "OWNER_SECRETS_KEY (or BETTER_AUTH_SECRET) is required to encrypt owner secrets.",
+      );
+    }
+    throw new Error(
+      "Set OWNER_SECRETS_KEY (or BETTER_AUTH_SECRET) before storing owner secrets.",
+    );
+  }
   return scryptSync(material, "acornsoft-owner-private-v1", KEY_LEN);
 }
 
