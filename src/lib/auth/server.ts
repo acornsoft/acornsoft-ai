@@ -48,6 +48,7 @@ import {
   CANONICAL_HOST,
   CANONICAL_ORIGIN,
   PRODUCTION_ORIGINS,
+  isProductionHost,
 } from "@/lib/site-origin";
 
 // Kick (and share) PGLite bootstrap as soon as the auth server module loads.
@@ -157,16 +158,34 @@ function isPrivateLanDevOrigin(origin: string): boolean {
   }
 }
 
+function requestLooksProduction(request?: Request): boolean {
+  if (env("VERCEL_ENV") === "production") return true;
+  const host = request?.headers.get("host")?.split(":")[0];
+  if (isProductionHost(host)) return true;
+  const origin = request?.headers.get("origin")?.trim() ?? "";
+  if (origin) {
+    try {
+      if (isProductionHost(new URL(origin).hostname)) return true;
+    } catch {
+      /* ignore */
+    }
+  }
+  return false;
+}
+
 /**
- * Origins Better Auth accepts on credentialed POSTs. A missing www origin
- * while the platform baseURL is *.grok.me is the production "Invalid origin".
+ * Origins Better Auth accepts on credentialed POSTs.
+ * Production (VERCEL_ENV=production or acornsoft.ai host): only canonical
+ * origins — never *.vercel.app / *.grok.me wildcards.
+ * Preview/dev: grok-sandbox + localhost (live preview must keep working).
  */
 const trustedOrigins = async (request?: Request): Promise<string[]> => {
+  if (requestLooksProduction(request)) {
+    return [...PRODUCTION_ORIGINS];
+  }
   const extra: string[] = [
     ...PRODUCTION_ORIGINS,
     ...LOCAL_DEV_ORIGINS,
-    "https://*.grok.me",
-    "https://*.vercel.app",
     "https://*.grok-sandbox.com",
     "http://*.grok-sandbox.com",
   ];
