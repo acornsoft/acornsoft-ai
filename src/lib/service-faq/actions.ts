@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getSql } from "@/lib/db";
+import { allowPublicClick } from "@/lib/access/click-rate-limit";
 import { isServiceFaqId } from "./ranking";
 
 export type FaqClickRow = { faqId: string; clicks: number };
@@ -55,6 +56,19 @@ export const recordServiceFaqClick = createServerFn({ method: "POST" })
     const { faqId } = data;
     await ensureFaqClicksTable();
     const sql = await getSql();
+    if (!allowPublicClick()) {
+      try {
+        const existing = await sql<{ clicks: number }>`
+          select clicks from service_faq_clicks where faq_id = ${faqId} limit 1
+        `;
+        return {
+          faqId,
+          clicks: Math.max(0, Number(existing[0]?.clicks) || 0),
+        };
+      } catch {
+        return { faqId, clicks: 0 };
+      }
+    }
     await sql`
       insert into service_faq_clicks (faq_id, clicks, updated_at)
       values (${faqId}, 1, now())

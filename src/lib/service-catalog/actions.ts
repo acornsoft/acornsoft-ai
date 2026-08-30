@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getSql } from "@/lib/db";
+import { allowPublicClick } from "@/lib/access/click-rate-limit";
 import { isBaselineServiceId } from "./ranking";
 
 export type ServiceClickRow = { serviceId: string; clicks: number };
@@ -51,6 +52,21 @@ export const recordServiceCardClick = createServerFn({ method: "POST" })
       const { serviceId } = data;
       await ensureTable();
       const sql = await getSql();
+      if (!allowPublicClick()) {
+        try {
+          const existing = await sql<{ clicks: number }>`
+            select clicks from service_card_clicks
+            where service_id = ${serviceId}
+            limit 1
+          `;
+          return {
+            serviceId,
+            clicks: Math.max(0, Number(existing[0]?.clicks) || 0),
+          };
+        } catch {
+          return { serviceId, clicks: 0 };
+        }
+      }
       await sql`
         insert into service_card_clicks (service_id, clicks, updated_at)
         values (${serviceId}, 1, now())
