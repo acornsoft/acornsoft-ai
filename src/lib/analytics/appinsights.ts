@@ -4,14 +4,13 @@ import type { AnalyticsEventName, AnalyticsProps } from "./types";
 /**
  * Browser Application Insights.
  * Instrumentation key is a client-side key (visible in the browser by design).
- * Prefer VITE_APPINSIGHTS_CONNECTION_STRING or VITE_APPINSIGHTS_INSTRUMENTATION_KEY.
+ * Env-only: VITE_APPINSIGHTS_CONNECTION_STRING or
+ * VITE_APPINSIGHTS_INSTRUMENTATION_KEY. Missing env disables telemetry.
  */
-
-const DEFAULT_INSTRUMENTATION_KEY = "5f8c893f-868d-4bad-b9b8-9d86b36b4f0d";
 
 function env(name: string): string | undefined {
   try {
-    const v = (import.meta as ImportMeta & { env?: Record<string, string> }).env?.[
+    const v = (import.meta as ImportMeta & { env?: Record<string, string> }).env?[
       name
     ];
     return typeof v === "string" && v.trim() ? v.trim() : undefined;
@@ -20,12 +19,14 @@ function env(name: string): string | undefined {
   }
 }
 
-function resolveConfig(): { connectionString?: string; instrumentationKey?: string } {
+function resolveConfig(): {
+  connectionString?: string;
+  instrumentationKey?: string;
+} | null {
   const cs = env("VITE_APPINSIGHTS_CONNECTION_STRING");
   if (cs) return { connectionString: cs };
-  const key =
-    env("VITE_APPINSIGHTS_INSTRUMENTATION_KEY") || DEFAULT_INSTRUMENTATION_KEY;
-  // Modern SDK prefers connection string
+  const key = env("VITE_APPINSIGHTS_INSTRUMENTATION_KEY");
+  if (!key) return null;
   return {
     connectionString: `InstrumentationKey=${key}`,
     instrumentationKey: key,
@@ -42,6 +43,10 @@ export function getAppInsights(): ApplicationInsights | null {
 
   try {
     const cfg = resolveConfig();
+    if (!cfg) {
+      appInsights = null;
+      return appInsights;
+    }
     const ai = new ApplicationInsights({
       config: {
         connectionString: cfg.connectionString,

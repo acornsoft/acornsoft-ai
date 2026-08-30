@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getSql } from "@/lib/db";
+import { authMiddleware } from "@/lib/auth/middleware";
 import {
   isAnalyticsEventName,
   type AnalyticsEventInput,
@@ -87,21 +88,23 @@ export const logAnalyticsEvent = createServerFn({ method: "POST" })
           )
         `;
         return { ok: true };
-      } catch (e) {
-        return {
-          ok: false,
-          reason: e instanceof Error ? e.message : "log failed",
-        };
+      } catch {
+        return { ok: false, reason: "log failed" };
       }
     },
   );
 
-/** Owner/debug: recent events (capped). */
+/** Owner-only: recent events (capped). Not a public listing. */
 export const listRecentAnalyticsEvents = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
   .validator((data?: { limit?: number }) => ({
     limit: Math.min(100, Math.max(1, Number(data?.limit) || 40)),
   }))
-  .handler(async ({ data }) => {
+  .handler(async ({ context, data }) => {
+    const { assertClimbNotesOwner } = await import(
+      "@/lib/climb-notes/owner.server"
+    );
+    await assertClimbNotesOwner(context.userId);
     try {
       await ensureAnalyticsTable();
       const sql = await getSql();
