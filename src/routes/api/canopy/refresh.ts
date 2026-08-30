@@ -10,8 +10,10 @@ import {
 } from "@/lib/canopy/cadence";
 
 /**
- * Weekly live feed. GET never spends X credits (cache / empty only).
- * POST (or GET ?force=1) spends credits only with CRON_SECRET.
+ * Weekly live feed.
+ * Unauthenticated GET never spends X credits (cache / empty only).
+ * Spend (weekly pull) requires CRON_SECRET via Authorization: Bearer or x-cron-secret.
+ * Vercel cron is GET /api/canopy/refresh and sends Bearer CRON_SECRET when that env is set.
  */
 
 const globalCache = globalThis as typeof globalThis & {
@@ -70,9 +72,8 @@ async function handle(request: Request): Promise<Response> {
   }
 
   const cron = authorizedCron(request);
-  const wantsSpend =
-    request.method === "POST" ||
-    new URL(request.url).searchParams.get("force") === "1";
+  const force = new URL(request.url).searchParams.get("force") === "1";
+  const wantsSpend = request.method === "POST" || force || cron;
 
   const cached = await lastPull();
 
@@ -97,7 +98,7 @@ async function handle(request: Request): Promise<Response> {
   }
 
   const due = pullIsDue(cached?.updatedAt, interval);
-  if (!due) {
+  if (!due && !force) {
     const held = withCadence(cached ?? {
       updatedAt: new Date().toISOString(),
       source: "cache",
