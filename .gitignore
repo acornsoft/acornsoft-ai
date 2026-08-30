@@ -4,3 +4,10 @@ node_modules/
 .env
 .env.*
 data/
+.vercel/
+dist/
+tmp/
+artifacts/
+screenshots/
+attachments/*.zip
+.DS_Store

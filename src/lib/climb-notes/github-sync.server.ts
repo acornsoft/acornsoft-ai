@@ -1,7 +1,8 @@
 /**
  * Optional async pull of Climb Notes from the Gnomah GitHub vault.
- * Requires GITHUB_TOKEN / GH_TOKEN / GNOMAH_GITHUB_TOKEN for private repos
- * and higher rate limits. Public trees may work unauthenticated.
+ * Requires GNOMAH_GITHUB_TOKEN (dedicated PAT) for private repos and
+ * higher rate limits. Never use Actions GITHUB_TOKEN / GH_TOKEN.
+ * Public trees may work unauthenticated.
  *
  * Server-only.
  */
@@ -23,12 +24,8 @@ export type GithubSyncResult = {
 };
 
 function githubToken(): string | undefined {
-  return (
-    process.env.GNOMAH_GITHUB_TOKEN?.trim() ||
-    process.env.GITHUB_TOKEN?.trim() ||
-    process.env.GH_TOKEN?.trim() ||
-    undefined
-  );
+  const dedicated = process.env.GNOMAH_GITHUB_TOKEN?.trim();
+  return dedicated || undefined;
 }
 
 function apiHeaders(): HeadersInit {
