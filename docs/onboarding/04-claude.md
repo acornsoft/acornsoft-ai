@@ -8,27 +8,49 @@ For people who already think with **Claude** (Pro is the practical floor for a r
 
 Confirm each line. If not, finish that item first.
 
-- **Claude Pro** (or higher)—not free-only chat limits
-- A **project folder** exists that *is* this climb
-- **VS Code or Cursor** with **Luna Foundry Multiagent** (so Setup can lay the pack), *or* you can copy a teammate’s `.github` pack
-- You can open that folder in **Claude Code** or a **Claude Project** with pack paths available
-- A few quiet minutes; no secrets or client names in Claude chat
+<div align="center">
+
+<table border="0" cellpadding="2" cellspacing="0">
+<tr>
+<td align="left">✓</td>
+<td align="left"><small><strong>Claude Pro</strong> (or higher)—not free-only chat limits</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small>A <strong>project folder</strong> exists that <em>is</em> this climb</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small><strong>VS Code or Cursor</strong> with <strong>Luna Foundry Multiagent</strong> (so Setup can lay the pack), <em>or</em> you can copy a teammate’s <code>.github</code> pack</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small>You can open that folder in <strong>Claude Code</strong> or a <strong>Claude Project</strong> with pack paths available</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small>A few quiet minutes; no secrets or client names in Claude chat</small></td>
+</tr>
+</table>
+
+</div>
 
 **Extension command (camp only)**
 
 | Type this | Full title |
 |-----------|------------|
-| `Setup` | **Luna: Setup (Copilot / Cursor / Grok)** |
+| `Setup Unified` | **Luna: Setup Unified Workspace (Copilot / Cursor / Grok)** |
 
+There is no Claude-specific Luna command. Grok Build / Grok plugin commands are optional and only if you also use Grok—see [01-grok-build.md](./01-grok-build.md) and [TUI-UI-TEST-CASES.md](./TUI-UI-TEST-CASES.md).
 
 ---
 
 ## Step 1 - Establish Camp
 
-![Establish camp — pack on the project](/images/luna/trail-set-camp-setup.jpg)
+<img src="./assets/trail-set-camp-setup.jpg" alt="Establish camp — pack on the project" width="50%" />
 
-1. Open the project in **VS Code or Cursor**. Run **Luna: Setup (Copilot / Cursor / Grok)** → **Set up**.  
-2. Confirm on disk: **`.github/skills/macroflow`**, **`.github/agents`** (Luna, BaseCamp, Route, Summit). Setup also writes **`.cursorrules`** and may install shell under **`$HOME/etc`**—fine to ignore for Claude-only work.  
+1. Open the project in **VS Code or Cursor**. Run **Luna: Setup Unified Workspace (Copilot / Cursor / Grok)** → **Yes, Unify Now**.  
+2. Confirm on disk: **`.github/skills/macroflow`**, **`.github/agents`** (Luna, BaseCamp, Route, Climb, Descent). Setup also writes **`.cursorrules`** and may install shell under **`$HOME/etc`**—fine to ignore for Claude-only work.  
 3. Open that **same** folder in **Claude Code**, or attach it as a **Claude Project** with those paths as knowledge.  
 4. Add short project instructions (Project settings or a local instructions file). Paste:
 
@@ -41,7 +63,7 @@ You are working a Luna MacroFlow climb. Ritual in order:
 Luna is the Sherpa. Read .github/skills/macroflow and .github/agents when unsure. Announce Phase · Skill before significant work.
 ```
 
-If you cannot run Setup, copy at least `macroflow` skills and the four agents into the project from a teammate—camp still needs those files.
+If you cannot run Setup, copy at least `macroflow` skills and the five agents into the project from a teammate—camp still needs those files.
 
 ---
 
@@ -134,3 +156,4 @@ When you want the **richest** multiagent UX (slash skills, agent modal, dual-pan
 
 ---
 
+[← All trail maps](./README.md) · [Security](./SECURITY-PRIVACY-ETHICS.md) · [Main story](../../README.md) · [Support](../../SUPPORT.md) · [Command reference](../OPERATOR-REFERENCE.md)

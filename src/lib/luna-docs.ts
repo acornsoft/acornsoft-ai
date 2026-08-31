@@ -74,6 +74,20 @@ export const LUNA_DOCS: LunaDoc[] = [
     kicker: "Help",
     lede: "Send a Climb Note. No GitHub required.",
   },
+  {
+    slug: "operators",
+    file: "OPERATOR-REFERENCE.md",
+    title: "Operator reference",
+    kicker: "Commands",
+    lede: "Setup, terminals, and what each Luna command does.",
+  },
+  {
+    slug: "tui",
+    file: "TUI-UI-TEST-CASES.md",
+    title: "TUI + UI test cases",
+    kicker: "Prove the climb",
+    lede: "Command wiring and one complete MacroFlow turn.",
+  },
 ];
 
 export const LUNA_HUB_FILE = "README.md";
@@ -88,6 +102,9 @@ const FILE_TO_HREF: Record<string, string> = {
   "SURFACE-REQUIREMENTS.md": "/luna/surface",
   "GROK-KEYBINDINGS-VS-CODE.md": "/luna/grok-keys",
   "SUPPORT.md": "/luna/support",
+  "OPERATOR-REFERENCE.md": "/luna/operators",
+  "TUI-UI-TEST-CASES.md": "/luna/tui",
+  "SCREEN-SHARE-COACH-01-GROK-BUILD.md": "/luna/grok-build",
   "README.md": "/luna",
 };
 

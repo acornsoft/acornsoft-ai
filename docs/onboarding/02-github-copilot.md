@@ -1,43 +1,72 @@
 # Trail map: GitHub Copilot
 
-For people who already work in **GitHub Copilot** day to day (Pro or a company seat). You do **not** need Grok for this ridge. Luna and MacroFlow join you in **Copilot Chat**—same climb language, familiar editor. You run one **complete MacroFlow turn** (Base Camp → Route → Waypoint → Summit) with proof; an optional second climb files a skill/feature wish.
+For people who already work in **GitHub Copilot** day to day (Pro or a company seat). You do **not** need Grok for this ridge. Luna and MacroFlow join you in **Copilot Chat**—same climb language, familiar editor. You run one **complete MacroFlow turn** (Basecamp → Route → Waypoint → Climb → Descent) with proof; an optional second climb files a skill/feature wish.
 
-**Multiagent on this ridge:** the Luna **four custom agents** (Luna, BaseCamp, Route, Summit) after Setup—not Grok slash menus.
+**Multiagent on this ridge:** Luna’s **five custom agents** (Luna, Basecamp, Route, Climb, Descent) after Setup—not Grok slash menus. Setup **hides other custom agents** in this workspace (org/enterprise, Claude-format folders, leftover chatmodes, extra `.github/agents` files). It cannot hide VS Code built-in Ask/Edit/Agent *modes*.
+
+On a **managed corporate laptop**, prefer the Copilot-only extension **Luna Foundry Copilot** (`acornsoft.luna-foundry-copilot`) — same agents and skills, no Grok CLI installer. The full **Luna Foundry Multiagent** listing still includes Grok terminals and installers.
 
 ### Before you start — ready to climb?
 
 Confirm each line. If not, finish that item first.
 
-- **Luna Foundry Multiagent** is installed and enabled in VS Code (or Cursor if that is your host)—prefer stamp **1.0.26243**
-- A **project folder** is open that *is* this climb
-- **GitHub Copilot** and **Copilot Chat** are signed in
-- Plan can run **sustained Chat / custom agents** (Pro or org seat—not free-only teaser limits)
-- Command Palette shows **Luna:** commands
-- A few quiet minutes; **no secrets** in Chat
+<div align="center">
+
+<table border="0" cellpadding="2" cellspacing="0">
+<tr>
+<td align="left">✓</td>
+<td align="left"><small><strong>Luna Foundry Copilot</strong> or <strong>Luna Foundry Multiagent</strong> is installed (stamp <strong>1.0.26247</strong>+). Corporate laptops: Copilot SKU. Lab/Grok: Multiagent.</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small>A <strong>project folder</strong> is open that <em>is</em> this climb</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small><strong>GitHub Copilot</strong> and <strong>Copilot Chat</strong> are signed in</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small>Plan can run <strong>sustained Chat / custom agents</strong> (Pro or org seat—not free-only teaser limits)</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small>Command Palette shows <strong>Luna:</strong> commands</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small>A few quiet minutes; <strong>no secrets</strong> in Chat</small></td>
+</tr>
+</table>
+
+</div>
 
 **Command you will use**
 
 | Type this | Full title |
 |-----------|------------|
-| `Setup` | **Luna: Setup (Copilot / Cursor / Grok)** |
+| `Setup` | **Luna: Setup (GitHub Copilot)** on the Copilot SKU, or **Luna: Setup (Copilot / Cursor / Grok)** on Multiagent |
 
+Optional later (only if you also use Grok Build): [Grok Build trail](./01-grok-build.md) + [TUI-UI-TEST-CASES.md](./TUI-UI-TEST-CASES.md).
 
 ---
 
 ## Step 1 - Establish Camp
 
-![Establish camp — Luna Setup](/images/luna/trail-set-camp-setup.jpg)
+<img src="./assets/trail-set-camp-setup.jpg" alt="Establish camp — Setup Unified Workspace" width="50%" />
 
 1. Confirm **Copilot Chat** opens and is signed in.  
-2. Command Palette → **Luna: Setup (Copilot / Cursor / Grok)**.  
+2. Command Palette → **Luna: Setup**.  
+   - Copilot SKU title: **Setup (GitHub Copilot)**. Multiagent title still mentions Grok.  
    - Multi-root: pick the **climb root**.  
    - Choose **Set up**.  
 3. What Setup actually does for you:  
    - Deploys **`.github/skills`**, **`.github/agents`**, and related instructions into the workspace.  
-   - Agents on disk: **Luna**, **BaseCamp**, **Route**, **Summit**.  
-   - Installs/refreshes shell under **`$HOME/etc`** (open a **new** terminal afterward).  
-   - Sets workspace chat settings to prefer **`.github/agents`**.  
-4. Quiet check: Explorer shows **`.github/agents`** and **`.github/skills/macroflow`**.
+   - Agents on disk: **Luna**, **Basecamp**, **Route**, **Climb**, **Descent** (no Summit, no chatmodes).  
+   - **Copilot SKU:** stops there — no Grok CLI, no `$HOME/etc`.  
+   - **Multiagent:** also installs/refreshes shell under **`$HOME/etc`** (open a **new** terminal afterward) and may offer Finish with Grok.  
+   - **Copilot ours-only (default on):** workspace settings so Copilot Chat custom agents come only from **`.github/agents`**.  
+4. Quiet check: Explorer shows **`.github/agents`** and **`.github/skills/macroflow`**. Copilot Chat agent picker lists Luna’s five — not org templates or leftover chatmodes.
 
 If `.github` is missing, re-run Setup on the real workspace root.
 
@@ -48,11 +77,11 @@ You do **not** need **Install Luna Plugin for Grok** for the Copilot ridge. Skip
 ## Step 2 - Open Copilot Chat with a Luna agent
 
 1. Open **Copilot Chat**.  
-2. Open the **agent** picker and choose **Base Camp** or **Luna** if listed (from `.github/agents` after Setup).  
-3. If custom agents are noisy, use Configure Custom Agents and hide non-Luna ones (Setup’s tip).  
-4. If the agent list is empty, re-run Setup, then reload the window. You can still paste the Step 3 text as plain Chat messages—the pack on disk still guides the model when the project is open.
+2. Open the **agent** picker and choose **Basecamp** or **Luna** (from `.github/agents` after Setup).  
+3. Setup already hides non-Luna *custom* agents. You will still see VS Code’s built-in **Ask / Edit / Agent** modes — those are not custom agents. User-profile agents in `~/.copilot/agents` may still appear; hide them with the eye icon in Configure Custom Agents.  
+4. If the Luna list is empty, re-run Setup, then reload the window. You can still paste the Step 3 text as plain Chat messages—the pack on disk still guides the model when the project is open.
 
-**Multiagent tip:** use **Luna** when you want orchestration; switch agent to **Base Camp** / **Route** / **Summit** for phase purity. Prefer one agent (or one phase) per stretch of work so handoffs stay readable.
+**Multiagent tip:** use **Luna** when you want orchestration; switch to **BaseCamp** / **Route** / **Climb** / **Descent** for phase purity. Prefer one agent (or one phase) per stretch of work so handoffs stay readable. Toggle: setting `lunaFoundry.copilotOursOnly` (default **true**).
 
 Copilot may not treat `/base-camp` as a Grok-style slash skill. Prefer: pick the **Base Camp** agent, then send the sentence **without** relying on slash routing—or keep the slash if your build accepts it.
 
@@ -70,7 +99,7 @@ Send each prompt in **Copilot Chat**. Terminal only for proof (3.5).
 With agent **Base Camp** (or **Luna**), send:
 
 ```text
-Confirm the Luna Foundry pack is present under .github (skills/macroflow and agents Luna, BaseCamp, Route, Summit). Report gaps only. Skip Azure DevOps and Gnomah vault. Do not implement product work.
+Confirm the Luna Foundry pack is present under .github (skills/macroflow and agents Luna, BaseCamp, Route, Climb, Descent — no Summit). Report gaps only. Skip Azure DevOps and Gnomah vault. Do not implement product work.
 ```
 
 ### 3.2 Route
@@ -143,6 +172,8 @@ Done.
 | Waypoint before claiming done | Skip proof |
 | File wishes with trail section **Copilot** | Paste secrets into issue bodies |
 
+Full dual-surface gates: [TUI-UI-TEST-CASES.md](./TUI-UI-TEST-CASES.md) Series D (MA-04, MA-05).
 
 ---
 
+[← All trail maps](./README.md) · [Security](./SECURITY-PRIVACY-ETHICS.md) · [Main story](../../README.md) · [Support](../../SUPPORT.md) · [Command reference](../OPERATOR-REFERENCE.md)

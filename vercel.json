@@ -66,6 +66,21 @@
       "source": "/SUPPORT.md",
       "destination": "/luna/support",
       "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/OPERATOR-REFERENCE.md",
+      "destination": "/luna/operators",
+      "permanent": true
+    },
+    {
+      "source": "/docs/onboarding/TUI-UI-TEST-CASES.md",
+      "destination": "/luna/tui",
+      "permanent": true
+    },
+    {
+      "source": "/docs/OPERATOR-REFERENCE.md",
+      "destination": "/luna/operators",
+      "permanent": true
     }
   ],
   "headers": [

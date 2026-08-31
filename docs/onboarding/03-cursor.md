@@ -8,30 +8,55 @@ For people who already build in **Cursor** with an **Agent**-capable plan. Multi
 
 Confirm each line. If not, finish that item first.
 
-- **Cursor** is installed and can load VS Code-compatible extensions
-- **Luna Foundry Multiagent** is installed and enabled in Cursor—prefer stamp **1.0.26243**
-- A **project folder** is open that *is* this climb
-- Plan includes **Agent** (Pro or current Agent-capable tier—not free-only limits)
-- Command Palette shows **Luna:** commands
-- **Privacy mode** on if the code is not public; no secrets in Agent chat
+<div align="center">
+
+<table border="0" cellpadding="2" cellspacing="0">
+<tr>
+<td align="left">✓</td>
+<td align="left"><small><strong>Cursor</strong> is installed and can load VS Code-compatible extensions</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small><strong>Luna Foundry Multiagent</strong> is installed and enabled in Cursor—prefer stamp <strong>1.0.26242</strong></small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small>A <strong>project folder</strong> is open that <em>is</em> this climb</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small>Plan includes <strong>Agent</strong> (Pro or current Agent-capable tier—not free-only limits)</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small>Command Palette shows <strong>Luna:</strong> commands</small></td>
+</tr>
+<tr>
+<td align="left">✓</td>
+<td align="left"><small><strong>Privacy mode</strong> on if the code is not public; no secrets in Agent chat</small></td>
+</tr>
+</table>
+
+</div>
 
 **Command you will use**
 
 | Type this | Full title |
 |-----------|------------|
-| `Setup` | **Luna: Setup (Copilot / Cursor / Grok)** |
+| `Setup Unified` | **Luna: Setup Unified Workspace (Copilot / Cursor / Grok)** |
 
+Optional later (Grok Build inside Cursor terminals): **Luna: Create Grok Build (bash|pwsh) Terminal**, **Luna: Install Luna Plugin for Grok (xAI Marketplace / TUI)** — full dual-pane + slash ritual: [Grok Build trail](./01-grok-build.md) · [TUI-UI-TEST-CASES.md](./TUI-UI-TEST-CASES.md).
 
 ---
 
 ## Step 1 - Establish Camp
 
-![Establish camp — Luna Setup](/images/luna/trail-set-camp-setup.jpg)
+<img src="./assets/trail-set-camp-setup.jpg" alt="Establish camp — Setup Unified Workspace" width="50%" />
 
 1. Confirm the multiagent extension is enabled in Cursor (Extensions view).  
-2. Command Palette → **Luna: Setup (Copilot / Cursor / Grok)**.  
+2. Command Palette → **Luna: Setup Unified Workspace (Copilot / Cursor / Grok)**.  
    - Multi-root: pick the **climb root**.  
-   - Choose **Set up**.  
+   - Choose **Yes, Unify Now**.  
 3. What Setup actually does:  
    - Deploys **`.github/`** (skills, agents, instructions).  
    - Writes **`.cursorrules`** at the project root (ritual + pointers into `.github`).  
@@ -46,7 +71,7 @@ If `.cursorrules` is missing, re-run Setup on the correct root—camp cannot be 
 
 1. Open **Agent** (or Composer—use the Agent-capable surface your plan includes).  
 2. One thread for this climb.  
-3. If Agent ignores the pack, point it at **`.cursorrules`**, **`.github/skills/macroflow`**, and agents under **`.github/agents`** (Luna, BaseCamp, Route, Summit).
+3. If Agent ignores the pack, point it at **`.cursorrules`**, **`.github/skills/macroflow`**, and agents under **`.github/agents`** (Luna, BaseCamp, Route, Climb, Descent).
 
 Slash skills like `/base-camp` are **Grok Build**-style. In Cursor, send the **same intent as plain text** (or @-mention pack files if your workflow does that).
 
@@ -131,6 +156,8 @@ Done.
 | Optional Grok dual-pane for TUI multiagent | Mix secrets into Agent chat |
 | Privacy mode for non-public code | Skip camp (Setup) and invent ritual |
 
+Wiring + dual-pane: [TUI-UI-TEST-CASES.md](./TUI-UI-TEST-CASES.md) · [01-grok-build.md](./01-grok-build.md).
 
 ---
 
+[← All trail maps](./README.md) · [Security](./SECURITY-PRIVACY-ETHICS.md) · [Main story](../../README.md) · [Support](../../SUPPORT.md) · [Command reference](../OPERATOR-REFERENCE.md)

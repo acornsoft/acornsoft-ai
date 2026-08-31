@@ -23,7 +23,7 @@ Free tiers: fine for reading. Not for agentic MacroFlow.
 
 ## After install (what the extension actually does)
 
-1. **Luna: Setup (Copilot / Cursor / Grok)** → **Set up**  
+1. **Luna: Setup Unified Workspace (Copilot / Cursor / Grok)** → **Yes, Unify Now**  
    - Deploys **`.github/`** (skills + agents + instructions)  
    - Writes **`.cursorrules`**  
    - Installs/refreshes shell → **`$HOME/etc`** when bundled  
@@ -39,8 +39,8 @@ Free tiers: fine for reading. Not for agentic MacroFlow.
 
 | Host | UI | How the pack shows up |
 |------|-----|------------------------|
-| Grok Build | TUI + plugin | **Luna: Install Luna Plugin for Grok** → `grok plugin list` shows **luna-foundry**; slash skills **/base-camp** · **/route** · **/summit** |
-| Copilot | Chat + custom agents | Setup → **`.github/agents`** (Luna, BaseCamp, Route, Summit) |
+| Grok Build | TUI + plugin | **Luna: Install Luna Plugin for Grok (xAI Marketplace / TUI)** → `grok plugin list` shows **luna-foundry**; slash skills **/base-camp** · **/route** · **/summit** |
+| Copilot | Chat + custom agents | Setup → **`.github/agents`** (Luna, BaseCamp, Route, Climb, Descent); ours-only picker |
 | Cursor | Agent | Setup → **`.cursorrules`** + **`.github/`** |
 | Claude | Project / Code | Same files on disk + your project instructions (no dedicated Luna command) |
 
@@ -48,12 +48,13 @@ Free tiers: fine for reading. Not for agentic MacroFlow.
 
 Registered on the extension (Command Palette, category **Luna**):
 
-- Setup (Copilot / Cursor / Grok)  
+- Setup Unified Workspace (Copilot / Cursor / Grok)  
 - Create Grok Build (pwsh | bash) Terminal — auto-starts TUI  
 - Create Grok (pwsh | bash) Terminal — clean shell only  
 - Install / Verify Grok CLI  
 - Install Luna Plugin for Grok (xAI Marketplace / TUI)  
 - **WSL is not supported** (no Luna WSL terminals or installers)
 
+Full table: [OPERATOR-REFERENCE.md](../OPERATOR-REFERENCE.md).
 
 Security before client data: [SECURITY-PRIVACY-ETHICS.md](./SECURITY-PRIVACY-ETHICS.md)
