@@ -74,6 +74,13 @@ export function VoicePage() {
                   <a className="rn-btn ac-btn-outline" href="#luna-dock">
                     <span>Try the on-site guide</span>
                   </a>
+                  <Link
+                    className="rn-btn ac-btn-outline"
+                    to="/work/$slug"
+                    params={{ slug: "acadence" }}
+                  >
+                    <span>Acadence 90/10 desk</span>
+                  </Link>
                   <Link className="rn-btn ac-btn-outline" to="/climb-notes">
                     <span>Open Climb Notes</span>
                   </Link>
@@ -90,11 +97,28 @@ export function VoicePage() {
               <div id="luna-dock">
                 <LunaVoiceDock />
               </div>
+              <aside className="ac-voice-desk-card">
+                <p className="ac-voice-desk-kicker">Client desk</p>
+                <h2 className="ac-voice-desk-title">Acadence 90/10</h2>
+                <p className="ac-voice-desk-lede">
+                  Spoken lead desk for Mike Strelick and team. Ready, mail,
+                  hold, sent. Nine lines. Captions on. Does not send.
+                </p>
+                <Link
+                  className="rn-btn ac-btn-maroon"
+                  to="/work/$slug"
+                  params={{ slug: "acadence" }}
+                >
+                  <span>Open the spoken desk</span>
+                </Link>
+              </aside>
               <p className="ac-voice-page-next">
                 Prefer reading first?{" "}
                 <Link to="/climb-notes">Browse the journal</Link>
                 {" · "}
                 <Link to="/canopy">See Canopy</Link>
+                {" · "}
+                <Link to="/work">Works</Link>
                 {" · "}
                 <Link to="/service">Services</Link>
               </p>

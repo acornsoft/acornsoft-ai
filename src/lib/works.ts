@@ -8,9 +8,12 @@
  *
  * Live URLs only. Never private git. Never blaszyk.us (silent work record).
  * Luna Foundry Multiagent is the field kit, not a catalog demo.
+ * honey-reef-yonder-fleet is the Grok export of this HQ app, not a second site.
  */
 
 export type WorkVisibility = "public" | "signed-in" | "owner";
+
+export type WorkSurface = "page" | "desk";
 
 export type WorkEntry = {
   id: string;
@@ -23,9 +26,28 @@ export type WorkEntry = {
   story: string[];
   /** Public host when one exists. Omit until the work has its own URL. */
   href?: string;
+  /** How the catalog card opens. Desk = spoken queue on this site. */
+  surface?: WorkSurface;
+  /** Named client when the work is for someone else. */
+  client?: string;
 };
 
 export const WORKS: WorkEntry[] = [
+  {
+    id: "acadence",
+    title: "Acadence 90/10 desk",
+    kicker: "Voice desk",
+    lede: "Spoken 90/10 lead desk for Mike Strelick and the Acadence team — ready, mail, hold, sent. Nine lines at a time.",
+    ridge: "Custom .NET",
+    visibility: "signed-in",
+    surface: "desk",
+    client: "Acadence · Mike Strelick",
+    story: [
+      "Mike asked for a current list of the right schools and the right people, so he could talk instead of hunting an outdated spreadsheet.",
+      "The desk loads Federal Student Aid workbooks into one store, scores proprietary schools on the 90/10 rule, and speaks a reviewed pack: school, inbox or paper, percent.",
+      "Mike receives the pack. Mark and Tony review. This page speaks the queue. It does not send mail to colleges.",
+    ],
+  },
   {
     id: "unofficial-covid-report",
     title: "Unofficial COVID Report",
@@ -37,6 +59,18 @@ export const WORKS: WorkEntry[] = [
     story: [
       "A public timeline of claims next to the record — origin to now — so a reader can see what was said, when, and what the documents show.",
       "Built on Grok Build. Lives on its own host. This page is the catalog entry; the report is the summit.",
+    ],
+  },
+  {
+    id: "bymorgan",
+    title: "By Morgan",
+    kicker: "Local site",
+    lede: "Holistic residential cleaning for Darien Center — callback desk, ten local services, a journal for neighbors.",
+    ridge: "Grok Build",
+    visibility: "signed-in",
+    story: [
+      "A cleaner house and a calmer home. Wells, septic, mud season, cottages by the park. Ten local services.",
+      "Four fields and a callback, not a shopping cart. Not live on a public Acornsoft host yet.",
     ],
   },
   {
@@ -76,6 +110,54 @@ export const WORKS: WorkEntry[] = [
     ],
   },
   {
+    id: "doge-reviews",
+    title: "Doge Reviews",
+    kicker: "Public site",
+    lede: "A transparency site for DOGE — community review, moderation, and a recommendation Sherpa.",
+    ridge: "Custom .NET",
+    visibility: "signed-in",
+    story: [
+      "A site for complete transparency to the American public. Reviews, moderation, and a Sherpa that points people to what is worth reading.",
+      "Custom .NET, clean architecture. Not on a public Acornsoft host yet.",
+    ],
+  },
+  {
+    id: "bocce-club-pizza",
+    title: "Bocce Club Pizza",
+    kicker: "Prototype",
+    lede: "Light Sherpa prototype — ordering and a social guide for a neighborhood pizza club.",
+    ridge: "Sherpa",
+    visibility: "signed-in",
+    story: [
+      "A fun first Sherpa: order a pie, walk a guest through the club, keep the table moving.",
+      "Prototype. Not on a public host.",
+    ],
+  },
+  {
+    id: "luna-contact-center",
+    title: "Luna Contact Center",
+    kicker: "Contact center",
+    lede: "D365 contact center utilities — form field analysis, search ring, keyboard macros — for enterprise desks.",
+    ridge: "Luna MacroFlow",
+    visibility: "signed-in",
+    story: [
+      "Debugging helpers and shared web resources for Dynamics 365 Contact Center implementations.",
+      "Field kit for the desk, not a public marketing site.",
+    ],
+  },
+  {
+    id: "gotham-gaars",
+    title: "Gotham GAARS",
+    kicker: "Field app",
+    lede: "Gotham Arrest Arraignment Recording System — arrest through arraignment, citation, and warrant. New York City spine.",
+    ridge: "Power Apps",
+    visibility: "signed-in",
+    story: [
+      "Analysis and a Power Apps canvas for arrest through arraignment, summary citation, and arrest warrant.",
+      "Major-city policing model. Not a public host.",
+    ],
+  },
+  {
     id: "blaze-dropship",
     title: "Dropshipping storefront",
     kicker: "Commerce",
@@ -102,4 +184,8 @@ export function worksVisibleTo(viewer: {
     if (w.visibility === "signed-in") return viewer.signedIn;
     return Boolean(viewer.owner);
   });
+}
+
+export function workOpenLabel(item: WorkEntry): string {
+  return item.surface === "desk" ? "Open desk" : "Open page";
 }
