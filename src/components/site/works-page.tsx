@@ -1,9 +1,11 @@
 import { Link, Navigate, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { SiteChrome } from "./site-chrome";
+import { AcadenceDesk } from "./acadence-desk";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import {
   workById,
+  workOpenLabel,
   worksVisibleTo,
   type WorkEntry,
 } from "@/lib/works";
@@ -33,21 +35,24 @@ function WorkSubnav({ current }: { current?: string }) {
   const { user } = useCurrentUserState();
   const items = worksVisibleTo({ signedIn: !!user, owner: false });
   return (
-    <p className="ac-luna-more">
-      {current ? <Link to="/work">All works</Link> : <span>All works</span>}
-      {items.map((w) => (
-        <span key={w.id}>
-          {" · "}
-          {w.id === current ? (
-            w.title
-          ) : (
-            <Link to="/work/$slug" params={{ slug: w.id }}>
-              {w.title}
-            </Link>
-          )}
-        </span>
-      ))}
-    </p>
+    <nav className="ac-works-subnav" aria-label="Works">
+      {current ? (
+        <Link to="/work">All works</Link>
+      ) : (
+        <span className="is-current">All works</span>
+      )}
+      {items.map((w) =>
+        w.id === current ? (
+          <span key={w.id} className="is-current">
+            {w.title}
+          </span>
+        ) : (
+          <Link key={w.id} to="/work/$slug" params={{ slug: w.id }}>
+            {w.title}
+          </Link>
+        ),
+      )}
+    </nav>
   );
 }
 
@@ -66,7 +71,10 @@ function WorkCard({ item, n, total }: { item: WorkEntry; n: number; total: numbe
       </header>
       <h2 className="ac-work-card-title">{item.title}</h2>
       <p className="ac-work-card-lede">{item.lede}</p>
-      <span className="ac-work-card-link">Open page</span>
+      {item.client ? (
+        <p className="ac-work-card-client">{item.client}</p>
+      ) : null}
+      <span className="ac-work-card-link">{workOpenLabel(item)}</span>
       <span className="ac-work-card-index">
         {num} / {String(total).padStart(2, "0")}
       </span>
@@ -151,6 +159,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
                 <header className="ac-service-head">
                   <span className="ac-service-kicker">
                     {item.kicker} · {item.ridge}
+                    {item.client ? ` · ${item.client}` : ""}
                   </span>
                   <h1 className="ac-service-title">{item.title}</h1>
                   <p className="ac-service-lede ac-service-lede--last">
@@ -171,10 +180,13 @@ export function WorkDetailPage({ slug }: { slug: string }) {
                         Live site
                       </a>
                     </p>
-                  ) : (
+                  ) : item.surface === "desk" ? null : (
                     <p>Not on a public host yet.</p>
                   )}
                 </article>
+                {item.surface === "desk" && item.id === "acadence" ? (
+                  <AcadenceDesk />
+                ) : null}
                 <WorkSubnav current={item.id} />
               </>
             )}
