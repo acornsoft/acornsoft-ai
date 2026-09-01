@@ -368,9 +368,7 @@ export function InbioPage() {
                         Luna as your Sherpa
                       </strong>
                       . She walks with you. Your Climb Note is what she
-                      follows.{" "}
-                      <strong className="ac-story-em">Gnomah</strong> holds
-                      the climbs. {PLATFORM}
+                      follows. {PLATFORM}
                     </p>
                     <ul
                       className="ac-story-beats"
@@ -389,7 +387,8 @@ export function InbioPage() {
                         follows
                       </li>
                       <li>
-                        <strong>Gnomah</strong> — the memory that backs her
+                        <strong>Grok Build</strong> — the agent that ships
+                        the step
                       </li>
                     </ul>
                     <p className="ac-story-support">{LUNA_SHERPA_PLAIN}</p>
@@ -527,7 +526,7 @@ export function InbioPage() {
                       They bring a diverse set of skills, capabilities, and
                       velocity to the problem. You provide the Climb Note —
                       that’s what they follow. Luna is the Sherpa — she
-                      walks with you. Gnomah remembers the climb. {PLATFORM}
+                      walks with you. {PLATFORM}
                     </p>
                     <div className="ac-story-actions">
                       <Link className="rn-btn ac-btn-maroon" to="/start">
