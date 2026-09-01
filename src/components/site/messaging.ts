@@ -2,8 +2,7 @@
  * Locked marketing lines. Repeat these. Do not invent a second story.
  *
  * Climb Notes are the same four beats for a shop owner and an engineer.
- * Gnomah holds the climbs. Grok-based tools run the step.
- * The journal is the proof.
+ * Grok-based tools run the step. The journal is the proof.
  *
  * Public mountain beats (Luna Foundry Multiagent). Same four names
  * on the site, the notes, and the extension. Do not name MacroFlow,
@@ -58,16 +57,16 @@ export const CROSSOVER_SHORT =
   "Same four beats on both sides of the table.";
 
 export const GNOMAH_BRAIN =
-  "Gnomah holds the climbs so the next step starts from a trail.";
+  "The journal holds the climbs so the next step starts from a trail.";
 
 export const LUNA_SHERPA =
-  "Luna is our voice Sherpa. Climb Notes drive her. Gnomah supports her.";
+  "Luna is our voice Sherpa. Climb Notes drive her.";
 
 export const PLATFORM =
   "Acornsoft builds with voice and agents.";
 
 export const LUNA_SHERPA_PLAIN =
-  "Luna is your Sherpa. She walks with you. Your write-up is what she follows. Gnomah remembers the climbs.";
+  "Luna is your Sherpa. She walks with you. Your write-up is what she follows.";
 
 /** Public, non-technical. Use these on home / start / Field Guide / Services. */
 export const PUBLIC_NEED = "Start with what’s bugging you.";
