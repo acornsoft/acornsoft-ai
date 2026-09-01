@@ -1,6 +1,6 @@
 # acornsoft.ai
 
-Public site for Acornsoft: Climb Notes, Field Guide, Canopy, Gnomah studio, and **Luna Foundry Multiagent onboarding**.
+Public site for Acornsoft: **Luna** (voice Sherpa), **Climb Notes**, and **Grok Build**. Live at [www.acornsoft.ai](https://www.acornsoft.ai).
 
 ## Luna onboarding (look here)
 
