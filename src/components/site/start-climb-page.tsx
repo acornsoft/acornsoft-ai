@@ -94,7 +94,7 @@ export function StartClimbPage() {
               </h1>
               <p className="ac-start-received-lede">
                 {sentNote?.number
-                  ? `It’s in Gnomah as CN-${sentNote.number} (draft).`
+                  ? `It’s on the Climb Notes list as CN-${sentNote.number} (draft).`
                   : "We’ll reach you at the email you left."}
               </p>
               <ol className="ac-start-received-next">
@@ -104,7 +104,7 @@ export function StartClimbPage() {
                 </li>
                 <li>
                   <span>2</span>
-                  We put agents on it
+                  We review the trail
                 </li>
                 <li>
                   <span>3</span>
@@ -112,19 +112,6 @@ export function StartClimbPage() {
                 </li>
               </ol>
               <div className="ac-start-received-actions">
-                <Link
-                  className="rn-btn ac-btn-maroon"
-                  to="/gnomah"
-                  search={
-                    sentNote?.id ? { note: sentNote.id } : undefined
-                  }
-                >
-                  <span>
-                    {sentNote?.number
-                      ? `Open CN-${sentNote.number}`
-                      : "Open Gnomah"}
-                  </span>
-                </Link>
                 <button
                   type="button"
                   className="rn-btn ac-btn-outline"
