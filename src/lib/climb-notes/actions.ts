@@ -214,6 +214,27 @@ export const submitPublicClimbNoteAction = createServerFn({ method: "POST" })
         "",
         from,
       );
+      try {
+        const { notifyClimbNotesGate } = await import(
+          "./notify-gate.server"
+        );
+        await notifyClimbNotesGate({
+          id,
+          number,
+          title: title || problem.slice(0, 72),
+          problem,
+          measure,
+          slice,
+          lesson: lesson || "",
+          name,
+          email,
+        });
+      } catch (err) {
+        console.error(
+          "[climb-notes/gate] notify skipped",
+          err instanceof Error ? err.message : err,
+        );
+      }
       return { ok: true, id, number };
     } catch {
       return {
