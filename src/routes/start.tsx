@@ -5,11 +5,11 @@ export const Route = createFileRoute("/start")({
   component: StartClimbPage,
   head: () => ({
     meta: [
-      { title: "Tell us what’s stuck — Acornsoft" },
+      { title: "Send a Note — Acornsoft" },
       {
         name: "description",
         content:
-          "Four short answers. No code. We turn it into something you can use.",
+          "Three short answers. Summit stays blank until we look at the climb.",
       },
     ],
   }),

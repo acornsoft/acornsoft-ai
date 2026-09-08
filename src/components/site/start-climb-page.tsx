@@ -2,26 +2,30 @@ import { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { SiteChrome } from "./site-chrome";
 import { submitPublicClimbNoteAction } from "@/lib/climb-notes/actions";
-import { ZERO_TO_ONE_PLAIN, CLIMB_BEATS } from "./messaging";
 
-const PLACEHOLDERS: Record<(typeof CLIMB_BEATS)[number]["key"], string> = {
-  problem:
-    "You are the person at tax time. Papers live in email, a drawer, and the camera roll. Weather: dread and a late start. Rule: one place to look. Fit to leave when you can say that out loud.",
-  measure:
-    "One summit: by March 1 you open one place and in ten minutes know what’s in, what’s missing, and what you likely owe or get back. Success: those three answers. Not today: filing the return for you.",
-  slice:
-    "Check the map. The pile is still scattered. Recover if last year ran late. Hold or go: go — write this down and hand it to an agent.",
-  lesson:
-    "The rope team builds one page you can open. Proof: you confirm what’s in, what’s missing, and the number.",
-};
-
-const MOVES = CLIMB_BEATS.map((beat) => ({
-  key: beat.key,
-  n: String(beat.n),
-  label: beat.label,
-  hint: `${beat.plain} — ${beat.hint}`,
-  placeholder: PLACEHOLDERS[beat.key],
-}));
+const SENDER_FIELDS = [
+  {
+    key: "problem" as const,
+    n: "1",
+    label: "Base Camp",
+    hint: "Where are you starting, and what has to stay true?",
+    placeholder: "We are here. This is what cannot change.",
+  },
+  {
+    key: "measure" as const,
+    n: "2",
+    label: "Route",
+    hint: "What is the one job, and what is not part of it?",
+    placeholder: "The one job. Then what we are not doing.",
+  },
+  {
+    key: "slice" as const,
+    n: "3",
+    label: "Waypoint",
+    hint: "Are we going, or holding? Say why in a sentence.",
+    placeholder: "Going, or holding, and why.",
+  },
+] as const;
 
 type Fields = {
   problem: string;
@@ -63,7 +67,9 @@ export function StartClimbPage() {
     setBusy(true);
     setError(null);
     try {
-      const result = await submitPublicClimbNoteAction({ data: fields });
+      const result = await submitPublicClimbNoteAction({
+        data: { ...fields, lesson: "" },
+      });
       if (result.ok) {
         setSentNote(
           result.id && result.number
@@ -89,40 +95,36 @@ export function StartClimbPage() {
           {sent ? (
             <section className="ac-start-received" role="status">
               <span className="ac-start-received-k">Received</span>
-              <h1 className="ac-start-received-title">
-                We have your write-up.
-              </h1>
+              <h1 className="ac-start-received-title">We have your note.</h1>
               <p className="ac-start-received-lede">
                 {sentNote?.number
-                  ? `It’s in Gnomah as CN-${sentNote.number} (draft).`
-                  : "We’ll reach you at the email you left."}
+                  ? `It’s in as CN-${sentNote.number}. Summit is still blank.`
+                  : "We’ll reach you at the email you left. Summit is still blank."}
               </p>
               <ol className="ac-start-received-next">
                 <li>
                   <span>1</span>
-                  It’s on the Climb Notes list
+                  We read Base Camp, Route, and Waypoint
                 </li>
                 <li>
                   <span>2</span>
-                  We put agents on it
+                  We may ask a follow-up
                 </li>
                 <li>
                   <span>3</span>
-                  You get a note back
+                  Summit is filled in after that
                 </li>
               </ol>
               <div className="ac-start-received-actions">
                 <Link
                   className="rn-btn ac-btn-maroon"
                   to="/gnomah"
-                  search={
-                    sentNote?.id ? { note: sentNote.id } : undefined
-                  }
+                  search={sentNote?.id ? { note: sentNote.id } : undefined}
                 >
                   <span>
                     {sentNote?.number
                       ? `Open CN-${sentNote.number}`
-                      : "Open Gnomah"}
+                      : "Open the note"}
                   </span>
                 </Link>
                 <button
@@ -139,111 +141,135 @@ export function StartClimbPage() {
             </section>
           ) : (
             <>
-          <header className="ac-service-head">
-            <span className="ac-service-kicker">First step</span>
-            <h1 className="ac-service-title">
-              Tell us what’s stuck. We’ll build from that.
-            </h1>
-            <div className="ac-service-lede-box">
-              <p className="ac-service-lede ac-service-lede--last">
-                Four answers. No code. We turn it into something you can
-                use.
-              </p>
-            </div>
-          </header>
+              <header className="ac-service-head">
+                <span className="ac-service-kicker">Send a Note</span>
+                <h1 className="ac-service-title">
+                  Tell us where you are, the one job, and whether to go.
+                </h1>
+                <div className="ac-service-lede-box">
+                  <p className="ac-service-lede ac-service-lede--last">
+                    Three answers. No code. Summit stays blank until we look
+                    at it.
+                  </p>
+                </div>
+              </header>
 
-            <form className="ac-start-form" onSubmit={onSubmit} noValidate>
-              <ol className="ac-start-moves">
-                {MOVES.map((move) => (
-                  <li key={move.key} className="ac-start-move">
-                    <label htmlFor={`ac-start-${move.key}`}>
-                      <span className="ac-start-n">{move.n}</span>
-                      <span className="ac-start-move-copy">
-                        <span className="ac-start-move-label">
-                          {move.label}
+              <form className="ac-start-form" onSubmit={onSubmit} noValidate>
+                <ol className="ac-start-moves">
+                  {SENDER_FIELDS.map((move) => (
+                    <li key={move.key} className="ac-start-move">
+                      <label htmlFor={`ac-start-${move.key}`}>
+                        <span className="ac-start-n">{move.n}</span>
+                        <span className="ac-start-move-copy">
+                          <span className="ac-start-move-label">{move.label}</span>
+                          <span className="ac-start-move-hint">{move.hint}</span>
                         </span>
-                        <span className="ac-start-move-hint">{move.hint}</span>
+                      </label>
+                      <textarea
+                        id={`ac-start-${move.key}`}
+                        name={move.key}
+                        rows={4}
+                        value={fields[move.key]}
+                        placeholder={move.placeholder}
+                        onChange={(ev) => set(move.key, ev.target.value)}
+                        required
+                      />
+                    </li>
+                  ))}
+                  <li className="ac-start-move" aria-disabled="true">
+                    <label htmlFor="ac-start-lesson">
+                      <span className="ac-start-n">4</span>
+                      <span className="ac-start-move-copy">
+                        <span className="ac-start-move-label">Summit</span>
+                        <span className="ac-start-move-hint">
+                          Left blank. We fill this in after we look at the climb.
+                          We may ask a follow-up first.
+                        </span>
                       </span>
                     </label>
                     <textarea
-                      id={`ac-start-${move.key}`}
-                      name={move.key}
-                      rows={move.key === "lesson" ? 3 : 4}
-                      value={fields[move.key]}
-                      placeholder={move.placeholder}
-                      onChange={(ev) => set(move.key, ev.target.value)}
-                      required={move.key !== "lesson"}
+                      id="ac-start-lesson"
+                      name="lesson"
+                      rows={3}
+                      value=""
+                      disabled
+                      readOnly
+                      placeholder="Filled in after we evaluate."
+                      style={{
+                        opacity: 0.55,
+                        cursor: "not-allowed",
+                        background: "#eceae6",
+                      }}
                     />
                   </li>
-                ))}
-              </ol>
+                </ol>
 
-              <div className="ac-start-meta">
-                <label>
-                  <span>Give this climb a name</span>
-                  <input
-                    type="text"
-                    name="title"
-                    value={fields.title}
-                    onChange={(ev) => set("title", ev.target.value)}
-                    placeholder="Optional — we’ll use the problem if you skip this"
-                  />
-                </label>
-                <label>
-                  <span>Your name</span>
-                  <input
-                    type="text"
-                    name="name"
-                    value={fields.name}
-                    onChange={(ev) => set("name", ev.target.value)}
-                    required
-                    autoComplete="name"
-                  />
-                </label>
-                <label>
-                  <span>Email</span>
-                  <input
-                    type="email"
-                    name="email"
-                    value={fields.email}
-                    onChange={(ev) => set("email", ev.target.value)}
-                    required
-                    autoComplete="email"
-                  />
-                </label>
-                <label className="ac-start-hp" aria-hidden="true">
-                  Fax
-                  <input
-                    type="text"
-                    name="hp_fax"
-                    value={fields.hp_fax}
-                    onChange={(ev) => set("hp_fax", ev.target.value)}
-                    tabIndex={-1}
-                    autoComplete="off"
-                  />
-                </label>
-              </div>
+                <div className="ac-start-meta">
+                  <label>
+                    <span>Give this climb a name</span>
+                    <input
+                      type="text"
+                      name="title"
+                      value={fields.title}
+                      onChange={(ev) => set("title", ev.target.value)}
+                      placeholder="Optional"
+                    />
+                  </label>
+                  <label>
+                    <span>Your name</span>
+                    <input
+                      type="text"
+                      name="name"
+                      value={fields.name}
+                      onChange={(ev) => set("name", ev.target.value)}
+                      required
+                      autoComplete="name"
+                    />
+                  </label>
+                  <label>
+                    <span>Email</span>
+                    <input
+                      type="email"
+                      name="email"
+                      value={fields.email}
+                      onChange={(ev) => set("email", ev.target.value)}
+                      required
+                      autoComplete="email"
+                    />
+                  </label>
+                  <label className="ac-start-hp" aria-hidden="true">
+                    Fax
+                    <input
+                      type="text"
+                      name="hp_fax"
+                      value={fields.hp_fax}
+                      onChange={(ev) => set("hp_fax", ev.target.value)}
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
+                  </label>
+                </div>
 
-              {error ? (
-                <p className="ac-start-error" role="alert">
-                  {error}
-                </p>
-              ) : null}
+                {error ? (
+                  <p className="ac-start-error" role="alert">
+                    {error}
+                  </p>
+                ) : null}
 
-              <div className="ac-start-actions">
-                <button
-                  type="submit"
-                  className="rn-btn ac-btn-maroon"
-                  disabled={busy}
-                >
-                  <span>{busy ? "Sending…" : "Send to Acornsoft"}</span>
-                </button>
-                <p className="ac-start-fine">
-                  We keep this private until you say otherwise.{" "}
-                  <Link to="/field-guide">Want the how-tos first?</Link>
-                </p>
-              </div>
-            </form>
+                <div className="ac-start-actions">
+                  <button
+                    type="submit"
+                    className="rn-btn ac-btn-maroon"
+                    disabled={busy}
+                  >
+                    <span>{busy ? "Sending…" : "Send a Note"}</span>
+                  </button>
+                  <p className="ac-start-fine">
+                    We keep this private until you say otherwise.{" "}
+                    <Link to="/field-guide">Want the how-tos first?</Link>
+                  </p>
+                </div>
+              </form>
             </>
           )}
         </div>
