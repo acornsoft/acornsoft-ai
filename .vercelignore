@@ -1,8 +1,7 @@
-# Keep Imagine tool dumps out of Vercel output
+# Keep Imagine scratch out of Vercel output. Site film lives in public/images/workforce.
 artifacts
 artifacts/imagine_images
 artifacts/imagine_videos
-public/images/workforce
 node_modules
 .git
 .output
