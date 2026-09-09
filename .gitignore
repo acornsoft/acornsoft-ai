@@ -10,8 +10,7 @@ dist/
 *.zip
 attachments/*.zip
 
-# Grok Imagine dumps — never commit, never ship
+# Grok Imagine scratch — never commit the 35MB dump
 artifacts/
 artifacts/imagine_images/
 artifacts/imagine_videos/
-public/images/workforce/
