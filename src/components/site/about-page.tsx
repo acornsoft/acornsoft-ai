@@ -4,13 +4,17 @@ import { VoiceCta, VoiceWhenSignedIn } from "./voice-access";
 
 import { PERSONAL_SITE, dualSiteNote } from "@/lib/site-links";
 
+const SHOW_ABOUT_PEOPLE = false;
+
 const aboutSections = [
   { id: "about-intro", label: "Who we are" },
   { id: "company-vision", label: "Vision" },
   { id: "first-principles", label: "First principles" },
   { id: "core-beliefs", label: "Beliefs" },
   { id: "charter", label: "Charter" },
-  { id: "founder", label: "People" },
+  ...(SHOW_ABOUT_PEOPLE
+    ? ([{ id: "founder", label: "People" }] as const)
+    : []),
 ] as const;
 
 const principles = [
@@ -248,6 +252,7 @@ export function AboutPage() {
             </ol>
           </section>
 
+          {SHOW_ABOUT_PEOPLE ? (
           <section
             className="ac-about-sec ac-about-founder"
             id="founder"
@@ -304,6 +309,7 @@ export function AboutPage() {
               </div>
             </div>
           </section>
+          ) : null}
           </div>
         </div>
       </div>
