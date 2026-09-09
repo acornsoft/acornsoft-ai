@@ -197,10 +197,9 @@ export function ServicePage() {
                 <strong>Summit</strong> (build, prove, evidence home).
               </p>
               <p className="ac-service-lede ac-service-lede--last">
-                Send that write-up. Luna is your Sherpa. She walks with
-                you, follows the note, and Gnomah remembers the climb.
-                Acornsoft builds with voice and agents. We
-                build from what you send.
+                You supply the instructions in a Climb Note. If you need a
+                guide, Luna on Grok Voice walks you through the steps. Send
+                the note and we work from it.
               </p>
             </div>
             <p className="ac-start-inline">

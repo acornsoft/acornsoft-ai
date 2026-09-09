@@ -59,14 +59,15 @@ export const CROSSOVER_SHORT =
 export const GNOMAH_BRAIN =
   "The journal holds the climbs so the next step starts from a trail.";
 
-export const LUNA_SHERPA =
-  "Luna is our voice Sherpa. Climb Notes drive her.";
+/** Elevator pitch — first thing a visitor should understand. */
+export const ELEVATOR =
+  "You supply the instructions in a Climb Note. If you need a guide, Luna on Grok Voice walks you through the steps.";
 
-export const PLATFORM =
-  "Acornsoft builds with voice and agents.";
+export const LUNA_SHERPA = ELEVATOR;
 
-export const LUNA_SHERPA_PLAIN =
-  "Luna is your Sherpa. She walks with you. Your write-up is what she follows.";
+export const PLATFORM = ELEVATOR;
+
+export const LUNA_SHERPA_PLAIN = ELEVATOR;
 
 /** Public, non-technical. Use these on home / start / Field Guide / Services. */
 export const PUBLIC_NEED = "Start with what’s bugging you.";

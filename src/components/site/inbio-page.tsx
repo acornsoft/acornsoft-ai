@@ -2,9 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "./site-chrome";
-import { ClimbNotesMark } from "./climb-notes-mark";
 import { VoiceWhenSignedIn } from "./voice-access";
-import { LIGHTSPEED_PLAIN, LUNA_SHERPA_PLAIN, PLATFORM, PUBLIC_AGENTS, PUBLIC_NEED } from "./messaging";
+import { LIGHTSPEED_PLAIN, ELEVATOR, PUBLIC_AGENTS, PUBLIC_NEED } from "./messaging";
 import { ViewportTip } from "./viewport-tip";
 import { GrokWorkforceLayers } from "./grok-workforce-layers";
 
@@ -337,42 +336,31 @@ export function InbioPage() {
                     aria-label="1 of 4"
                     aria-hidden={phase === "out"}
                   >
-                    <p className="ac-story-kicker">
-                      Luna as your Sherpa · <ClimbNotesMark />
-                    </p>
+                    <p className="ac-story-kicker">How it works</p>
                     <h1 className="ac-story-headline">
                       Building with AI is a climb.
                     </h1>
-                    <p className="ac-story-lede">
-                      You climb, with{" "}
-                      <strong className="ac-story-em">
-                        Luna as your Sherpa
-                      </strong>
-                      . She walks with you. Your Climb Note is what she
-                      follows. {PLATFORM}
-                    </p>
+                    <p className="ac-story-lede">{ELEVATOR}</p>
                     <ul
                       className="ac-story-beats"
-                      aria-label="The metaphor at a glance"
+                      aria-label="How it works"
                     >
                       <li>
-                        <strong>You climb</strong> — your problem, your step,
-                        your pace
+                        <strong>Climb Note</strong> — your instructions, in a
+                        simple format
                       </li>
                       <li>
-                        <strong>Luna</strong> — voice Sherpa. She walks with
-                        you.
+                        <strong>Luna</strong> — a guide on Grok Voice, if you
+                        want one
                       </li>
                       <li>
-                        <strong>Climb Notes</strong> — the write-up she
-                        follows
+                        <strong>The steps</strong> — short, and the same each
+                        time
                       </li>
                       <li>
-                        <strong>Grok Build</strong> — the agent that ships
-                        the step
+                        <strong>The result</strong> — something you can use
                       </li>
                     </ul>
-                    <p className="ac-story-support">{LUNA_SHERPA_PLAIN}</p>
                     <div className="ac-story-actions">
                       <Link className="rn-btn ac-btn-maroon" to="/start">
                         <span>Send a Climb Note</span>
@@ -487,10 +475,9 @@ export function InbioPage() {
                       <GrokWorkforceLayers compact />
                     </div>
                     <p className="ac-story-lede">
-                      They bring a diverse set of skills, capabilities, and
-                      velocity to the problem. You provide the Climb Note —
-                      that’s what they follow. Luna is the Sherpa — she
-                      walks with you. {PLATFORM}
+                      You supply the Climb Note. Use Voice, Build, Bot, or
+                      Imagine only if they help. Luna can walk you through
+                      the steps on Grok Voice.
                     </p>
                     <div className="ac-story-actions">
                       <Link className="rn-btn ac-btn-maroon" to="/start">
