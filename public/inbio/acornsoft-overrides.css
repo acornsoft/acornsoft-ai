@@ -22902,10 +22902,11 @@ a.ac-work-card:hover {
   color: #c4cfde !important;
   font-size: 13px !important;
 }
-.ac-wf-hand--voice.is-on { border-color: #8eecc8 !important; }
-.ac-wf-hand--build.is-on { border-color: #ff9900 !important; }
-.ac-wf-hand--grok.is-on { border-color: #7ec8ff !important; }
-.ac-wf-hand--imagine.is-on { border-color: #d4c2ff !important; }
+.ac-wf-hand--voice .ac-wf-token { background: #8eecc8 !important; color: #06281c !important; }
+.ac-wf-hand--build .ac-wf-token { background: #ff9900 !important; color: #1a100c !important; }
+.ac-wf-hand--grok .ac-wf-token { background: #7ec8ff !important; color: #072033 !important; }
+.ac-wf-hand--imagine .ac-wf-token { background: #d4c2ff !important; color: #1a1030 !important; }
+.ac-wf-film { display: none !important; }
 .ac-wf-hand-hit {
   appearance: none !important;
   display: flex !important;
@@ -22939,11 +22940,15 @@ a.ac-work-card:hover {
   display: none !important;
 }
 .ac-wf-token {
+  display: grid !important;
+  place-items: center !important;
   width: 56px !important;
   height: 56px !important;
   border-radius: 999px !important;
-  object-fit: cover !important;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.2) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
 }
 .ac-wf-hand-meta {
   display: flex !important;

@@ -6,13 +6,6 @@ import {
   type WorkforceLayer,
 } from "./field-guide-data";
 
-const TOKEN: Record<WorkforceLayer["id"], string> = {
-  voice: "/images/workforce/token-voice.jpg",
-  build: "/images/workforce/token-build.jpg",
-  grok: "/images/workforce/token-grok.jpg",
-  imagine: "/images/workforce/token-imagine.jpg",
-};
-
 const LOOP_PATH =
   "M180 72 H620 C708 72 728 92 728 160 V248 C728 316 708 336 620 336 H180 C92 336 72 316 72 248 V160 C72 92 92 72 180 72 Z";
 
@@ -168,7 +161,9 @@ function ToolRail({
               aria-pressed={on}
               onClick={() => onToggle(layer.id)}
             >
-              <img src={TOKEN[layer.id]} alt="" width={40} height={40} />
+              <span className="ac-cycle-tool-mark" aria-hidden>
+                {layer.verb}
+              </span>
               <span className="ac-cycle-tool-t">{layer.title}</span>
               {compact ? null : (
                 <span className="ac-cycle-tool-l">{layer.line}</span>
