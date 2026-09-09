@@ -4,3 +4,14 @@ node_modules/
 .env
 .env.*
 data/
+.vercel/
+.output/
+dist/
+*.zip
+attachments/*.zip
+
+.vercel/
+.output/
+dist/
+*.zip
+attachments/*.zip

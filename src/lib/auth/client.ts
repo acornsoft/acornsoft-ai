@@ -70,30 +70,53 @@ function setBearerToken(token: string | null): void {
 }
 
 /**
- * The sandbox live preview runs this app inside an iframe on a `*.grok-sandbox.com`
- * host, where a full-page redirect to the broker can't work — so sign-in uses a
- * popup there and a normal redirect everywhere else.
+ * Live preview (Grok Build) vs deployed site.
+ *
+ * - www.acornsoft.ai / acornsoft.ai / Vercel: top-level tab, cookie session,
+ *   full-page redirect. `/auth/popup` is not shipped on the deployed build.
+ * - Grok Build (`npm run dev`, `*.grok-sandbox.com`, or an embed): pop-up +
+ *   bearer token. A redirect inside the preview frame cannot finish.
  */
 function inLivePreview(): boolean {
-  return (
-    typeof window !== "undefined" &&
-    window.location.hostname.endsWith(".grok-sandbox.com")
-  );
+  // SSR: Vite `dev` is Grok Build; the production build is the live site.
+  if (typeof window === "undefined") return Boolean(import.meta.env.DEV);
+  const host = window.location.hostname.toLowerCase();
+  if (
+    host === "www.acornsoft.ai" ||
+    host === "acornsoft.ai" ||
+    host.endsWith(".vercel.app")
+  ) {
+    return false;
+  }
+  if (host.endsWith(".grok-sandbox.com")) return true;
+  if (import.meta.env.DEV) return true;
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
+  }
+}
+
+/** True when Continue with X / Google should open a pop-up (Grok Build). */
+export function usesPreviewSignIn(): boolean {
+  return inLivePreview();
 }
 
 /** Message the popup posts back to the opener once sign-in completes. */
-type PopupMessage = { source: "grok-auth-popup"; token: string | null; error?: string };
+type PopupMessage = {
+  source: "grok-auth-popup";
+  token: string | null;
+  error?: string;
+};
 
 /**
  * Start sign-in with one upstream provider (`providerId` from `GROK_PROVIDERS`),
  * federating through the Grok auth broker.
  *
- * - **Live preview** (`*.grok-sandbox.com` iframe): opens a POPUP to
- *   `/auth/popup`, served by the template Vite plugin (see `vite.config.ts` +
- *   `popup.server.ts`) — 302s to the broker/upstream login (no app chrome) and,
- *   on return, posts the session bearer token back. We store it and refresh the
- *   session; no top-level navigation of the iframe to the broker.
- * - **Deployed** (and local non-iframe): a normal full-page redirect into the broker.
+ * - **Live preview** (Grok Build iframe / `*.grok-sandbox.com`): opens a POPUP
+ *   to `/auth/popup` (Vite plugin + `popup.server.ts`) — 302s to the broker
+ *   and posts the session bearer back. No top-level navigation of the iframe.
+ * - **Deployed www.acornsoft.ai**: a normal full-page redirect into the broker.
  *
  * Either way it clears any existing local session FIRST so switching providers
  * actually switches identity.
@@ -126,9 +149,15 @@ export async function signIn(
 
   if (inLivePreview()) {
     if (!popup) throw new Error("Pop-up blocked — allow pop-ups for sign-in");
-    const token = await waitForPopupToken(popup);
-    if (!token) throw new Error("Sign-in was cancelled or failed");
-    setBearerToken(token);
+    const result = await waitForPopupToken(popup);
+    if (!result.token) {
+      const detail = result.error?.trim();
+      if (detail && detail !== "sign_in_failed") {
+        throw new Error(humanizeAuthError(detail));
+      }
+      throw new Error("Sign-in was cancelled or failed");
+    }
+    setBearerToken(result.token);
     // Refresh the client session store with the bearer attached (onRequest).
     // Avoid a full iframe reload when we're already on the destination — that
     // reload was the slow "still loading after the popup closed" feeling.
@@ -156,6 +185,19 @@ export async function signIn(
   if (data?.url) window.location.href = data.url;
 }
 
+function humanizeAuthError(raw: string): string {
+  const t = raw.toLowerCase();
+  if (t.includes("popup blocked")) return "Pop-up blocked — allow pop-ups for sign-in";
+  if (t.includes("not a function") || t.includes("oauth_init")) {
+    return "Sign-in is not ready on this preview yet. Try again in a moment.";
+  }
+  if (t.includes("invalid_client") || t.includes("unauthorized_client")) {
+    return "This preview cannot talk to the sign-in service. Refresh and try again.";
+  }
+  if (raw.length > 180) return "Sign-in failed. Try Continue with X again.";
+  return raw;
+}
+
 /**
  * Open `/auth/popup` in a new window. Must run synchronously inside the click
  * handler (no await before this). The path is served by the template Vite
@@ -177,29 +219,36 @@ function openSignInPopup(providerId: string): Window | null {
  * Wait for the popup's completion page to postMessage the session bearer (or
  * for the user to dismiss the popup).
  */
-function waitForPopupToken(popup: Window): Promise<string | null> {
+function waitForPopupToken(popup: Window): Promise<PopupMessage> {
   return new Promise((resolve) => {
     const origin = window.location.origin;
     let settled = false;
     let closeTimer: number | undefined;
-    const settle = (token: string | null) => {
+    const settle = (msg: PopupMessage) => {
       if (settled) return;
       settled = true;
       cleanup();
-      resolve(token);
+      resolve(msg);
     };
     const onMessage = (event: MessageEvent) => {
       if (event.origin !== origin) return;
       const data = event.data as PopupMessage | undefined;
       if (!data || data.source !== "grok-auth-popup") return;
-      settle(data.token ?? null);
+      settle({
+        source: "grok-auth-popup",
+        token: data.token ?? null,
+        error: data.error,
+      });
     };
     // Fallback when the user dismisses the popup. Grace period lets the
     // completion page's postMessage win over a racing `popup.closed`.
     const pollTimer = window.setInterval(() => {
       if (!popup.closed) return;
       window.clearInterval(pollTimer);
-      closeTimer = window.setTimeout(() => settle(null), 400);
+      closeTimer = window.setTimeout(
+        () => settle({ source: "grok-auth-popup", token: null }),
+        400,
+      );
     }, 300);
     function cleanup() {
       window.clearInterval(pollTimer);

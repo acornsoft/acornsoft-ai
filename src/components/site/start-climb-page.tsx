@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { SiteChrome } from "./site-chrome";
 import { submitPublicClimbNoteAction } from "@/lib/climb-notes/actions";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
 
 const SENDER_FIELDS = [
   {
@@ -50,6 +51,7 @@ const EMPTY: Fields = {
 };
 
 export function StartClimbPage() {
+  const { user } = useCurrentUserState();
   const [fields, setFields] = useState<Fields>(EMPTY);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -97,9 +99,11 @@ export function StartClimbPage() {
               <span className="ac-start-received-k">Received</span>
               <h1 className="ac-start-received-title">We have your note.</h1>
               <p className="ac-start-received-lede">
-                {sentNote?.number
-                  ? `It’s in as CN-${sentNote.number}. Summit is still blank.`
-                  : "We’ll reach you at the email you left. Summit is still blank."}
+                {user && sentNote?.number
+                  ? `It’s in Gnomah as CN-${sentNote.number}. Summit is still blank.`
+                  : sentNote?.number
+                    ? `It’s in as CN-${sentNote.number}. Summit is still blank.`
+                    : "We’ll reach you at the email you left. Summit is still blank."}
               </p>
               <ol className="ac-start-received-next">
                 <li>
@@ -116,17 +120,23 @@ export function StartClimbPage() {
                 </li>
               </ol>
               <div className="ac-start-received-actions">
-                <Link
-                  className="rn-btn ac-btn-maroon"
-                  to="/gnomah"
-                  search={sentNote?.id ? { note: sentNote.id } : undefined}
-                >
-                  <span>
-                    {sentNote?.number
-                      ? `Open CN-${sentNote.number}`
-                      : "Open the note"}
-                  </span>
-                </Link>
+                {user ? (
+                  <Link
+                    className="rn-btn ac-btn-maroon"
+                    to="/gnomah"
+                    search={sentNote?.id ? { note: sentNote.id } : undefined}
+                  >
+                    <span>
+                      {sentNote?.number
+                        ? `Open CN-${sentNote.number}`
+                        : "Open Gnomah"}
+                    </span>
+                  </Link>
+                ) : (
+                  <Link className="rn-btn ac-btn-maroon" to="/climb-notes">
+                    <span>See Climb Notes</span>
+                  </Link>
+                )}
                 <button
                   type="button"
                   className="rn-btn ac-btn-outline"

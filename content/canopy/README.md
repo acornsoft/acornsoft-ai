@@ -76,14 +76,18 @@ User timeline for one account is cheaper than many topic searches. Keep topic `q
 - X Premium “for you” feed  
 - Webhooks on every post (X does not give free instant webhooks for this)
 
-## Grok Bot (next)
+## Grok Bot + GitHub (same repo)
 
-When you wire a Grok Bot, give it this job only:
+**Source of truth is [acornsoft/acornsoft-ai](https://github.com/acornsoft/acornsoft-ai).** Grok Build, Grok Bots, and www.acornsoft.ai all run that tree. Do not point bots at the Grok “Push to Code” export repo (`honey-reef-yonder-fleet`).
 
-1. Weekly (e.g. Monday 09:00 America/New_York).
-2. `POST /api/canopy/refresh` with `Authorization: Bearer $CRON_SECRET`.
-3. If the response is **429**, stop. Do not retry until `nextPullAt`.
-4. Do not search X yourself. Do not scrape. Do not pull extra accounts.
-5. If a takedown request arrives, run the same POST with `CRON_SECRET` once, or edit `live-feed.json`.
+Weekly pull is a GitHub Action, not a second X client:
 
-The bot is a clock, not a second API client.
+1. Workflow [`.github/workflows/canopy-weekly.yml`](../../.github/workflows/canopy-weekly.yml) runs Monday 09:00 ET (`0 13 * * 1` UTC) and on **Actions → Canopy weekly Radar → Run workflow**.
+2. It runs `npm run canopy:fetch` with secret `X_BEARER_TOKEN`.
+3. If the feed changed, it commits `public/canopy/live-feed.json` to `main`. Vercel deploys that file. (A POST to `/api/canopy/refresh` on Vercel cannot keep the JSON after the function exits.)
+4. If the script reports the weekly window is closed, it stops. Do not retry until `nextPullAt`. Do not scrape. Do not pull extra accounts.
+5. Takedown: run the workflow with **force**, or edit `live-feed.json` on `main`.
+
+Secrets on the GitHub repo (Actions): `X_BEARER_TOKEN`. Optional host env `CRON_SECRET` is only for the Vercel GET cron (cache wake). The durable pull is this workflow.
+
+A Grok Bot, if you still want one, is the same clock: it must clone **acornsoft-ai** and either dispatch this workflow or `POST /api/canopy/refresh` with `CRON_SECRET`. It must not search X itself.

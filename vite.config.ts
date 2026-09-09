@@ -62,7 +62,9 @@ function authPopupPlugin(): Plugin {
             return;
           }
 
-          const host = String(req.headers["x-forwarded-host"] ?? req.headers.host ?? "localhost:8080");
+          const host = String(
+            req.headers["x-forwarded-host"] ?? req.headers.host ?? "localhost:8080",
+          );
           const proto = String(
             req.headers["x-forwarded-proto"] ??
               ((req.socket as { encrypted?: boolean } | undefined)?.encrypted ? "https" : "http"),
@@ -76,9 +78,11 @@ function authPopupPlugin(): Plugin {
               requestHeaders.set(key, value);
             }
           }
-          // Ensure Host is the public preview host so Better Auth's dynamic
-          // baseURL / redirect_uri match the popup origin.
-          if (!requestHeaders.has("host")) requestHeaders.set("host", host);
+          // Public preview host wins over localhost so the broker callback
+          // is https://*.grok-sandbox.com/api/auth/oauth2/callback/...
+          requestHeaders.set("host", host);
+          requestHeaders.set("x-forwarded-host", host);
+          requestHeaders.set("x-forwarded-proto", proto);
 
           const request = new Request(`${proto}://${host}${rawUrl}`, {
             method: "GET",
