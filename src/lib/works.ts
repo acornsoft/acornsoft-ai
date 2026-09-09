@@ -1,10 +1,10 @@
 /**
  * Acornsoft developed solutions — HQ catalog SoT.
  *
- * Visibility (flip per item; default signed-in):
+ * Visibility (flip per item; default owner):
  *   public     — anyone
- *   signed-in  — any authenticated visitor (current default)
- *   owner      — Gnomah / @acornsoftai only
+ *   signed-in  — any authenticated visitor
+ *   owner      — founder / @acornsoftai only; shown when that account is signed in
  *
  * Live URLs only. Never private git. Never blaszyk.us (silent work record).
  * Luna Foundry Multiagent is the field kit, not a catalog demo.
@@ -39,7 +39,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "Voice desk",
     lede: "Spoken 90/10 lead desk for Mike Strelick and the Acadence team — ready, mail, hold, sent. Nine lines at a time.",
     ridge: "Custom .NET",
-    visibility: "signed-in",
+    visibility: "owner",
     surface: "desk",
     client: "Acadence · Mike Strelick",
     story: [
@@ -54,7 +54,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "Report",
     lede: "Independent timeline of claims next to the record, origin to now, in plain language.",
     ridge: "Grok Build",
-    visibility: "signed-in",
+    visibility: "owner",
     href: "https://unofficial-covid-report.acornsoft.ai/",
     story: [
       "A public timeline of claims next to the record — origin to now — so a reader can see what was said, when, and what the documents show.",
@@ -67,7 +67,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "Local site",
     lede: "Holistic residential cleaning for Darien Center — callback desk, ten local services, a journal for neighbors.",
     ridge: "Grok Build",
-    visibility: "signed-in",
+    visibility: "owner",
     story: [
       "A cleaner house and a calmer home. Wells, septic, mud season, cottages by the park. Ten local services.",
       "Four fields and a callback, not a shopping cart. Not live on a public Acornsoft host yet.",
@@ -79,7 +79,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "Storefront",
     lede: "Voice-first barbershop storefront — catalog, cart, and a climb from note to shelf.",
     ridge: "Grok Build",
-    visibility: "signed-in",
+    visibility: "owner",
     story: [
       "A storefront a barber can run: catalog, cart, and a path from a Climb Note to something on the shelf.",
       "Voice-first. Not live on a public host yet.",
@@ -91,7 +91,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "Local site",
     lede: "Services, hours, and contact so neighbors can find the chair without phone tag.",
     ridge: "Grok Build",
-    visibility: "signed-in",
+    visibility: "owner",
     story: [
       "A small local site: services, hours, contact. Neighbors should not need a phone tree to find the chair.",
       "Not live on a public host yet.",
@@ -103,7 +103,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "League app",
     lede: "Voice-first live scoring for weekly golf leagues — course, group, board.",
     ridge: "Custom .NET",
-    visibility: "signed-in",
+    visibility: "owner",
     story: [
       "Weekly league scoring: course, group, live board. Voice-first so a round does not wait on a clipboard.",
       "Custom .NET. Not on a public Acornsoft host.",
@@ -115,7 +115,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "Public site",
     lede: "A transparency site for DOGE — community review, moderation, and a recommendation Sherpa.",
     ridge: "Custom .NET",
-    visibility: "signed-in",
+    visibility: "owner",
     story: [
       "A site for complete transparency to the American public. Reviews, moderation, and a Sherpa that points people to what is worth reading.",
       "Custom .NET, clean architecture. Not on a public Acornsoft host yet.",
@@ -127,7 +127,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "Prototype",
     lede: "Light Sherpa prototype — ordering and a social guide for a neighborhood pizza club.",
     ridge: "Sherpa",
-    visibility: "signed-in",
+    visibility: "owner",
     story: [
       "A fun first Sherpa: order a pie, walk a guest through the club, keep the table moving.",
       "Prototype. Not on a public host.",
@@ -139,7 +139,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "Contact center",
     lede: "D365 contact center utilities — form field analysis, search ring, keyboard macros — for enterprise desks.",
     ridge: "Luna MacroFlow",
-    visibility: "signed-in",
+    visibility: "owner",
     story: [
       "Debugging helpers and shared web resources for Dynamics 365 Contact Center implementations.",
       "Field kit for the desk, not a public marketing site.",
@@ -151,7 +151,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "Field app",
     lede: "Gotham Arrest Arraignment Recording System — arrest through arraignment, citation, and warrant. New York City spine.",
     ridge: "Power Apps",
-    visibility: "signed-in",
+    visibility: "owner",
     story: [
       "Analysis and a Power Apps canvas for arrest through arraignment, summary citation, and arrest warrant.",
       "Major-city policing model. Not a public host.",
@@ -163,7 +163,7 @@ export const WORKS: WorkEntry[] = [
     kicker: "Commerce",
     lede: "Catalog, cart, checkout, and fulfillment wiring. Earlier export; Blaze is the current storefront SoT.",
     ridge: "Grok Build",
-    visibility: "signed-in",
+    visibility: "owner",
     story: [
       "Catalog, cart, checkout, fulfillment wiring. An earlier export.",
       "Blaze the Barber is the current storefront source of truth.",

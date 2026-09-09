@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Settings, X } from "lucide-react";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { useOwnerAccess } from "@/lib/auth/use-owner-access";
 import { OwnerRadarPrefs } from "./owner-radar-prefs";
 
 export function SettingsMenuButton({ onClick }: { onClick: () => void }) {
@@ -27,6 +28,7 @@ export function SettingsSheet({
   onClose: () => void;
 }) {
   const { user } = useCurrentUserState();
+  const { isOwner } = useOwnerAccess();
 
   useEffect(() => {
     if (!open) return;
@@ -89,13 +91,12 @@ export function SettingsSheet({
             <p className="ac-settings-account-name">{label}</p>
             <p className="ac-settings-account-meta">{meta}</p>
             <p className="ac-settings-account-note">
-              Gnomah stays on the account menu while you are signed in.
               Climb Notes publishing is reserved for @acornsoftai on X.
             </p>
           </div>
         </div>
 
-        <OwnerRadarPrefs />
+        {isOwner ? <OwnerRadarPrefs /> : null}
       </section>
     </div>
   );

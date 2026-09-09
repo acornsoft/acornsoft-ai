@@ -15,3 +15,5 @@ attachments/*.zip
 dist/
 *.zip
 attachments/*.zip
+
+artifacts/
