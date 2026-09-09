@@ -103,8 +103,7 @@ export function WorksPage() {
               <div className="ac-service-lede-box">
                 <p className="ac-service-lede">
                   Each card is a page on this site. Live hosts stay on their
-                  own domain. Founder only — shown when you are signed in as
-                  @acornsoftai.
+                  own domain. Private catalog for @acornsoftai.
                 </p>
                 <p className="ac-service-lede ac-service-lede--last">
                   The field kit is Luna Foundry Multiagent (help at{" "}
