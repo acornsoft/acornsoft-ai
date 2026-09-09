@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { SiteChrome } from "./site-chrome";
 import { AcadenceDesk } from "./acadence-desk";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { useOwnerAccess } from "@/lib/auth/use-owner-access";
 import {
   workById,
   workOpenLabel,
@@ -12,9 +13,10 @@ import {
 
 function WorkGate({ children }: { children: ReactNode }) {
   const { user, isPending } = useCurrentUserState();
+  const { isOwner, isPending: ownerPending } = useOwnerAccess();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  if (isPending && !user) {
+  if ((isPending && !user) || (user && ownerPending && !isOwner)) {
     return (
       <SiteChrome loginRedirect={pathname || "/work"}>
         <div className="ac-service-page ac-works-page ac-page-top">
@@ -28,12 +30,16 @@ function WorkGate({ children }: { children: ReactNode }) {
     return <Navigate to="/login" search={{ redirect: pathname || "/work" }} />;
   }
 
+  if (!isOwner) {
+    return <Navigate to="/" />;
+  }
+
   return <>{children}</>;
 }
 
 function WorkSubnav({ current }: { current?: string }) {
-  const { user } = useCurrentUserState();
-  const items = worksVisibleTo({ signedIn: !!user, owner: false });
+  const { signedIn, isOwner } = useOwnerAccess();
+  const items = worksVisibleTo({ signedIn, owner: isOwner });
   return (
     <nav className="ac-works-subnav" aria-label="Works">
       {current ? (
@@ -83,8 +89,8 @@ function WorkCard({ item, n, total }: { item: WorkEntry; n: number; total: numbe
 }
 
 export function WorksPage() {
-  const { user } = useCurrentUserState();
-  const items = worksVisibleTo({ signedIn: !!user, owner: false });
+  const { signedIn, isOwner } = useOwnerAccess();
+  const items = worksVisibleTo({ signedIn, owner: isOwner });
 
   return (
     <WorkGate>
@@ -97,8 +103,8 @@ export function WorksPage() {
               <div className="ac-service-lede-box">
                 <p className="ac-service-lede">
                   Each card is a page on this site. Live hosts stay on their
-                  own domain. Signed in for now; promote an item public when
-                  the summit is ready.
+                  own domain. Founder only — shown when you are signed in as
+                  @acornsoftai.
                 </p>
                 <p className="ac-service-lede ac-service-lede--last">
                   The field kit is Luna Foundry Multiagent (help at{" "}
@@ -136,10 +142,10 @@ export function WorksPage() {
 }
 
 export function WorkDetailPage({ slug }: { slug: string }) {
-  const { user } = useCurrentUserState();
+  const { signedIn, isOwner } = useOwnerAccess();
   const item = workById(slug);
   const visible = item
-    ? worksVisibleTo({ signedIn: !!user, owner: false }).some(
+    ? worksVisibleTo({ signedIn, owner: isOwner }).some(
         (w) => w.id === item.id,
       )
     : false;

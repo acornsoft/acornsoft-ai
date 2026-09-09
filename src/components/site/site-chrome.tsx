@@ -5,6 +5,7 @@ import { SiteAuthSlot } from "./site-auth-slot";
 
 import { primaryNav } from "./site-nav";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { useOwnerAccess } from "@/lib/auth/use-owner-access";
 import { SiteFooter } from "./site-footer";
 
 function useActivePath() {
@@ -38,14 +39,17 @@ function NavLinks({
   onNavigate,
   mobile = false,
   showStudio = false,
+  showOwner = false,
 }: {
   onNavigate?: () => void;
   mobile?: boolean;
   showStudio?: boolean;
+  showOwner?: boolean;
 }) {
   const pathname = useActivePath();
 
   const links = primaryNav.filter((item) => {
+    if ("ownerOnly" in item && item.ownerOnly) return showOwner;
     if ("authOnly" in item && item.authOnly) return showStudio;
     return true;
   });
@@ -74,7 +78,7 @@ function NavLinks({
           </li>
         );
       })}
-      {showStudio && mobile ? (
+      {showOwner && mobile ? (
         <>
           <li className="ac-nav-item">
             <Link
@@ -134,7 +138,9 @@ export function SiteHeader({
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = useActivePath();
   const { user } = useCurrentUserState();
+  const { isOwner } = useOwnerAccess();
   const showStudio = !!user;
+  const showOwner = isOwner;
   const title = pageTitle(pathname);
 
   useEffect(() => {
@@ -185,7 +191,7 @@ export function SiteHeader({
 
           <nav className="ac-site-nav ac-site-nav--desktop" aria-label="Primary">
             <ul className="ac-site-nav-list">
-              <NavLinks showStudio={showStudio} />
+              <NavLinks showStudio={showStudio} showOwner={showOwner} />
             </ul>
           </nav>
 
@@ -243,6 +249,7 @@ export function SiteHeader({
               <NavLinks
                 mobile
                 showStudio={showStudio}
+                showOwner={showOwner}
                 onNavigate={() => setMenuOpen(false)}
               />
             </ul>

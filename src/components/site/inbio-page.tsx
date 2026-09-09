@@ -6,6 +6,7 @@ import { ClimbNotesMark } from "./climb-notes-mark";
 import { VoiceWhenSignedIn } from "./voice-access";
 import { LIGHTSPEED_PLAIN, LUNA_SHERPA_PLAIN, PLATFORM, PUBLIC_AGENTS, PUBLIC_NEED } from "./messaging";
 import { ViewportTip } from "./viewport-tip";
+import { GrokWorkforceLayers } from "./grok-workforce-layers";
 
 const TOTAL = 4;
 const MARKETPLACE_URL =
@@ -13,14 +14,6 @@ const MARKETPLACE_URL =
 const TRANS_OUT_MS = 240;
 const TRANS_IN_MS = 420;
 
-const stackWords = [
-  "Grok Bot",
-  "Grok Build",
-  "Imagine",
-  "Grok Voice",
-] as const;
-
-/** Teaching climbs for slide 2 — not journal entries. Everyday need → kit. */
 const teachingClimbs = [
   {
     id: "taxes",
@@ -194,7 +187,6 @@ export function InbioPage() {
   const [phase, setPhase] = useState<TransPhase>("in");
   const [dir, setDir] = useState<1 | -1>(1);
   const [paused, setPaused] = useState(false);
-  const [slideWord, setSlideWord] = useState(0);
   const touchX = useRef<number | null>(null);
   const busyRef = useRef(false);
   const timers = useRef<number[]>([]);
@@ -217,7 +209,6 @@ export function InbioPage() {
         setIndex(next);
         setPhase("in");
         setDir(direction);
-        setSlideWord(0);
         return;
       }
 
@@ -227,7 +218,6 @@ export function InbioPage() {
 
       const t1 = window.setTimeout(() => {
         setIndex(next);
-        setSlideWord(0);
         setPhase("in");
         const t2 = window.setTimeout(() => {
           busyRef.current = false;
@@ -269,15 +259,6 @@ export function InbioPage() {
     }, 11000);
     return () => window.clearInterval(id);
   }, [go, paused, prefersReduced, index]);
-
-  useEffect(() => {
-    if (index !== 2) return;
-    if (prefersReduced()) return;
-    const id = window.setInterval(() => {
-      setSlideWord((w) => (w + 1) % stackWords.length);
-    }, 3200);
-    return () => window.clearInterval(id);
-  }, [index, prefersReduced]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -503,24 +484,7 @@ export function InbioPage() {
                       <span className="ac-story-hline">We supply the workforce.</span>
                     </h1>
                     <div className="hero-sub ac-story-with">
-                      <span className="hero-with">with</span>
-                      <span
-                        className="cd-words-wrapper hero-slide"
-                        aria-live="polite"
-                      >
-                        {stackWords.map((word, i) => (
-                          <b
-                            key={word}
-                            className={
-                              i === slideWord
-                                ? "is-visible is-sliding"
-                                : "is-hidden"
-                            }
-                          >
-                            {word.toUpperCase()}
-                          </b>
-                        ))}
-                      </span>
+                      <GrokWorkforceLayers compact />
                     </div>
                     <p className="ac-story-lede">
                       They bring a diverse set of skills, capabilities, and

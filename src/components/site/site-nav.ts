@@ -8,7 +8,7 @@ export const primaryNav = [
   { to: "/climb-notes", label: "Climb Notes" },
   { to: "/field-guide", label: "Field Guide" },
   { to: "/canopy", label: "Canopy" },
-  { to: "/work", label: "Works", authOnly: true },
+  { to: "/work", label: "Works", ownerOnly: true },
   { to: "/service", label: "Services" },
   { to: "/about", label: "About" },
 ] as const;

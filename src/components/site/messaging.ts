@@ -20,38 +20,38 @@ export const CLIMB_BEATS = [
     key: "problem" as const,
     n: 1 as const,
     label: "Base Camp",
-    plain: "Are we fit to leave?",
-    hint: "Gear, weather, rules of the mountain, who we are on this trip.",
-    stage: "Gear · weather · who we are",
+    plain: "Confirm the work can begin",
+    hint: "Who is involved, current conditions, constraints, and risks.",
+    stage: "Starting conditions",
   },
   {
     key: "measure" as const,
     n: 2 as const,
     label: "Route",
-    plain: "One summit objective",
-    hint: "Clear success marks. What we are not climbing today.",
-    stage: "Success marks · not today",
+    plain: "Define success",
+    hint: "One objective, how it will be verified, and what is out of scope.",
+    stage: "Success criteria",
   },
   {
     key: "slice" as const,
     n: 3 as const,
     label: "Waypoint",
-    plain: "Check the map",
-    hint: "Stop, look around, recover if needed, then decide: hold or go.",
-    stage: "Hold or go",
+    plain: "Decide whether to proceed",
+    hint: "Review the plan. Proceed or wait.",
+    stage: "Go / no-go",
   },
   {
     key: "lesson" as const,
     n: 4 as const,
-    label: "Summit",
-    plain: "Build, prove, evidence home",
-    hint: "The rope team builds, proves, and brings evidence home.",
-    stage: "Evidence home",
+    label: "Execution",
+    plain: "Complete the work",
+    hint: "Use Grok tools only if they are required to meet the success criteria.",
+    stage: "Execution",
   },
 ] as const;
 
 export const CROSSOVER =
-  "Climb Notes™ are the same four beats for a shop owner and an engineer.";
+  "Climb Notes use the same four steps for operations and engineering.";
 
 export const CROSSOVER_SHORT =
   "Same four beats on both sides of the table.";

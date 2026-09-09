@@ -1,36 +1,38 @@
 import { Link } from "@tanstack/react-router";
 import { SiteChrome } from "./site-chrome";
-import { ViewportTip } from "./viewport-tip";
-import {
-  fieldRecipes,
-  TOOL_EXPLAIN,
-  TOOL_LABEL,
-  TOOL_LEGEND,
-  type FieldRecipe,
-  type RecipeTool,
-} from "./field-guide-data";
+import { GrokWorkforceLayers } from "./grok-workforce-layers";
+import { fieldRecipes, type FieldRecipe } from "./field-guide-data";
 
-function RecipeToolChip({
-  tool,
-  tipId,
-}: {
-  tool: RecipeTool;
-  tipId: string;
-}) {
-  const explain = TOOL_EXPLAIN[tool];
+function CrewRidge({ recipe }: { recipe: FieldRecipe }) {
   return (
-    <ViewportTip
-      className={`ac-recipe-tool ac-recipe-tool--${tool}`}
-      tipClassName="ac-recipe-tip"
-      tipId={tipId}
-      label={TOOL_LABEL[tool]}
-    >
-      <span className="ac-recipe-tip-what">{explain.what}</span>
-    </ViewportTip>
+    <article className="ac-recipe ac-fg-crew is-open" id={recipe.id}>
+      <header className="ac-recipe-head">
+        <span className="ac-recipe-num">{recipe.number}</span>
+        <div className="ac-recipe-titles">
+          <h2 className="ac-recipe-title">{recipe.title}</h2>
+          <p className="ac-recipe-when">{recipe.when}</p>
+        </div>
+      </header>
+
+      <GrokWorkforceLayers defaultOpen />
+
+      <p className="ac-recipe-done">
+        <span>Complete when</span>
+        {recipe.doneWhen}
+      </p>
+
+      <p className="ac-fg-descent">
+        <a className="ac-fg-descent-link" href="#name-the-problem">
+          Return to Base Camp
+        </a>
+      </p>
+    </article>
   );
 }
 
 function RecipeCard({ recipe }: { recipe: FieldRecipe }) {
+  if (recipe.crew) return <CrewRidge recipe={recipe} />;
+
   return (
     <article className="ac-recipe" id={recipe.id}>
       <header className="ac-recipe-head">
@@ -39,15 +41,16 @@ function RecipeCard({ recipe }: { recipe: FieldRecipe }) {
           <h2 className="ac-recipe-title">{recipe.title}</h2>
           <p className="ac-recipe-when">{recipe.when}</p>
         </div>
-        <RecipeToolChip tool={recipe.tool} tipId={`fg-tip-${recipe.id}`} />
       </header>
-      <ol className="ac-recipe-steps">
+      {recipe.steps.length > 0 ? (
+        <ol className="ac-recipe-steps">
         {recipe.steps.map((step) => (
           <li key={step}>{step}</li>
         ))}
       </ol>
+      ) : null}
       <p className="ac-recipe-done">
-        <span>Done when</span>
+        <span>Complete when</span>
         {recipe.doneWhen}
       </p>
     </article>
@@ -62,26 +65,12 @@ export function FieldGuidePage() {
           <header className="ac-service-head">
             <span className="ac-service-kicker">Field guide</span>
             <div className="ac-fg-title-row">
-              <h1 className="ac-service-title">Recipes for the climb</h1>
-              <ul className="ac-recipe-legend" aria-label="The agents">
-                {TOOL_LEGEND.map((tool) => (
-                  <li key={tool}>
-                    <RecipeToolChip
-                      tool={tool}
-                      tipId={`fg-tip-legend-${tool}`}
-                    />
-                  </li>
-                ))}
-              </ul>
+              <h1 className="ac-service-title">Operating method</h1>
             </div>
             <div className="ac-service-lede-box">
-              <p className="ac-service-lede">
-                Finished write-ups live in the journal. This page is how to
-                write one: nine short how-tos. You and whoever builds it use
-                the same answers.
-              </p>
               <p className="ac-service-lede ac-service-lede--last">
-                Write it first. Agents second.
+                Write the plan. Complete the work. Record results and return
+                to the starting point.
               </p>
             </div>
           </header>
@@ -93,11 +82,9 @@ export function FieldGuidePage() {
           </div>
 
           <p className="ac-field-guide-foot">
-            <Link to="/start">Send a Climb Note</Link>
+            <Link to="/start">Submit a Climb Note</Link>
             <span aria-hidden> · </span>
-            <Link to="/climb-notes">Read published Climb Notes</Link>
-            <span aria-hidden> · </span>
-            <Link to="/service">How we help you climb</Link>
+            <Link to="/climb-notes">Published notes</Link>
           </p>
         </div>
       </div>

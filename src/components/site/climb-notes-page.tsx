@@ -14,6 +14,7 @@ import {
   type ClimbNote,
 } from "./climb-notes-data";
 import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
+import { useOwnerAccess } from "@/lib/auth/use-owner-access";
 import { CROSSOVER, GNOMAH_BRAIN, TWENTY_X, CLIMB_BEATS } from "./messaging";
 
 
@@ -205,6 +206,7 @@ function NoteCard({ note }: { note: ClimbNote }) {
  * Draft / pending / approved / archived live in Gnomah (owner), never here.
  */
 export function ClimbNotesPage() {
+  const { isOwner } = useOwnerAccess();
   const [notes, setNotes] = useState<ClimbNote[]>(() =>
     sortPublished(staticPublishedClimbNotes),
   );
@@ -290,10 +292,12 @@ export function ClimbNotesPage() {
                 <Link className="rn-btn ac-btn-maroon" to="/voice">
                   <span>Talk to Luna</span>
                 </Link>
+              </VoiceWhenSignedIn>
+              {isOwner ? (
                 <Link className="rn-btn ac-btn-outline" to="/gnomah">
                   <span>Open Gnomah</span>
                 </Link>
-              </VoiceWhenSignedIn>
+              ) : null}
             </div>
           </div>
         </div>

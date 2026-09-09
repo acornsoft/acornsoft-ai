@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { SiteChrome } from "./site-chrome";
 import { submitPublicClimbNoteAction } from "@/lib/climb-notes/actions";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { useOwnerAccess } from "@/lib/auth/use-owner-access";
 
 const SENDER_FIELDS = [
   {
@@ -52,6 +53,7 @@ const EMPTY: Fields = {
 
 export function StartClimbPage() {
   const { user } = useCurrentUserState();
+  const { isOwner } = useOwnerAccess();
   const [fields, setFields] = useState<Fields>(EMPTY);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -120,7 +122,7 @@ export function StartClimbPage() {
                 </li>
               </ol>
               <div className="ac-start-received-actions">
-                {user ? (
+                {isOwner ? (
                   <Link
                     className="rn-btn ac-btn-maroon"
                     to="/gnomah"

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { LogIn, LogOut } from "lucide-react";
 import { authEnabled, signOut } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { useOwnerAccess } from "@/lib/auth/use-owner-access";
 import { SettingsMenuButton, SettingsSheet } from "./owner-settings";
 
 const OWNER_ALIASES: Record<string, string> = {
@@ -28,6 +29,7 @@ export function SiteAuthSlot({
   className?: string;
 }) {
   const { user, isPending } = useCurrentUserState();
+  const { isOwner } = useOwnerAccess();
   const [open, setOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -103,15 +105,17 @@ export function SiteAuthSlot({
         </button>
         {open ? (
           <ul className="ac-auth-dropdown" role="menu">
-            <li role="none">
-              <Link
-                role="menuitem"
-                to="/gnomah"
-                onClick={() => setOpen(false)}
-              >
-                Gnomah
-              </Link>
-            </li>
+            {isOwner ? (
+              <li role="none">
+                <Link
+                  role="menuitem"
+                  to="/gnomah"
+                  onClick={() => setOpen(false)}
+                >
+                  Gnomah
+                </Link>
+              </li>
+            ) : null}
             <li role="none">
               <Link
                 role="menuitem"
