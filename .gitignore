@@ -10,10 +10,8 @@ dist/
 *.zip
 attachments/*.zip
 
-.vercel/
-.output/
-dist/
-*.zip
-attachments/*.zip
-
+# Grok Imagine dumps — never commit, never ship
 artifacts/
+artifacts/imagine_images/
+artifacts/imagine_videos/
+public/images/workforce/

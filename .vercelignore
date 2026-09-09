@@ -1,0 +1,9 @@
+# Keep Imagine tool dumps out of Vercel output
+artifacts
+artifacts/imagine_images
+artifacts/imagine_videos
+public/images/workforce
+node_modules
+.git
+.output
+data
