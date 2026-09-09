@@ -1,18 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "./site-chrome";
-import { ClimbNotesMark } from "./climb-notes-mark";
 import {
   LunaVoiceDock,
   VoiceFirstPatternLegend,
 } from "./voice-first-patterns";
 import {
   VOICE_NAME,
-  VOICE_LABEL,
   VOICE_URL,
   SHERPA_LINE,
   useVoiceVisible,
 } from "./voice-access";
-import { LUNA_SHERPA, LUNA_SHERPA_PLAIN, PLATFORM } from "./messaging";
+import { ELEVATOR } from "./messaging";
 
 /**
  * Voice-first destination — only for signed-in visitors.
@@ -36,9 +34,7 @@ export function VoicePage() {
             ) : !signedIn ? (
               <>
                 <p className="ac-voice-page-lede">
-                  {LUNA_SHERPA} {PLATFORM} Sign in with X to walk with her
-                  on Grok Voice — she follows your{" "}
-                  <ClimbNotesMark />.
+                  {ELEVATOR} Sign in with X to talk on Grok Voice.
                 </p>
                 <div className="ac-voice-page-cta">
                   <Link
@@ -55,13 +51,7 @@ export function VoicePage() {
               </>
             ) : (
               <>
-                <p className="ac-voice-page-lede">
-                  {LUNA_SHERPA_PLAIN}{" "}
-                  <strong>Luna and Ara are one and the same</strong> on{" "}
-                  <strong>{VOICE_LABEL}</strong>. {PLATFORM} Describe what’s
-                  stuck in plain language; she guides you from your{" "}
-                  <ClimbNotesMark />.
-                </p>
+                <p className="ac-voice-page-lede">{ELEVATOR}</p>
                 <div className="ac-voice-page-cta">
                   <a
                     className="rn-btn ac-btn-maroon"
