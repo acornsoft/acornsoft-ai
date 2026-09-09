@@ -51,7 +51,7 @@ export function PersonalSiteBridge({
         {PERSONAL_SITE.ownerName}
       </h2>
       <p className="ac-personal-bridge-role">
-        {PERSONAL_SITE.ownerTitle}, Acornsoft · personal work biography
+        Acornsoft · personal work biography
       </p>
       <p className="ac-personal-bridge-copy">{dualSiteNote}</p>
       <a

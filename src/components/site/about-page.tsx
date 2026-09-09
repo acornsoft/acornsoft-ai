@@ -10,7 +10,7 @@ const aboutSections = [
   { id: "first-principles", label: "First principles" },
   { id: "core-beliefs", label: "Beliefs" },
   { id: "charter", label: "Charter" },
-  { id: "founder", label: "Founder" },
+  { id: "founder", label: "People" },
 ] as const;
 
 const principles = [
@@ -255,7 +255,7 @@ export function AboutPage() {
           >
             <span className="ac-service-kicker">People</span>
             <h2 className="ac-about-h2" id="founder-heading">
-              Founder
+              {PERSONAL_SITE.ownerName}
             </h2>
             <div className="ac-about-founder-row">
               <picture className="ac-about-founder-photo">
@@ -265,7 +265,7 @@ export function AboutPage() {
                 />
                 <img
                   src="/david-blaszyk-headshot.jpg"
-                  alt="David Blaszyk, founder of Acornsoft"
+                  alt="David Blaszyk of Acornsoft"
                   width={320}
                   height={400}
                   loading="lazy"
@@ -276,9 +276,7 @@ export function AboutPage() {
                 <p className="ac-about-founder-name">
                   {PERSONAL_SITE.ownerName}
                 </p>
-                <p className="ac-about-founder-role">
-                  {PERSONAL_SITE.ownerTitle}, Acornsoft
-                </p>
+                <p className="ac-about-founder-role">Acornsoft</p>
                 <p>
                   Founded Acornsoft so Climb Notes™ cross the table — shop
                   owner and engineer, same four beats — then become systems
