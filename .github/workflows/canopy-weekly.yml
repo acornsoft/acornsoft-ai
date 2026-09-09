@@ -1,0 +1,62 @@
+# Weekly Canopy Radar pull — same GitHub repo Grok Build and Grok Bots use.
+# Writes public/canopy/live-feed.json so Vercel deploys a durable feed.
+# Vercel serverless cannot keep that file after the function exits.
+#
+# GitHub secrets (acornsoft/acornsoft-ai → Settings → Secrets → Actions):
+#   X_BEARER_TOKEN  App-only Bearer from developer.x.com
+name: Canopy weekly Radar
+
+on:
+  schedule:
+    # Monday 13:00 UTC = 09:00 America/New_York (EDT)
+    - cron: "0 13 * * 1"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Bypass the 7-day window"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: canopy-weekly
+  cancel-in-progress: false
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Pull X into live-feed.json
+        env:
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+        run: |
+          if [ -z "$X_BEARER_TOKEN" ]; then
+            echo "Add X_BEARER_TOKEN as a GitHub Actions secret on acornsoft/acornsoft-ai."
+            exit 1
+          fi
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            node scripts/fetch-canopy-feed.mjs --force
+          else
+            node scripts/fetch-canopy-feed.mjs
+          fi
+      - name: Commit feed when it changed
+        run: |
+          git config user.name "acornsoft-bot"
+          git config user.email "acornsoft@users.noreply.github.com"
+          git add public/canopy/live-feed.json
+          if git diff --cached --quiet; then
+            echo "No feed change (window closed or identical pull)."
+            exit 0
+          fi
+          git commit -m "Canopy weekly Radar pull"
+          git push

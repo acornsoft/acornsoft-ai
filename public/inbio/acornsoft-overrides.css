@@ -20317,7 +20317,7 @@ body:has(.ac-service-page) .ac-about-top-fab {
 }
 .ac-auth-dropdown a,
 .ac-auth-dropdown-out,
-.ac-auth-dropdown-settings .ac-settings-btn {
+.ac-auth-dropdown-settings .ac-settings-row {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
@@ -20337,12 +20337,9 @@ body:has(.ac-service-page) .ac-about-top-fab {
 }
 .ac-auth-dropdown a:hover,
 .ac-auth-dropdown-out:hover,
-.ac-auth-dropdown-settings .ac-settings-btn:hover {
+.ac-auth-dropdown-settings .ac-settings-row:hover {
   background: rgba(128, 0, 32, 0.45) !important;
   color: #ffcc66 !important;
-}
-.ac-auth-dropdown-settings .ac-settings-btn::after {
-  content: "Settings" !important;
 }
 
 /* Climb Notes journal: same stack as Services / About */
@@ -20827,9 +20824,51 @@ body:has(.ac-service-page) .ac-about-top-fab {
 }
 .ac-settings-sheet .ac-owner-prefs {
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 16px 0 0 !important;
   border: 0 !important;
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
   background: transparent !important;
+}
+.ac-settings-account {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+  margin: 0 0 8px !important;
+}
+.ac-settings-account-avatar {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 999px !important;
+  object-fit: cover !important;
+  flex-shrink: 0 !important;
+  background: rgba(255,153,0,0.18) !important;
+}
+.ac-settings-account-fallback {
+  display: grid !important;
+  place-items: center !important;
+  color: #ffe08a !important;
+  font-weight: 700 !important;
+  font-size: 1.15rem !important;
+}
+.ac-settings-account-copy {
+  min-width: 0 !important;
+}
+.ac-settings-account-name {
+  margin: 0 0 2px !important;
+  color: #fff !important;
+  font-size: 1.05rem !important;
+  font-weight: 650 !important;
+}
+.ac-settings-account-meta {
+  margin: 0 0 8px !important;
+  color: rgba(244,239,230,0.72) !important;
+  font-size: 13px !important;
+}
+.ac-settings-account-note {
+  margin: 0 !important;
+  color: rgba(244,239,230,0.62) !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
 }
 
 /* Gnomah toolbar — one bar, same height family */

@@ -29,6 +29,11 @@ const STATUSES: ClimbNoteStatus[] = [
 const NOTES_DIR = path.join(process.cwd(), "content", "climb-notes");
 const REGISTRY_PATH = path.join(NOTES_DIR, "_publish-registry.json");
 
+const seedRef = globalThis as typeof globalThis & {
+  __climbNotesSeedPromise__?: Promise<void>;
+  __climbNotesVaultCache__?: ClimbNote[];
+};
+
 /** Build-time inlined notes for serverless (nested vault folders). */
 const BUNDLED_NOTE_MD = import.meta.glob("/content/climb-notes/**/*.md", {
   query: "?raw",
@@ -299,6 +304,7 @@ function isNestedVaultPath(p: string): boolean {
 }
 
 function readMarkdownSeeds(): ClimbNote[] {
+  if (seedRef.__climbNotesVaultCache__) return seedRef.__climbNotesVaultCache__;
   const registry = loadRegistry();
   const byId = new Map<string, ClimbNote>();
 
@@ -320,6 +326,7 @@ function readMarkdownSeeds(): ClimbNote[] {
     }
   };
 
+  let fromDisk = 0;
   if (fs.existsSync(NOTES_DIR)) {
     try {
       const walk = (dir: string) => {
@@ -330,6 +337,7 @@ function readMarkdownSeeds(): ClimbNote[] {
             walk(full);
           } else if (ent.isFile() && ent.name.endsWith(".md")) {
             collectFile(full, fs.readFileSync(full, "utf8"));
+            fromDisk += 1;
           }
         }
       };
@@ -339,11 +347,23 @@ function readMarkdownSeeds(): ClimbNote[] {
     }
   }
 
-  for (const [globPath, raw] of Object.entries(BUNDLED_NOTE_MD)) {
-    collectFile(globPath, raw);
+  // Disk is SoT in the workspace / preview. Skip the bundled copy when
+  // content/ already yielded notes so we don't parse the vault twice.
+  if (fromDisk === 0) {
+    for (const [globPath, raw] of Object.entries(BUNDLED_NOTE_MD)) {
+      collectFile(globPath, raw);
+    }
   }
 
-  return [...byId.values()].sort((a, b) => a.number.localeCompare(b.number));
+  const list = [...byId.values()].sort((a, b) =>
+    a.number.localeCompare(b.number),
+  );
+  seedRef.__climbNotesVaultCache__ = list;
+  return list;
+}
+
+function invalidateVaultCache(): void {
+  seedRef.__climbNotesVaultCache__ = undefined;
 }
 
 async function upsertNoteRow(note: ClimbNote, ownerUserId?: string | null) {
@@ -409,8 +429,6 @@ async function upsertNoteRow(note: ClimbNote, ownerUserId?: string | null) {
 
 /** Insert seed only if missing — never clobber editor state. */
 async function insertNoteRowIfMissing(note: ClimbNote): Promise<boolean> {
-  const existing = await getClimbNoteFromDb(note.id);
-  if (existing) return false;
   const sql = await getSql();
   await sql`
     insert into climb_notes (
@@ -447,12 +465,46 @@ async function insertNoteRowIfMissing(note: ClimbNote): Promise<boolean> {
     )
     on conflict (id) do nothing
   `;
-  const wrote = await getClimbNoteFromDb(note.id);
-  if (wrote) writeMarkdownMirror(wrote);
-  return Boolean(wrote);
+  return true;
 }
 
 export async function ensureClimbNotesSeeded(): Promise<void> {
+  seedRef.__climbNotesSeedPromise__ ??= seedClimbNotesOnce().catch((err) => {
+    seedRef.__climbNotesSeedPromise__ = undefined;
+    throw err;
+  });
+  return seedRef.__climbNotesSeedPromise__;
+}
+
+async function existingNoteIds(): Promise<Set<string>> {
+  const sql = await getSql();
+  const rows = await sql<{ id: string }>`select id from climb_notes`;
+  return new Set(rows.map((r) => r.id));
+}
+
+async function insertMissingNotes(notes: ClimbNote[]): Promise<number> {
+  if (notes.length === 0) return 0;
+  const have = await existingNoteIds();
+  const missing = notes.filter((n) => n.id && !have.has(n.id));
+  if (missing.length === 0) return 0;
+  const batchSize = 8;
+  let inserted = 0;
+  for (let i = 0; i < missing.length; i += batchSize) {
+    const batch = missing.slice(i, i + batchSize);
+    const results = await Promise.allSettled(
+      batch.map((note) => insertNoteRowIfMissing(note)),
+    );
+    for (const result of results) {
+      if (result.status === "fulfilled") inserted += 1;
+      else {
+        console.warn("[climb-notes] seed insert failed", result.reason);
+      }
+    }
+  }
+  return inserted;
+}
+
+async function seedClimbNotesOnce(): Promise<void> {
   const seeds = readMarkdownSeeds();
   if (seeds.length === 0) {
     console.warn(
@@ -460,14 +512,7 @@ export async function ensureClimbNotesSeeded(): Promise<void> {
     );
     return;
   }
-  for (const note of seeds) {
-    try {
-      await insertNoteRowIfMissing(note);
-    } catch (err) {
-      console.warn(`[climb-notes] seed insert failed for ${note.id}`, err);
-    }
-  }
-  // Refresh SoT / consumer-pack bodies from vault (000 origin; 017 example; 101–105 consumer)
+  await insertMissingNotes(seeds);
   await refreshDraftSeedBodies(seeds, [
     "cn-016",
     "cn-017",
@@ -479,6 +524,12 @@ export async function ensureClimbNotesSeeded(): Promise<void> {
   ]).catch(() => {});
 }
 
+if (typeof window === "undefined") {
+  void ensureClimbNotesSeeded().catch((err) => {
+    console.warn("[climb-notes] background seed failed", err);
+  });
+}
+
 /** Update body fields for listed IDs from current markdown seeds (content sync). */
 async function refreshDraftSeedBodies(
   seeds: ClimbNote[],
@@ -486,24 +537,25 @@ async function refreshDraftSeedBodies(
 ): Promise<void> {
   const sql = await getSql();
   const want = new Set(ids);
-  for (const note of seeds) {
-    if (!want.has(note.id)) continue;
-    // Always pull number + title + four moves from vault for these SoT / example notes
-    await sql`
-      update climb_notes set
-        number = ${note.number},
-        title = ${note.title},
-        note_date = ${note.date},
-        problem = ${note.problem},
-        measure = ${note.measure},
-        slice = ${note.slice},
-        lesson = ${note.lesson},
-        tags = ${JSON.stringify(note.tags ?? [])},
-        source_file = ${note.sourceFile ?? null},
-        updated_at = now()
-      where id = ${note.id}
-    `;
-  }
+  const updates = seeds.filter((note) => want.has(note.id));
+  await Promise.all(
+    updates.map((note) =>
+      sql`
+        update climb_notes set
+          number = ${note.number},
+          title = ${note.title},
+          note_date = ${note.date},
+          problem = ${note.problem},
+          measure = ${note.measure},
+          slice = ${note.slice},
+          lesson = ${note.lesson},
+          tags = ${JSON.stringify(note.tags ?? [])},
+          source_file = ${note.sourceFile ?? null},
+          updated_at = now()
+        where id = ${note.id}
+      `,
+    ),
+  );
 }
 
 
@@ -522,12 +574,13 @@ export type LibrarySyncResult = {
  * 2) optional GitHub Gnomah pull — insert missing only (never overwrite edits)
  */
 export async function syncClimbNotesLibrary(): Promise<LibrarySyncResult> {
-  await ensureClimbNotesSeeded();
+  invalidateVaultCache();
   const local = readMarkdownSeeds();
+  const localInserted = await insertMissingNotes(local);
   let githubFetched = 0;
   let githubInserted = 0;
   let source = "local vault";
-  let message = `Local vault: ${local.length} seed files`;
+  let message = `Local vault: ${local.length} files (${localInserted} new)`;
 
   try {
     const { fetchClimbNotesFromGithub } = await import("./github-sync.server");
@@ -535,16 +588,8 @@ export async function syncClimbNotesLibrary(): Promise<LibrarySyncResult> {
     githubFetched = notes.length;
     if (meta.ok && notes.length) {
       source = `local + ${meta.repo}`;
-      for (const note of notes) {
-        try {
-          const inserted = await insertNoteRowIfMissing(note);
-          if (inserted) githubInserted += 1;
-        } catch {
-          /* skip */
-        }
-      }
-      // recount inserted roughly: not exact on conflict; message uses fetched
-      message = `${meta.message}; local seeds ${local.length}`;
+      githubInserted = await insertMissingNotes(notes);
+      message = `${meta.message}; local ${local.length} (${localInserted} new), GitHub +${githubInserted}`;
     } else if (!meta.ok) {
       message = `${message}. GitHub: ${meta.message}`;
     }
@@ -552,7 +597,7 @@ export async function syncClimbNotesLibrary(): Promise<LibrarySyncResult> {
     message = `${message}. GitHub skip: ${err instanceof Error ? err.message : "error"}`;
   }
 
-  const all = await listClimbNotesFromDb();
+  const all = await listClimbNotesFromDb({ skipSeed: true });
   return {
     localSeeded: local.length,
     githubFetched,
@@ -565,11 +610,10 @@ export async function syncClimbNotesLibrary(): Promise<LibrarySyncResult> {
 
 export async function listClimbNotesFromDb(opts?: {
   publishedOnly?: boolean;
+  skipSeed?: boolean;
 }): Promise<ClimbNote[]> {
-  await ensureClimbNotesSeeded();
   const sortNotes = (list: ClimbNote[]) =>
     [...list].sort((a, b) => {
-      // Only public SoT first when present
       if (a.id === "cn-016") return -1;
       if (b.id === "cn-016") return 1;
       const byNum = b.number.localeCompare(a.number);
@@ -577,26 +621,49 @@ export async function listClimbNotesFromDb(opts?: {
       return a.title.localeCompare(b.title);
     });
 
+  const mapRows = (rows: NoteRow[]) => {
+    const registry = loadRegistry();
+    let list = rows.map((r) => withRegistryFields(rowToNote(r), registry));
+    if (opts?.publishedOnly) {
+      list = list.filter((n) => n.status === "published");
+    }
+    return { list, registry };
+  };
+
   try {
     const sql = await getSql();
-    // Load all rows; registry status is SoT for public gate (DB can lag after unpublish)
     const rows = await sql<NoteRow>`
       select * from climb_notes
       order by number desc
     `;
     if (rows.length > 0) {
-      const registry = loadRegistry();
-      let list = rows.map((r) => withRegistryFields(rowToNote(r), registry));
-      // Best-effort: push registry status into DB so next SQL stays consistent
-      await syncDbStatusFromRegistry(list, registry).catch(() => {});
-      if (opts?.publishedOnly) {
-        list = list.filter((n) => n.status === "published");
+      const { list, registry } = mapRows(rows);
+      if (!opts?.skipSeed) {
+        void ensureClimbNotesSeeded().catch(() => {});
+        void syncDbStatusFromRegistry(list, registry).catch(() => {});
       }
       return sortNotes(list);
     }
   } catch (err) {
     console.warn("[climb-notes] DB list failed, falling back to markdown", err);
   }
+
+  if (!opts?.skipSeed) {
+    await ensureClimbNotesSeeded();
+    try {
+      const sql = await getSql();
+      const rows = await sql<NoteRow>`
+        select * from climb_notes
+        order by number desc
+      `;
+      if (rows.length > 0) {
+        return sortNotes(mapRows(rows).list);
+      }
+    } catch {
+      /* markdown fallback */
+    }
+  }
+
   const seeds = readMarkdownSeeds();
   if (opts?.publishedOnly) {
     return sortNotes(seeds.filter((n) => n.status === "published"));
@@ -604,13 +671,22 @@ export async function listClimbNotesFromDb(opts?: {
   return sortNotes(seeds);
 }
 
-/** Next CN number in the library (001, 002, …). */
+/** Next CN number in the library (001, 002, …). Numbers only — no full library load. */
 export async function nextClimbNoteNumber(): Promise<string> {
-  const list = await listClimbNotesFromDb();
-  const max = list
+  const fromFiles = readMarkdownSeeds()
     .map((n) => parseInt(n.number, 10))
-    .filter((x) => !Number.isNaN(x))
-    .reduce((a, b) => Math.max(a, b), 0);
+    .filter((x) => !Number.isNaN(x));
+  let fromDb: number[] = [];
+  try {
+    const sql = await getSql();
+    const rows = await sql<{ number: string }>`select number from climb_notes`;
+    fromDb = rows
+      .map((n) => parseInt(n.number, 10))
+      .filter((x) => !Number.isNaN(x));
+  } catch {
+    /* empty DB is fine */
+  }
+  const max = [...fromFiles, ...fromDb].reduce((a, b) => Math.max(a, b), 0);
   return String(max + 1).padStart(3, "0");
 }
 
@@ -636,7 +712,6 @@ async function syncDbStatusFromRegistry(
 }
 
 async function getClimbNoteFromDb(id: string): Promise<ClimbNote | null> {
-  await ensureClimbNotesSeeded();
   const sql = await getSql();
   const rows = await sql<NoteRow>`
     select * from climb_notes where id = ${id} limit 1
@@ -792,8 +867,9 @@ export async function saveClimbNote(
   input: SaveClimbNoteInput,
   ownerUserId: string,
   actorHandle: string,
+  opts?: { skipSeed?: boolean },
 ): Promise<ClimbNote> {
-  await ensureClimbNotesSeeded();
+  if (!opts?.skipSeed) await ensureClimbNotesSeeded();
   const id = (
     input.id?.trim() ||
     `cn-${String(input.number).replace(/\D/g, "").padStart(3, "0")}`

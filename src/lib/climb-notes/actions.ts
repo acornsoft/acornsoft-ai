@@ -213,6 +213,7 @@ export const submitPublicClimbNoteAction = createServerFn({ method: "POST" })
         },
         "",
         from,
+        { skipSeed: true },
       );
       return { ok: true, id, number };
     } catch {

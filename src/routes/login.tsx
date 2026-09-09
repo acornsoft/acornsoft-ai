@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { GROK_PROVIDERS, authEnabled, signIn } from "@/lib/auth/client";
+import { GROK_PROVIDERS, authEnabled, signIn, usesPreviewSignIn } from "@/lib/auth/client";
 import { Logo } from "@/components/site/logo";
 import { SiteHeader } from "@/components/site/site-chrome";
 
@@ -52,6 +52,7 @@ function LoginPage() {
     safeRedirect === "/gnomah" || safeRedirect.startsWith("/gnomah?");
   const forWorks =
     safeRedirect === "/work" || safeRedirect.startsWith("/work?");
+  const previewSignIn = usesPreviewSignIn();
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -126,7 +127,9 @@ function LoginPage() {
                   </span>
                   <span className="ac-login-btn-label">
                     {busy === xProvider.providerId
-                      ? "Connecting to X…"
+                      ? previewSignIn
+                        ? "Waiting on the sign-in window…"
+                        : "Connecting to X…"
                       : "Continue with X"}
                   </span>
                 </button>
@@ -143,6 +146,17 @@ function LoginPage() {
                     Choose <strong>Continue with X</strong> — OAuth only; we never
                     store your X password.
                   </li>
+                  {previewSignIn ? (
+                    <li>
+                      In Grok Build a <strong>sign-in window</strong> opens.
+                      Allow pop-ups if the browser asks, then finish on X.
+                    </li>
+                  ) : (
+                    <li>
+                      On the live site you leave this page, sign in on X, and
+                      return here.
+                    </li>
+                  )}
                   <li>
                     Server checks that the linked X identity is{" "}
                     <strong>@acornsoftai</strong> before any Climb Notes edit.

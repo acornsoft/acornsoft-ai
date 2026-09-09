@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { LogIn, LogOut } from "lucide-react";
 import { authEnabled, signOut } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { OwnerSettings } from "./owner-settings";
+import { SettingsMenuButton, SettingsSheet } from "./owner-settings";
 
 const OWNER_ALIASES: Record<string, string> = {
   blaze: "acornsoftai",
@@ -29,7 +29,13 @@ export function SiteAuthSlot({
 }) {
   const { user, isPending } = useCurrentUserState();
   const [open, setOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -51,6 +57,17 @@ export function SiteAuthSlot({
   }, [open]);
 
   if (!authEnabled) return null;
+
+  // Same pending slot on the server and the first client paint so hydration
+  // matches. After mount, session memory / useSession can show the real chip.
+  if (!mounted || (isPending && !user)) {
+    return (
+      <span
+        className={`ac-auth-slot ac-auth-slot-pending ${className}`.trim()}
+        aria-hidden
+      />
+    );
+  }
 
   if (user) {
     const label = (user.displayName ?? "Account").trim() || "Account";
@@ -105,7 +122,12 @@ export function SiteAuthSlot({
               </Link>
             </li>
             <li role="none" className="ac-auth-dropdown-settings">
-              <OwnerSettings />
+              <SettingsMenuButton
+                onClick={() => {
+                  setOpen(false);
+                  setSettingsOpen(true);
+                }}
+              />
             </li>
             <li role="none">
               <button
@@ -120,16 +142,11 @@ export function SiteAuthSlot({
             </li>
           </ul>
         ) : null}
+        <SettingsSheet
+          open={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+        />
       </div>
-    );
-  }
-
-  if (isPending) {
-    return (
-      <span
-        className={`ac-auth-slot ac-auth-slot-pending ${className}`.trim()}
-        aria-hidden
-      />
     );
   }
 
