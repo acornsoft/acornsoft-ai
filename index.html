@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Acornsoft — Coming soon</title>
+    <meta name="description" content="Acornsoft is getting ready. The public site is not announced yet." />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --ink: #0e1109;
+        --paper: #f4f0e6;
+        --muted: #5c6358;
+        --border: #ddd6c8;
+        --accent: #e6c84a;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Inter, system-ui, sans-serif;
+      }
+      header {
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.25rem;
+      }
+      .brand {
+        font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      main {
+        max-width: 42rem;
+        margin: 0 auto;
+        padding: 4rem 1.25rem 5rem;
+      }
+      .kicker {
+        display: inline-flex;
+        border-radius: 999px;
+        background: var(--ink);
+        color: var(--accent);
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 0.35rem 0.7rem;
+      }
+      h1 {
+        margin: 1rem 0 0;
+        font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+        font-size: clamp(2.4rem, 6vw, 3.4rem);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+      p {
+        margin: 1rem 0 0;
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        max-width: 36rem;
+      }
+      .note {
+        margin-top: 2rem;
+        padding: 1rem 1.1rem;
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+        background: #fbf8f0;
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <header><div class="brand">Acornsoft</div></header>
+    <main>
+      <span class="kicker">Acornsoft</span>
+      <h1>Coming soon</h1>
+      <p>We’re still getting the public site ready. Nothing to announce here yet.</p>
+      <p>Check back later. If you already work with us, use the main site sign-in when you have an account.</p>
+      <div class="note">
+        Temporary preview of the soft landing for <code>www.acornsoft.ai</code>.
+        Production still needs a working Vercel token before this replaces the live home.
+      </div>
+    </main>
+  </body>
+</html>
