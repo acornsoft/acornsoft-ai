@@ -22004,7 +22004,7 @@ body .feather {
 .ac-start-move-copy {
   display: flex !important;
   flex-direction: column !important;
-  gap: 2px !important;
+  gap: 4px !important;
 }
 .ac-start-move-label {
   color: #fff !important;
@@ -22012,10 +22012,38 @@ body .feather {
   font-weight: 650 !important;
   letter-spacing: -0.01em !important;
 }
+.ac-start-move-sub {
+  color: #c4cfde !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+}
 .ac-start-move-hint {
   color: #c4cfde !important;
   font-size: 13px !important;
   font-weight: 400 !important;
+  line-height: 1.45 !important;
+}
+.ac-start-move--summit {
+  border-color: rgba(255,255,255,0.06) !important;
+  background: rgba(0,0,0,0.16) !important;
+}
+.ac-start-move--summit .ac-start-n {
+  background: #3a3a44 !important;
+  color: #9aa3b2 !important;
+}
+.ac-start-move--summit .ac-start-move-label {
+  color: #c4cfde !important;
+}
+.ac-start-move--summit .ac-start-move-hint {
+  color: #8b95a6 !important;
+}
+.ac-start-move--summit textarea {
+  cursor: not-allowed !important;
+  background: rgba(18,18,24,0.55) !important;
+  color: #7a8494 !important;
+  border-color: rgba(255,255,255,0.07) !important;
+  min-height: 4.5rem !important;
 }
 .ac-start-move textarea,
 .ac-start-meta input {

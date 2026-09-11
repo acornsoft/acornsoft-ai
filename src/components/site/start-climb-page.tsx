@@ -10,22 +10,28 @@ const SENDER_FIELDS = [
     key: "problem" as const,
     n: "1",
     label: "Base Camp",
-    hint: "Where are you starting, and what has to stay true?",
-    placeholder: "We are here. This is what cannot change.",
+    sub: "what has to stay true",
+    hint: "Current situation in plain terms. Constraints that cannot move (compliance, customers, cash, downtime).",
+    placeholder:
+      "e.g. We’re taking bookings by phone; nothing can go down on weekends.",
   },
   {
     key: "measure" as const,
     n: "2",
     label: "Route",
-    hint: "What is the one job, and what is not part of it?",
-    placeholder: "The one job. Then what we are not doing.",
+    sub: "the one job",
+    hint: "Name the single outcome for this climb. List what’s out of scope so we don’t wander.",
+    placeholder:
+      "e.g. Online booking for existing clients. Not: new marketing site.",
   },
   {
     key: "slice" as const,
     n: "3",
     label: "Waypoint",
-    hint: "Are we going, or holding? Say why in a sentence.",
-    placeholder: "Going, or holding, and why.",
+    sub: "go or hold",
+    hint: "Go = start now. Hold = park it with a reason (budget, season, dependency).",
+    placeholder:
+      "e.g. Go — need this before holiday season. / Hold — waiting on vendor contract.",
   },
 ] as const;
 
@@ -102,10 +108,10 @@ export function StartClimbPage() {
               <h1 className="ac-start-received-title">We have your note.</h1>
               <p className="ac-start-received-lede">
                 {user && sentNote?.number
-                  ? `It’s in Gnomah as CN-${sentNote.number}. Summit is still blank.`
+                  ? `It’s in Gnomah as CN-${sentNote.number}. We’ll read Base Camp, Route, and Waypoint. Summit stays blank.`
                   : sentNote?.number
-                    ? `It’s in as CN-${sentNote.number}. Summit is still blank.`
-                    : "We’ll reach you at the email you left. Summit is still blank."}
+                    ? `It’s in as CN-${sentNote.number}. We’ll read Base Camp, Route, and Waypoint. Summit stays blank.`
+                    : "We’ll reach you at the email you left. We’ll read Base Camp, Route, and Waypoint. Summit stays blank."}
               </p>
               <ol className="ac-start-received-next">
                 <li>
@@ -118,7 +124,7 @@ export function StartClimbPage() {
                 </li>
                 <li>
                   <span>3</span>
-                  Summit is filled in after that
+                  Summit stays blank until we review
                 </li>
               </ol>
               <div className="ac-start-received-actions">
@@ -156,12 +162,13 @@ export function StartClimbPage() {
               <header className="ac-service-head">
                 <span className="ac-service-kicker">Send a Note</span>
                 <h1 className="ac-service-title">
-                  Tell us where you are, the one job, and whether to go.
+                  One problem. One climb. Ready to start.
                 </h1>
                 <div className="ac-service-lede-box">
                   <p className="ac-service-lede ac-service-lede--last">
-                    Three answers. No code. Summit stays blank until we look
-                    at it.
+                    Send a Note is how a busy owner hands Acornsoft one real
+                    problem and gets a clear climb: where you stand, the one
+                    job, and whether to go — then we turn it into work.
                   </p>
                 </div>
               </header>
@@ -173,7 +180,13 @@ export function StartClimbPage() {
                       <label htmlFor={`ac-start-${move.key}`}>
                         <span className="ac-start-n">{move.n}</span>
                         <span className="ac-start-move-copy">
-                          <span className="ac-start-move-label">{move.label}</span>
+                          <span className="ac-start-move-label">
+                            {move.label}
+                            <span className="ac-start-move-sub">
+                              {" "}
+                              — {move.sub}
+                            </span>
+                          </span>
                           <span className="ac-start-move-hint">{move.hint}</span>
                         </span>
                       </label>
@@ -188,14 +201,14 @@ export function StartClimbPage() {
                       />
                     </li>
                   ))}
-                  <li className="ac-start-move" aria-disabled="true">
+                  <li className="ac-start-move ac-start-move--summit" aria-disabled="true">
                     <label htmlFor="ac-start-lesson">
                       <span className="ac-start-n">4</span>
                       <span className="ac-start-move-copy">
                         <span className="ac-start-move-label">Summit</span>
                         <span className="ac-start-move-hint">
-                          Left blank. We fill this in after we look at the climb.
-                          We may ask a follow-up first.
+                          Acornsoft fills this after review. We may ask a
+                          follow-up first.
                         </span>
                       </span>
                     </label>
@@ -206,12 +219,7 @@ export function StartClimbPage() {
                       value=""
                       disabled
                       readOnly
-                      placeholder="Filled in after we evaluate."
-                      style={{
-                        opacity: 0.55,
-                        cursor: "not-allowed",
-                        background: "#eceae6",
-                      }}
+                      aria-label="Summit — left blank"
                     />
                   </li>
                 </ol>
