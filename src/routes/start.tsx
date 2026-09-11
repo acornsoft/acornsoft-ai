@@ -9,7 +9,7 @@ export const Route = createFileRoute("/start")({
       {
         name: "description",
         content:
-          "Three short answers. Summit stays blank until we look at the climb.",
+          "One problem. One climb. Ready to start. Where you stand, the one job, and whether to go.",
       },
     ],
   }),
