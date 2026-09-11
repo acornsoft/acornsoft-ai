@@ -20,7 +20,7 @@ const inbioCss = [
   "/inbio/assets/css/vendor/aos.css",
   "/inbio/assets/css/plugins/feature.css",
   "/inbio/assets/css/style.css",
-  "/inbio/acornsoft-overrides.css?v=luna-help-14",
+  "/inbio/acornsoft-overrides.css?v=hide-nav-1",
   "/inbio/slide3-center.css?v=1",
 ] as const;
 

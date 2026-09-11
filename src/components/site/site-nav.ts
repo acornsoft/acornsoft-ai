@@ -1,3 +1,6 @@
+/** Flip SHOW_PRIMARY_NAV when public nav should return. */
+export const SHOW_PRIMARY_NAV: boolean = false;
+
 /** Top-level primary nav. Items with `authOnly` show only when signed in.
  *
  * Order is the climb, not the org chart:
