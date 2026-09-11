@@ -50,38 +50,37 @@ function mulberry32(seed: number) {
 function inMountain(x: number, y: number): boolean {
   const nx = x / VIEW_W;
   const ny = y / VIEW_H;
-  const peakX = 0.52;
-  const half = 0.07 + 0.4 * ny * ny + 0.08 * ny;
-  const lobe =
-    ny < 0.5
-      ? Math.exp(-((nx - 0.68) ** 2) / 0.035 - ((ny - 0.26) ** 2) / 0.045) * 0.16
+  const peakX = 0.5;
+  const half = 0.11 + 0.4 * ny ** 1.12;
+  const rightLobe =
+    ny < 0.56
+      ? Math.exp(-((nx - 0.68) ** 2) / 0.038 - ((ny - 0.3) ** 2) / 0.055) * 0.2
       : 0;
   const leftLobe =
-    ny < 0.42
-      ? Math.exp(-((nx - 0.34) ** 2) / 0.028 - ((ny - 0.22) ** 2) / 0.04) * 0.1
+    ny < 0.5
+      ? Math.exp(-((nx - 0.3) ** 2) / 0.03 - ((ny - 0.26) ** 2) / 0.048) * 0.16
       : 0;
   return (
-    Math.abs(nx - peakX) < half + lobe + leftLobe &&
-    ny > 0.05 &&
-    ny < 0.96
+    Math.abs(nx - peakX) < half + rightLobe + leftLobe &&
+    ny > 0.035 &&
+    ny < 0.97
   );
 }
 
 function buildStars(): Star[] {
   const rand = mulberry32(20260911);
   const stars: Star[] = [];
-  for (let i = 0; i < 920; i += 1) {
-    const x = 36 + rand() * (VIEW_W - 72);
-    const y = 24 + rand() * (VIEW_H - 48);
+  for (let i = 0; i < 2400 && stars.length < 320; i += 1) {
+    const x = 20 + rand() * (VIEW_W - 40);
+    const y = 16 + rand() * (VIEW_H - 32);
     if (!inMountain(x, y)) continue;
-    const edge = Math.abs(x / VIEW_W - 0.52) / 0.48;
+    const edge = Math.abs(x / VIEW_W - 0.5) / 0.5;
     stars.push({
       x,
       y,
-      r: 0.7 + rand() * 1.9,
-      a: 0.22 + rand() * 0.62 - edge * 0.08,
+      r: 0.85 + rand() * 2.35,
+      a: 0.38 + rand() * 0.58 - edge * 0.06,
     });
-    if (stars.length >= 168) break;
   }
   return stars;
 }
@@ -94,10 +93,10 @@ function buildLinks(stars: Star[]): [number, number][] {
       const dx = stars[i].x - stars[j].x;
       const dy = stars[i].y - stars[j].y;
       const d = Math.hypot(dx, dy);
-      if (d < 78) near.push({ j, d });
+      if (d < 62) near.push({ j, d });
     }
     near.sort((a, b) => a.d - b.d);
-    for (const n of near.slice(0, 3)) links.push([i, n.j]);
+    for (const n of near.slice(0, 2)) links.push([i, n.j]);
   }
   return links;
 }
@@ -141,7 +140,7 @@ export function StartClimbTrail({ statuses, active, onSelect }: Props) {
 
   return (
     <aside className="ac-start-trail" aria-label="Climb trail">
-      <p className="ac-start-trail-kicker">The mountain</p>
+      <p className="ac-start-trail-kicker">Constellation trail</p>
       <ol className="ac-start-trail-chips">
         {TRAIL_STATIONS.map((station) => {
           const status = statuses[station.id];
@@ -179,7 +178,7 @@ export function StartClimbTrail({ statuses, active, onSelect }: Props) {
               <stop offset="100%" stopColor="#080204" stopOpacity="0" />
             </radialGradient>
             <filter id="ac-star-glow" x="-80%" y="-80%" width="260%" height="260%">
-              <feGaussianBlur stdDeviation="1.6" result="blur" />
+              <feGaussianBlur stdDeviation="2.4" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
@@ -235,20 +234,20 @@ export function StartClimbTrail({ statuses, active, onSelect }: Props) {
                 <foreignObject x="-10" y="-10" width="20" height="20">
                   <span className="ac-start-trail-icon">{stationIcon(station.id)}</span>
                 </foreignObject>
-                <text className="ac-start-trail-lab" x="28" y="5" textAnchor="start">
+                <text className="ac-start-trail-lab" x="0" y="38" textAnchor="middle">
                   {station.label}
                 </text>
                 {isActive ? (
-                  <g className="ac-start-trail-callout" transform="translate(28 -36)">
+                  <g className="ac-start-trail-callout" transform="translate(34 -6)">
                     <rect
                       className="ac-start-trail-callout-plate"
                       x="0"
-                      y="-18"
-                      width={Math.min(220, 18 + station.callout.length * 6.4)}
-                      height="28"
-                      rx="14"
+                      y="-16"
+                      width={Math.max(168, Math.min(248, 22 + station.callout.length * 7.1))}
+                      height="30"
+                      rx="15"
                     />
-                    <text className="ac-start-trail-callout-txt" x="14" y="1">
+                    <text className="ac-start-trail-callout-txt" x="14" y="4">
                       {station.callout}
                     </text>
                   </g>

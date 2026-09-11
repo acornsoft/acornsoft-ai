@@ -141,6 +141,7 @@ export function StartClimbPage() {
     activeOverride && statuses[activeOverride] !== "locked"
       ? activeOverride
       : suggested;
+  const climbActive = active === "start" ? "basecamp" : active;
   const canSend = climbReadyToSend(beats) && !busy;
 
   useEffect(() => {
@@ -330,7 +331,7 @@ export function StartClimbPage() {
                       const locked =
                         (move.station === "route" && routeLocked) ||
                         (move.station === "waypoint" && waypointLocked);
-                      const current = active === move.station;
+                      const current = climbActive === move.station;
                       const done = hasMeaningful(fields[move.key]);
                       return (
                         <li
@@ -401,7 +402,7 @@ export function StartClimbPage() {
                     <li
                       className={[
                         "ac-start-move ac-start-move--start",
-                        active === "start" ? "is-current" : "",
+                        activeOverride === "start" ? "is-current" : "",
                         statuses.start === "done" ? "is-done" : "",
                       ]
                         .filter(Boolean)
@@ -521,7 +522,7 @@ export function StartClimbPage() {
 
               <StartClimbTrail
                 statuses={statuses}
-                active={active}
+                active={climbActive}
                 onSelect={onTrailSelect}
               />
             </div>

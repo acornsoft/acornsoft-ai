@@ -23471,12 +23471,11 @@ html body .ac-start-climb .ac-service-title.ac-start-headline,
   overflow: hidden !important;
 }
 .ac-start-trail-kicker {
-  margin: 0 8px 8px !important;
-  color: #ffb020 !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.16em !important;
-  text-transform: uppercase !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
 }
 .ac-start-trail-chips {
   display: none !important;
@@ -23551,11 +23550,11 @@ html body .ac-start-climb .ac-service-title.ac-start-headline,
   max-width: 100% !important;
 }
 .ac-start-trail-net {
-  stroke: rgba(255, 122, 24, 0.16) !important;
-  stroke-width: 0.8 !important;
+  stroke: rgba(255, 140, 40, 0.28) !important;
+  stroke-width: 0.9 !important;
 }
 .ac-start-trail-star {
-  fill: #ff9a3c !important;
+  fill: #ffb056 !important;
 }
 .ac-start-trail-line {
   fill: none !important;
@@ -23598,12 +23597,15 @@ html body .ac-start-climb .ac-service-title.ac-start-headline,
 .ac-start-trail-node.is-current .ac-start-trail-icon {
   color: #1a0e08 !important;
 }
+.ac-start-trail {
+  position: relative !important;
+}
 .ac-start-trail-lab {
   font-family: var(--font-ui), system-ui, sans-serif !important;
-  fill: #d8dee8 !important;
-  font-size: 13px !important;
+  fill: #e8edf4 !important;
+  font-size: 12px !important;
   font-weight: 750 !important;
-  letter-spacing: 0.08em !important;
+  letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
   pointer-events: none !important;
 }
@@ -23683,7 +23685,8 @@ html body .ac-start-climb .ac-service-title.ac-start-headline,
     padding: 0 6px !important;
     font-size: 11px !important;
   }
-  .ac-start-trail-callout {
+  .ac-start-trail-callout,
+  .ac-start-trail-lab {
     display: none !important;
   }
 }

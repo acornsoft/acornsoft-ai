@@ -115,7 +115,7 @@ try {
   }
 
   const stars = await page.locator(".ac-start-trail-star").count();
-  if (stars < 80) throw new Error(`Constellation too thin (${stars} stars)`);
+  if (stars < 200) throw new Error(`Constellation too thin (${stars} stars)`);
 
   await page.locator(".ac-start-trail").screenshot({
     path: `${outDir}/start-climb-trail-peak.png`,
