@@ -1,6 +1,6 @@
 # acornsoft.ai
 
-Public site for Acornsoft: **Luna** (voice Sherpa), **Climb Notes**, and **Grok Build**. Live at [www.acornsoft.ai](https://www.acornsoft.ai).
+Public site for Acornsoft: **Luna** (voice Sherpa), **Climb Notes**, and **Grok Build**. Live at [www.acornsoft.ai](https://www.acornsoft.ai). Production www is published via Grok Build, not the GitHub Actions/Vercel workflow.
 
 ## Luna onboarding (look here)
 

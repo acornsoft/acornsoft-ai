@@ -1,3 +1,8 @@
+# FROZEN 2026-09-11 (David): Vercel is not the www deploy path.
+# Production www.acornsoft.ai is published via Grok Build ONLY.
+# Do not revive this workflow without explicit owner approval.
+# File kept for history. workflow_dispatch only — no auto-deploy on push to main.
+#
 # Production deploy for www.acornsoft.ai — no Vercel CLI login.
 # One-time in GitHub (acornsoft/acornsoft-ai → Settings → Secrets):
 #   VERCEL_TOKEN      from https://vercel.com/account/tokens
@@ -8,8 +13,6 @@ name: Deploy www.acornsoft.ai
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
 
 permissions:
   contents: read
