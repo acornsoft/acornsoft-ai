@@ -166,7 +166,7 @@ export function SiteHeader({
   return (
     <>
       <header
-        className={`ac-site-header${scrolled || menuOpen ? " is-scrolled" : ""}${menuOpen ? " is-menu-open" : ""}`}
+        className={`ac-site-header${scrolled || menuOpen ? " is-scrolled" : ""}${menuOpen ? " is-menu-open" : ""}${SHOW_PRIMARY_NAV ? "" : " ac-site-header--no-primary-nav"}`}
       >
         <div className="ac-site-header-inner">
           <div className="ac-site-brand">

@@ -22184,6 +22184,10 @@ body .feather {
   .ac-site-header .ac-start-cta:not(.ac-start-cta--mobile) {
     display: none !important;
   }
+  /* Menu is gone when SHOW_PRIMARY_NAV is false — keep the CTA in header actions. */
+  .ac-site-header--no-primary-nav .ac-start-cta:not(.ac-start-cta--mobile) {
+    display: inline-flex !important;
+  }
 }
 
 /* Slide 3 WITH — last wins: centered, caps, white, same size as fade-in words */
