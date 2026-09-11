@@ -42,6 +42,56 @@ try {
   if (!trail) throw new Error("Trail map missing on desktop");
   if (summitField) throw new Error("Summit should not be an intake field");
 
+  const talkLabels = await page
+    .locator(".ac-start-move--talk .ac-start-move-label")
+    .allInnerTexts();
+  if (talkLabels.map((s) => s.trim()).join(",") !== "Summit,Descent") {
+    throw new Error(`Talk-track order ${talkLabels.join(" → ")}`);
+  }
+
+  const chipIds = await page
+    .locator(".ac-start-trail-chips [data-station]")
+    .evaluateAll((els) => els.map((el) => el.getAttribute("data-station")));
+  const expectedChips = [
+    "start",
+    "basecamp",
+    "route",
+    "waypoint",
+    "summit",
+    "descent",
+  ];
+  if (chipIds.join(",") !== expectedChips.join(",")) {
+    throw new Error(`Chip order ${chipIds.join(" → ")}`);
+  }
+
+  const peak = await page.evaluate(() => {
+    const read = (id) => {
+      const g = document.querySelector(
+        `svg.ac-start-trail-map [data-station="${id}"]`,
+      );
+      const t = g?.getAttribute("transform") || "";
+      const m = /translate\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/.exec(t);
+      return m ? { x: Number(m[1]), y: Number(m[2]) } : null;
+    };
+    return { summit: read("summit"), descent: read("descent") };
+  });
+  if (!peak.summit || !peak.descent) {
+    throw new Error("Trail stations missing transform");
+  }
+  if (!(peak.summit.y < peak.descent.y)) {
+    throw new Error(
+      `Summit must be the peak (smaller y). summit.y=${peak.summit.y} descent.y=${peak.descent.y}`,
+    );
+  }
+  if (!(peak.descent.x > peak.summit.x)) {
+    throw new Error(
+      `Descent must sit to the right of Summit. summit.x=${peak.summit.x} descent.x=${peak.descent.x}`,
+    );
+  }
+
+  await page.locator(".ac-start-trail").screenshot({
+    path: `${outDir}/start-climb-trail-peak.png`,
+  });
   await page.screenshot({
     path: `${outDir}/start-climb-desktop-locked.png`,
     fullPage: true,
@@ -138,9 +188,11 @@ try {
         ok: true,
         errors,
         screenshots: [
+          "start-climb-trail-peak.png",
           "start-climb-desktop-locked.png",
           "start-climb-desktop-route-open.png",
           "start-climb-desktop-ready.png",
+          "start-climb-mobile-top.png",
           "start-climb-mobile-ready.png",
           "start-climb-welcome-back.png",
         ],

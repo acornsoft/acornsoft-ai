@@ -6,6 +6,11 @@ type Props = {
   onSelect: (id: ClimbStationId) => void;
 };
 
+/**
+ * Climb order (Start here → … → Summit → Descent).
+ * SVG y grows downward, so Summit must have the smallest y (the peak).
+ * Descent is after the peak: lower than Summit, offset to the right.
+ */
 const STATIONS: {
   id: ClimbStationId;
   label: string;
@@ -13,16 +18,16 @@ const STATIONS: {
   x: number;
   y: number;
 }[] = [
-  { id: "descent", label: "Descent", mark: "D", x: 152, y: 42 },
-  { id: "summit", label: "Summit", mark: "4", x: 88, y: 118 },
-  { id: "waypoint", label: "Waypoint", mark: "3", x: 52, y: 216 },
-  { id: "route", label: "Route", mark: "2", x: 118, y: 308 },
-  { id: "basecamp", label: "Base Camp", mark: "1", x: 56, y: 398 },
   { id: "start", label: "Start here", mark: "S", x: 96, y: 490 },
+  { id: "basecamp", label: "Base Camp", mark: "1", x: 56, y: 400 },
+  { id: "route", label: "Route", mark: "2", x: 124, y: 318 },
+  { id: "waypoint", label: "Waypoint", mark: "3", x: 52, y: 220 },
+  { id: "summit", label: "Summit", mark: "4", x: 102, y: 56 },
+  { id: "descent", label: "Descent", mark: "D", x: 188, y: 138 },
 ];
 
 const TRAIL_PATH =
-  "M96 490 C64 462, 42 432, 56 398 C74 356, 110 344, 118 308 C126 270, 70 252, 52 216 C36 180, 62 144, 88 118 C108 98, 132 66, 152 42";
+  "M96 490 C68 458, 40 430, 56 400 C78 360, 116 348, 124 318 C132 280, 72 258, 52 220 C36 186, 58 100, 102 56 C130 70, 160 110, 188 138";
 
 function stationClass(status: StationStatus, isActive: boolean): string {
   const bits = ["ac-start-trail-node", `is-${status}`];
@@ -35,7 +40,7 @@ export function StartClimbTrail({ statuses, active, onSelect }: Props) {
     <aside className="ac-start-trail" aria-label="Climb trail">
       <p className="ac-start-trail-kicker">Trail</p>
       <ol className="ac-start-trail-chips">
-        {[...STATIONS].reverse().map((station) => {
+        {STATIONS.map((station) => {
           const status = statuses[station.id];
           const locked = status === "locked" || status === "narrative";
           return (
@@ -43,6 +48,7 @@ export function StartClimbTrail({ statuses, active, onSelect }: Props) {
               <button
                 type="button"
                 className={stationClass(status, active === station.id)}
+                data-station={station.id}
                 disabled={locked}
                 aria-current={active === station.id ? "step" : undefined}
                 onClick={() => onSelect(station.id)}
@@ -56,9 +62,9 @@ export function StartClimbTrail({ statuses, active, onSelect }: Props) {
       </ol>
       <svg
         className="ac-start-trail-map"
-        viewBox="0 0 260 530"
+        viewBox="0 0 280 530"
         role="img"
-        aria-label="Trail from Start here up through Base Camp, Route, and Waypoint to Summit, then Descent"
+        aria-label="Trail climbs Start here, Base Camp, Route, and Waypoint to Summit at the peak, then descends"
       >
         <path className="ac-start-trail-line" d={TRAIL_PATH} />
         {STATIONS.map((station) => {
@@ -69,6 +75,7 @@ export function StartClimbTrail({ statuses, active, onSelect }: Props) {
             <g
               key={station.id}
               className={stationClass(status, isActive)}
+              data-station={station.id}
               transform={`translate(${station.x} ${station.y})`}
             >
               <circle className="ac-start-trail-hit" r="18" />
