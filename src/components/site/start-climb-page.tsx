@@ -382,7 +382,7 @@ export function StartClimbPage() {
                       </div>
                       {welcomeBack ? (
                         <p className="ac-start-remembered" role="status">
-                          Welcome back — we remembered you
+                          <span>Welcome back — we remembered you</span>
                           <button
                             type="button"
                             className="ac-start-not-you"

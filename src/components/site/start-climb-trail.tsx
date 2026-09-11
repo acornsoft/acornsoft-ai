@@ -13,16 +13,16 @@ const STATIONS: {
   x: number;
   y: number;
 }[] = [
-  { id: "descent", label: "Descent", mark: "D", x: 148, y: 40 },
-  { id: "summit", label: "Summit", mark: "4", x: 96, y: 114 },
-  { id: "waypoint", label: "Waypoint", mark: "3", x: 58, y: 212 },
-  { id: "route", label: "Route", mark: "2", x: 132, y: 304 },
-  { id: "basecamp", label: "Base Camp", mark: "1", x: 64, y: 396 },
-  { id: "start", label: "Start here", mark: "S", x: 108, y: 490 },
+  { id: "descent", label: "Descent", mark: "D", x: 152, y: 42 },
+  { id: "summit", label: "Summit", mark: "4", x: 88, y: 118 },
+  { id: "waypoint", label: "Waypoint", mark: "3", x: 52, y: 216 },
+  { id: "route", label: "Route", mark: "2", x: 118, y: 308 },
+  { id: "basecamp", label: "Base Camp", mark: "1", x: 56, y: 398 },
+  { id: "start", label: "Start here", mark: "S", x: 96, y: 490 },
 ];
 
 const TRAIL_PATH =
-  "M108 490 C72 460, 48 430, 64 396 C84 352, 124 340, 132 304 C140 266, 78 250, 58 212 C40 176, 70 140, 96 114 C116 94, 132 64, 148 40";
+  "M96 490 C64 462, 42 432, 56 398 C74 356, 110 344, 118 308 C126 270, 70 252, 52 216 C36 180, 62 144, 88 118 C108 98, 132 66, 152 42";
 
 function stationClass(status: StationStatus, isActive: boolean): string {
   const bits = ["ac-start-trail-node", `is-${status}`];

@@ -23144,6 +23144,12 @@ a.ac-work-card:hover {
 
 /* Progressive climb — Send a Note /start
    Left: bottom-up intake. Right: trail map only. Brain stays on the stage. */
+.ac-start-climb.ac-page-top {
+  padding-top: 120px !important;
+}
+.ac-start-move {
+  scroll-margin-top: 108px !important;
+}
 .ac-start-climb .ac-service-stack {
   max-width: 1120px !important;
   margin-left: auto !important;
@@ -23237,21 +23243,25 @@ a.ac-work-card:hover {
 }
 .ac-start-remembered {
   display: flex !important;
-  flex-wrap: wrap !important;
-  align-items: center !important;
-  gap: 8px 14px !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 2px 12px !important;
   margin: 0 0 12px !important;
-  padding: 8px 10px !important;
+  padding: 10px 12px !important;
   border-radius: 8px !important;
   background: rgba(255, 204, 102, 0.08) !important;
   color: #f4efe6 !important;
   font-size: 13px !important;
   font-weight: 500 !important;
 }
+.ac-start-remembered > span {
+  min-width: 0 !important;
+  line-height: 1.4 !important;
+}
 .ac-start-not-you {
   margin: 0 !important;
-  padding: 4px 0 !important;
-  min-height: 44px !important;
+  padding: 6px 0 !important;
+  min-height: 32px !important;
   border: 0 !important;
   background: none !important;
   color: #ffb020 !important;
@@ -23260,6 +23270,14 @@ a.ac-work-card:hover {
   font-weight: 700 !important;
   text-decoration: underline !important;
   text-underline-offset: 3px !important;
+  white-space: nowrap !important;
+}
+@media (min-width: 640px) {
+  .ac-start-remembered {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
 }
 .ac-start-not-you:hover,
 .ac-start-not-you:focus-visible {
@@ -23344,11 +23362,14 @@ a.ac-work-card:hover {
   color: #8b95a6 !important;
 }
 .ac-start-trail-chips .is-current {
-  border-color: rgba(255, 153, 0, 0.55) !important;
+  border-color: rgba(255, 153, 0, 0.7) !important;
   color: #ffcc66 !important;
 }
 .ac-start-trail-chips .is-done {
-  border-color: rgba(255, 204, 102, 0.35) !important;
+  border-color: rgba(128, 0, 32, 0.55) !important;
+}
+.ac-start-trail-chips .is-current.is-done {
+  border-color: rgba(255, 153, 0, 0.7) !important;
 }
 .ac-start-trail-chips .is-narrative {
   color: #8b95a6 !important;
@@ -23363,6 +23384,10 @@ a.ac-work-card:hover {
   color: #ffcc66 !important;
   font-size: 10px !important;
   font-weight: 800 !important;
+}
+.ac-start-trail-chips .is-current .ac-start-trail-chip-mark {
+  background: #ff9900 !important;
+  color: #1a0e08 !important;
 }
 .ac-start-trail-chips .is-locked .ac-start-trail-chip-mark,
 .ac-start-trail-chips .is-narrative .ac-start-trail-chip-mark {
@@ -23450,6 +23475,12 @@ a.ac-work-card:hover {
   }
 }
 @media (max-width: 879px) {
+  .ac-start-climb.ac-page-top {
+    padding-top: 136px !important;
+  }
+  .ac-start-move {
+    scroll-margin-top: 120px !important;
+  }
   .ac-start-board {
     display: flex !important;
     flex-direction: column !important;
@@ -23459,11 +23490,23 @@ a.ac-work-card:hover {
     order: -1 !important;
     padding: 12px 12px 10px !important;
   }
+  .ac-start-trail-kicker {
+    margin-bottom: 8px !important;
+  }
   .ac-start-trail-map {
     display: none !important;
   }
   .ac-start-trail-chips {
-    display: flex !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .ac-start-trail-chips button {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+    padding: 0 6px !important;
+    font-size: 11px !important;
   }
 }
 @media (prefers-reduced-motion: reduce) {
