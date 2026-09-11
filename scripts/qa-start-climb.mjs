@@ -21,16 +21,22 @@ try {
   await page.goto(`${base}/start`, { waitUntil: "networkidle", timeout: 45000 });
   await page.waitForTimeout(600);
 
-  const headline = await page.locator("h1.ac-service-title").innerText();
+  const headline = (await page.locator("h1.ac-service-title").innerText())
+    .replace(/\s+/g, " ")
+    .trim();
   const routeDisabled = await page.locator("#ac-start-measure").isDisabled();
   const waypointDisabled = await page.locator("#ac-start-slice").isDisabled();
   const ctaDisabled = await page.locator('button[type="submit"]').isDisabled();
   const startHere = await page.locator(".ac-start-start-badge").innerText();
   const trail = await page.locator(".ac-start-trail-map").count();
   const summitField = await page.locator("#ac-start-lesson").count();
+  const accent = await page.locator(".ac-start-headline-accent").innerText();
 
-  if (headline.trim() !== "One problem. One climb. Ready to start.") {
+  if (headline !== "One problem. One climb. Ready to start.") {
     throw new Error(`Headline mismatch: ${headline}`);
+  }
+  if (accent.trim() !== "Ready to start.") {
+    throw new Error(`Dual-tone last sentence missing: ${accent}`);
   }
   if (startHere.trim().toLowerCase() !== "start here") {
     throw new Error(`Missing Start here badge: ${startHere}`);
@@ -39,26 +45,35 @@ try {
     throw new Error("Route/Waypoint should start locked");
   }
   if (!ctaDisabled) throw new Error("CTA should start disabled");
-  if (!trail) throw new Error("Trail map missing on desktop");
+  if (!trail) throw new Error("Constellation trail missing on desktop");
   if (summitField) throw new Error("Summit should not be an intake field");
 
   const talkLabels = await page
     .locator(".ac-start-move--talk .ac-start-move-label")
     .allInnerTexts();
-  if (talkLabels.map((s) => s.trim()).join(",") !== "Summit,Descent") {
+  if (
+    talkLabels.map((s) => s.trim().toLowerCase()).join(",") !== "summit,descent"
+  ) {
     throw new Error(`Talk-track order ${talkLabels.join(" → ")}`);
+  }
+
+  const unlocks = await page.locator(".ac-start-unlock").allInnerTexts();
+  if (!unlocks.some((t) => /Unlocks after Base Camp/i.test(t))) {
+    throw new Error("Route lock should say Unlocks after Base Camp");
+  }
+  if (!unlocks.some((t) => /Unlocks after Route/i.test(t))) {
+    throw new Error("Waypoint lock should say Unlocks after Route (sequential)");
   }
 
   const chipIds = await page
     .locator(".ac-start-trail-chips [data-station]")
     .evaluateAll((els) => els.map((el) => el.getAttribute("data-station")));
   const expectedChips = [
-    "start",
     "basecamp",
     "route",
     "waypoint",
-    "summit",
     "descent",
+    "summit",
   ];
   if (chipIds.join(",") !== expectedChips.join(",")) {
     throw new Error(`Chip order ${chipIds.join(" → ")}`);
@@ -73,21 +88,34 @@ try {
       const m = /translate\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/.exec(t);
       return m ? { x: Number(m[1]), y: Number(m[2]) } : null;
     };
-    return { summit: read("summit"), descent: read("descent") };
+    return {
+      basecamp: read("basecamp"),
+      route: read("route"),
+      waypoint: read("waypoint"),
+      descent: read("descent"),
+      summit: read("summit"),
+      start: read("start"),
+    };
   });
-  if (!peak.summit || !peak.descent) {
+  if (!peak.summit || !peak.descent || !peak.basecamp) {
     throw new Error("Trail stations missing transform");
   }
-  if (!(peak.summit.y < peak.descent.y)) {
+  if (peak.start) throw new Error("Start here must not be a constellation station");
+  if (
+    !(
+      peak.summit.y < peak.descent.y &&
+      peak.descent.y < peak.waypoint.y &&
+      peak.waypoint.y < peak.route.y &&
+      peak.route.y < peak.basecamp.y
+    )
+  ) {
     throw new Error(
-      `Summit must be the peak (smaller y). summit.y=${peak.summit.y} descent.y=${peak.descent.y}`,
+      `Bottom-to-peak order failed: ${JSON.stringify(peak)}`,
     );
   }
-  if (!(peak.descent.x > peak.summit.x)) {
-    throw new Error(
-      `Descent must sit to the right of Summit. summit.x=${peak.summit.x} descent.x=${peak.descent.x}`,
-    );
-  }
+
+  const stars = await page.locator(".ac-start-trail-star").count();
+  if (stars < 80) throw new Error(`Constellation too thin (${stars} stars)`);
 
   await page.locator(".ac-start-trail").screenshot({
     path: `${outDir}/start-climb-trail-peak.png`,
@@ -142,12 +170,16 @@ try {
   const chips = await page.locator(".ac-start-trail-chips").evaluate((el) => {
     return window.getComputedStyle(el).display !== "none";
   });
-  const mapHidden = await page.locator(".ac-start-trail-map").evaluate((el) => {
-    return window.getComputedStyle(el).display === "none";
+  const mapVisible = await page.locator(".ac-start-trail-map").evaluate((el) => {
+    return window.getComputedStyle(el).display !== "none";
   });
-  if (!chips || !mapHidden) {
-    throw new Error("Mobile should show chips and hide the tall trail map");
+  const overflow = await page.evaluate(() => {
+    return document.documentElement.scrollWidth > document.documentElement.clientWidth + 2;
+  });
+  if (!chips || !mapVisible) {
+    throw new Error("Mobile should keep chips and a compact constellation map");
   }
+  if (overflow) throw new Error("Mobile has horizontal overflow");
   await page.screenshot({
     path: `${outDir}/start-climb-mobile-top.png`,
     fullPage: false,
@@ -157,7 +189,6 @@ try {
     fullPage: true,
   });
 
-  // Remembered identity
   await page.reload({ waitUntil: "networkidle" });
   await page.waitForTimeout(400);
   await page.evaluate(() => window.scrollTo(0, 0));
@@ -167,6 +198,8 @@ try {
   }
   const nameVal = await page.locator("#ac-start-name").inputValue();
   if (nameVal !== "David") throw new Error("Name was not remembered");
+  const problemVal = await page.locator("#ac-start-problem").inputValue();
+  if (problemVal) throw new Error("Note body must not persist");
 
   await page.locator("#ac-start-name").scrollIntoViewIfNeeded();
   await page.waitForTimeout(200);

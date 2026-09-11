@@ -1,3 +1,11 @@
+import type { ReactNode } from "react";
+import {
+  ArrowUpRight,
+  Crosshair,
+  Flag,
+  Lightbulb,
+  User,
+} from "lucide-react";
 import type { ClimbStationId, StationStatus } from "./start-climb-model";
 
 type Props = {
@@ -6,28 +14,116 @@ type Props = {
   onSelect: (id: ClimbStationId) => void;
 };
 
-/**
- * Climb order (Start here → … → Summit → Descent).
- * SVG y grows downward, so Summit must have the smallest y (the peak).
- * Descent is after the peak: lower than Summit, offset to the right.
- */
-const STATIONS: {
-  id: ClimbStationId;
+export const TRAIL_STATIONS: {
+  id: Exclude<ClimbStationId, "start">;
   label: string;
-  mark: string;
+  callout: string;
   x: number;
   y: number;
 }[] = [
-  { id: "start", label: "Start here", mark: "S", x: 96, y: 490 },
-  { id: "basecamp", label: "Base Camp", mark: "1", x: 56, y: 400 },
-  { id: "route", label: "Route", mark: "2", x: 124, y: 318 },
-  { id: "waypoint", label: "Waypoint", mark: "3", x: 52, y: 220 },
-  { id: "summit", label: "Summit", mark: "4", x: 102, y: 56 },
-  { id: "descent", label: "Descent", mark: "D", x: 188, y: 138 },
+  { id: "basecamp", label: "Base Camp", callout: "What has to stay true", x: 248, y: 708 },
+  { id: "route", label: "Route", callout: "The one job", x: 286, y: 548 },
+  { id: "waypoint", label: "Waypoint", callout: "Go or hold", x: 308, y: 398 },
+  { id: "descent", label: "Descent", callout: "What we learn on the way down", x: 322, y: 248 },
+  { id: "summit", label: "Summit", callout: "Acornsoft sets success criteria", x: 334, y: 98 },
 ];
 
+const VIEW_W = 640;
+const VIEW_H = 840;
+
 const TRAIL_PATH =
-  "M96 490 C68 458, 40 430, 56 400 C78 360, 116 348, 124 318 C132 280, 72 258, 52 220 C36 186, 58 100, 102 56 C130 70, 160 110, 188 138";
+  "M248 708 C262 668, 274 608, 286 548 C296 508, 302 448, 308 398 C314 348, 318 298, 322 248 C326 198, 330 148, 334 98";
+
+type Star = { x: number; y: number; r: number; a: number };
+
+function mulberry32(seed: number) {
+  let a = seed;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function inMountain(x: number, y: number): boolean {
+  const nx = x / VIEW_W;
+  const ny = y / VIEW_H;
+  const peakX = 0.52;
+  const half = 0.07 + 0.4 * ny * ny + 0.08 * ny;
+  const lobe =
+    ny < 0.5
+      ? Math.exp(-((nx - 0.68) ** 2) / 0.035 - ((ny - 0.26) ** 2) / 0.045) * 0.16
+      : 0;
+  const leftLobe =
+    ny < 0.42
+      ? Math.exp(-((nx - 0.34) ** 2) / 0.028 - ((ny - 0.22) ** 2) / 0.04) * 0.1
+      : 0;
+  return (
+    Math.abs(nx - peakX) < half + lobe + leftLobe &&
+    ny > 0.05 &&
+    ny < 0.96
+  );
+}
+
+function buildStars(): Star[] {
+  const rand = mulberry32(20260911);
+  const stars: Star[] = [];
+  for (let i = 0; i < 920; i += 1) {
+    const x = 36 + rand() * (VIEW_W - 72);
+    const y = 24 + rand() * (VIEW_H - 48);
+    if (!inMountain(x, y)) continue;
+    const edge = Math.abs(x / VIEW_W - 0.52) / 0.48;
+    stars.push({
+      x,
+      y,
+      r: 0.7 + rand() * 1.9,
+      a: 0.22 + rand() * 0.62 - edge * 0.08,
+    });
+    if (stars.length >= 168) break;
+  }
+  return stars;
+}
+
+function buildLinks(stars: Star[]): [number, number][] {
+  const links: [number, number][] = [];
+  for (let i = 0; i < stars.length; i += 1) {
+    const near: { j: number; d: number }[] = [];
+    for (let j = i + 1; j < stars.length; j += 1) {
+      const dx = stars[i].x - stars[j].x;
+      const dy = stars[i].y - stars[j].y;
+      const d = Math.hypot(dx, dy);
+      if (d < 78) near.push({ j, d });
+    }
+    near.sort((a, b) => a.d - b.d);
+    for (const n of near.slice(0, 3)) links.push([i, n.j]);
+  }
+  return links;
+}
+
+const STARS = buildStars();
+const LINKS = buildLinks(STARS);
+
+function stationIcon(id: (typeof TRAIL_STATIONS)[number]["id"]): ReactNode {
+  const props = { size: 16, strokeWidth: 2.15, "aria-hidden": true as const };
+  switch (id) {
+    case "basecamp":
+      return <User {...props} />;
+    case "route":
+      return <ArrowUpRight {...props} />;
+    case "waypoint":
+      return <Crosshair {...props} />;
+    case "descent":
+      return <Lightbulb {...props} />;
+    case "summit":
+      return <Flag {...props} />;
+    default: {
+      const _never: never = id;
+      return _never;
+    }
+  }
+}
 
 function stationClass(status: StationStatus, isActive: boolean): string {
   const bits = ["ac-start-trail-node", `is-${status}`];
@@ -36,76 +132,148 @@ function stationClass(status: StationStatus, isActive: boolean): string {
 }
 
 export function StartClimbTrail({ statuses, active, onSelect }: Props) {
+  const trailActive =
+    active === "start"
+      ? "basecamp"
+      : TRAIL_STATIONS.some((s) => s.id === active)
+        ? active
+        : "basecamp";
+
   return (
     <aside className="ac-start-trail" aria-label="Climb trail">
-      <p className="ac-start-trail-kicker">Trail</p>
+      <p className="ac-start-trail-kicker">The mountain</p>
       <ol className="ac-start-trail-chips">
-        {STATIONS.map((station) => {
+        {TRAIL_STATIONS.map((station) => {
           const status = statuses[station.id];
           const locked = status === "locked" || status === "narrative";
           return (
             <li key={station.id}>
               <button
                 type="button"
-                className={stationClass(status, active === station.id)}
+                className={stationClass(status, trailActive === station.id)}
                 data-station={station.id}
                 disabled={locked}
-                aria-current={active === station.id ? "step" : undefined}
+                aria-current={trailActive === station.id ? "step" : undefined}
                 onClick={() => onSelect(station.id)}
               >
-                <span className="ac-start-trail-chip-mark">{station.mark}</span>
+                <span className="ac-start-trail-chip-mark">
+                  {stationIcon(station.id)}
+                </span>
                 {station.label}
               </button>
             </li>
           );
         })}
       </ol>
-      <svg
-        className="ac-start-trail-map"
-        viewBox="0 0 280 530"
-        role="img"
-        aria-label="Trail climbs Start here, Base Camp, Route, and Waypoint to Summit at the peak, then descends"
-      >
-        <path className="ac-start-trail-line" d={TRAIL_PATH} />
-        {STATIONS.map((station) => {
-          const status = statuses[station.id];
-          const isActive = active === station.id;
-          const locked = status === "locked" || status === "narrative";
-          return (
-            <g
-              key={station.id}
-              className={stationClass(status, isActive)}
-              data-station={station.id}
-              transform={`translate(${station.x} ${station.y})`}
-            >
-              <circle className="ac-start-trail-hit" r="18" />
-              <circle className="ac-start-trail-dot" r={isActive ? 11 : 9} />
-              <text className="ac-start-trail-mark" textAnchor="middle" dy="4">
-                {station.mark}
-              </text>
-              <text className="ac-start-trail-lab" x="20" y="4" textAnchor="start">
-                {station.label}
-              </text>
-              {!locked ? (
-                <circle
-                  className="ac-start-trail-btn"
-                  r="18"
-                  role="button"
-                  tabIndex={0}
-                  aria-label={station.label}
-                  onClick={() => onSelect(station.id)}
-                  onKeyDown={(ev) => {
-                    if (ev.key === "Enter" || ev.key === " ") {
-                      ev.preventDefault();
-                      onSelect(station.id);
-                    }
-                  }}
-                />
-              ) : null}
-            </g>
-          );
-        })}
-      </svg>
+      <div className="ac-start-trail-stage">
+        <svg
+          className="ac-start-trail-map"
+          viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+          role="img"
+          aria-label="Constellation trail from Base Camp to Summit, with Descent just below the peak"
+        >
+          <defs>
+            <radialGradient id="ac-trail-wash" cx="52%" cy="42%" r="62%">
+              <stop offset="0%" stopColor="#ff7a18" stopOpacity="0.16" />
+              <stop offset="42%" stopColor="#801428" stopOpacity="0.1" />
+              <stop offset="100%" stopColor="#080204" stopOpacity="0" />
+            </radialGradient>
+            <filter id="ac-star-glow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="1.6" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <filter id="ac-node-glow" x="-120%" y="-120%" width="340%" height="340%">
+              <feGaussianBlur stdDeviation="4.2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <rect width={VIEW_W} height={VIEW_H} fill="url(#ac-trail-wash)" />
+          {LINKS.map(([a, b]) => (
+            <line
+              key={`${a}-${b}`}
+              className="ac-start-trail-net"
+              x1={STARS[a].x}
+              y1={STARS[a].y}
+              x2={STARS[b].x}
+              y2={STARS[b].y}
+            />
+          ))}
+          {STARS.map((star, i) => (
+            <circle
+              key={i}
+              className="ac-start-trail-star"
+              cx={star.x}
+              cy={star.y}
+              r={star.r}
+              opacity={star.a}
+              filter="url(#ac-star-glow)"
+            />
+          ))}
+          <path className="ac-start-trail-line" d={TRAIL_PATH} />
+          {TRAIL_STATIONS.map((station) => {
+            const status = statuses[station.id];
+            const isActive = trailActive === station.id;
+            const locked = status === "locked" || status === "narrative";
+            return (
+              <g
+                key={station.id}
+                className={stationClass(status, isActive)}
+                data-station={station.id}
+                transform={`translate(${station.x} ${station.y})`}
+              >
+                {isActive ? (
+                  <circle className="ac-start-trail-halo" r="28" filter="url(#ac-node-glow)" />
+                ) : null}
+                <circle className="ac-start-trail-hit" r="22" />
+                <circle className="ac-start-trail-dot" r={isActive ? 18 : 15} />
+                <foreignObject x="-10" y="-10" width="20" height="20">
+                  <span className="ac-start-trail-icon">{stationIcon(station.id)}</span>
+                </foreignObject>
+                <text className="ac-start-trail-lab" x="28" y="5" textAnchor="start">
+                  {station.label}
+                </text>
+                {isActive ? (
+                  <g className="ac-start-trail-callout" transform="translate(28 -36)">
+                    <rect
+                      className="ac-start-trail-callout-plate"
+                      x="0"
+                      y="-18"
+                      width={Math.min(220, 18 + station.callout.length * 6.4)}
+                      height="28"
+                      rx="14"
+                    />
+                    <text className="ac-start-trail-callout-txt" x="14" y="1">
+                      {station.callout}
+                    </text>
+                  </g>
+                ) : null}
+                {!locked ? (
+                  <circle
+                    className="ac-start-trail-btn"
+                    r="22"
+                    role="button"
+                    tabIndex={0}
+                    aria-label={station.label}
+                    onClick={() => onSelect(station.id)}
+                    onKeyDown={(ev) => {
+                      if (ev.key === "Enter" || ev.key === " ") {
+                        ev.preventDefault();
+                        onSelect(station.id);
+                      }
+                    }}
+                  />
+                ) : null}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
     </aside>
   );
 }
