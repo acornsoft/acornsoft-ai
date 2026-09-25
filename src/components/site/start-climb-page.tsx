@@ -1,6 +1,18 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Lock } from "lucide-react";
+import {
+  ArrowUpRight,
+  Clock,
+  Crosshair,
+  Flag,
+  Lightbulb,
+  Lock,
+  Mail,
+  Mountain,
+  Send,
+  ShieldCheck,
+  User,
+} from "lucide-react";
 import { SiteChrome } from "./site-chrome";
 import { StartClimbTrail } from "./start-climb-trail";
 import {
@@ -24,35 +36,32 @@ const SENDER_FIELDS = [
   {
     key: "problem" as const,
     station: "basecamp" as const,
-    n: "1",
     label: "Base Camp",
-    sub: "what has to stay true",
-    hint: "Current situation in plain terms. Constraints that cannot move (compliance, customers, cash, downtime).",
+    hint: "Where every climb begins. Describe the challenge or problem.",
     placeholder:
       "e.g. We’re taking bookings by phone; nothing can go down on weekends.",
-    unlocksAfter: null,
+    example: "What has to stay true",
+    lockedHint: null,
   },
   {
     key: "measure" as const,
     station: "route" as const,
-    n: "2",
     label: "Route",
-    sub: "the one job",
     hint: "Name the single outcome for this climb. List what’s out of scope so we don’t wander.",
     placeholder:
       "e.g. Online booking for existing clients. Not: new marketing site.",
-    unlocksAfter: "Base Camp",
+    example: "Define the path.",
+    lockedHint: "Define the path.",
   },
   {
     key: "slice" as const,
     station: "waypoint" as const,
-    n: "3",
     label: "Waypoint",
-    sub: "go or hold",
     hint: "Go = start now. Hold = park it with a reason (budget, season, dependency).",
     placeholder:
       "e.g. Go — need this before holiday season. / Hold — waiting on vendor contract.",
-    unlocksAfter: "Route",
+    example: "Go or hold",
+    lockedHint: "Unlocks after Route.",
   },
 ] as const;
 
@@ -88,6 +97,23 @@ function focusStation(id: ClimbStationId) {
   });
 }
 
+function fieldIcon(station: "basecamp" | "route" | "waypoint", locked: boolean): ReactNode {
+  const props = { size: 16, strokeWidth: 2.2, "aria-hidden": true as const };
+  if (locked) return <Lock {...props} />;
+  switch (station) {
+    case "basecamp":
+      return <Mountain {...props} />;
+    case "route":
+      return <ArrowUpRight {...props} />;
+    case "waypoint":
+      return <Crosshair {...props} />;
+    default: {
+      const _never: never = station;
+      return _never;
+    }
+  }
+}
+
 export function StartClimbPage() {
   const { user } = useCurrentUserState();
   const { isOwner } = useOwnerAccess();
@@ -116,6 +142,7 @@ export function StartClimbPage() {
     activeOverride && statuses[activeOverride] !== "locked"
       ? activeOverride
       : suggested;
+  const climbActive = active === "start" ? "basecamp" : active;
   const canSend = climbReadyToSend(beats) && !busy;
 
   useEffect(() => {
@@ -245,141 +272,136 @@ export function StartClimbPage() {
               </div>
             </section>
           ) : (
-            <>
-              <header className="ac-service-head">
-                <span className="ac-service-kicker">Send a Note</span>
-                <h1 className="ac-service-title">
-                  One problem. One climb. Ready to start.
-                </h1>
-                <div className="ac-service-lede-box">
-                  <p className="ac-service-lede ac-service-lede--last">
-                    Send a Note is how a busy owner hands Acornsoft one real
-                    problem and gets a clear climb: where you stand, the one
-                    job, and whether to go — then we turn it into work.
-                  </p>
-                </div>
-              </header>
+            <div className="ac-start-board">
+              <div className="ac-start-col">
+                <div className="ac-start-glass">
+                  <header className="ac-service-head ac-start-head">
+                    <span className="ac-service-kicker">Send a Note</span>
+                    <h1 className="ac-service-title ac-start-headline">
+                      <span className="ac-start-headline-lead">One problem.</span>{" "}
+                      <span className="ac-start-headline-climb">One climb.</span>{" "}
+                      <span className="ac-start-headline-accent">
+                        Ready to start.
+                      </span>
+                    </h1>
+                  </header>
 
-              <div className="ac-start-board">
-                <form className="ac-start-form" onSubmit={onSubmit} noValidate>
-                  <ol className="ac-start-moves ac-start-moves--climb">
-                    <li
-                      className={`ac-start-move ac-start-move--summit ac-start-move--talk${
-                        active === "summit" ? " is-current" : ""
-                      }`}
-                      aria-disabled="true"
-                    >
-                      <div className="ac-start-move-head">
-                        <span className="ac-start-n">4</span>
-                        <span className="ac-start-move-copy">
-                          <span className="ac-start-move-label">Summit</span>
-                          <span className="ac-start-move-hint">
-                            Acornsoft fills this after review. We may ask a
-                            follow-up first.
+                  <form className="ac-start-form" onSubmit={onSubmit} noValidate>
+                    <ol className="ac-start-moves ac-start-moves--climb">
+                      <li
+                        className="ac-start-move ac-start-move--summit ac-start-move--talk"
+                        aria-disabled="true"
+                      >
+                        <div className="ac-start-move-head">
+                          <span className="ac-start-n ac-start-n--icon">
+                            <Flag size={15} strokeWidth={2.2} aria-hidden />
                           </span>
-                        </span>
-                      </div>
-                    </li>
-                    <li
-                      className={`ac-start-move ac-start-move--descent ac-start-move--talk${
-                        active === "descent" ? " is-current" : ""
-                      }`}
-                      aria-disabled="true"
-                    >
-                      <div className="ac-start-move-head">
-                        <span className="ac-start-n ac-start-n--quiet">D</span>
-                        <span className="ac-start-move-copy">
-                          <span className="ac-start-move-label">Descent</span>
-                          <span className="ac-start-move-hint">
-                            Knowledge gained for the next climb.
-                          </span>
-                        </span>
-                      </div>
-                    </li>
-                    {[...SENDER_FIELDS].reverse().map((move) => {
-                      const locked =
-                        (move.station === "route" && routeLocked) ||
-                        (move.station === "waypoint" && waypointLocked);
-                      const current = active === move.station;
-                      const done = hasMeaningful(fields[move.key]);
-                      return (
-                        <li
-                          key={move.key}
-                          className={[
-                            "ac-start-move",
-                            locked ? "ac-start-move--locked" : "",
-                            current ? "is-current" : "",
-                            done && !locked ? "is-done" : "",
-                          ]
-                            .filter(Boolean)
-                            .join(" ")}
-                        >
-                          <label
-                            htmlFor={`ac-start-${move.key}`}
-                            className="ac-start-move-head"
-                          >
-                            <span className="ac-start-n">{move.n}</span>
-                            <span className="ac-start-move-copy">
-                              <span className="ac-start-move-label">
-                                {move.label}
-                                <span className="ac-start-move-sub">
-                                  {" "}
-                                  — {move.sub}
-                                </span>
-                              </span>
-                              <span className="ac-start-move-hint">
-                                {move.hint}
-                              </span>
-                              {locked && move.unlocksAfter ? (
-                                <span className="ac-start-unlock">
-                                  <Lock size={13} strokeWidth={2.25} />
-                                  Unlocks after {move.unlocksAfter}
-                                </span>
-                              ) : null}
+                          <span className="ac-start-move-copy">
+                            <span className="ac-start-move-label">Summit</span>
+                            <span className="ac-start-move-hint">
+                              The peak of understanding.
                             </span>
-                          </label>
-                          <textarea
-                            id={`ac-start-${move.key}`}
-                            name={move.key}
-                            rows={4}
-                            value={fields[move.key]}
-                            placeholder={
-                              locked ? undefined : move.placeholder
-                            }
-                            onChange={(ev) => {
-                              if (locked) return;
-                              patch(move.key, ev.target.value);
-                              setActiveOverride(move.station);
-                            }}
-                            onFocus={() => {
-                              if (!locked) setActiveOverride(move.station);
-                            }}
-                            disabled={locked}
-                            readOnly={locked}
-                            required={!locked}
-                            aria-disabled={locked}
-                          />
-                        </li>
-                      );
-                    })}
-                    <li
+                          </span>
+                        </div>
+                      </li>
+                      <li
+                        className="ac-start-move ac-start-move--descent ac-start-move--talk"
+                        aria-disabled="true"
+                      >
+                        <div className="ac-start-move-head">
+                          <span className="ac-start-n ac-start-n--icon ac-start-n--quiet">
+                            <Lightbulb size={15} strokeWidth={2.2} aria-hidden />
+                          </span>
+                          <span className="ac-start-move-copy">
+                            <span className="ac-start-move-label">Descent</span>
+                            <span className="ac-start-move-hint">
+                              Insights that light the way.
+                            </span>
+                          </span>
+                        </div>
+                      </li>
+                      {[...SENDER_FIELDS].reverse().map((move) => {
+                        const locked =
+                          (move.station === "route" && routeLocked) ||
+                          (move.station === "waypoint" && waypointLocked);
+                        const current = climbActive === move.station;
+                        const done = hasMeaningful(fields[move.key]);
+                        return (
+                          <li
+                            key={move.key}
+                            className={[
+                              "ac-start-move",
+                              locked ? "ac-start-move--locked" : "",
+                              current ? "is-current" : "",
+                              done && !locked ? "is-done" : "",
+                            ]
+                              .filter(Boolean)
+                              .join(" ")}
+                          >
+                            <label
+                              htmlFor={`ac-start-${move.key}`}
+                              className="ac-start-move-head"
+                            >
+                              <span className="ac-start-n ac-start-n--icon">
+                                {fieldIcon(move.station, locked)}
+                              </span>
+                              <span className="ac-start-move-copy">
+                                <span className="ac-start-move-label">
+                                  {move.label}
+                                </span>
+                                {locked && move.lockedHint ? (
+                                  <span className="ac-start-unlock">
+                                    {move.lockedHint}
+                                  </span>
+                                ) : (
+                                  <span className="ac-start-move-hint">
+                                    {move.hint}
+                                  </span>
+                                )}
+                              </span>
+                            </label>
+                            {!locked ? (
+                              <div className="ac-start-example">
+                                <Clock size={14} strokeWidth={2.2} aria-hidden />
+                                <span>
+                                  Example: “{move.example}”
+                                </span>
+                              </div>
+                            ) : null}
+                            <textarea
+                              id={`ac-start-${move.key}`}
+                              name={move.key}
+                              rows={current && !locked ? 3 : 2}
+                              value={fields[move.key]}
+                              placeholder={locked ? undefined : move.placeholder}
+                              onChange={(ev) => {
+                                if (locked) return;
+                                patch(move.key, ev.target.value);
+                                setActiveOverride(move.station);
+                              }}
+                              onFocus={() => {
+                                if (!locked) setActiveOverride(move.station);
+                              }}
+                              disabled={locked}
+                              readOnly={locked}
+                              required={!locked}
+                              aria-disabled={locked}
+                            />
+                          </li>
+                        );
+                      })}
+                    </ol>
+
+                    <div
                       className={[
-                        "ac-start-move ac-start-move--start",
-                        active === "start" ? "is-current" : "",
+                        "ac-start-here",
+                        activeOverride === "start" ? "is-current" : "",
                         statuses.start === "done" ? "is-done" : "",
                       ]
                         .filter(Boolean)
                         .join(" ")}
                     >
-                      <div className="ac-start-move-head">
-                        <span className="ac-start-n ac-start-n--start">S</span>
-                        <span className="ac-start-move-copy">
-                          <span className="ac-start-start-badge">Start here</span>
-                          <span className="ac-start-move-label">
-                            Name and email
-                          </span>
-                        </span>
-                      </div>
+                      <span className="ac-start-start-badge">Start here</span>
                       {welcomeBack ? (
                         <p className="ac-start-remembered" role="status">
                           <span>Welcome back — we remembered you</span>
@@ -393,13 +415,17 @@ export function StartClimbPage() {
                         </p>
                       ) : null}
                       <div className="ac-start-meta ac-start-meta--identity">
-                        <label htmlFor="ac-start-name">
-                          <span>Your name</span>
+                        <label htmlFor="ac-start-name" className="ac-start-icon-field">
+                          <span className="ac-start-icon-field-mark">
+                            <User size={15} strokeWidth={2.2} aria-hidden />
+                          </span>
+                          <span className="ac-start-sr">Your name</span>
                           <input
                             id="ac-start-name"
                             type="text"
                             name="name"
                             value={fields.name}
+                            placeholder="Your name"
                             onChange={(ev) => {
                               patch("name", ev.target.value);
                               setActiveOverride("start");
@@ -409,13 +435,17 @@ export function StartClimbPage() {
                             autoComplete="name"
                           />
                         </label>
-                        <label htmlFor="ac-start-email">
-                          <span>Email</span>
+                        <label htmlFor="ac-start-email" className="ac-start-icon-field">
+                          <span className="ac-start-icon-field-mark">
+                            <Mail size={15} strokeWidth={2.2} aria-hidden />
+                          </span>
+                          <span className="ac-start-sr">Email</span>
                           <input
                             id="ac-start-email"
                             type="email"
                             name="email"
                             value={fields.email}
+                            placeholder="you@example.com"
                             onChange={(ev) => {
                               patch("email", ev.target.value);
                               setActiveOverride("start");
@@ -425,7 +455,7 @@ export function StartClimbPage() {
                             autoComplete="email"
                           />
                         </label>
-                        <label htmlFor="ac-start-title">
+                        <label htmlFor="ac-start-title" className="ac-start-sr-field">
                           <span>Give this climb a name</span>
                           <input
                             id="ac-start-title"
@@ -448,48 +478,45 @@ export function StartClimbPage() {
                           />
                         </label>
                       </div>
-                    </li>
-                  </ol>
+                    </div>
 
-                  <input type="hidden" name="lesson" value="" />
+                    <input type="hidden" name="lesson" value="" />
 
-                  {error ? (
-                    <p className="ac-start-error" role="alert">
-                      {error}
-                    </p>
-                  ) : null}
+                    {error ? (
+                      <p className="ac-start-error" role="alert">
+                        {error}
+                      </p>
+                    ) : null}
 
-                  <div className="ac-start-actions">
-                    <button
-                      type="submit"
-                      className="rn-btn ac-btn-maroon"
-                      disabled={!canSend}
-                      title={
-                        canSend
-                          ? undefined
-                          : "Name yourself, then Base Camp, Route, and Waypoint."
-                      }
-                    >
-                      <span>{busy ? "Sending…" : "Send a Note"}</span>
-                    </button>
-                    <p className="ac-start-fine">
-                      We keep this private until you say otherwise.{" "}
-                      <Link to="/field-guide">Want the how-tos first?</Link>
-                    </p>
-                    <p className="ac-start-energy">
-                      With firm requirements, success criteria, and constraints,
-                      we can climb anything.
-                    </p>
-                  </div>
-                </form>
-
-                <StartClimbTrail
-                  statuses={statuses}
-                  active={active}
-                  onSelect={onTrailSelect}
-                />
+                    <div className="ac-start-actions">
+                      <button
+                        type="submit"
+                        className="rn-btn ac-start-send"
+                        disabled={!canSend}
+                        title={
+                          canSend
+                            ? undefined
+                            : "Name yourself, then Base Camp, Route, and Waypoint."
+                        }
+                      >
+                        <Send size={16} strokeWidth={2.2} aria-hidden />
+                        <span>{busy ? "Sending…" : "Send a Note"}</span>
+                      </button>
+                      <p className="ac-start-fine">
+                        <ShieldCheck size={14} strokeWidth={2.2} aria-hidden />
+                        We’ll respond within 24 hours.
+                      </p>
+                    </div>
+                  </form>
+                </div>
               </div>
-            </>
+
+              <StartClimbTrail
+                statuses={statuses}
+                active={climbActive}
+                onSelect={onTrailSelect}
+              />
+            </div>
           )}
         </div>
       </div>
