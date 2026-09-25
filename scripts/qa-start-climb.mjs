@@ -31,9 +31,15 @@ try {
   const trail = await page.locator(".ac-start-trail-map").count();
   const summitField = await page.locator("#ac-start-lesson").count();
   const accent = await page.locator(".ac-start-headline-accent").innerText();
+  const climbLine = await page.locator(".ac-start-headline-climb").innerText();
+  const glass = await page.locator(".ac-start-glass").count();
+  const sla = await page.locator(".ac-start-fine").innerText();
 
   if (headline !== "One problem. One climb. Ready to start.") {
     throw new Error(`Headline mismatch: ${headline}`);
+  }
+  if (climbLine.trim() !== "One climb.") {
+    throw new Error(`One climb line missing: ${climbLine}`);
   }
   if (accent.trim() !== "Ready to start.") {
     throw new Error(`Dual-tone last sentence missing: ${accent}`);
@@ -41,11 +47,13 @@ try {
   if (startHere.trim().toLowerCase() !== "start here") {
     throw new Error(`Missing Start here badge: ${startHere}`);
   }
+  if (!glass) throw new Error("Glass form card missing");
+  if (!/24 hours/i.test(sla)) throw new Error("24-hour response line missing");
   if (!routeDisabled || !waypointDisabled) {
     throw new Error("Route/Waypoint should start locked");
   }
   if (!ctaDisabled) throw new Error("CTA should start disabled");
-  if (!trail) throw new Error("Constellation trail missing on desktop");
+  if (!trail) throw new Error("Trail map missing on desktop");
   if (summitField) throw new Error("Summit should not be an intake field");
 
   const talkLabels = await page
@@ -58,8 +66,8 @@ try {
   }
 
   const unlocks = await page.locator(".ac-start-unlock").allInnerTexts();
-  if (!unlocks.some((t) => /Unlocks after Base Camp/i.test(t))) {
-    throw new Error("Route lock should say Unlocks after Base Camp");
+  if (!unlocks.some((t) => /Define the path/i.test(t))) {
+    throw new Error("Locked Route should say Define the path.");
   }
   if (!unlocks.some((t) => /Unlocks after Route/i.test(t))) {
     throw new Error("Waypoint lock should say Unlocks after Route (sequential)");
@@ -72,8 +80,8 @@ try {
     "basecamp",
     "route",
     "waypoint",
-    "descent",
     "summit",
+    "descent",
   ];
   if (chipIds.join(",") !== expectedChips.join(",")) {
     throw new Error(`Chip order ${chipIds.join(" → ")}`);
@@ -100,22 +108,55 @@ try {
   if (!peak.summit || !peak.descent || !peak.basecamp) {
     throw new Error("Trail stations missing transform");
   }
-  if (peak.start) throw new Error("Start here must not be a constellation station");
+  if (peak.start) throw new Error("Start here must not be a trail station");
   if (
     !(
-      peak.summit.y < peak.descent.y &&
-      peak.descent.y < peak.waypoint.y &&
+      peak.summit.y < peak.waypoint.y &&
       peak.waypoint.y < peak.route.y &&
       peak.route.y < peak.basecamp.y
     )
   ) {
+    throw new Error(`Climb path order failed: ${JSON.stringify(peak)}`);
+  }
+  if (!(peak.summit.y < peak.descent.y && peak.descent.x > peak.summit.x)) {
     throw new Error(
-      `Bottom-to-peak order failed: ${JSON.stringify(peak)}`,
+      `Descent must sit on the downslope (lower and right of Summit): ${JSON.stringify(peak)}`,
     );
   }
 
-  const stars = await page.locator(".ac-start-trail-star").count();
-  if (stars < 200) throw new Error(`Constellation too thin (${stars} stars)`);
+  const hero = await page.evaluate(() => {
+    const photo = document.querySelector(".ac-global-hero-photo");
+    const wash = document.querySelector(".ac-global-hero-wash");
+    const pageEl = document.querySelector(".ac-start-climb");
+    const trail = document.querySelector(".ac-start-trail");
+    const photoCs = photo ? getComputedStyle(photo) : null;
+    const washCs = wash ? getComputedStyle(wash) : null;
+    const pageCs = pageEl ? getComputedStyle(pageEl) : null;
+    const trailCs = trail ? getComputedStyle(trail) : null;
+    return {
+      photoOpacity: photoCs ? Number(photoCs.opacity) : 0,
+      photoImage: photoCs?.backgroundImage || "",
+      washColor: washCs?.backgroundColor || "",
+      washImage: washCs?.backgroundImage || "",
+      pageBg: pageCs?.backgroundColor || "",
+      trailBg: trailCs?.backgroundColor || "",
+    };
+  });
+  if (!/hero\.jpg/.test(hero.photoImage)) {
+    throw new Error("Site hero photo is missing");
+  }
+  if (hero.photoOpacity < 0.35) {
+    throw new Error(`Hero photo dimmed out (opacity ${hero.photoOpacity})`);
+  }
+  if (/rgb\(7,\s*7,\s*8\)|rgb\(0,\s*0,\s*0\)/.test(hero.washColor) && hero.washImage === "none") {
+    throw new Error("Hero wash is a solid night sky");
+  }
+  if (!/transparent|rgba\(0,\s*0,\s*0,\s*0\)/.test(hero.pageBg)) {
+    throw new Error(`Start page must not paint a solid ground: ${hero.pageBg}`);
+  }
+  if (!/transparent|rgba\(0,\s*0,\s*0,\s*0\)/.test(hero.trailBg)) {
+    throw new Error(`Trail must float over the hero: ${hero.trailBg}`);
+  }
 
   await page.locator(".ac-start-trail").screenshot({
     path: `${outDir}/start-climb-trail-peak.png`,
@@ -177,7 +218,7 @@ try {
     return document.documentElement.scrollWidth > document.documentElement.clientWidth + 2;
   });
   if (!chips || !mapVisible) {
-    throw new Error("Mobile should keep chips and a compact constellation map");
+    throw new Error("Mobile should keep chips and a compact trail map");
   }
   if (overflow) throw new Error("Mobile has horizontal overflow");
   await page.screenshot({
@@ -220,6 +261,7 @@ try {
       {
         ok: true,
         errors,
+        hero,
         screenshots: [
           "start-climb-trail-peak.png",
           "start-climb-desktop-locked.png",
