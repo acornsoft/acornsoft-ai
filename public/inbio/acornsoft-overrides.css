@@ -150,7 +150,7 @@ body.ac-inbio,
 }
 .rn-header .header-right,
 .ac-cn-header-right .header-right,
-.ac-gnomah-header-right .header-right {
+.ac-studio-header-right .header-right {
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
@@ -158,9 +158,9 @@ body.ac-inbio,
   flex: 0 0 auto;
   margin-left: 0 !important;
 }
-/* Climb Notes / Gnomah: auth sits in the actions cluster */
+/* Climb Notes studio: auth sits in the actions cluster */
 .ac-cn-header-right,
-.ac-gnomah-header-right {
+.ac-studio-header-right {
   display: flex !important;
   align-items: center;
   justify-content: flex-end;
@@ -169,11 +169,11 @@ body.ac-inbio,
   width: 100%;
 }
 .ac-cn-header-right .ac-auth-slot,
-.ac-gnomah-header-right .ac-auth-slot {
+.ac-studio-header-right .ac-auth-slot {
   margin-left: 0;
 }
 .ac-cn-header-right > .ac-menu-text,
-.ac-gnomah-header-right > .ac-menu-text {
+.ac-studio-header-right > .ac-menu-text {
   margin-left: 0;
 }
 
@@ -5154,7 +5154,7 @@ a.ac-corp-foot-link:hover {
 }
 
 
-/* ========== Auth, Gnomah, scroll-to-top ========== */
+/* ========== Auth, studio, scroll-to-top ========== */
 .ac-scroll-top {
   display: none;
 }
@@ -5378,10 +5378,10 @@ a.ac-corp-foot-link:hover {
 
 /* header clusters defined in site header bar block above */
 .ac-cn-header-right,
-.ac-gnomah-header-right {
+.ac-studio-header-right {
   /* keep class hook; rules live in header bar block */
 }
-.ac-cn-mode-gnomah {
+.ac-cn-mode-studio {
   text-decoration: none !important;
   display: inline-flex;
   align-items: center;
@@ -5634,10 +5634,10 @@ a.ac-corp-foot-link:hover {
 .ac-login-foot-sep {
   opacity: 0.45;
 }
-.ac-gnomah-gate-detail {
+.ac-studio-gate-detail {
   margin: 12px 0 0;
 }
-.ac-gnomah-gate-actions {
+.ac-studio-gate-actions {
   margin-top: 22px;
   display: flex;
   flex-wrap: wrap;
@@ -5663,37 +5663,37 @@ a.ac-corp-foot-link:hover {
   }
 }
 
-/* Gnomah editor */
-.ac-gnomah-loading {
+/* Studio editor */
+.ac-studio-loading {
   min-height: 40vh;
   display: grid;
   place-items: center;
   color: #c4cfde;
 }
-.ac-gnomah-gate {
+.ac-studio-gate {
   max-width: 560px;
   margin: 12vh auto;
   padding: 32px;
   text-align: center;
   color: #ffffff !important;
 }
-.ac-gnomah-gate h1 {
+.ac-studio-gate h1 {
   color: #ffffff !important;
   margin: 16px 0 12px;
 }
-.ac-gnomah-gate p,
-.ac-gnomah-gate .ac-gnomah-gate-detail,
-.ac-gnomah-gate .ac-gnomah-muted,
-.ac-gnomah-gate strong {
+.ac-studio-gate p,
+.ac-studio-gate .ac-studio-gate-detail,
+.ac-studio-gate .ac-studio-muted,
+.ac-studio-gate strong {
   color: #ffffff !important;
 }
-.ac-gnomah-main {
+.ac-studio-main {
   padding-top: 90px;
 }
-.ac-gnomah-hero .description {
+.ac-studio-hero .description {
   max-width: 720px;
 }
-.ac-gnomah-shell {
+.ac-studio-shell {
   display: grid;
   grid-template-columns: minmax(240px, 300px) 1fr;
   gap: 18px;
@@ -5702,7 +5702,7 @@ a.ac-corp-foot-link:hover {
   max-width: 1400px;
   margin: 0 auto;
 }
-.ac-gnomah-rail {
+.ac-studio-rail {
   position: sticky;
   top: 88px;
   max-height: calc(100vh - 110px);
@@ -5712,20 +5712,20 @@ a.ac-corp-foot-link:hover {
   background: rgba(12, 10, 10, 0.92);
   padding: 14px;
 }
-.ac-gnomah-rail-head {
+.ac-studio-rail-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
 }
-.ac-gnomah-rail-head h2 {
+.ac-studio-rail-head h2 {
   margin: 0;
   font-size: 14px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #ff9900;
 }
-.ac-gnomah-new {
+.ac-studio-new {
   appearance: none;
   border: 1px solid rgba(255, 153, 0, 0.45);
   background: rgba(128, 0, 32, 0.55);
@@ -5737,18 +5737,18 @@ a.ac-corp-foot-link:hover {
   padding: 5px 12px;
   cursor: pointer;
 }
-.ac-gnomah-filters {
+.ac-studio-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 12px;
 }
-.ac-gnomah-list {
+.ac-studio-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.ac-gnomah-list-item {
+.ac-studio-list-item {
   width: 100%;
   text-align: left;
   appearance: none;
@@ -5762,34 +5762,34 @@ a.ac-corp-foot-link:hover {
   display: grid;
   gap: 4px;
 }
-.ac-gnomah-list-item:hover,
-.ac-gnomah-list-item.is-active {
+.ac-studio-list-item:hover,
+.ac-studio-list-item.is-active {
   border-color: rgba(255, 153, 0, 0.4);
   background: rgba(128, 0, 32, 0.25);
 }
-.ac-gnomah-list-num {
+.ac-studio-list-num {
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.1em;
   color: #ff9900;
 }
-.ac-gnomah-list-title {
+.ac-studio-list-title {
   font-size: 14px;
   font-weight: 600;
   color: #fff;
 }
-.ac-gnomah-muted {
+.ac-studio-muted {
   color: #8b929a;
   font-size: 13px;
 }
-.ac-gnomah-editor {
+.ac-studio-editor {
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(14, 14, 16, 0.92);
   padding: 16px 18px 24px;
   min-width: 0;
 }
-.ac-gnomah-toolbar {
+.ac-studio-toolbar {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -5800,11 +5800,11 @@ a.ac-corp-foot-link:hover {
   padding: 8px 0;
   background: linear-gradient(180deg, rgba(14, 14, 16, 0.98), rgba(14, 14, 16, 0.9));
 }
-.ac-gnomah-action {
+.ac-studio-action {
   font-size: 12px !important;
   padding: 8px 12px !important;
 }
-.ac-gnomah-danger {
+.ac-studio-danger {
   appearance: none;
   margin-left: auto;
   border: 1px solid rgba(255, 100, 100, 0.45);
@@ -5817,7 +5817,7 @@ a.ac-corp-foot-link:hover {
   padding: 8px 14px;
   cursor: pointer;
 }
-.ac-gnomah-form label {
+.ac-studio-form label {
   display: grid;
   gap: 6px;
   font-size: 11px;
@@ -5827,9 +5827,9 @@ a.ac-corp-foot-link:hover {
   color: #ff9900;
   margin-bottom: 12px;
 }
-.ac-gnomah-form input,
-.ac-gnomah-form textarea,
-.ac-gnomah-form select {
+.ac-studio-form input,
+.ac-studio-form textarea,
+.ac-studio-form select {
   width: 100%;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -5842,40 +5842,40 @@ a.ac-corp-foot-link:hover {
   text-transform: none;
   padding: 10px 12px;
 }
-.ac-gnomah-form textarea {
+.ac-studio-form textarea {
   resize: vertical;
   min-height: 96px;
   line-height: 1.5;
 }
-.ac-gnomah-row {
+.ac-studio-row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
-.ac-gnomah-full {
+.ac-studio-full {
   width: 100%;
 }
-.ac-gnomah-grow {
+.ac-studio-grow {
   grid-column: span 2;
 }
 @media (max-width: 991px) {
-  .ac-gnomah-shell {
+  .ac-studio-shell {
     grid-template-columns: 1fr;
   }
-  .ac-gnomah-rail {
+  .ac-studio-rail {
     position: relative;
     top: 0;
     max-height: none;
   }
-  .ac-gnomah-row {
+  .ac-studio-row {
     grid-template-columns: 1fr 1fr;
   }
-  .ac-gnomah-grow {
+  .ac-studio-grow {
     grid-column: span 1;
   }
 }
 @media (max-width: 575px) {
-  .ac-gnomah-row {
+  .ac-studio-row {
     grid-template-columns: 1fr;
   }
 }
@@ -6011,7 +6011,7 @@ a.ac-corp-foot-link:hover {
 }
 
 
-/* Owner private preferences (Gnomah) */
+/* Owner private preferences (studio) */
 .ac-owner-prefs {
   margin: 0 0 28px;
   padding: 20px 22px;
@@ -7462,7 +7462,7 @@ body.template-color-1 {
 .ac-hero-stage .ac-about-page,
 .ac-hero-stage .cn-page,
 .ac-hero-stage .cn-canopy-shell,
-.ac-hero-stage .ac-gnomah-main,
+.ac-hero-stage .ac-studio-main,
 .ac-hero-stage .ac-corporate-main {
   background: transparent !important;
   background-color: transparent !important;
@@ -7771,11 +7771,11 @@ body.ac-has-global-hero > *:not(.ac-global-hero):not(script) {
 }
 
 
-/* climb notes gnomah access panel */
-.ac-cn-gnomah-panel {
+/* climb notes studio access panel */
+.ac-cn-studio-panel {
   margin-top: 28px;
 }
-.ac-cn-gnomah-panel-inner {
+.ac-cn-studio-panel-inner {
   max-width: 52rem;
   padding: 22px 24px 20px;
   border-radius: 16px;
@@ -7793,7 +7793,7 @@ body.ac-has-global-hero > *:not(.ac-global-hero):not(script) {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
-.ac-cn-gnomah-kicker {
+.ac-cn-studio-kicker {
   margin: 0 0 6px;
   color: #ff9900;
   font-size: 11px;
@@ -7801,50 +7801,50 @@ body.ac-has-global-hero > *:not(.ac-global-hero):not(script) {
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.ac-cn-gnomah-title {
+.ac-cn-studio-title {
   margin: 0 0 10px;
   color: #fff;
   font-size: clamp(1.25rem, 1.5vw + 1rem, 1.55rem);
   font-weight: 700;
   line-height: 1.25;
 }
-.ac-cn-gnomah-text {
+.ac-cn-studio-text {
   margin: 0 0 12px;
   color: rgba(232, 237, 244, 0.92);
   font-size: 15px;
   line-height: 1.6;
 }
-.ac-cn-gnomah-list {
+.ac-cn-studio-list {
   margin: 0 0 16px;
   padding-left: 1.15rem;
   color: rgba(196, 207, 222, 0.95);
   font-size: 14px;
   line-height: 1.55;
 }
-.ac-cn-gnomah-list li {
+.ac-cn-studio-list li {
   margin-bottom: 6px;
 }
-.ac-cn-gnomah-list a {
+.ac-cn-studio-list a {
   color: #ff9900 !important;
   text-decoration: none !important;
 }
-.ac-cn-gnomah-list a:hover {
+.ac-cn-studio-list a:hover {
   text-decoration: underline !important;
 }
-.ac-cn-gnomah-actions {
+.ac-cn-studio-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 12px;
 }
-.ac-cn-gnomah-status {
+.ac-cn-studio-status {
   margin: 0;
   color: rgba(196, 207, 222, 0.85);
   font-size: 13px;
   line-height: 1.5;
 }
 @media (max-width: 575px) {
-  .ac-cn-gnomah-panel-inner {
+  .ac-cn-studio-panel-inner {
     padding: 18px 16px;
   }
 }
@@ -7895,7 +7895,7 @@ body.ac-has-global-hero > *:not(.ac-global-hero):not(script) {
   font-weight: 600 !important;
 }
 /* hide residual Owner studio kicker if any */
-.ac-cn-gnomah-kicker {
+.ac-cn-studio-kicker {
   display: none !important;
 }
 
@@ -8227,24 +8227,24 @@ body .ac-scroll-top {
 }
 
 /* ============================================================
-   Gnomah full Climb Notes studio (workspace, not marketing page)
+   Studio — Climb Notes workspace (not a marketing page)
    ============================================================ */
-.ac-gnomah-app {
+.ac-studio-app {
   min-height: 100vh;
 }
-.ac-gnomah-app .ac-gnomah-main {
+.ac-studio-app .ac-studio-main {
   padding-top: 76px;
   padding-bottom: 40px;
   min-height: calc(100vh - 0px);
 }
 
 /* Compact studio bar replaces giant hero */
-.ac-gnomah-studio-bar {
+.ac-studio-studio-bar {
   max-width: 1400px;
   margin: 0 auto 16px;
   padding: 0 18px;
 }
-.ac-gnomah-studio-bar-inner {
+.ac-studio-studio-bar-inner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -8259,10 +8259,10 @@ body .ac-scroll-top {
   );
   backdrop-filter: blur(10px);
 }
-.ac-gnomah-studio-identity {
+.ac-studio-studio-identity {
   min-width: 0;
 }
-.ac-gnomah-studio-kicker {
+.ac-studio-studio-kicker {
   margin: 0 0 2px;
   font-size: 11px;
   font-weight: 700;
@@ -8270,7 +8270,7 @@ body .ac-scroll-top {
   text-transform: uppercase;
   color: #ff9900;
 }
-.ac-gnomah-studio-title {
+.ac-studio-studio-title {
   margin: 0 !important;
   font-size: 1.35rem !important;
   font-weight: 700 !important;
@@ -8278,26 +8278,26 @@ body .ac-scroll-top {
   color: #fff !important;
   letter-spacing: -0.01em;
 }
-.ac-gnomah-studio-meta {
+.ac-studio-studio-meta {
   margin: 0;
   flex: 1 1 auto;
   font-size: 13px;
   color: #c4cfde;
 }
-.ac-gnomah-studio-meta a {
+.ac-studio-studio-meta a {
   color: #ff9900 !important;
   text-decoration: none !important;
   font-weight: 600;
 }
-.ac-gnomah-studio-meta a:hover {
+.ac-studio-studio-meta a:hover {
   text-decoration: underline !important;
 }
-.ac-gnomah-studio-actions {
+.ac-studio-studio-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
-.ac-gnomah-chip-btn {
+.ac-studio-chip-btn {
   appearance: none;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(0, 0, 0, 0.35);
@@ -8310,30 +8310,30 @@ body .ac-scroll-top {
   cursor: pointer;
   min-height: 36px;
 }
-.ac-gnomah-chip-btn:hover {
+.ac-studio-chip-btn:hover {
   border-color: rgba(255, 153, 0, 0.45);
   color: #ffcc66;
 }
-.ac-gnomah-prefs-panel {
+.ac-studio-prefs-panel {
   margin-top: 12px;
 }
 
 /* Shell denser + full workspace */
-.ac-gnomah-app .ac-gnomah-shell {
+.ac-studio-app .ac-studio-shell {
   min-height: calc(100vh - 200px);
   align-items: stretch;
 }
-.ac-gnomah-app .ac-gnomah-rail {
+.ac-studio-app .ac-studio-rail {
   max-height: calc(100vh - 160px);
 }
-.ac-gnomah-app .ac-gnomah-editor {
+.ac-studio-app .ac-studio-editor {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 200px);
 }
 
 /* Filter chips (not reusing New button styles) */
-.ac-gnomah-filter {
+.ac-studio-filter {
   appearance: none;
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: transparent;
@@ -8345,22 +8345,22 @@ body .ac-scroll-top {
   padding: 5px 10px;
   cursor: pointer;
 }
-.ac-gnomah-filter.is-active {
+.ac-studio-filter.is-active {
   border-color: rgba(255, 153, 0, 0.55);
   background: rgba(128, 0, 32, 0.55);
   color: #ffcc66;
 }
-.ac-gnomah-empty {
+.ac-studio-empty {
   display: grid;
   gap: 10px;
   padding: 12px 4px 8px;
   justify-items: start;
 }
 
-/* Kill Inbio form wars inside Gnomah */
-.ac-gnomah-app .ac-gnomah-form input,
-.ac-gnomah-app .ac-gnomah-form textarea,
-.ac-gnomah-app .ac-gnomah-form select {
+/* Kill Inbio form wars inside the studio */
+.ac-studio-app .ac-studio-form input,
+.ac-studio-app .ac-studio-form textarea,
+.ac-studio-app .ac-studio-form select {
   display: block !important;
   width: 100% !important;
   max-width: none !important;
@@ -8380,24 +8380,24 @@ body .ac-scroll-top {
   height: auto !important;
   min-height: 42px !important;
 }
-.ac-gnomah-app .ac-gnomah-form textarea {
+.ac-studio-app .ac-studio-form textarea {
   min-height: 110px !important;
   resize: vertical !important;
 }
-.ac-gnomah-app .ac-gnomah-form input:focus,
-.ac-gnomah-app .ac-gnomah-form textarea:focus {
+.ac-studio-app .ac-studio-form input:focus,
+.ac-studio-app .ac-studio-form textarea:focus {
   outline: none !important;
   border-color: rgba(255, 153, 0, 0.55) !important;
   box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.15) !important;
 }
-.ac-gnomah-app .ac-gnomah-form label {
+.ac-studio-app .ac-studio-form label {
   color: #ff9900 !important;
   font-size: 11px !important;
   font-weight: 800 !important;
   letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
 }
-.ac-gnomah-app .ac-gnomah-toolbar {
+.ac-studio-app .ac-studio-toolbar {
   position: sticky;
   top: 72px;
   z-index: 6;
@@ -8407,35 +8407,35 @@ body .ac-scroll-top {
   padding: 10px 0 !important;
   gap: 8px;
 }
-.ac-gnomah-app .ac-gnomah-action {
+.ac-studio-app .ac-studio-action {
   min-height: 38px !important;
 }
-.ac-gnomah-app .ac-gnomah-danger {
+.ac-studio-app .ac-studio-danger {
   min-height: 38px;
 }
 
 @media (max-width: 991px) {
-  .ac-gnomah-studio-bar-inner {
+  .ac-studio-studio-bar-inner {
     align-items: flex-start;
   }
-  .ac-gnomah-app .ac-gnomah-rail,
-  .ac-gnomah-app .ac-gnomah-editor {
+  .ac-studio-app .ac-studio-rail,
+  .ac-studio-app .ac-studio-editor {
     max-height: none;
     min-height: 0;
   }
-  .ac-gnomah-app .ac-gnomah-shell {
+  .ac-studio-app .ac-studio-shell {
     min-height: 0;
   }
 }
 
 /* ============================================================
-   Gnomah — private library list (table, easy to scan/edit)
+   Studio — private library list (table, easy to scan/edit)
    ============================================================ */
-.ac-gnomah-shell--list-first {
+.ac-studio-shell--list-first {
   grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
   gap: 16px;
 }
-.ac-gnomah-rail-sub {
+.ac-studio-rail-sub {
   margin: 4px 0 0;
   font-size: 12px;
   line-height: 1.4;
@@ -8444,16 +8444,16 @@ body .ac-scroll-top {
   letter-spacing: normal;
   text-transform: none;
 }
-.ac-gnomah-rail-head {
+.ac-studio-rail-head {
   align-items: flex-start;
   gap: 10px;
   margin-bottom: 12px;
 }
-.ac-gnomah-search {
+.ac-studio-search {
   display: block;
   margin-bottom: 10px;
 }
-.ac-gnomah-search input {
+.ac-studio-search input {
   width: 100%;
   box-sizing: border-box;
   border-radius: 10px;
@@ -8464,30 +8464,30 @@ body .ac-scroll-top {
   font-size: 13px;
   padding: 10px 12px;
 }
-.ac-gnomah-search input:focus {
+.ac-studio-search input:focus {
   outline: none;
   border-color: rgba(255, 153, 0, 0.5);
 }
-.ac-gnomah-filter-count {
+.ac-studio-filter-count {
   margin-left: 4px;
   opacity: 0.75;
   font-weight: 600;
 }
-.ac-gnomah-table-wrap {
+.ac-studio-table-wrap {
   margin-top: 4px;
 }
-.ac-gnomah-table {
+.ac-studio-table {
   width: 100%;
   border-collapse: collapse;
 }
-.ac-gnomah-table thead {
+.ac-studio-table thead {
   display: none; /* row button carries labels visually */
 }
-.ac-gnomah-table-cell {
+.ac-studio-table-cell {
   padding: 0;
   border: none;
 }
-.ac-gnomah-row-btn {
+.ac-studio-row-btn {
   width: 100%;
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr) auto;
@@ -8506,12 +8506,12 @@ body .ac-scroll-top {
   cursor: pointer;
   font: inherit;
 }
-.ac-gnomah-row-btn:hover,
-tr.is-active .ac-gnomah-row-btn {
+.ac-studio-row-btn:hover,
+tr.is-active .ac-studio-row-btn {
   border-color: rgba(255, 153, 0, 0.4);
   background: rgba(128, 0, 32, 0.28);
 }
-.ac-gnomah-row-num {
+.ac-studio-row-num {
   grid-row: 1 / span 2;
   align-self: center;
   font-size: 13px;
@@ -8519,14 +8519,14 @@ tr.is-active .ac-gnomah-row-btn {
   letter-spacing: 0.06em;
   color: #ff9900;
 }
-.ac-gnomah-row-main {
+.ac-studio-row-main {
   grid-column: 2;
   grid-row: 1;
   min-width: 0;
   display: grid;
   gap: 2px;
 }
-.ac-gnomah-row-title {
+.ac-studio-row-title {
   font-size: 14px;
   font-weight: 650;
   color: #fff;
@@ -8535,7 +8535,7 @@ tr.is-active .ac-gnomah-row-btn {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.ac-gnomah-row-preview {
+.ac-studio-row-preview {
   font-size: 12px;
   line-height: 1.4;
   color: #8b929a;
@@ -8545,7 +8545,7 @@ tr.is-active .ac-gnomah-row-btn {
   overflow: hidden;
   white-space: normal;
 }
-.ac-gnomah-status {
+.ac-studio-status {
   grid-column: 3;
   grid-row: 1;
   justify-self: end;
@@ -8559,40 +8559,40 @@ tr.is-active .ac-gnomah-row-btn {
   color: #c4cfde;
   white-space: nowrap;
 }
-.ac-gnomah-status-draft {
+.ac-studio-status-draft {
   border-color: rgba(160, 160, 170, 0.35);
   color: #c4cfde;
 }
-.ac-gnomah-status-pending {
+.ac-studio-status-pending {
   border-color: rgba(255, 180, 60, 0.45);
   color: #ffcc66;
 }
-.ac-gnomah-status-approved {
+.ac-studio-status-approved {
   border-color: rgba(80, 180, 255, 0.4);
   color: #9fd4ff;
 }
-.ac-gnomah-status-published {
+.ac-studio-status-published {
   border-color: rgba(80, 200, 120, 0.45);
   color: #8fe0a8;
 }
-.ac-gnomah-status-archived {
+.ac-studio-status-archived {
   border-color: rgba(255, 255, 255, 0.12);
   color: #8b929a;
 }
-.ac-gnomah-row-date {
+.ac-studio-row-date {
   grid-column: 3;
   grid-row: 2;
   justify-self: end;
   font-size: 11px;
   color: #8b929a;
 }
-.ac-gnomah-editor-head {
+.ac-studio-editor-head {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-bottom: 12px;
 }
-.ac-gnomah-editor-kicker {
+.ac-studio-editor-kicker {
   margin: 0;
   font-size: 11px;
   font-weight: 700;
@@ -8600,14 +8600,14 @@ tr.is-active .ac-gnomah-row-btn {
   text-transform: uppercase;
   color: #ff9900;
 }
-.ac-gnomah-editor-heading {
+.ac-studio-editor-heading {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
   color: #fff;
   line-height: 1.25;
 }
-.ac-gnomah-back-list {
+.ac-studio-back-list {
   display: none;
   appearance: none;
   align-self: flex-start;
@@ -8635,19 +8635,19 @@ tr.is-active .ac-gnomah-row-btn {
 }
 
 @media (max-width: 991px) {
-  .ac-gnomah-shell--list-first {
+  .ac-studio-shell--list-first {
     grid-template-columns: 1fr;
   }
-  .ac-gnomah-pane-list .ac-gnomah-editor {
+  .ac-studio-pane-list .ac-studio-editor {
     display: none;
   }
-  .ac-gnomah-pane-editor .ac-gnomah-rail {
+  .ac-studio-pane-editor .ac-studio-rail {
     display: none;
   }
-  .ac-gnomah-back-list {
+  .ac-studio-back-list {
     display: inline-flex;
   }
-  .ac-gnomah-app .ac-gnomah-rail {
+  .ac-studio-app .ac-studio-rail {
     max-height: none;
     position: relative;
     top: 0;
@@ -8655,9 +8655,9 @@ tr.is-active .ac-gnomah-row-btn {
 }
 
 /* ============================================================
-   Gnomah — timeline carousel studio
+   Studio — timeline carousel
    ============================================================ */
-.ac-gnomah-main--carousel {
+.ac-studio-main--carousel {
   padding-top: 88px;
   padding-bottom: 48px;
   max-width: 1280px;
@@ -9176,7 +9176,7 @@ tr.is-active .ac-gnomah-row-btn {
   }
 }
 
-/* Gnomah — cleaner view filters + rail tools (no status laundry list) */
+/* Studio — cleaner view filters + rail tools (no status laundry list) */
 .ac-gn-timeline-head {
   display: flex;
   flex-wrap: wrap;
@@ -9383,7 +9383,7 @@ tr.is-active .ac-gnomah-row-btn {
   flex: 0 0 auto;
   white-space: nowrap;
 }
-.ac-gnomah-main--carousel {
+.ac-studio-main--carousel {
   padding-bottom: 12px;
 }
 /* undo earlier mobile full-width wrap for top filters */
@@ -9397,32 +9397,32 @@ tr.is-active .ac-gnomah-row-btn {
   }
 }
 
-/* Gnomah — cap control width */
-.ac-gnomah-app .ac-gn-view-btn,
-.ac-gnomah-app .ac-gn-icon-btn,
-.ac-gnomah-app .ac-gn-chip,
-.ac-gnomah-app .ac-gn-tool-btn,
-.ac-gnomah-app .ac-gn-nav-btn,
-.ac-gnomah-app .ac-gn-card-edit {
+/* Studio — cap control width */
+.ac-studio-app .ac-gn-view-btn,
+.ac-studio-app .ac-gn-icon-btn,
+.ac-studio-app .ac-gn-chip,
+.ac-studio-app .ac-gn-tool-btn,
+.ac-studio-app .ac-gn-nav-btn,
+.ac-studio-app .ac-gn-card-edit {
   max-width: 120px;
   box-sizing: border-box;
 }
-.ac-gnomah-app .ac-gn-view-btn,
-.ac-gnomah-app .ac-gn-icon-btn {
+.ac-studio-app .ac-gn-view-btn,
+.ac-studio-app .ac-gn-icon-btn {
   overflow: hidden;
   text-overflow: ellipsis;
   justify-content: center;
 }
-.ac-gnomah-app .ac-gn-icon-btn span,
-.ac-gnomah-app .ac-gn-view-btn {
+.ac-studio-app .ac-gn-icon-btn span,
+.ac-studio-app .ac-gn-view-btn {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 /* Square icon tools stay small */
-.ac-gnomah-app .ac-gn-tool-btn,
-.ac-gnomah-app .ac-gn-nav-btn,
-.ac-gnomah-app .ac-gn-card-edit {
+.ac-studio-app .ac-gn-tool-btn,
+.ac-studio-app .ac-gn-nav-btn,
+.ac-studio-app .ac-gn-card-edit {
   max-width: 32px;
   width: 32px;
 }
@@ -9697,7 +9697,7 @@ body:has(.ac-home-shell) .ac-scroll-top {
   display: none !important;
 }
 
-/* Gnomah — direct state dropdown */
+/* Studio — direct state dropdown */
 .ac-gn-state {
   display: inline-flex;
   align-items: center;
@@ -9869,7 +9869,7 @@ body:has(.ac-home-shell) .ac-scroll-top {
   background: #6e757c;
 }
 
-/* Gnomah editor bar integration */
+/* Studio editor bar integration */
 .ac-gn-editor-actions .ac-peci {
   margin-right: 2px;
 }
@@ -10917,7 +10917,7 @@ body.ac-hero-static .ac-global-hero-photo,
   max-width: 168px !important;
 }
 
-/* Gnomah autosave status */
+/* Studio autosave status */
 .ac-gn-autosave {
   display: inline-flex;
   align-items: center;
@@ -11000,7 +11000,7 @@ body.ac-hero-static .ac-global-hero-photo,
   gap: 8px 12px;
 }
 
-/* Climb Notes — Open Gnomah always visible in page toolbar */
+/* Climb Notes — Open Studio stays in page toolbar */
 .ac-cn-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -11008,7 +11008,7 @@ body.ac-hero-static .ac-global-hero-photo,
   justify-content: space-between;
   gap: 12px 16px;
 }
-.ac-cn-open-gnomah {
+.ac-cn-open-studio {
   display: inline-flex !important;
   flex: 0 0 auto;
   max-width: 160px;
@@ -11019,7 +11019,7 @@ body.ac-hero-static .ac-global-hero-photo,
     flex-direction: column;
     align-items: stretch;
   }
-  .ac-cn-open-gnomah {
+  .ac-cn-open-studio {
     max-width: none;
     justify-content: center;
   }
@@ -18897,7 +18897,7 @@ body:has(.ac-service-page) .ac-about-top-fab {
 }
 
 /* ============================================================
-   Service catalog — same carousel as Climb Notes / Gnomah
+   Service catalog — same carousel as Climb Notes studio
    ============================================================ */
 .ac-service-page .ac-svc-catalog {
   display: flex !important;
@@ -18920,7 +18920,7 @@ body:has(.ac-service-page) .ac-about-top-fab {
   margin: 0 !important;
 }
 
-/* Reuse Gnomah strip; slightly wider cards on Services */
+/* Reuse the studio strip; slightly wider cards on Services */
 .ac-service-page .ac-svc-carousel {
   width: 100% !important;
   margin: 0 -4px !important;
@@ -20387,20 +20387,20 @@ body:has(.ac-service-page) .ac-about-top-fab {
   }
 }
 
-/* ===== Gnomah studio — match Services / About chrome ===== */
-.ac-gnomah.ac-service-page,
-.ac-gnomah .ac-service-stack {
+/* ===== Studio — match Services / About chrome ===== */
+.ac-studio.ac-service-page,
+.ac-studio .ac-service-stack {
   width: 100% !important;
   max-width: none !important;
 }
-.ac-gnomah .ac-gn-toolbar {
+.ac-studio .ac-gn-toolbar {
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: center !important;
   gap: 10px !important;
   width: 100% !important;
 }
-.ac-gnomah .ac-gn-search {
+.ac-studio .ac-gn-search {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
@@ -20412,7 +20412,7 @@ body:has(.ac-service-page) .ac-about-top-fab {
   background: rgba(0,0,0,0.35) !important;
   color: #c4cfde !important;
 }
-.ac-gnomah .ac-gn-search input {
+.ac-studio .ac-gn-search input {
   width: 100% !important;
   border: 0 !important;
   background: transparent !important;
@@ -20420,12 +20420,12 @@ body:has(.ac-service-page) .ac-about-top-fab {
   font: inherit !important;
   outline: none !important;
 }
-.ac-gnomah .ac-gn-new {
+.ac-studio .ac-gn-new {
   display: inline-flex !important;
   align-items: center !important;
   gap: 8px !important;
 }
-.ac-gnomah .ac-gn-tool-btn {
+.ac-studio .ac-gn-tool-btn {
   appearance: none !important;
   width: 40px !important;
   height: 40px !important;
@@ -20437,13 +20437,13 @@ body:has(.ac-service-page) .ac-about-top-fab {
   color: #e8edf4 !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-view-bar { width: 100% !important; }
-.ac-gnomah .ac-gn-view-row {
+.ac-studio .ac-gn-view-bar { width: 100% !important; }
+.ac-studio .ac-gn-view-row {
   display: flex !important;
   flex-wrap: wrap !important;
   gap: 8px !important;
 }
-.ac-gnomah .ac-gn-view-btn {
+.ac-studio .ac-gn-view-btn {
   appearance: none !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -20459,69 +20459,69 @@ body:has(.ac-service-page) .ac-about-top-fab {
   font-weight: 650 !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-view-btn.is-active {
+.ac-studio .ac-gn-view-btn.is-active {
   border-color: rgba(255,153,0,0.5) !important;
   color: #ffe08a !important;
   background: rgba(255,153,0,0.12) !important;
 }
-.ac-gnomah .ac-gn-view-n { opacity: 0.7 !important; font-size: 11px !important; }
+.ac-studio .ac-gn-view-n { opacity: 0.7 !important; font-size: 11px !important; }
 
-.ac-gnomah .ac-gn-library {
+.ac-studio .ac-gn-library {
   display: grid !important;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
   gap: 14px !important;
   width: 100% !important;
   overflow: visible !important;
 }
-.ac-gnomah .ac-gn-card {
+.ac-studio .ac-gn-card {
   min-width: 0 !important;
   width: 100% !important;
   margin: 0 !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-card--new { display: none !important; }
+.ac-studio .ac-gn-card--new { display: none !important; }
 
-.ac-gnomah .ac-gn-focus {
+.ac-studio .ac-gn-focus {
   width: 100% !important;
   padding: 18px 20px !important;
   border-radius: 16px !important;
   border: 1px solid rgba(255,255,255,0.1) !important;
   background: rgba(12,12,14,0.72) !important;
 }
-.ac-gnomah .ac-gn-focus-head {
+.ac-studio .ac-gn-focus-head {
   display: flex !important;
   flex-wrap: wrap !important;
   justify-content: space-between !important;
   gap: 12px !important;
   margin-bottom: 16px !important;
 }
-.ac-gnomah .ac-gn-focus-kicker {
+.ac-studio .ac-gn-focus-kicker {
   margin: 0 0 4px !important;
   font-size: 11px !important;
   letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
   color: #ffb020 !important;
 }
-.ac-gnomah .ac-gn-focus-title {
+.ac-studio .ac-gn-focus-title {
   margin: 0 !important;
   font-size: 1.35rem !important;
   color: #fff !important;
 }
-.ac-gnomah .ac-gn-focus-body {
+.ac-studio .ac-gn-focus-body {
   display: grid !important;
   gap: 14px 24px !important;
 }
 @media (min-width: 800px) {
-  .ac-gnomah .ac-gn-focus-body { grid-template-columns: 1fr 1fr !important; }
+  .ac-studio .ac-gn-focus-body { grid-template-columns: 1fr 1fr !important; }
 }
-.ac-gnomah .ac-gn-focus-body h3 {
+.ac-studio .ac-gn-focus-body h3 {
   margin: 0 0 4px !important;
   font-size: 12px !important;
   letter-spacing: 0.06em !important;
   text-transform: uppercase !important;
   color: #ffb020 !important;
 }
-.ac-gnomah .ac-gn-focus-body p {
+.ac-studio .ac-gn-focus-body p {
   margin: 0 !important;
   color: #c4cfde !important;
   line-height: 1.5 !important;
@@ -20529,42 +20529,42 @@ body:has(.ac-service-page) .ac-about-top-fab {
 }
 
 /* Editor */
-.ac-gnomah .ac-gn-editor { width: 100% !important; }
-.ac-gnomah .ac-gn-editor-bar {
+.ac-studio .ac-gn-editor { width: 100% !important; }
+.ac-studio .ac-gn-editor-bar {
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: center !important;
   gap: 10px 14px !important;
   margin-bottom: 18px !important;
 }
-.ac-gnomah .ac-gn-editor-id {
+.ac-studio .ac-gn-editor-id {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
   flex: 1 1 auto !important;
   color: #fff !important;
 }
-.ac-gnomah .ac-gn-form {
+.ac-studio .ac-gn-form {
   display: grid !important;
   gap: 22px 28px !important;
   width: 100% !important;
   align-items: start !important;
 }
 @media (min-width: 900px) {
-  .ac-gnomah .ac-gn-form {
+  .ac-studio .ac-gn-form {
     grid-template-columns: minmax(0, 1fr) 280px !important;
   }
 }
-.ac-gnomah .ac-gn-form-main,
-.ac-gnomah .ac-gn-form-side {
+.ac-studio .ac-gn-form-main,
+.ac-studio .ac-gn-form-side {
   display: flex !important;
   flex-direction: column !important;
   gap: 14px !important;
   min-width: 0 !important;
 }
-.ac-gnomah .ac-gn-form label,
-.ac-gnomah .ac-gn-full,
-.ac-gnomah .ac-gn-climb-field {
+.ac-studio .ac-gn-form label,
+.ac-studio .ac-gn-full,
+.ac-studio .ac-gn-climb-field {
   display: flex !important;
   flex-direction: column !important;
   gap: 6px !important;
@@ -20572,9 +20572,9 @@ body:has(.ac-service-page) .ac-about-top-fab {
   font-size: 13px !important;
   font-weight: 650 !important;
 }
-.ac-gnomah .ac-gn-form input,
-.ac-gnomah .ac-gn-form select,
-.ac-gnomah .ac-gn-form textarea {
+.ac-studio .ac-gn-form input,
+.ac-studio .ac-gn-form select,
+.ac-studio .ac-gn-form textarea {
   width: 100% !important;
   box-sizing: border-box !important;
   border-radius: 10px !important;
@@ -20586,47 +20586,47 @@ body:has(.ac-service-page) .ac-about-top-fab {
   font-size: 15px !important;
   padding: 10px 12px !important;
 }
-.ac-gnomah .ac-gn-form textarea { min-height: 96px !important; resize: vertical !important; line-height: 1.5 !important; }
-.ac-gnomah .ac-gn-climb-lab {
+.ac-studio .ac-gn-form textarea { min-height: 96px !important; resize: vertical !important; line-height: 1.5 !important; }
+.ac-studio .ac-gn-climb-lab {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
 }
-.ac-gnomah .ac-gn-climb-n {
+.ac-studio .ac-gn-climb-n {
   color: #ffb020 !important;
   font-weight: 800 !important;
   letter-spacing: 0.04em !important;
 }
-.ac-gnomah .ac-gn-form-side {
+.ac-studio .ac-gn-form-side {
   padding: 16px !important;
   border-radius: 16px !important;
   border: 1px solid rgba(255,255,255,0.1) !important;
   background: rgba(12,12,14,0.7) !important;
 }
-.ac-gnomah .ac-gn-canopy-panel {
+.ac-studio .ac-gn-canopy-panel {
   margin: 4px 0 0 !important;
   padding: 12px 0 0 !important;
   border: 0 !important;
   border-top: 1px solid rgba(255,255,255,0.08) !important;
 }
-.ac-gnomah .ac-gn-canopy-panel legend {
+.ac-studio .ac-gn-canopy-panel legend {
   padding: 0 !important;
   color: #fff !important;
   font-size: 13px !important;
   font-weight: 700 !important;
 }
-.ac-gnomah .ac-gn-canopy-toggle {
+.ac-studio .ac-gn-canopy-toggle {
   flex-direction: row !important;
   align-items: center !important;
   gap: 8px !important;
   font-weight: 500 !important;
 }
-.ac-gnomah .ac-gn-canopy-presets {
+.ac-studio .ac-gn-canopy-presets {
   display: flex !important;
   flex-wrap: wrap !important;
   gap: 6px !important;
 }
-.ac-gnomah .ac-gn-preset {
+.ac-studio .ac-gn-preset {
   appearance: none !important;
   min-height: 30px !important;
   padding: 4px 10px !important;
@@ -20638,14 +20638,14 @@ body:has(.ac-service-page) .ac-about-top-fab {
   font-size: 12px !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-canopy-status {
+.ac-studio .ac-gn-canopy-status {
   margin: 6px 0 0 !important;
   font-size: 12px !important;
   font-weight: 500 !important;
   color: #aeb6c2 !important;
   line-height: 1.4 !important;
 }
-.ac-gnomah .ac-owner-prefs {
+.ac-studio .ac-owner-prefs {
   margin-top: 8px !important;
   padding: 18px 20px !important;
   border-radius: 16px !important;
@@ -20653,15 +20653,15 @@ body:has(.ac-service-page) .ac-about-top-fab {
   background: rgba(12,12,14,0.7) !important;
 }
 
-/* Gnomah: carousel library + editor window */
-.ac-gnomah .ac-gn-rail {
+/* Studio: carousel library + editor window */
+.ac-studio .ac-gn-rail {
   display: grid !important;
   grid-template-columns: 40px minmax(0, 1fr) 40px !important;
   align-items: center !important;
   gap: 10px !important;
   width: 100% !important;
 }
-.ac-gnomah .ac-gn-rail-btn {
+.ac-studio .ac-gn-rail-btn {
   appearance: none !important;
   width: 40px !important;
   height: 40px !important;
@@ -20673,11 +20673,11 @@ body:has(.ac-service-page) .ac-about-top-fab {
   color: #fff !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-rail-btn:hover {
+.ac-studio .ac-gn-rail-btn:hover {
   border-color: rgba(255,153,0,0.55) !important;
   color: #ffe08a !important;
 }
-.ac-gnomah .ac-gn-carousel {
+.ac-studio .ac-gn-carousel {
   display: flex !important;
   gap: 14px !important;
   overflow-x: auto !important;
@@ -20687,7 +20687,7 @@ body:has(.ac-service-page) .ac-about-top-fab {
   padding: 8px 4px 16px !important;
   width: 100% !important;
 }
-.ac-gnomah .ac-gn-carousel .ac-gn-card {
+.ac-studio .ac-gn-carousel .ac-gn-card {
   flex: 0 0 min(300px, 78vw) !important;
   width: min(300px, 78vw) !important;
   min-height: 176px !important;
@@ -20695,7 +20695,7 @@ body:has(.ac-service-page) .ac-about-top-fab {
   display: flex !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-modal {
+.ac-studio .ac-gn-modal {
   position: fixed !important;
   inset: 0 !important;
   z-index: 80 !important;
@@ -20703,14 +20703,14 @@ body:has(.ac-service-page) .ac-about-top-fab {
   place-items: center !important;
   padding: 18px 12px !important;
 }
-.ac-gnomah .ac-gn-modal-backdrop {
+.ac-studio .ac-gn-modal-backdrop {
   position: absolute !important;
   inset: 0 !important;
   border: 0 !important;
   background: rgba(0,0,0,0.62) !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-modal-sheet {
+.ac-studio .ac-gn-modal-sheet {
   position: relative !important;
   z-index: 1 !important;
   width: min(1040px, 100%) !important;
@@ -20723,15 +20723,15 @@ body:has(.ac-service-page) .ac-about-top-fab {
   box-shadow: 0 24px 64px rgba(0,0,0,0.55) !important;
 }
 @media (max-width: 640px) {
-  .ac-gnomah .ac-gn-rail {
+  .ac-studio .ac-gn-rail {
     grid-template-columns: 1fr !important;
   }
-  .ac-gnomah .ac-gn-rail-btn { display: none !important; }
-  .ac-gnomah .ac-gn-modal {
+  .ac-studio .ac-gn-rail-btn { display: none !important; }
+  .ac-studio .ac-gn-modal {
     padding: 0 !important;
     align-items: stretch !important;
   }
-  .ac-gnomah .ac-gn-modal-sheet {
+  .ac-studio .ac-gn-modal-sheet {
     width: 100% !important;
     max-height: 100% !important;
     border-radius: 0 !important;
@@ -20871,15 +20871,15 @@ body:has(.ac-service-page) .ac-about-top-fab {
   line-height: 1.45 !important;
 }
 
-/* Gnomah toolbar — one bar, same height family */
-.ac-gnomah .ac-gn-toolbar {
+/* Studio toolbar — one bar, same height family */
+.ac-studio .ac-gn-toolbar {
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: center !important;
   gap: 10px !important;
   width: 100% !important;
 }
-.ac-gnomah .ac-gn-search {
+.ac-studio .ac-gn-search {
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
@@ -20892,11 +20892,11 @@ body:has(.ac-service-page) .ac-about-top-fab {
   background: rgba(0,0,0,0.32) !important;
   color: #9aa3b0 !important;
 }
-.ac-gnomah .ac-gn-search:focus-within {
+.ac-studio .ac-gn-search:focus-within {
   border-color: rgba(255,153,0,0.45) !important;
   color: #ffe08a !important;
 }
-.ac-gnomah .ac-gn-search input {
+.ac-studio .ac-gn-search input {
   width: 100% !important;
   border: 0 !important;
   background: transparent !important;
@@ -20905,19 +20905,19 @@ body:has(.ac-service-page) .ac-about-top-fab {
   font-size: 15px !important;
   outline: none !important;
 }
-.ac-gnomah .ac-gn-toolbar-actions {
+.ac-studio .ac-gn-toolbar-actions {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
   flex-wrap: wrap !important;
 }
-.ac-gnomah .ac-gn-lanes {
+.ac-studio .ac-gn-lanes {
   display: flex !important;
   flex-wrap: wrap !important;
   gap: 6px !important;
   margin-right: 8px !important;
 }
-.ac-gnomah .ac-gn-lane {
+.ac-studio .ac-gn-lane {
   appearance: none !important;
   height: 32px !important;
   padding: 0 12px !important;
@@ -20932,12 +20932,12 @@ body:has(.ac-service-page) .ac-about-top-fab {
   text-transform: uppercase !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-lane.is-active {
+.ac-studio .ac-gn-lane.is-active {
   border-color: rgba(255,153,0,0.55) !important;
   background: rgba(128,0,32,0.65) !important;
   color: #ffcc66 !important;
 }
-.ac-gnomah .ac-gn-action {
+.ac-studio .ac-gn-action {
   appearance: none !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -20954,35 +20954,35 @@ body:has(.ac-service-page) .ac-about-top-fab {
   font-weight: 650 !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-action--primary {
+.ac-studio .ac-gn-action--primary {
   border-color: rgba(255,153,0,0.45) !important;
   background: rgba(128,0,32,0.72) !important;
   color: #fff !important;
 }
-.ac-gnomah .ac-gn-action--primary:hover {
+.ac-studio .ac-gn-action--primary:hover {
   border-color: #ff9900 !important;
   background: rgba(160,0,40,0.88) !important;
 }
-.ac-gnomah .ac-gn-action--icon {
+.ac-studio .ac-gn-action--icon {
   width: 42px !important;
   padding: 0 !important;
 }
-.ac-gnomah .ac-gn-action:disabled {
+.ac-studio .ac-gn-action:disabled {
   opacity: 0.45 !important;
   cursor: not-allowed !important;
 }
 
-.ac-gnomah .ac-gn-search-wrap {
+.ac-studio .ac-gn-search-wrap {
   position: relative !important;
   flex: 1 1 240px !important;
   min-width: 0 !important;
   z-index: 6 !important;
 }
-.ac-gnomah .ac-gn-search-wrap .ac-gn-search {
+.ac-studio .ac-gn-search-wrap .ac-gn-search {
   width: 100% !important;
   flex: none !important;
 }
-.ac-gnomah .ac-gn-suggest {
+.ac-studio .ac-gn-suggest {
   list-style: none !important;
   margin: 6px 0 0 !important;
   padding: 6px !important;
@@ -20997,7 +20997,7 @@ body:has(.ac-service-page) .ac-about-top-fab {
   background: #161618 !important;
   box-shadow: 0 16px 40px rgba(0,0,0,0.45) !important;
 }
-.ac-gnomah .ac-gn-suggest-item {
+.ac-studio .ac-gn-suggest-item {
   appearance: none !important;
   width: 100% !important;
   display: grid !important;
@@ -21013,34 +21013,34 @@ body:has(.ac-service-page) .ac-about-top-fab {
   font: inherit !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-suggest-item.is-hi,
-.ac-gnomah .ac-gn-suggest-item:hover {
+.ac-studio .ac-gn-suggest-item.is-hi,
+.ac-studio .ac-gn-suggest-item:hover {
   background: rgba(255,153,0,0.12) !important;
 }
-.ac-gnomah .ac-gn-suggest-num {
+.ac-studio .ac-gn-suggest-num {
   color: #ffb020 !important;
   font-size: 12px !important;
   font-weight: 800 !important;
   letter-spacing: 0.04em !important;
 }
-.ac-gnomah .ac-gn-suggest-title {
+.ac-studio .ac-gn-suggest-title {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
   font-size: 14px !important;
   font-weight: 600 !important;
 }
-.ac-gnomah .ac-gn-suggest-empty {
+.ac-studio .ac-gn-suggest-empty {
   padding: 10px 12px !important;
   color: #9aa3b0 !important;
   font-size: 13px !important;
 }
 
-.ac-gnomah .ac-gn-editor-bar {
+.ac-studio .ac-gn-editor-bar {
   position: relative !important;
   padding-right: 48px !important;
 }
-.ac-gnomah .ac-gn-modal-x {
+.ac-studio .ac-gn-modal-x {
   appearance: none !important;
   position: absolute !important;
   top: 0 !important;
@@ -21055,7 +21055,7 @@ body:has(.ac-service-page) .ac-about-top-fab {
   color: #c4cfde !important;
   cursor: pointer !important;
 }
-.ac-gnomah .ac-gn-modal-x:hover {
+.ac-studio .ac-gn-modal-x:hover {
   color: #fff !important;
   background: rgba(255,255,255,0.08) !important;
 }

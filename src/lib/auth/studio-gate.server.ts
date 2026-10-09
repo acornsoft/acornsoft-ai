@@ -11,8 +11,25 @@ export function studioPath(): string {
   return STUDIO_PATH;
 }
 
-function isSafeAppPath(value: string): boolean {
-  return value.startsWith("/") && !value.startsWith("//") && !value.includes("\\");
+const UNSAFE_PATH_CHAR = /[\u0000-\u001F\u007F\\]/;
+
+/**
+ * Same-origin app path only. Control characters and backslashes are rejected
+ * before and after decoding, so `/\t/evil.com` and `/%2f%2fevil.com` cannot
+ * pass a prefix check and then collapse into a protocol-relative URL.
+ */
+export function isSafeAppPath(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed.startsWith("/")) return false;
+  if (UNSAFE_PATH_CHAR.test(trimmed)) return false;
+  let decoded = trimmed;
+  try {
+    decoded = decodeURIComponent(trimmed);
+  } catch {
+    return false;
+  }
+  if (UNSAFE_PATH_CHAR.test(decoded)) return false;
+  return decoded.startsWith("/") && !decoded.startsWith("//");
 }
 
 /** Any case, trailing slash, or extra segment of the retired studio path. */
@@ -89,12 +106,29 @@ export async function legacyStudioDestination(
 
 export type StudioGateReason = "owner" | "anon" | "denied";
 
+/**
+ * Auth-off owner bypass is dev-only. Production builds fail closed even when
+ * sign-in is switched off, so a production bundle never treats every visitor
+ * as the owner.
+ */
+export function authOffAllowsOwner(): boolean {
+  if (process.env.NODE_ENV === "production") return false;
+  if (process.env.NODE_ENV === "development") return true;
+  try {
+    return import.meta.env.DEV === true;
+  } catch {
+    return false;
+  }
+}
+
 /** Fail closed: anonymous and non-owners never receive the owner document. */
 export async function decideStudioGate(): Promise<{ reason: StudioGateReason }> {
   const { authConfigured, getSessionUser } = await import("./verify.server");
   const { isClimbNotesOwner } = await import("@/lib/climb-notes/owner.server");
 
-  if (!authConfigured) return { reason: "owner" };
+  if (!authConfigured) {
+    return { reason: authOffAllowsOwner() ? "owner" : "denied" };
+  }
 
   let user: { id: string } | null = null;
   try {

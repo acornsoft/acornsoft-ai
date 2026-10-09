@@ -1,11 +1,18 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { GnomahEditorPage } from "@/components/site/gnomah-editor";
+import { StudioEditorPage } from "@/components/site/gnomah-editor";
 import { gateStudioRoute, STUDIO_NEXT } from "@/lib/auth/studio-gate";
 
+function noteSearchParam(raw: unknown): string | undefined {
+  if (typeof raw === "number" && Number.isFinite(raw)) return String(raw);
+  if (typeof raw === "string" && raw) return raw;
+  return undefined;
+}
+
 export const Route = createFileRoute("/studio")({
-  validateSearch: (s: Record<string, unknown>): { note?: string } => ({
-    note: typeof s.note === "string" && s.note ? s.note : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { note?: string } => {
+    const note = noteSearchParam(s.note);
+    return note ? { note } : {};
+  },
   beforeLoad: async () => {
     const gate = await gateStudioRoute();
     switch (gate.reason) {
@@ -21,7 +28,7 @@ export const Route = createFileRoute("/studio")({
       }
     }
   },
-  component: GnomahEditorPage,
+  component: StudioEditorPage,
   head: () => ({
     meta: [
       { title: "Studio — Climb Notes Editor · Acornsoft" },

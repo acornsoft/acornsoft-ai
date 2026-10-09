@@ -185,6 +185,10 @@ function noteSearchHay(n: ClimbNote): string {
     .toLowerCase();
 }
 
+function previewLine(n: ClimbNote): string {
+  return n.problem.trim();
+}
+
 function searchScore(n: ClimbNote, q: string): number {
   const num = n.number.toLowerCase();
   const title = n.title.toLowerCase();
@@ -220,7 +224,7 @@ function isOwnerForbiddenError(err: unknown): boolean {
   );
 }
 
-export function GnomahEditorPage() {
+export function StudioEditorPage() {
   const { user, isPending } = useCurrentUserState();
   const search = useSearch({ from: "/studio", shouldThrow: false }) as
     | { note?: string }
@@ -238,6 +242,7 @@ export function GnomahEditorPage() {
   const [lane, setLane] = useState<(typeof LANES)[number]["id"]>("all");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchHi, setSearchHi] = useState(0);
+  const [query, setQuery] = useState("");
 
   const [saveState, setSaveState] = useState<
     "idle" | "saving" | "saved" | "error"
@@ -333,7 +338,7 @@ export function GnomahEditorPage() {
     [handleAuthFailure, openNoteId],
   );
 
-  /** Local vault re-scan + optional GitHub Gnomah pull. */
+  /** Local vault re-scan, plus an optional GitHub pull. */
   const syncLibrary = useCallback(
     async (opts?: { quiet?: boolean }) => {
       setSyncing(true);
@@ -627,7 +632,7 @@ export function GnomahEditorPage() {
   if (needsReauth) {
     return (
       <SiteChrome loginRedirect="studio">
-        <div className="ac-service-page ac-gnomah ac-page-top">
+        <div className="ac-service-page ac-studio ac-page-top">
           <p className="ac-gn-empty">Redirecting to sign in…</p>
         </div>
       </SiteChrome>
@@ -637,7 +642,7 @@ export function GnomahEditorPage() {
   if (isPending && !user) {
     return (
       <SiteChrome loginRedirect="studio">
-        <div className="ac-service-page ac-gnomah ac-page-top">
+        <div className="ac-service-page ac-studio ac-page-top">
           <p className="ac-gn-empty">Loading session…</p>
         </div>
       </SiteChrome>
@@ -651,7 +656,7 @@ export function GnomahEditorPage() {
   if (forbidden) {
     return (
       <SiteChrome loginRedirect="studio">
-        <div className="ac-service-page ac-gnomah ac-page-top">
+        <div className="ac-service-page ac-studio ac-page-top">
           <div className="ac-service-stack">
             <header className="ac-service-head">
               <span className="ac-service-kicker">Studio</span>
@@ -680,8 +685,8 @@ export function GnomahEditorPage() {
   }
 
   return (
-    <SiteChrome loginRedirect="studio" mainClassName="ac-gnomah">
-      <div className="ac-service-page ac-gnomah ac-page-top" id="studio">
+    <SiteChrome loginRedirect="studio" mainClassName="ac-studio">
+      <div className="ac-service-page ac-studio ac-page-top" id="studio">
         <div className="ac-service-stack">
           <header className="ac-service-head">
             <span className="ac-service-kicker">Studio</span>
@@ -768,7 +773,7 @@ export function GnomahEditorPage() {
                             {n.title || "Untitled"}
                           </span>
                           <span
-                            className={`ac-gnomah-status ac-gnomah-status-${n.status}`}
+                            className={`ac-studio-status ac-studio-status-${n.status}`}
                           >
                             {CLIMB_NOTE_STATUS_LABEL[n.status]}
                           </span>
@@ -875,7 +880,7 @@ export function GnomahEditorPage() {
                     <div className="ac-gn-card-top">
                       <span className="ac-gn-card-num">CN-{n.number}</span>
                       <span
-                        className={`ac-gnomah-status ac-gnomah-status-${n.status}`}
+                        className={`ac-studio-status ac-studio-status-${n.status}`}
                       >
                         {CLIMB_NOTE_STATUS_LABEL[n.status]}
                       </span>
@@ -925,7 +930,7 @@ export function GnomahEditorPage() {
                 <div className="ac-gn-editor-bar">
                   <div className="ac-gn-editor-id">
                     <span
-                      className={`ac-gnomah-status ac-gnomah-status-${form.status}`}
+                      className={`ac-studio-status ac-studio-status-${form.status}`}
                     >
                       {CLIMB_NOTE_STATUS_LABEL[form.status]}
                     </span>
