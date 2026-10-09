@@ -131,7 +131,7 @@ function MenuIcon({ open }: { open: boolean }) {
  * Public primary nav is gated by SHOW_PRIMARY_NAV (logo, Send a note, auth stay).
  */
 export function SiteHeader({
-  loginRedirect = "/gnomah",
+  loginRedirect = "studio",
 }: {
   loginRedirect?: string;
 }) {
@@ -282,7 +282,7 @@ export { SiteFooter };
 /** Page shell: shared header + main + footer. */
 export function SiteChrome({
   children,
-  loginRedirect = "/gnomah",
+  loginRedirect = "studio",
   mainClassName = "",
 }: {
   children: ReactNode;

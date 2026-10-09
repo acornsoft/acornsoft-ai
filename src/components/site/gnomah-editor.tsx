@@ -289,9 +289,9 @@ export function GnomahEditorPage() {
     setNotes([]);
     toast.message("Session expired — sign in again with X as @acornsoftai");
     try {
-      await signOut("/login?redirect=/gnomah");
+      await signOut("/login?next=studio");
     } catch {
-      window.location.href = "/login?redirect=/gnomah";
+      window.location.href = "/login?next=studio";
     }
   }, []);
 
@@ -320,7 +320,7 @@ export function GnomahEditorPage() {
           setForbidMsg(
             e instanceof Error
               ? e.message
-              : "This X account is not authorized for Gnomah.",
+              : "This X account is not authorized for the Climb Notes studio.",
           );
           setNotes([]);
         } else {
@@ -349,7 +349,7 @@ export function GnomahEditorPage() {
         else if (isOwnerForbiddenError(e)) {
           setForbidden(true);
           setForbidMsg(
-            e instanceof Error ? e.message : "Not authorized for Gnomah.",
+            e instanceof Error ? e.message : "Not authorized for the Climb Notes studio.",
           );
         } else if (!opts?.quiet) {
           toast.error(e instanceof Error ? e.message : "Sync failed");
@@ -626,7 +626,7 @@ export function GnomahEditorPage() {
 
   if (needsReauth) {
     return (
-      <SiteChrome loginRedirect="/gnomah">
+      <SiteChrome loginRedirect="studio">
         <div className="ac-service-page ac-gnomah ac-page-top">
           <p className="ac-gn-empty">Redirecting to sign in…</p>
         </div>
@@ -636,7 +636,7 @@ export function GnomahEditorPage() {
 
   if (isPending && !user) {
     return (
-      <SiteChrome loginRedirect="/gnomah">
+      <SiteChrome loginRedirect="studio">
         <div className="ac-service-page ac-gnomah ac-page-top">
           <p className="ac-gn-empty">Loading session…</p>
         </div>
@@ -645,17 +645,17 @@ export function GnomahEditorPage() {
   }
 
   if (authEnabled && !user) {
-    return <Navigate to="/login" search={{ redirect: "/gnomah" }} />;
+    return <Navigate to="/login" search={{ next: "studio" }} />;
   }
 
   if (forbidden) {
     return (
-      <SiteChrome loginRedirect="/gnomah">
+      <SiteChrome loginRedirect="studio">
         <div className="ac-service-page ac-gnomah ac-page-top">
           <div className="ac-service-stack">
             <header className="ac-service-head">
               <span className="ac-service-kicker">Studio</span>
-              <h1 className="ac-service-title">Gnomah</h1>
+              <h1 className="ac-service-title">Studio</h1>
               <div className="ac-service-lede-box">
                 <p className="ac-service-lede">
                   Climb Notes may only be edited when signed in with X as
@@ -680,7 +680,7 @@ export function GnomahEditorPage() {
   }
 
   return (
-    <SiteChrome loginRedirect="/gnomah" mainClassName="ac-gnomah">
+    <SiteChrome loginRedirect="studio" mainClassName="ac-gnomah">
       <div className="ac-service-page ac-gnomah ac-page-top" id="gnomah">
         <div className="ac-service-stack">
           <header className="ac-service-head">

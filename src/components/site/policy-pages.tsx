@@ -16,7 +16,7 @@ function PolicyChrome({
 }) {
   return (
     <div className="template-color-1 spybody ac-inbio ac-hero-stage ac-policy-page">
-      <SiteHeader loginRedirect="/gnomah" />
+      <SiteHeader loginRedirect="studio" />
 
       <main className="main-page-wrapper ac-policy-main">
         <section className="rn-section-gap ac-policy-shell">

@@ -250,7 +250,7 @@ export function ClimbNotesPage() {
   const visible = useMemo(() => sortPublished(notes), [notes]);
 
   return (
-    <SiteChrome loginRedirect="/gnomah" mainClassName="ac-climb-notes">
+    <SiteChrome loginRedirect="studio" mainClassName="ac-climb-notes">
       <div className="ac-service-page ac-climb-notes ac-page-top" id="notes">
         <div className="ac-service-stack">
           <header className="ac-service-head">

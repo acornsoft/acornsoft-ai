@@ -4,6 +4,7 @@ import { LogIn, LogOut } from "lucide-react";
 import { authEnabled, signOut } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { useOwnerAccess } from "@/lib/auth/use-owner-access";
+import { loginSearchFor, STUDIO_NEXT } from "@/lib/auth/studio-gate";
 import { SettingsMenuButton, SettingsSheet } from "./owner-settings";
 
 const OWNER_ALIASES: Record<string, string> = {
@@ -22,7 +23,7 @@ function formatAuthLabel(raw: string): string {
 }
 
 export function SiteAuthSlot({
-  loginRedirect = "/gnomah",
+  loginRedirect = STUDIO_NEXT,
   className = "",
 }: {
   loginRedirect?: string;
@@ -157,7 +158,7 @@ export function SiteAuthSlot({
   return (
     <Link
       to="/login"
-      search={{ redirect: loginRedirect }}
+      search={loginSearchFor(loginRedirect)}
       className={`ac-auth-slot ac-auth-signin ${className}`.trim()}
       aria-label="Log in"
     >
