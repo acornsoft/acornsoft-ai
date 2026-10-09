@@ -135,20 +135,26 @@ export function climbNoteCanopyDisplayDate(
 }
 
 
-const noteModules = import.meta.glob("../../../content/climb-notes/**/*.md", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-}) as Record<string, string>;
-
-import registryJson from "../../../content/climb-notes/_publish-registry.json";
+/**
+ * Public bundle only. The published origin note is safe to ship.
+ * Drafts, style guides, and the registry description stay on the server
+ * (`store.server.ts`) so anonymous scripts never carry studio vocabulary.
+ */
+const noteModules = import.meta.glob(
+  "../../../content/climb-notes/016-*.md",
+  {
+    query: "?raw",
+    import: "default",
+    eager: true,
+  },
+) as Record<string, string>;
 
 type RegistryFile = {
   version?: number;
   notes?: Record<string, ClimbNotePublishEntry>;
 };
 
-const publishRegistry = registryJson as RegistryFile;
+const publishRegistry: RegistryFile = { notes: {} };
 
 function asStatus(value: unknown): ClimbNoteStatus | undefined {
   if (typeof value === "string") {
@@ -293,7 +299,6 @@ function parseNote(path: string, raw: string): ClimbNote | null {
     canopyAt: pub.canopyAt,
     xUrl,
     tags: tags?.length ? tags : undefined,
-    sourceFile: path.split("/").pop(),
   };
 }
 

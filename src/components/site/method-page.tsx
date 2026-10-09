@@ -28,7 +28,7 @@ export function MethodPage() {
 
   return (
     <div className="template-color-1 spybody ac-inbio ac-method-page ac-hero-stage">
-      <SiteHeader loginRedirect="/gnomah" />
+      <SiteHeader loginRedirect="studio" />
 
       <main className="main-page-wrapper ac-page-hero-main">
         <section className="rn-section-gap ac-page-top ac-method-hero">

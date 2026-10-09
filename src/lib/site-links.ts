@@ -2,7 +2,7 @@
  * Dual-site bridge: Acornsoft (this app) ↔ personal work bio (blaszyk.us).
  *
  * Acornsoft = New York AI-first organization product surface
- *   (Climb Notes, Canopy, Gnomah, services, corporate notices)
+ *   (Climb Notes, Canopy, the studio, services, corporate notices)
  * blaszyk.us = personal development / work biography
  *   (resume, enterprise delivery, client portfolio, contact)
  *

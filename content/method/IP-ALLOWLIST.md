@@ -36,7 +36,7 @@ GoDaddy DNS does **not** enforce this. Control is in the **app on Vercel**.
 
 ## Limits
 
-- Not a substitute for **login** on Gnomah/Voice.
+- Not a substitute for **login** on Studio/Voice.
 - Home/mobile IPs change — prefer CIDR for offices or leave public + app auth.
 - Shared VPNs: allowlist the VPN egress range.
 - Stronger geo/IP product features: Cloudflare or Azure Front Door in front of Vercel later.

@@ -14,17 +14,17 @@ tags:
 
 ## Base Camp
 
-We take incoming requirements from /start. They must land in Gnomah as real Climb Notes, then be curated before any agent runs. Supporting repos stay destinations, not second brains. Luna Foundry Multiagent is the Sherpa pack; its docs ship in the VSIX and have a public trailhead on acornsoft.ai/luna.
+We take incoming requirements from /start. They must land in Studio as real Climb Notes, then be curated before any agent runs. Supporting repos stay destinations, not second brains. Luna Foundry Multiagent is the Sherpa pack; its docs ship in the VSIX and have a public trailhead on acornsoft.ai/luna.
 
-Gear: Gnomah vault (acornsoft/gnomah), this site (acornsoft/acornsoft-ai), the extension (acornsoft/luna-foundry-multiagent), config pack (acornsoft/luna-foundry-config). Rule: mountain first. We are fit to leave when Inbox is a lane, not a lost 9xx file.
+Gear: the studio vault, this site (acornsoft/acornsoft-ai), the extension (acornsoft/luna-foundry-multiagent), config pack (acornsoft/luna-foundry-config). Rule: mountain first. We are fit to leave when Inbox is a lane, not a lost 9xx file.
 
 ## Route
 
-One summit: every incoming write-up is a draft in Gnomah Inbox. Curate (hold or go). Go means a lane (product / foundation / engagement) and one supporting repo. Then Grok Bot / Grok Build runs the step. Success: owner can filter Inbox, open CN-0xx, and know which repo gets the workforce. Not today: auto-running Workforce on every submit.
+One summit: every incoming write-up is a draft in the Studio Inbox. Curate (hold or go). Go means a lane (product / foundation / engagement) and one supporting repo. Then Grok Bot / Grok Build runs the step. Success: owner can filter Inbox, open CN-0xx, and know which repo gets the workforce. Not today: auto-running Workforce on every submit.
 
 ## Waypoint
 
-Check the map. Intake now writes a draft with tag `intake` under `inbox/`. Gnomah has Inbox / Product / Foundation / Engagement lanes. Extension README + `docs/onboarding/**` already ship in the VSIX (.vscodeignore keeps them). Public host for the intro is `/luna`. Hold or go: go on curation; hold on silent Bot fire.
+Check the map. Intake now writes a draft with tag `intake` under `inbox/`. Studio has Inbox / Product / Foundation / Engagement lanes. Extension README + `docs/onboarding/**` already ship in the VSIX (.vscodeignore keeps them). Public host for the intro is `/luna`. Hold or go: go on curation; hold on silent Bot fire.
 
 ## Summit
 

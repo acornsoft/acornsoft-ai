@@ -1,15 +1,33 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { GROK_PROVIDERS, authEnabled, signIn, usesPreviewSignIn } from "@/lib/auth/client";
+import {
+  loginQueryLeaksStudio,
+  resolveSignInDestination,
+  STUDIO_NEXT,
+} from "@/lib/auth/studio-gate";
 import { Logo } from "@/components/site/logo";
 import { SiteHeader } from "@/components/site/site-chrome";
 
-type LoginSearch = { redirect?: string };
+type LoginSearch = { redirect?: string; next?: typeof STUDIO_NEXT };
 
 export const Route = createFileRoute("/login")({
   validateSearch: (s: Record<string, unknown>): LoginSearch => ({
     redirect: typeof s.redirect === "string" ? s.redirect : undefined,
+    next: s.next === STUDIO_NEXT ? STUDIO_NEXT : undefined,
   }),
+  beforeLoad: async ({ search }) => {
+    if (search.redirect && redirectsToLogin(search.redirect)) {
+      throw redirect({ to: "/login" });
+    }
+    if (!search.redirect) return;
+    const { leak } = await loginQueryLeaksStudio({
+      data: { redirect: search.redirect },
+    });
+    if (leak) {
+      throw redirect({ to: "/login", search: { next: STUDIO_NEXT } });
+    }
+  },
   component: LoginPage,
   head: () => ({
     meta: [
@@ -17,8 +35,9 @@ export const Route = createFileRoute("/login")({
       {
         name: "description",
         content:
-          "Sign in to Acornsoft with X. Gnomah Climb Notes editing is reserved for the owner.",
+          "Sign in to Acornsoft with X. Climb Notes editing stays with the owner.",
       },
+      { name: "robots" as const, content: "noindex, nofollow" },
     ],
   }),
 });
@@ -42,23 +61,48 @@ function XMarkIcon({ className }: { className?: string }) {
   );
 }
 
+function redirectsToLogin(value: string): boolean {
+  let decoded = value;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    return false;
+  }
+  const path = (decoded.split(/[?#]/, 1)[0] ?? decoded).replace(/\/+$/, "") || "/";
+  const lower = path.toLowerCase();
+  return lower === "/login" || lower.startsWith("/login/");
+}
+
+function clientSafeRedirect(value: string | undefined): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/";
+  if (/[\u0000-\u001F\u007F\\]/.test(value)) return "/";
+  let decoded = value;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    return "/";
+  }
+  if (/[\u0000-\u001F\u007F\\]/.test(decoded)) return "/";
+  if (!decoded.startsWith("/") || decoded.startsWith("//")) return "/";
+  if (redirectsToLogin(decoded)) return "/";
+  return value;
+}
+
 function LoginPage() {
-  const { redirect } = Route.useSearch();
-  const safeRedirect =
-    redirect && redirect.startsWith("/") && !redirect.startsWith("//")
-      ? redirect
-      : "/gnomah";
-  const forGnomah =
-    safeRedirect === "/gnomah" || safeRedirect.startsWith("/gnomah?");
+  const { redirect: redirectTo, next } = Route.useSearch();
+  const safeRedirect = clientSafeRedirect(redirectTo);
   const forWorks =
-    safeRedirect === "/work" || safeRedirect.startsWith("/work?");
+    safeRedirect === "/work" ||
+    safeRedirect.startsWith("/work/") ||
+    safeRedirect.startsWith("/work?");
+  const forStudio = next === STUDIO_NEXT || (!redirectTo && !forWorks);
   const previewSignIn = usesPreviewSignIn();
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const xProvider = GROK_PROVIDERS.find((p) => p.providerId === "grok-x");
   // Site login is X-first. Google remains available only as a secondary path
-  // for general identity — it never unlocks Gnomah (server enforces X owner).
+  // for general identity. The owner studio stays X-only (server enforces it).
   const googleProvider = GROK_PROVIDERS.find(
     (p) => p.providerId === "grok-google",
   );
@@ -67,9 +111,18 @@ function LoginPage() {
     setError(null);
     setBusy(providerId);
     try {
+      const { path } = await resolveSignInDestination({
+        data: {
+          next: forStudio ? STUDIO_NEXT : next,
+          redirect: redirectTo,
+        },
+      });
+      const errorCallbackURL = forStudio
+        ? `/login?next=${STUDIO_NEXT}`
+        : `/login?redirect=${encodeURIComponent(path)}`;
       await signIn(providerId, {
-        callbackURL: safeRedirect,
-        errorCallbackURL: `/login?redirect=${encodeURIComponent(safeRedirect)}`,
+        callbackURL: path,
+        errorCallbackURL,
       });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Sign-in failed");
@@ -79,7 +132,7 @@ function LoginPage() {
 
   return (
     <div className="template-color-1 spybody ac-inbio ac-login-page ac-hero-stage">
-      <SiteHeader loginRedirect={safeRedirect} />
+      <SiteHeader loginRedirect={forStudio ? STUDIO_NEXT : safeRedirect} />
       <div className="ac-login-backdrop" aria-hidden />
       <main className="ac-login-main">
         <div className="ac-login-card">
@@ -90,9 +143,9 @@ function LoginPage() {
             <p className="ac-login-kicker">Acornsoft account</p>
             <h1 className="ac-login-title">Sign in</h1>
             <p className="ac-login-lead">
-              {forGnomah ? (
+              {forStudio ? (
                 <>
-                  <strong>Gnomah</strong> is the private Climb Notes studio
+                  The <strong>Climb Notes studio</strong> is private
                   (draft → approve → publish). Access is via{" "}
                   <strong>X credentials</strong> only for owner{" "}
                   <span className="ac-login-handle">@acornsoftai</span>.
@@ -100,13 +153,13 @@ function LoginPage() {
               ) : forWorks ? (
                 <>
                   <strong>Works</strong> lists developed solutions. Sign in to
-                  view them. Gnomah publishing stays gated to{" "}
+                  view them. Climb Notes publishing stays gated to{" "}
                   <span className="ac-login-handle">@acornsoftai</span>.
                 </>
               ) : (
                 <>
                   Sign in with <strong>X</strong> to unlock signed-in surfaces.
-                  Gnomah and Climb Notes publishing stay gated to{" "}
+                  Climb Notes publishing stays gated to{" "}
                   <span className="ac-login-handle">@acornsoftai</span>.
                 </>
               )}
@@ -140,7 +193,7 @@ function LoginPage() {
               )}
 
               <div className="ac-login-gate-box" role="note">
-                <p className="ac-login-gate-title">How Gnomah access works</p>
+                <p className="ac-login-gate-title">How studio access works</p>
                 <ul className="ac-login-gate-list">
                   <li>
                     Choose <strong>Continue with X</strong> — OAuth only; we never
@@ -164,11 +217,11 @@ function LoginPage() {
                   <li>
                     After success you return to the page you asked for.{" "}
                     <strong>Works</strong> appears in the top nav while signed
-                    in. Gnomah stays owner-only.
+                    in. The studio stays owner-only.
                   </li>
                   <li>
                     Google can create a session for display tools, but it cannot
-                    open Gnomah.
+                    open the Climb Notes studio.
                   </li>
                 </ul>
               </div>

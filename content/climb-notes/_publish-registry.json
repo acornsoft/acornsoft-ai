@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "SharePoint-style publish control for Climb Notes. status=journal; onCanopy+canopyAt=Canopy timeline. Managed by Gnomah editor and CLI.",
+  "description": "SharePoint-style publish control for Climb Notes. status=journal; onCanopy+canopyAt=Canopy timeline. Managed by the Studio editor and CLI.",
   "notes": {
     "cn-016": {
       "status": "published",
