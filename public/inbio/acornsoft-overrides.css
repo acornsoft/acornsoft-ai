@@ -20729,6 +20729,15 @@ body:has(.ac-service-page) .ac-about-top-fab {
   min-width: 0 !important;
   max-width: 100% !important;
 }
+.ac-studio .ac-gn-form input[type="checkbox"],
+.ac-studio .ac-gn-form input[type="radio"] {
+  width: 16px !important;
+  min-width: 16px !important;
+  max-width: 16px !important;
+  height: 16px !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
+}
 @media (max-width: 640px) {
   .ac-studio .ac-gn-rail {
     grid-template-columns: 1fr !important;
