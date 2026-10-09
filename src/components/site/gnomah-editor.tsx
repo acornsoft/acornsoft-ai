@@ -227,9 +227,14 @@ function isOwnerForbiddenError(err: unknown): boolean {
 export function StudioEditorPage() {
   const { user, isPending } = useCurrentUserState();
   const search = useSearch({ from: "/studio", shouldThrow: false }) as
-    | { note?: string }
+    | { note?: string | number }
     | undefined;
-  const openNoteId = search?.note;
+  const openNoteId =
+    typeof search?.note === "number"
+      ? String(search.note)
+      : typeof search?.note === "string"
+        ? search.note
+        : undefined;
   const [notes, setNotes] = useState<ClimbNote[]>([]);
   const [focusId, setFocusId] = useState<string | null>(null);
   const [form, setForm] = useState<DraftForm>(emptyForm());
