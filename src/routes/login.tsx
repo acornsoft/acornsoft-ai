@@ -17,7 +17,7 @@ export const Route = createFileRoute("/login")({
       {
         name: "description",
         content:
-          "Sign in to Acornsoft with X. Gnomah Climb Notes editing is reserved for the owner.",
+          "Sign in to Acornsoft with X. Climb Notes editing stays with the owner.",
       },
     ],
   }),
@@ -92,7 +92,7 @@ function LoginPage() {
             <p className="ac-login-lead">
               {forGnomah ? (
                 <>
-                  <strong>Gnomah</strong> is the private Climb Notes studio
+                  The <strong>Climb Notes studio</strong> is private
                   (draft → approve → publish). Access is via{" "}
                   <strong>X credentials</strong> only for owner{" "}
                   <span className="ac-login-handle">@acornsoftai</span>.
@@ -100,13 +100,13 @@ function LoginPage() {
               ) : forWorks ? (
                 <>
                   <strong>Works</strong> lists developed solutions. Sign in to
-                  view them. Gnomah publishing stays gated to{" "}
+                  view them. Climb Notes publishing stays gated to{" "}
                   <span className="ac-login-handle">@acornsoftai</span>.
                 </>
               ) : (
                 <>
                   Sign in with <strong>X</strong> to unlock signed-in surfaces.
-                  Gnomah and Climb Notes publishing stay gated to{" "}
+                  Climb Notes publishing stays gated to{" "}
                   <span className="ac-login-handle">@acornsoftai</span>.
                 </>
               )}
@@ -140,7 +140,7 @@ function LoginPage() {
               )}
 
               <div className="ac-login-gate-box" role="note">
-                <p className="ac-login-gate-title">How Gnomah access works</p>
+                <p className="ac-login-gate-title">How studio access works</p>
                 <ul className="ac-login-gate-list">
                   <li>
                     Choose <strong>Continue with X</strong> — OAuth only; we never
@@ -164,11 +164,11 @@ function LoginPage() {
                   <li>
                     After success you return to the page you asked for.{" "}
                     <strong>Works</strong> appears in the top nav while signed
-                    in. Gnomah stays owner-only.
+                    in. The studio stays owner-only.
                   </li>
                   <li>
                     Google can create a session for display tools, but it cannot
-                    open Gnomah.
+                    open the Climb Notes studio.
                   </li>
                 </ul>
               </div>

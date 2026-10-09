@@ -15,7 +15,7 @@ import {
 } from "./climb-notes-data";
 import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
 import { useOwnerAccess } from "@/lib/auth/use-owner-access";
-import { CROSSOVER, GNOMAH_BRAIN, TWENTY_X, CLIMB_BEATS } from "./messaging";
+import { CROSSOVER, GNOMAH_BRAIN, CLIMB_BEATS } from "./messaging";
 
 
 
@@ -261,7 +261,7 @@ export function ClimbNotesPage() {
             <div className="ac-service-lede-box">
               <p className="ac-service-lede">{CROSSOVER}</p>
               <p className="ac-service-lede ac-service-lede--last">
-                {GNOMAH_BRAIN} {TWENTY_X} Published trails anyone can follow.
+                {GNOMAH_BRAIN} Published trails anyone can follow.
                 Drafts stay in the studio.
               </p>
             </div>
@@ -282,7 +282,7 @@ export function ClimbNotesPage() {
           <div className="ac-cn-footer-links">
             <p>
               Climb Notes™ use the same four beats. Canopy shows the public
-              journal on the live radar. Gnomah holds the studio.
+              journal on the live radar. The studio holds the drafts.
             </p>
             <div className="ac-hero-cta ac-cn-footer-actions">
               <Link className="rn-btn" to="/canopy">

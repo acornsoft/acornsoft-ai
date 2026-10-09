@@ -85,9 +85,6 @@ export const LIGHTSPEED_PLAIN =
 export const LIGHTSPEED =
   "Climb Notes™ are how we build with AI, fast.";
 
-export const TWENTY_X =
-  "We use that trail to aim for about twenty times a normal build cycle. The journal is the proof.";
-
 /** 0→1: a layperson writes a Climb Note; we turn it into software. */
 export const ZERO_TO_ONE =
   "Write your problem as a Climb Note. Send it to Acornsoft. We build your software.";

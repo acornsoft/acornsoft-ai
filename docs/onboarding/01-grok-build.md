@@ -9,7 +9,7 @@ For people who already use **Grok Build** (SuperGrok or X Premium+), or are abou
 
 Confirm each line. If not, finish that item first.
 
-- **Luna Foundry Multiagent** is installed and enabled (Marketplace or VSIX)—prefer stamp **1.0.26243**
+- **Luna Foundry Multiagent** is installed and enabled (Marketplace or VSIX)—prefer stamp **1.0.26250**
 - A **project folder** is open that *is* this climb (workspace root)
 - **SuperGrok** or **X Premium+** is active (Grok Build—not free-only chat)
 - Command Palette shows **Luna:** commands (type `Luna` to filter)
@@ -53,7 +53,7 @@ Open the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`). Run these in order.
 grok plugin list
 ```
 
-You want **luna-foundry** present, and the install path should match the **current** extension (not a stale older VSIX path). Skills should include **base-camp**, **route**, **summit**, and **macroflow**. Agents: **Luna**, **BaseCamp**, **Route**, **Summit**.
+You want **luna-foundry** present, and the install path should match the **current** extension (not a stale older VSIX path). Skills should include **base-camp**, **route**, and **summit**. Luna orchestrates the climb. Agents: **Luna**, **BaseCamp**, **Route**, **Summit**.
 
 Then open a **new** terminal so `$HOME/etc` hooks can load.
 
@@ -98,7 +98,7 @@ If agents/skills are missing, reinstall the plugin from the **current** extensio
 ## Step 3 — One complete climb (product mode)
 
 Send prompts in the **Grok Build** pane (left). Use the **shell** pane only for proof.  
-**Product mode:** skip Azure DevOps and Gnomah vault unless you explicitly opt in. **No secrets** in the TUI.
+**Product mode:** skip Azure DevOps and the studio vault unless you explicitly opt in. **No secrets** in the TUI.
 
 **Ritual (do not skip Waypoint):**
 
@@ -112,7 +112,7 @@ Phase skills are slash commands when the plugin is loaded:
 - **Route** — `/route` — Concrete job + done-when marks?
 - **Waypoint** — plain text *Waypoint Check* — Hold or go?
 - **Summit** — `/summit` — Ship with proof?
-- **Orchestrator** — `/macroflow` or agent **Luna** — Who owns the flow?
+- **Orchestrator** — agent **Luna** — Who owns the flow?
 
 **Multiagent tip:** start with agent **Luna** when you want orchestration; switch to **Base Camp** / **Route** / **Summit** for phase purity—or stay on Luna and let her hand off. Prefer **one phase at a time**.
 
@@ -121,7 +121,7 @@ Phase skills are slash commands when the plugin is loaded:
 In Grok Build, send:
 
 ```text
-/base-camp Confirm the luna-foundry pack is present (plugin or workspace). Run product preflight only: shell, gh, grok as needed. Skip ADO and Gnomah vault. Report gaps only. Do not implement product work.
+/base-camp Confirm the luna-foundry pack is present (plugin or workspace). Run product preflight only: shell, gh, grok as needed. Skip ADO and the studio vault. Report gaps only. Do not implement product work.
 ```
 
 Wait for the report. Fix blockers, then continue.
@@ -133,7 +133,7 @@ Pick a **smoke job** (wiring) **or** a **wish** (product feedback).
 **Smoke job (prove the turn works):**
 
 ```text
-/route Job: produce docs/Analysis/outputs/macroflow-turn-smoke.md with machine name, date, extension version, plugin version, and the exact line "product mode MacroFlow turn OK". Draft title, purpose, 3–5 ACs, out-of-scope (no ADO, no Gnomah required). Interview only if a critical AC is missing. Stop for my Go. Do not implement.
+/route Job: produce docs/Analysis/outputs/climb-smoke.md with machine name, date, extension version, plugin version, and the exact line "climb OK". Draft title, purpose, 3–5 ACs, out-of-scope (no ADO, no studio vault required). Interview only if a critical AC is missing. Stop for my Go. Do not implement.
 ```
 
 **Wish climb (skill / feature feedback):**
@@ -163,7 +163,7 @@ Waypoint Check: collect phase position, kit readiness, gaps. Report NAB event ty
 **Smoke job:**
 
 ```text
-/summit For the approved smoke job only: create folders if needed and write docs/Analysis/outputs/macroflow-turn-smoke.md with machine, date, extension version, plugin version, and exact line "product mode MacroFlow turn OK". Verify against ACs. Do not open PRs or post issues. Summarize proof paths.
+/summit For the approved smoke job only: create folders if needed and write docs/Analysis/outputs/climb-smoke.md with machine, date, extension version, plugin version, and exact line "climb OK". Verify against ACs. Do not open PRs or post issues. Summarize proof paths.
 ```
 
 **Wish climb:**
@@ -190,11 +190,11 @@ If the folder is not a git repo, listing the outputs folder is enough to show th
 When goal mode is available in your Grok Build session:
 
 ```text
-/goal Complete product-mode MacroFlow: Base Camp → Route → Waypoint → Summit for this climb with proof
+/goal Complete this climb: Base Camp → Route → Waypoint → Summit with proof
 /goal status
 ```
 
-`/goal` **stacks with** MacroFlow—it does not replace Base Camp / Route / Summit. Clear when done: `/goal clear`.
+`/goal` **stacks with** the climb. Base Camp, Route, Waypoint, and Summit stay the phases. Clear when done: `/goal clear`.
 
 ### 3.7 File feedback (wish climb only)
 
@@ -215,8 +215,8 @@ Done.
 CLI alternatives (outside TUI, useful for quick checks):
 
 ```bash
-grok --agent Luna -p "Announce phase and next MacroFlow step only."
-grok --agent BaseCamp -p "Product preflight only. Skip ADO and Gnomah. Gaps only."
+grok --agent Luna -p "Announce phase and the next climb step only."
+grok --agent BaseCamp -p "Product preflight only. Skip ADO and the studio vault. Gaps only."
 ```
 
 [All trails](/luna) · [Security](/luna/security) · [Grok keys](/luna/grok-keys) · [Support](/luna/support)
