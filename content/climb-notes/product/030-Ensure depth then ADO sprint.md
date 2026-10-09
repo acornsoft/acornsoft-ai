@@ -18,7 +18,7 @@ Ensure-* depth then ADO sprint is an open climb under the product lane. Define a
 A small step that can be demoed, measured, and written back into this note.
 
 ## Waypoint
-Capture the climb in the journal. Promote through draft to published only when the public journal should show it.
+Capture the climb in the studio. Promote through draft to published only when the public journal should show it.
 
 ## Summit
 (Write after the first slice.) Failure is tuition. Update this note when reality moves.

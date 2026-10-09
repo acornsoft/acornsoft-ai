@@ -8,6 +8,7 @@ import {
   authOffAllowsOwner,
   destinationForSignIn,
   isSafeAppPath,
+  workReturnTarget,
 } from "../src/lib/auth/studio-path.mjs";
 
 const slashTab = "/\t/evil.com";
@@ -24,6 +25,16 @@ assert.equal(destinationForSignIn({ redirect: "/climb-notes" }), "/climb-notes")
 assert.equal(destinationForSignIn({ redirect: "/about?x=1" }), "/about?x=1");
 assert.equal(destinationForSignIn({ redirect: "/work" }), "/work");
 assert.equal(destinationForSignIn({ redirect: "/work/acadence" }), "/work/acadence");
+assert.equal(
+  destinationForSignIn({ redirect: "/work/acadence?x=1" }),
+  "/work/acadence?x=1",
+);
+assert.equal(workReturnTarget("/work/acadence", "?x=1"), "/work/acadence?x=1");
+assert.equal(workReturnTarget("/work/acadence", "?x=1&y=2"), "/work/acadence?x=1&y=2");
+assert.equal(workReturnTarget("/work", ""), "/work");
+assert.equal(workReturnTarget("/work/acadence", "?x=%00"), "/work/acadence");
+assert.equal(workReturnTarget("//evil.com", "?x=1"), "/work");
+assert.equal(workReturnTarget("/work/../login", "?x=1"), "/work");
 assert.equal(destinationForSignIn({ next: "studio" }), "/studio");
 assert.equal(destinationForSignIn({}), "/studio");
 assert.equal(destinationForSignIn({ next: "other" }), "/");

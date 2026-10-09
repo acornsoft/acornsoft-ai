@@ -83,6 +83,21 @@ export function destinationForSignIn(input) {
 }
 
 /**
+ * Anonymous return path for /work. Keeps a same-origin query string.
+ * A query that fails the path check is dropped; the path itself stays.
+ */
+export function workReturnTarget(pathname, search) {
+  const path = typeof pathname === "string" ? pathname : "";
+  const underWork = path === "/work" || path.startsWith("/work/");
+  if (!underWork || path.includes("..") || !isSafeAppPath(path)) return "/work";
+  if (typeof search !== "string" || search.length === 0) return path;
+  if (!search.startsWith("?") || search.includes("#")) return path;
+  const combined = `${path}${search}`;
+  if (!isSafeAppPath(combined)) return path;
+  return combined;
+}
+
+/**
  * Auth-off owner bypass is dev-only. Production builds fail closed even when
  * sign-in is switched off, so a production bundle never treats every visitor
  * as the owner.

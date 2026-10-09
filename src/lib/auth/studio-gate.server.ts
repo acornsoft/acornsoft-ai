@@ -17,6 +17,7 @@ export {
   isSafeAppPath,
   redirectNamesStudio,
   studioPath,
+  workReturnTarget,
 } from "./studio-path.mjs";
 
 const STUDIO_PATH = studioPath();

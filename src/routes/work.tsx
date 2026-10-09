@@ -3,7 +3,9 @@ import { gateWorkRoute } from "@/lib/auth/studio-gate";
 
 export const Route = createFileRoute("/work")({
   beforeLoad: async ({ location }) => {
-    const gate = await gateWorkRoute({ data: { pathname: location.pathname } });
+    const gate = await gateWorkRoute({
+      data: { pathname: location.pathname, search: location.searchStr },
+    });
     switch (gate.reason) {
       case "owner":
         return;

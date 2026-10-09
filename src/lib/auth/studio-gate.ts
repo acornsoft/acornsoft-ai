@@ -40,20 +40,19 @@ export function loginSearchFor(
  * while the gate is still mounted and would replace the return path).
  */
 export const gateWorkRoute = createServerFn({ method: "GET" })
-  .validator((data: { pathname?: string } | undefined) => ({
+  .validator((data: { pathname?: string; search?: string } | undefined) => ({
     pathname: typeof data?.pathname === "string" ? data.pathname : "/work",
+    search: typeof data?.search === "string" ? data.search : "",
   }))
   .handler(async ({ data }) => {
-    const { decideStudioGate, isSafeAppPath } = await import("./studio-gate.server");
+    const { decideStudioGate, workReturnTarget } = await import(
+      "./studio-gate.server"
+    );
     const gate = await decideStudioGate();
-    const requested = data.pathname;
-    const underWork =
-      requested === "/work" || requested.startsWith("/work/");
-    const redirectTo =
-      underWork && !requested.includes("..") && isSafeAppPath(requested)
-        ? requested
-        : "/work";
-    return { reason: gate.reason, redirectTo };
+    return {
+      reason: gate.reason,
+      redirectTo: workReturnTarget(data.pathname, data.search),
+    };
   });
 
 export const loginQueryLeaksStudio = createServerFn({ method: "POST" })

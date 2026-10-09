@@ -29,7 +29,7 @@ export const Route = createFileRoute("/login")({
     }
   },
   component: LoginPage,
-  head: ({ match }) => ({
+  head: () => ({
     meta: [
       { title: "Sign in — Acornsoft" },
       {
@@ -37,9 +37,7 @@ export const Route = createFileRoute("/login")({
         content:
           "Sign in to Acornsoft with X. Climb Notes editing stays with the owner.",
       },
-      ...(match.search.next === STUDIO_NEXT
-        ? [{ name: "robots" as const, content: "noindex, nofollow" }]
-        : []),
+      { name: "robots" as const, content: "noindex, nofollow" },
     ],
   }),
 });

@@ -18,7 +18,7 @@ Grok Omnichannel Agent Platform is an open climb under the engagement lane. Defi
 A small step that can be demoed, measured, and written back into this note.
 
 ## Waypoint
-Capture the climb in the journal. Promote through draft to published only when the public journal should show it.
+Capture the climb in the studio. Promote through draft to published only when the public journal should show it.
 
 ## Summit
 (Write after the first slice.) Failure is tuition. Update this note when reality moves.

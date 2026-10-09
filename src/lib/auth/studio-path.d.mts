@@ -7,4 +7,5 @@ export function destinationForSignIn(input: {
   next?: string;
   redirect?: string;
 }): string;
+export function workReturnTarget(pathname: string, search: string): string;
 export function authOffAllowsOwner(): boolean;

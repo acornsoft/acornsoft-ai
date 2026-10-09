@@ -299,7 +299,6 @@ function parseNote(path: string, raw: string): ClimbNote | null {
     canopyAt: pub.canopyAt,
     xUrl,
     tags: tags?.length ? tags : undefined,
-    sourceFile: path.split("/").pop(),
   };
 }
 
