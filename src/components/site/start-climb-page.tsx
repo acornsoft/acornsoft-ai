@@ -245,13 +245,13 @@ export function StartClimbPage() {
                 {isOwner ? (
                   <Link
                     className="rn-btn ac-btn-maroon"
-                    to="/gnomah"
+                    to="/studio"
                     search={sentNote?.id ? { note: sentNote.id } : undefined}
                   >
                     <span>
                       {sentNote?.number
                         ? `Open CN-${sentNote.number}`
-                        : "Open Gnomah"}
+                        : "Open Studio"}
                     </span>
                   </Link>
                 ) : (

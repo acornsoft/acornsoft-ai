@@ -15,7 +15,6 @@ import { Route as CanopyRouteImport } from './routes/canopy'
 import { Route as ClimbNotesRouteImport } from './routes/climb-notes'
 import { Route as CorporateRouteImport } from './routes/corporate'
 import { Route as FieldGuideRouteImport } from './routes/field-guide'
-import { Route as GnomahRouteImport } from './routes/gnomah'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LunaRouteImport } from './routes/luna'
 import { Route as MethodRouteImport } from './routes/method'
@@ -24,6 +23,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProceduresRouteImport } from './routes/procedures'
 import { Route as ServiceRouteImport } from './routes/service'
 import { Route as StartRouteImport } from './routes/start'
+import { Route as StudioRouteImport } from './routes/studio'
 import { Route as VoiceRouteImport } from './routes/voice'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as DocsOnboardingRouteImport } from './routes/docs/onboarding'
@@ -65,11 +65,6 @@ const FieldGuideRoute = FieldGuideRouteImport.update({
   path: '/field-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GnomahRoute = GnomahRouteImport.update({
-  id: '/gnomah',
-  path: '/gnomah',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -108,6 +103,11 @@ const ServiceRoute = ServiceRouteImport.update({
 const StartRoute = StartRouteImport.update({
   id: '/start',
   path: '/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VoiceRoute = VoiceRouteImport.update({
@@ -168,7 +168,6 @@ export interface FileRoutesByFullPath {
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
   '/field-guide': typeof FieldGuideRoute
-  '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
   '/luna': typeof LunaRouteWithChildren
   '/method': typeof MethodRoute
@@ -177,6 +176,7 @@ export interface FileRoutesByFullPath {
   '/procedures': typeof ProceduresRoute
   '/service': typeof ServiceRoute
   '/start': typeof StartRoute
+  '/studio': typeof StudioRoute
   '/voice': typeof VoiceRoute
   '/work': typeof WorkRouteWithChildren
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
@@ -195,7 +195,6 @@ export interface FileRoutesByTo {
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
   '/field-guide': typeof FieldGuideRoute
-  '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
   '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
@@ -203,6 +202,7 @@ export interface FileRoutesByTo {
   '/procedures': typeof ProceduresRoute
   '/service': typeof ServiceRoute
   '/start': typeof StartRoute
+  '/studio': typeof StudioRoute
   '/voice': typeof VoiceRoute
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
   '/luna/$slug': typeof LunaSlugRoute
@@ -221,7 +221,6 @@ export interface FileRoutesById {
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
   '/field-guide': typeof FieldGuideRoute
-  '/gnomah': typeof GnomahRoute
   '/login': typeof LoginRoute
   '/luna': typeof LunaRouteWithChildren
   '/method': typeof MethodRoute
@@ -230,6 +229,7 @@ export interface FileRoutesById {
   '/procedures': typeof ProceduresRoute
   '/service': typeof ServiceRoute
   '/start': typeof StartRoute
+  '/studio': typeof StudioRoute
   '/voice': typeof VoiceRoute
   '/work': typeof WorkRouteWithChildren
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
@@ -250,7 +250,6 @@ export interface FileRouteTypes {
     | '/climb-notes'
     | '/corporate'
     | '/field-guide'
-    | '/gnomah'
     | '/login'
     | '/luna'
     | '/method'
@@ -259,6 +258,7 @@ export interface FileRouteTypes {
     | '/procedures'
     | '/service'
     | '/start'
+    | '/studio'
     | '/voice'
     | '/work'
     | '/docs/onboarding'
@@ -277,7 +277,6 @@ export interface FileRouteTypes {
     | '/climb-notes'
     | '/corporate'
     | '/field-guide'
-    | '/gnomah'
     | '/login'
     | '/method'
     | '/policies'
@@ -285,6 +284,7 @@ export interface FileRouteTypes {
     | '/procedures'
     | '/service'
     | '/start'
+    | '/studio'
     | '/voice'
     | '/docs/onboarding'
     | '/luna/$slug'
@@ -302,7 +302,6 @@ export interface FileRouteTypes {
     | '/climb-notes'
     | '/corporate'
     | '/field-guide'
-    | '/gnomah'
     | '/login'
     | '/luna'
     | '/method'
@@ -311,6 +310,7 @@ export interface FileRouteTypes {
     | '/procedures'
     | '/service'
     | '/start'
+    | '/studio'
     | '/voice'
     | '/work'
     | '/docs/onboarding'
@@ -330,7 +330,6 @@ export interface RootRouteChildren {
   ClimbNotesRoute: typeof ClimbNotesRoute
   CorporateRoute: typeof CorporateRoute
   FieldGuideRoute: typeof FieldGuideRoute
-  GnomahRoute: typeof GnomahRoute
   LoginRoute: typeof LoginRoute
   LunaRoute: typeof LunaRouteWithChildren
   MethodRoute: typeof MethodRoute
@@ -339,6 +338,7 @@ export interface RootRouteChildren {
   ProceduresRoute: typeof ProceduresRoute
   ServiceRoute: typeof ServiceRoute
   StartRoute: typeof StartRoute
+  StudioRoute: typeof StudioRoute
   VoiceRoute: typeof VoiceRoute
   WorkRoute: typeof WorkRouteWithChildren
   DocsOnboardingRoute: typeof DocsOnboardingRouteWithChildren
@@ -388,13 +388,6 @@ declare module '@tanstack/react-router' {
       path: '/field-guide'
       fullPath: '/field-guide'
       preLoaderRoute: typeof FieldGuideRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/gnomah': {
-      id: '/gnomah'
-      path: '/gnomah'
-      fullPath: '/gnomah'
-      preLoaderRoute: typeof GnomahRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -451,6 +444,13 @@ declare module '@tanstack/react-router' {
       path: '/start'
       fullPath: '/start'
       preLoaderRoute: typeof StartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/voice': {
@@ -569,7 +569,6 @@ const rootRouteChildren: RootRouteChildren = {
   ClimbNotesRoute: ClimbNotesRoute,
   CorporateRoute: CorporateRoute,
   FieldGuideRoute: FieldGuideRoute,
-  GnomahRoute: GnomahRoute,
   LoginRoute: LoginRoute,
   LunaRoute: LunaRouteWithChildren,
   MethodRoute: MethodRoute,
@@ -578,6 +577,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProceduresRoute: ProceduresRoute,
   ServiceRoute: ServiceRoute,
   StartRoute: StartRoute,
+  StudioRoute: StudioRoute,
   VoiceRoute: VoiceRoute,
   WorkRoute: WorkRouteWithChildren,
   DocsOnboardingRoute: DocsOnboardingRouteWithChildren,
@@ -589,10 +589,11 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

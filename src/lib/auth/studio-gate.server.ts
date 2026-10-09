@@ -1,9 +1,11 @@
 /**
  * Server-only map from the public sign-in token `studio` to the owner route.
- * The route slug stays here so anonymous HTML and login URLs do not carry it.
+ * The retired path stays in this file so anonymous HTML, headers, and
+ * downloaded scripts do not carry it.
  */
 
-const STUDIO_PATH = "/gnomah";
+const STUDIO_PATH = "/studio";
+const LEGACY_STUDIO_SLUG = "gnomah";
 
 export function studioPath(): string {
   return STUDIO_PATH;
@@ -13,11 +15,24 @@ function isSafeAppPath(value: string): boolean {
   return value.startsWith("/") && !value.startsWith("//") && !value.includes("\\");
 }
 
-/** True when a public login `redirect` param names the owner route. */
-export function redirectNamesStudio(value: string | undefined): boolean {
+/** Any case, trailing slash, or extra segment of the retired studio path. */
+export function isLegacyStudioPath(value: string | undefined): boolean {
   if (!value) return false;
-  const path = value.split(/[?#]/, 1)[0] ?? value;
-  return path === STUDIO_PATH || path.startsWith(`${STUDIO_PATH}/`);
+  let path = value.split(/[?#]/, 1)[0] ?? value;
+  try {
+    path = decodeURIComponent(path);
+  } catch {
+    // Keep the raw path when it is not valid encoding.
+  }
+  const trimmed = path.replace(/\/+$/, "") || "/";
+  const lower = trimmed.toLowerCase();
+  const root = `/${LEGACY_STUDIO_SLUG}`;
+  return lower === root || lower.startsWith(`${root}/`);
+}
+
+/** True when a public login `redirect` param names the retired studio path. */
+export function redirectNamesStudio(value: string | undefined): boolean {
+  return isLegacyStudioPath(value);
 }
 
 /**
@@ -28,13 +43,48 @@ export function destinationForSignIn(input: {
   next?: string;
   redirect?: string;
 }): string {
-  if (input.next === "studio" || redirectNamesStudio(input.redirect)) {
-    return STUDIO_PATH;
-  }
+  if (input.next === "studio") return STUDIO_PATH;
   const redirect = input.redirect?.trim();
+  if (redirect && isLegacyStudioPath(redirect)) {
+    const queryAt = redirect.indexOf("?");
+    const search = queryAt >= 0 ? redirect.slice(queryAt).split("#", 1)[0] : "";
+    return `${STUDIO_PATH}${search}`;
+  }
   if (redirect && isSafeAppPath(redirect)) return redirect;
   if (!redirect && !input.next) return STUDIO_PATH;
   return "/";
+}
+
+/**
+ * First-hop destination for a retired studio URL.
+ * Anonymous visitors go straight to the public login token.
+ * Owners keep their query string on the live studio route.
+ */
+export async function legacyStudioDestination(
+  pathname: string,
+  requestUrl: string,
+): Promise<string | null> {
+  if (!isLegacyStudioPath(pathname)) return null;
+  const gate = await decideStudioGate();
+  switch (gate.reason) {
+    case "owner": {
+      let search = "";
+      try {
+        search = new URL(requestUrl).search;
+      } catch {
+        search = "";
+      }
+      return `${STUDIO_PATH}${search}`;
+    }
+    case "denied":
+      return "/";
+    case "anon":
+      return "/login?next=studio";
+    default: {
+      const _exhaustive: never = gate.reason;
+      return _exhaustive;
+    }
+  }
 }
 
 export type StudioGateReason = "owner" | "anon" | "denied";

@@ -222,7 +222,7 @@ function isOwnerForbiddenError(err: unknown): boolean {
 
 export function GnomahEditorPage() {
   const { user, isPending } = useCurrentUserState();
-  const search = useSearch({ from: "/gnomah", shouldThrow: false }) as
+  const search = useSearch({ from: "/studio", shouldThrow: false }) as
     | { note?: string }
     | undefined;
   const openNoteId = search?.note;
@@ -681,11 +681,11 @@ export function GnomahEditorPage() {
 
   return (
     <SiteChrome loginRedirect="studio" mainClassName="ac-gnomah">
-      <div className="ac-service-page ac-gnomah ac-page-top" id="gnomah">
+      <div className="ac-service-page ac-gnomah ac-page-top" id="studio">
         <div className="ac-service-stack">
           <header className="ac-service-head">
             <span className="ac-service-kicker">Studio</span>
-            <h1 className="ac-service-title">Gnomah</h1>
+            <h1 className="ac-service-title">Studio</h1>
             <div className="ac-service-lede-box">
               <p className="ac-service-lede">
                 Choose a Climb Note to edit. The carousel is the library —

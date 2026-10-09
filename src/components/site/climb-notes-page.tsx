@@ -203,7 +203,7 @@ function NoteCard({ note }: { note: ClimbNote }) {
 
 /**
  * Public Climb Notes journal — **published only**.
- * Draft / pending / approved / archived live in Gnomah (owner), never here.
+ * Draft / pending / approved / archived live in the studio (owner), never here.
  */
 export function ClimbNotesPage() {
   const { isOwner } = useOwnerAccess();
@@ -294,8 +294,8 @@ export function ClimbNotesPage() {
                 </Link>
               </VoiceWhenSignedIn>
               {isOwner ? (
-                <Link className="rn-btn ac-btn-outline" to="/gnomah">
-                  <span>Open Gnomah</span>
+                <Link className="rn-btn ac-btn-outline" to="/studio">
+                  <span>Open Studio</span>
                 </Link>
               ) : null}
             </div>

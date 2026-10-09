@@ -29,7 +29,7 @@ function pageTitle(pathname: string): string {
   if (pathname.startsWith("/work")) return "Works";
   if (pathname.startsWith("/start")) return "Send a note";
   if (pathname.startsWith("/canopy")) return "Canopy";
-  if (pathname.startsWith("/gnomah")) return "Gnomah";
+  if (pathname.startsWith("/studio")) return "Studio";
   if (pathname.startsWith("/corporate")) return "Corporate";
   if (pathname.startsWith("/login")) return "Sign in";
   return "Acornsoft";
@@ -84,14 +84,14 @@ function NavLinks({
             <Link
               className={[
                 "ac-nav-link ac-nav-link--mobile",
-                isActivePath(pathname, "/gnomah") ? "is-active" : "",
+                isActivePath(pathname, "/studio") ? "is-active" : "",
               ]
                 .filter(Boolean)
                 .join(" ")}
-              to="/gnomah"
+              to="/studio"
               onClick={onNavigate}
             >
-              Gnomah
+              Studio
             </Link>
           </li>
           <li className="ac-nav-item">
@@ -126,7 +126,7 @@ function MenuIcon({ open }: { open: boolean }) {
 
 /**
  * Shared sticky header + mobile full-screen menu.
- * Primary links same on every page; Gnomah only when signed in.
+ * Primary links same on every page; Studio only when the owner is signed in.
  * Mobile: logo hidden — page title + Log in + menu control.
  * Public primary nav is gated by SHOW_PRIMARY_NAV (logo, Send a note, auth stay).
  */

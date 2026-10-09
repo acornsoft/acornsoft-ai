@@ -110,10 +110,10 @@ export function SiteAuthSlot({
               <li role="none">
                 <Link
                   role="menuitem"
-                  to="/gnomah"
+                  to="/studio"
                   onClick={() => setOpen(false)}
                 >
-                  Gnomah
+                  Studio
                 </Link>
               </li>
             ) : null}
