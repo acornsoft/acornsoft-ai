@@ -146,6 +146,12 @@ export async function assertClimbNotesOwner(userId: string): Promise<{
   handle: string;
 }> {
   if (!authConfigured && userId === DEV_USER_ID) {
+    // Dynamic import keeps the retired route slug off client graphs that only
+    // need ForbiddenOwnerError from this module.
+    const { authOffAllowsOwner } = await import("@/lib/auth/studio-path.mjs");
+    if (!authOffAllowsOwner()) {
+      throw new UnauthorizedError();
+    }
     await recordOwnerClaim(userId, "dev-user");
     return { userId, handle: "dev-user" };
   }

@@ -41,12 +41,25 @@ export const getClimbNotesAccess = createServerFn({ method: "GET" })
     }
   });
 
-/** Fields that name vault files. Owner editor responses keep them. */
-const INTERNAL_NOTE_FIELDS = ["sourceFile"] as const;
+/**
+ * Kept off the anonymous feed. Public pages render title, beats, date,
+ * tags, and publishedAt — not vault filenames or the approval trail.
+ * Owner editor responses keep these fields.
+ */
+const INTERNAL_NOTE_FIELDS = [
+  "sourceFile",
+  "history",
+  "approvalNote",
+  "submittedBy",
+  "approvedBy",
+] as const;
 
-export type PublicClimbNote = Omit<ClimbNote, "sourceFile">;
+export type PublicClimbNote = Omit<
+  ClimbNote,
+  "sourceFile" | "history" | "approvalNote" | "submittedBy" | "approvedBy"
+>;
 
-/** Published notes for anonymous visitors. No vault path or filename. */
+/** Published notes for anonymous visitors. No vault path, filename, or approval trail. */
 export function toPublicClimbNote(note: ClimbNote): PublicClimbNote {
   const copy: ClimbNote = { ...note };
   for (const key of INTERNAL_NOTE_FIELDS) {

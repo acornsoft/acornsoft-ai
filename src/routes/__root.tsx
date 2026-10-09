@@ -20,7 +20,7 @@ const inbioCss = [
   "/inbio/assets/css/vendor/aos.css",
   "/inbio/assets/css/plugins/feature.css",
   "/inbio/assets/css/style.css",
-  "/inbio/acornsoft-overrides.css?v=start-climb-9",
+  "/inbio/acornsoft-overrides.css?v=start-climb-10",
   "/inbio/slide3-center.css?v=1",
 ] as const;
 

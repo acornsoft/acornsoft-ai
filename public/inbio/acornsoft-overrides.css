@@ -20715,12 +20715,19 @@ body:has(.ac-service-page) .ac-about-top-fab {
   z-index: 1 !important;
   width: min(1040px, 100%) !important;
   max-height: min(92vh, 920px) !important;
-  overflow: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
   padding: 18px 18px 22px !important;
   border-radius: 18px !important;
   border: 1px solid rgba(255,255,255,0.12) !important;
   background: #121214 !important;
   box-shadow: 0 24px 64px rgba(0,0,0,0.55) !important;
+}
+.ac-studio .ac-gn-form input[type="date"],
+.ac-studio .ac-gn-form input[type="datetime-local"] {
+  min-width: 0 !important;
+  max-width: 100% !important;
 }
 @media (max-width: 640px) {
   .ac-studio .ac-gn-rail {

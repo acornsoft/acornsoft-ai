@@ -95,38 +95,3 @@ export const logAnalyticsEvent = createServerFn({ method: "POST" })
       }
     },
   );
-
-/** Owner/debug: recent events (capped). */
-export const listRecentAnalyticsEvents = createServerFn({ method: "GET" })
-  .validator((data?: { limit?: number }) => ({
-    limit: Math.min(100, Math.max(1, Number(data?.limit) || 40)),
-  }))
-  .handler(async ({ data }) => {
-    try {
-      await ensureAnalyticsTable();
-      const sql = await getSql();
-      const rows = await sql<{
-        id: number;
-        event_name: string;
-        path: string | null;
-        session_id: string | null;
-        props: unknown;
-        created_at: string;
-      }>`
-        select id, event_name, path, session_id, props, created_at
-        from analytics_events
-        order by created_at desc
-        limit ${data.limit}
-      `;
-      return rows.map((r) => ({
-        id: Number(r.id),
-        event: r.event_name,
-        path: r.path,
-        sessionId: r.session_id,
-        props: r.props ?? {},
-        createdAt: r.created_at,
-      }));
-    } catch {
-      return [];
-    }
-  });
