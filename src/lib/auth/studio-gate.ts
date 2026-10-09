@@ -34,6 +34,28 @@ export function loginSearchFor(
   return { redirect: loginRedirect };
 }
 
+/**
+ * Owner gate for /work. Anonymous visitors get a stable return path captured
+ * from the request, not from the live router location (that flips to /login
+ * while the gate is still mounted and would replace the return path).
+ */
+export const gateWorkRoute = createServerFn({ method: "GET" })
+  .validator((data: { pathname?: string } | undefined) => ({
+    pathname: typeof data?.pathname === "string" ? data.pathname : "/work",
+  }))
+  .handler(async ({ data }) => {
+    const { decideStudioGate, isSafeAppPath } = await import("./studio-gate.server");
+    const gate = await decideStudioGate();
+    const requested = data.pathname;
+    const underWork =
+      requested === "/work" || requested.startsWith("/work/");
+    const redirectTo =
+      underWork && !requested.includes("..") && isSafeAppPath(requested)
+        ? requested
+        : "/work";
+    return { reason: gate.reason, redirectTo };
+  });
+
 export const loginQueryLeaksStudio = createServerFn({ method: "POST" })
   .validator((data: { redirect?: string } | undefined) => ({
     redirect: typeof data?.redirect === "string" ? data.redirect : undefined,

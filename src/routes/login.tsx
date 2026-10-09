@@ -17,6 +17,9 @@ export const Route = createFileRoute("/login")({
     next: s.next === STUDIO_NEXT ? STUDIO_NEXT : undefined,
   }),
   beforeLoad: async ({ search }) => {
+    if (search.redirect && redirectsToLogin(search.redirect)) {
+      throw redirect({ to: "/login" });
+    }
     if (!search.redirect) return;
     const { leak } = await loginQueryLeaksStudio({
       data: { redirect: search.redirect },
@@ -60,14 +63,40 @@ function XMarkIcon({ className }: { className?: string }) {
   );
 }
 
+function redirectsToLogin(value: string): boolean {
+  let decoded = value;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    return false;
+  }
+  const path = (decoded.split(/[?#]/, 1)[0] ?? decoded).replace(/\/+$/, "") || "/";
+  const lower = path.toLowerCase();
+  return lower === "/login" || lower.startsWith("/login/");
+}
+
+function clientSafeRedirect(value: string | undefined): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/";
+  if (/[\u0000-\u001F\u007F\\]/.test(value)) return "/";
+  let decoded = value;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    return "/";
+  }
+  if (/[\u0000-\u001F\u007F\\]/.test(decoded)) return "/";
+  if (!decoded.startsWith("/") || decoded.startsWith("//")) return "/";
+  if (redirectsToLogin(decoded)) return "/";
+  return value;
+}
+
 function LoginPage() {
   const { redirect: redirectTo, next } = Route.useSearch();
-  const safeRedirect =
-    redirectTo && redirectTo.startsWith("/") && !redirectTo.startsWith("//")
-      ? redirectTo
-      : "/";
+  const safeRedirect = clientSafeRedirect(redirectTo);
   const forWorks =
-    safeRedirect === "/work" || safeRedirect.startsWith("/work?");
+    safeRedirect === "/work" ||
+    safeRedirect.startsWith("/work/") ||
+    safeRedirect.startsWith("/work?");
   const forStudio = next === STUDIO_NEXT || (!redirectTo && !forWorks);
   const previewSignIn = usesPreviewSignIn();
   const [busy, setBusy] = useState<string | null>(null);

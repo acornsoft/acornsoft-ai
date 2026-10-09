@@ -204,7 +204,7 @@ export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
 /**
  * Map broker OIDC profile fields into Better Auth's user row.
  * For X: prefer handle (preferred_username / username) over display name so
- * Gnomah owner checks can match @acornsoftai reliably.
+ * Studio owner checks can match @acornsoftai reliably.
  */
 function mapBrokerProfile(
   providerId: string,

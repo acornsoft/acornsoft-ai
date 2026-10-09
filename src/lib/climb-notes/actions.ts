@@ -51,7 +51,7 @@ export const listPublishedClimbNotes = createServerFn({ method: "GET" }).handler
 
 /**
  * Full library (draft / pending / approved / archived).
- * Owner-only. Prefer listClimbNotesForEditor for Gnomah.
+ * Owner-only. Prefer listClimbNotesForEditor for the studio.
  * Not used by the public Climb Notes journal (published only).
  */
 export const listAllClimbNotesPublic = createServerFn({ method: "GET" })
@@ -63,7 +63,7 @@ export const listAllClimbNotesPublic = createServerFn({ method: "GET" })
     return listClimbNotesFromDb({ publishedOnly: false });
   });
 
-/** Owner: full library for Gnomah editor. */
+/** Owner: full library for the studio editor. */
 export const listClimbNotesForEditor = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }): Promise<ClimbNote[]> => {
@@ -126,7 +126,7 @@ export const deleteClimbNoteAction = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-/** Owner: re-scan local vault + optional GitHub Gnomah pull (async). */
+/** Owner: re-scan local vault + optional GitHub studio pull (async). */
 export const refreshClimbNotesLibrary = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {

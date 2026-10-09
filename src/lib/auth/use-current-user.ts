@@ -45,7 +45,7 @@ export type CurrentUserState = {
  *   - Auth disabled (`VITE_AUTH_ENABLED=false`) -> `DEV_USER`, never pending.
  *
  * `isPending` is INITIAL load only. A refetch, a 401 blip, or a header remount
- * must not look like sign-out — that was the logged-in flicker (Voice, Gnomah,
+ * must not look like sign-out — that was the logged-in flicker (Voice, the studio,
  * Method, chip, gear). Identity is remembered in `sessionMemory` until sign-out.
  *
  * Protect a route by waiting out `isPending` before acting on `user` —

@@ -1,4 +1,4 @@
--- Climb Notes runtime store (Gnomah editor) + single-owner gate.
+-- Climb Notes runtime store (studio editor) + single-owner gate.
 -- Markdown under content/climb-notes remains the Obsidian / git mirror;
 -- this table is the live edit surface after seed.
 

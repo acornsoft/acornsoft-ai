@@ -56,7 +56,7 @@ export const CROSSOVER =
 export const CROSSOVER_SHORT =
   "Same four beats on both sides of the table.";
 
-export const GNOMAH_BRAIN =
+export const JOURNAL_LINE =
   "The journal holds the climbs so the next step starts from a trail.";
 
 /** Elevator pitch — first thing a visitor should understand. */

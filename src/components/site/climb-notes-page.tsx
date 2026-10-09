@@ -15,7 +15,7 @@ import {
 } from "./climb-notes-data";
 import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
 import { useOwnerAccess } from "@/lib/auth/use-owner-access";
-import { CROSSOVER, GNOMAH_BRAIN, CLIMB_BEATS } from "./messaging";
+import { CROSSOVER, JOURNAL_LINE, CLIMB_BEATS } from "./messaging";
 
 
 
@@ -261,7 +261,7 @@ export function ClimbNotesPage() {
             <div className="ac-service-lede-box">
               <p className="ac-service-lede">{CROSSOVER}</p>
               <p className="ac-service-lede ac-service-lede--last">
-                {GNOMAH_BRAIN} Published trails anyone can follow.
+                {JOURNAL_LINE} Published trails anyone can follow.
                 Drafts stay in the studio.
               </p>
             </div>

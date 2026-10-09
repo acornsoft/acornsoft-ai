@@ -1,5 +1,5 @@
 /**
- * Climb Notes / Gnomah editor is owner-only.
+ * Climb Notes studio editor is owner-only.
  *
  * Enforcement chain (every mutation and editor list):
  * 1. Caller must already be signed in (authMiddleware → verified session user id).
@@ -8,7 +8,7 @@
  *    Better Auth user id / X account id must be on an explicit env allowlist.
  *
  * Display names are not an authorization signal. Sign-in alone is not enough.
- * Google (or any non-X identity) cannot open Gnomah.
+ * Google (or any non-X identity) cannot open the studio.
  * A prior climb_notes_owner row is only a claim log — access is re-checked each time.
  */
 import { getSql } from "@/lib/db";
@@ -136,7 +136,7 @@ async function recordOwnerClaim(userId: string, handle: string): Promise<void> {
 }
 
 /**
- * Verify the signed-in user may use the Gnomah Climb Notes editor.
+ * Verify the signed-in user may use the Climb Notes studio.
  * Throws ForbiddenOwnerError when not the owner.
  * Throws UnauthorizedError when the session id has no matching user row
  * (stale cookie / wiped preview DB) — client should re-authenticate.
@@ -176,7 +176,7 @@ export async function assertClimbNotesOwner(userId: string): Promise<{
   const xAccounts = accounts.filter((a) => isXProvider(a.providerId));
   if (xAccounts.length === 0) {
     throw new ForbiddenOwnerError(
-      "Sign in with X as @acornsoftai to edit Climb Notes. Other providers cannot open Gnomah.",
+      "Sign in with X as @acornsoftai to edit Climb Notes. Other providers cannot open the studio.",
     );
   }
 
