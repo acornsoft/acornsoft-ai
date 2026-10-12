@@ -1,7 +1,7 @@
 ---
 id: cn-023
 number: "023"
-title: "Gnomah ↔ ADO complete linkage (all clients)"
+title: "Studio ↔ ADO complete linkage (all clients)"
 date: 2026-07-31
 status: draft
 folder: product
@@ -12,13 +12,13 @@ xUrl:
 ---
 
 ## Base Camp
-Gnomah ↔ ADO complete linkage (all clients) is an open climb under the product lane. Define a measurable slice that can fail safely and be improved in front of the team that owns it.
+Studio ↔ ADO complete linkage (all clients) is an open climb under the product lane. Define a measurable slice that can fail safely and be improved in front of the team that owns it.
 
 ## Route
 A small step that can be demoed, measured, and written back into this note.
 
 ## Waypoint
-Capture the climb in Gnomah. Promote through draft to published only when the public journal should show it.
+Capture the climb in the studio. Promote through draft to published only when the public journal should show it.
 
 ## Summit
 (Write after the first slice.) Failure is tuition. Update this note when reality moves.

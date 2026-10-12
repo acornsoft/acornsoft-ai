@@ -19,7 +19,7 @@
 | Cursor | Pro with Agent |
 | Claude | Pro (~$20) |
 
-Free tiers: fine for reading. Not for agentic MacroFlow.
+Free tiers: fine for reading. A full climb needs a paid host.
 
 ## After install (what the extension actually does)
 
@@ -33,9 +33,9 @@ Free tiers: fine for reading. Not for agentic MacroFlow.
 
 **Not required:** Dreamcatcher Foundry monorepo clone (shell ships inside multiagent).
 
-**Optional:** Starship, `gh` when feedback issues matter, Gnomah/ADO later (not this release’s Base Camp gate).
+**Optional:** Starship, `gh` when feedback issues matter, the studio vault or ADO later (not this release’s Base Camp gate).
 
-## How MacroFlow appears (by host)
+## How the climb appears (by host)
 
 | Host | UI | How the pack shows up |
 |------|-----|------------------------|
@@ -48,11 +48,11 @@ Free tiers: fine for reading. Not for agentic MacroFlow.
 
 Registered on the extension (Command Palette, category **Luna**):
 
-- Setup (Copilot / Cursor / Grok)  
+- **Luna: Setup (Copilot / Cursor / Grok)** → **Set up**  
 - Create Grok Build (pwsh | bash) Terminal — auto-starts TUI  
 - Create Grok (pwsh | bash) Terminal — clean shell only  
 - Install / Verify Grok CLI  
-- Install Luna Plugin for Grok (xAI Marketplace / TUI)  
+- **Luna: Install Luna Plugin for Grok**  
 - **WSL is not supported** (no Luna WSL terminals or installers)
 
 

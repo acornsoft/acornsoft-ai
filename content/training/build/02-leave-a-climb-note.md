@@ -1,6 +1,6 @@
 # Build · 02 — Leave a Climb Note
 
-**Tool:** Grok Build + Climb Notes vault / Gnomah  
+**Tool:** Grok Build + Climb Notes vault / Studio  
 **Time:** ~20 minutes after a step  
 **Done when:** A Climb Note exists with all four headings filled.
 

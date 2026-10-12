@@ -15,7 +15,7 @@ import {
 } from "./climb-notes-data";
 import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
 import { useOwnerAccess } from "@/lib/auth/use-owner-access";
-import { CROSSOVER, GNOMAH_BRAIN, TWENTY_X, CLIMB_BEATS } from "./messaging";
+import { CROSSOVER, JOURNAL_LINE, CLIMB_BEATS } from "./messaging";
 
 
 
@@ -203,7 +203,7 @@ function NoteCard({ note }: { note: ClimbNote }) {
 
 /**
  * Public Climb Notes journal — **published only**.
- * Draft / pending / approved / archived live in Gnomah (owner), never here.
+ * Draft / pending / approved / archived live in the studio (owner), never here.
  */
 export function ClimbNotesPage() {
   const { isOwner } = useOwnerAccess();
@@ -250,7 +250,7 @@ export function ClimbNotesPage() {
   const visible = useMemo(() => sortPublished(notes), [notes]);
 
   return (
-    <SiteChrome loginRedirect="/gnomah" mainClassName="ac-climb-notes">
+    <SiteChrome loginRedirect="studio" mainClassName="ac-climb-notes">
       <div className="ac-service-page ac-climb-notes ac-page-top" id="notes">
         <div className="ac-service-stack">
           <header className="ac-service-head">
@@ -261,7 +261,7 @@ export function ClimbNotesPage() {
             <div className="ac-service-lede-box">
               <p className="ac-service-lede">{CROSSOVER}</p>
               <p className="ac-service-lede ac-service-lede--last">
-                {GNOMAH_BRAIN} {TWENTY_X} Published trails anyone can follow.
+                {JOURNAL_LINE} Published trails anyone can follow.
                 Drafts stay in the studio.
               </p>
             </div>
@@ -282,7 +282,7 @@ export function ClimbNotesPage() {
           <div className="ac-cn-footer-links">
             <p>
               Climb Notes™ use the same four beats. Canopy shows the public
-              journal on the live radar. Gnomah holds the studio.
+              journal on the live radar. The studio holds the drafts.
             </p>
             <div className="ac-hero-cta ac-cn-footer-actions">
               <Link className="rn-btn" to="/canopy">
@@ -294,8 +294,8 @@ export function ClimbNotesPage() {
                 </Link>
               </VoiceWhenSignedIn>
               {isOwner ? (
-                <Link className="rn-btn ac-btn-outline" to="/gnomah">
-                  <span>Open Gnomah</span>
+                <Link className="rn-btn ac-btn-outline" to="/studio">
+                  <span>Open Studio</span>
                 </Link>
               ) : null}
             </div>

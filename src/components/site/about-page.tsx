@@ -142,9 +142,8 @@ export function AboutPage() {
                 under real rules.
               </p>
               <p className="ac-service-lede">
-                Gnomah holds the climbs. Grok-based tools run the step.
-                That trail is how we aim for about twenty times a normal
-                cycle. The journal is how we show it. Failure is how we
+                The journal holds the climbs. Grok-based tools run the step.
+                The journal is how we show the trail. Failure is how we
                 succeed. We are always trying to improve.
               </p>
               <p className="ac-service-lede ac-service-lede--last">
@@ -285,7 +284,7 @@ export function AboutPage() {
                 <p>
                   Founded Acornsoft so Climb Notes™ cross the table — shop
                   owner and engineer, same four beats — then become systems
-                  people can run. Based in New York. Gnomah holds the climbs.
+                  people can run. Based in New York. The journal holds the climbs.
                   Grok-based tools run the step.
                 </p>
                 <p className="ac-about-founder-note">{dualSiteNote}</p>

@@ -27,7 +27,7 @@ export function CorporatePage() {
 
   return (
     <div className="template-color-1 spybody ac-inbio ac-corporate-page ac-hero-stage">
-      <SiteHeader loginRedirect="/gnomah" />
+      <SiteHeader loginRedirect="studio" />
 
       <main className="main-page-wrapper ac-corporate-main">
         <section className="rn-section-gap ac-corporate-shell">

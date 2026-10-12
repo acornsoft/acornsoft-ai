@@ -92,7 +92,7 @@ Locked line: **mountain first, kit second.** Luna is the Sherpa. Proof at the su
 | Problem / Measure / Pitch / Slice / Lesson *(as headings)* | Base Camp / Route / Waypoint / Summit |
 | “not X, it’s Y” / “not a slide” / “not a blank page” | say the thing |
 | this is the way | drop it |
-| crossover / second brain / thin vertical | same four beats / Gnomah holds the climbs / small step |
+| crossover / second brain / thin vertical | same four beats / the journal holds the climbs / small step |
 | actually / quickly / quietly | cut the -ly |
 | free solo as contrast | say the trail |
 | demo-as-progress | finished step + evidence home |
@@ -119,7 +119,7 @@ X citation: even shorter. Site holds the full note; X points at it.
 | Surface | Style |
 | --- | --- |
 | **Public journal / Canopy / X** | Strict plain language. No internal process slang. |
-| **Studio library / Gnomah drafts** | May name systems (ADO, Gnomah, Luna) but still short and clear. |
+| **Studio drafts** | May name systems (ADO, Luna) but still short and clear. |
 | **Before publish** | Read Base Camp out loud. If you stumble, rewrite. |
 
 ---

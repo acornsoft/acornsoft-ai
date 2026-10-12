@@ -1,5 +1,5 @@
 /**
- * Climb Notes DB store + markdown seed / write-through (Gnomah editor).
+ * Climb Notes DB store + markdown seed / write-through (studio editor).
  * Server-only.
  *
  * Seeds are also inlined via `import.meta.glob` so standalone Vercel deploys
@@ -571,7 +571,7 @@ export type LibrarySyncResult = {
 /**
  * Async library refresh:
  * 1) re-scan local vault (content/climb-notes) — insert missing only
- * 2) optional GitHub Gnomah pull — insert missing only (never overwrite edits)
+ * 2) optional GitHub studio pull — insert missing only (never overwrite edits)
  */
 export async function syncClimbNotesLibrary(): Promise<LibrarySyncResult> {
   invalidateVaultCache();
@@ -838,7 +838,7 @@ function writeRegistryMap(notesMap: Record<string, RegistryNote>) {
   const payload = {
     version: 1,
     description:
-      "SharePoint-style publish control for Climb Notes. status=journal; onCanopy+canopyAt=Canopy timeline. Managed by Gnomah editor and CLI.",
+      "SharePoint-style publish control for Climb Notes. status=journal; onCanopy+canopyAt=Canopy timeline. Managed by the Studio editor and CLI.",
     notes: notesMap,
   };
   fs.mkdirSync(NOTES_DIR, { recursive: true });

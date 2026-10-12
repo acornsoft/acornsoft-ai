@@ -255,13 +255,13 @@ export const serviceFaqs: ServiceFaq[] = [
     id: "crossover",
     defaultOrder: 1,
     q: "Why do Climb Notes matter if I am not a developer?",
-    a: "The same four beats work on both sides of the table. A shop owner and an engineer can write the same note, and both can follow it. Gnomah holds the climbs. Grok-based tools run the step. We use that trail to aim for about twenty times a normal cycle. The journal is how we show it.",
+    a: "The same four beats work on both sides of the table. A shop owner and an engineer can write the same note, and both can follow it. The journal holds the climbs. Grok-based tools run the step. The journal is how we show it.",
   },
   {
     id: "mountaineering-approach",
     defaultOrder: 1,
     q: "What does “Mountaineering approach” mean?",
-    a: "Four plain beats on every Climb Note: Base Camp (are we fit to leave?), Route (one objective and success marks), Waypoint (hold or go), and Summit (build, prove, evidence home). Same words for a shop owner and an engineer. Luna is your Sherpa on Voice. Gnomah holds the climbs. Grok-based tools run the step.",
+    a: "Four plain beats on every Climb Note: Base Camp (are we fit to leave?), Route (one objective and success marks), Waypoint (hold or go), and Summit (build, prove, evidence home). Same words for a shop owner and an engineer. Luna is your Sherpa on Voice. The journal holds the climbs. Grok-based tools run the step.",
   },
   {
     id: "how-help-use",

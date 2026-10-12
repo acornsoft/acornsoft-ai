@@ -2,7 +2,7 @@
 
 This project is built and maintained on **personal time and budget** under Acornsoft. There is **no paywall** — the pack stays free to install and use.
 
-Help ships **inside this install**. You do not need GitHub (or a clone) to read docs, file a wish, or run MacroFlow. The git repository is **private**.
+Help ships **inside this install**. You do not need GitHub (or a clone) to read docs, file a wish, or run the climb. The git repository is **private**.
 
 | Pack | Where help lives |
 |------|------------------|

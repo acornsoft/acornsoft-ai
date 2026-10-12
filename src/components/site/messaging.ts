@@ -56,7 +56,7 @@ export const CROSSOVER =
 export const CROSSOVER_SHORT =
   "Same four beats on both sides of the table.";
 
-export const GNOMAH_BRAIN =
+export const JOURNAL_LINE =
   "The journal holds the climbs so the next step starts from a trail.";
 
 /** Elevator pitch — first thing a visitor should understand. */
@@ -84,9 +84,6 @@ export const LIGHTSPEED_PLAIN =
 /** Landing stamp. Repeat on every home slide. */
 export const LIGHTSPEED =
   "Climb Notes™ are how we build with AI, fast.";
-
-export const TWENTY_X =
-  "We use that trail to aim for about twenty times a normal build cycle. The journal is the proof.";
 
 /** 0→1: a layperson writes a Climb Note; we turn it into software. */
 export const ZERO_TO_ONE =

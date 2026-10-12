@@ -1,4 +1,4 @@
-import { Link, Navigate, useRouterState } from "@tanstack/react-router";
+import { Link, Navigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { SiteChrome } from "./site-chrome";
 import { AcadenceDesk } from "./acadence-desk";
@@ -11,14 +11,30 @@ import {
   type WorkEntry,
 } from "@/lib/works";
 
-function WorkGate({ children }: { children: ReactNode }) {
+/** Stable /work return path. Never read the live location — it becomes /login. */
+function workReturnTo(value: string): string {
+  if (value !== "/work" && !value.startsWith("/work/")) return "/work";
+  if (value.includes("..") || value.includes("//") || value.includes("\\")) {
+    return "/work";
+  }
+  if (/[\u0000-\u001F\u007F]/.test(value)) return "/work";
+  return value;
+}
+
+function WorkGate({
+  children,
+  returnTo,
+}: {
+  children: ReactNode;
+  returnTo: string;
+}) {
+  const dest = workReturnTo(returnTo);
   const { user, isPending } = useCurrentUserState();
   const { isOwner, isPending: ownerPending } = useOwnerAccess();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   if ((isPending && !user) || (user && ownerPending && !isOwner)) {
     return (
-      <SiteChrome loginRedirect={pathname || "/work"}>
+      <SiteChrome loginRedirect={dest}>
         <div className="ac-service-page ac-works-page ac-page-top">
           <p className="ac-works-status">Loading session…</p>
         </div>
@@ -27,7 +43,7 @@ function WorkGate({ children }: { children: ReactNode }) {
   }
 
   if (!user) {
-    return <Navigate to="/login" search={{ redirect: pathname || "/work" }} />;
+    return <Navigate to="/login" search={{ redirect: dest }} />;
   }
 
   if (!isOwner) {
@@ -93,7 +109,7 @@ export function WorksPage() {
   const items = worksVisibleTo({ signedIn, owner: isOwner });
 
   return (
-    <WorkGate>
+    <WorkGate returnTo="/work">
       <SiteChrome loginRedirect="/work">
         <div className="ac-service-page ac-works-page ac-page-top">
           <div className="ac-service-stack">
@@ -150,7 +166,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
     : false;
 
   return (
-    <WorkGate>
+    <WorkGate returnTo={`/work/${slug}`}>
       <SiteChrome loginRedirect={`/work/${slug}`}>
         <div className="ac-service-page ac-works-page ac-page-top">
           <div className="ac-service-stack ac-luna-doc">

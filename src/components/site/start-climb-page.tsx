@@ -222,7 +222,7 @@ export function StartClimbPage() {
               <h1 className="ac-start-received-title">We have your note.</h1>
               <p className="ac-start-received-lede">
                 {user && sentNote?.number
-                  ? `It’s in Gnomah as CN-${sentNote.number}. We’ll read Base Camp, Route, and Waypoint. Summit stays blank.`
+                  ? `It’s in the studio as CN-${sentNote.number}. We’ll read Base Camp, Route, and Waypoint. Summit stays blank.`
                   : sentNote?.number
                     ? `It’s in as CN-${sentNote.number}. We’ll read Base Camp, Route, and Waypoint. Summit stays blank.`
                     : "We’ll reach you at the email you left. We’ll read Base Camp, Route, and Waypoint. Summit stays blank."}
@@ -245,13 +245,13 @@ export function StartClimbPage() {
                 {isOwner ? (
                   <Link
                     className="rn-btn ac-btn-maroon"
-                    to="/gnomah"
+                    to="/studio"
                     search={sentNote?.id ? { note: sentNote.id } : undefined}
                   >
                     <span>
                       {sentNote?.number
                         ? `Open CN-${sentNote.number}`
-                        : "Open Gnomah"}
+                        : "Open Studio"}
                     </span>
                   </Link>
                 ) : (

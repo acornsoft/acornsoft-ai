@@ -4,7 +4,7 @@ import { useCurrentUserState } from "./use-current-user";
 
 /**
  * Founder gate for chrome. True only when the signed-in X identity is
- * @acornsoftai (same check Gnomah uses). Sign-in alone is not enough.
+ * @acornsoftai (same check the studio uses). Sign-in alone is not enough.
  */
 export function useOwnerAccess(): {
   isOwner: boolean;

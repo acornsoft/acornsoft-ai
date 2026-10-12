@@ -41,17 +41,45 @@ export const getClimbNotesAccess = createServerFn({ method: "GET" })
     }
   });
 
+/**
+ * Kept off the anonymous feed. Public pages render title, beats, date,
+ * tags, and publishedAt — not vault filenames or the approval trail.
+ * Owner editor responses keep these fields.
+ */
+const INTERNAL_NOTE_FIELDS = [
+  "sourceFile",
+  "history",
+  "approvalNote",
+  "submittedBy",
+  "approvedBy",
+] as const;
+
+export type PublicClimbNote = Omit<
+  ClimbNote,
+  "sourceFile" | "history" | "approvalNote" | "submittedBy" | "approvedBy"
+>;
+
+/** Published notes for anonymous visitors. No vault path, filename, or approval trail. */
+export function toPublicClimbNote(note: ClimbNote): PublicClimbNote {
+  const copy: ClimbNote = { ...note };
+  for (const key of INTERNAL_NOTE_FIELDS) {
+    delete copy[key];
+  }
+  return copy;
+}
+
 /** Published notes only — safe for anonymous visitors. */
 export const listPublishedClimbNotes = createServerFn({ method: "GET" }).handler(
-  async (): Promise<ClimbNote[]> => {
+  async (): Promise<PublicClimbNote[]> => {
     const { listClimbNotesFromDb } = await import("./store.server");
-    return listClimbNotesFromDb({ publishedOnly: true });
+    const notes = await listClimbNotesFromDb({ publishedOnly: true });
+    return notes.map(toPublicClimbNote);
   },
 );
 
 /**
  * Full library (draft / pending / approved / archived).
- * Owner-only. Prefer listClimbNotesForEditor for Gnomah.
+ * Owner-only. Prefer listClimbNotesForEditor for the studio.
  * Not used by the public Climb Notes journal (published only).
  */
 export const listAllClimbNotesPublic = createServerFn({ method: "GET" })
@@ -63,7 +91,7 @@ export const listAllClimbNotesPublic = createServerFn({ method: "GET" })
     return listClimbNotesFromDb({ publishedOnly: false });
   });
 
-/** Owner: full library for Gnomah editor. */
+/** Owner: full library for the studio editor. */
 export const listClimbNotesForEditor = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }): Promise<ClimbNote[]> => {
@@ -126,7 +154,7 @@ export const deleteClimbNoteAction = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-/** Owner: re-scan local vault + optional GitHub Gnomah pull (async). */
+/** Owner: re-scan local vault + optional GitHub studio pull (async). */
 export const refreshClimbNotesLibrary = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {

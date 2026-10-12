@@ -1,6 +1,6 @@
 # Trail map: Cursor
 
-For people who already build in **Cursor** with an **Agent**-capable plan. Multiagent does not replace Cursor—it gives Luna and MacroFlow a home via **Setup** (`.cursorrules` + `.github/`). You run one **complete MacroFlow turn** (Base Camp → Route → Waypoint → Summit) with proof; an optional second climb files a skill/feature wish.
+For people who already build in **Cursor** with an **Agent**-capable plan. This ridge is secondary to **Grok Build** and uses the same **Luna Foundry Multiagent** extension. Setup gives Luna a home via **`.cursorrules`** + **`.github/`**. You run one **complete climb** (Base Camp → Route → Waypoint → Summit) with proof; an optional second climb files a skill/feature wish.
 
 **Multiagent on this ridge:** pack-on-disk + Cursor Agent/Composer reading **`.cursorrules`** and **`.github/`**. Grok slash skills (`/base-camp`) are **optional** only if you also open Grok Build terminals inside Cursor.
 
@@ -9,7 +9,7 @@ For people who already build in **Cursor** with an **Agent**-capable plan. Multi
 Confirm each line. If not, finish that item first.
 
 - **Cursor** is installed and can load VS Code-compatible extensions
-- **Luna Foundry Multiagent** is installed and enabled in Cursor—prefer stamp **1.0.26243**
+- **Luna Foundry Multiagent** is installed and enabled in Cursor—prefer stamp **1.0.26250**
 - A **project folder** is open that *is* this climb
 - Plan includes **Agent** (Pro or current Agent-capable tier—not free-only limits)
 - Command Palette shows **Luna:** commands
@@ -36,7 +36,7 @@ Confirm each line. If not, finish that item first.
    - Deploys **`.github/`** (skills, agents, instructions).  
    - Writes **`.cursorrules`** at the project root (ritual + pointers into `.github`).  
    - Installs/refreshes shell under **`$HOME/etc`**.  
-4. Quiet check: both **`.cursorrules`** and **`.github/skills/macroflow`** exist. Open a **new** terminal.
+4. Quiet check: both **`.cursorrules`** and **`.github/skills`** (base-camp, route, summit) exist. Open a **new** terminal.
 
 If `.cursorrules` is missing, re-run Setup on the correct root—camp cannot be half a directory away.
 
@@ -46,7 +46,7 @@ If `.cursorrules` is missing, re-run Setup on the correct root—camp cannot be 
 
 1. Open **Agent** (or Composer—use the Agent-capable surface your plan includes).  
 2. One thread for this climb.  
-3. If Agent ignores the pack, point it at **`.cursorrules`**, **`.github/skills/macroflow`**, and agents under **`.github/agents`** (Luna, BaseCamp, Route, Summit).
+3. If Agent ignores the pack, point it at **`.cursorrules`**, **`.github/skills`**, and agents under **`.github/agents`** (Luna, BaseCamp, Route, Summit).
 
 Slash skills like `/base-camp` are **Grok Build**-style. In Cursor, send the **same intent as plain text** (or @-mention pack files if your workflow does that).
 
@@ -54,17 +54,17 @@ Slash skills like `/base-camp` are **Grok Build**-style. In Cursor, send the **s
 
 ---
 
-## Step 3 - Complete MacroFlow turn (product mode)
+## Step 3 - Complete the climb (product mode)
 
 Send each prompt in Cursor **Agent**. Terminal only for proof (3.5).  
-**Product mode:** skip Azure DevOps and Gnomah vault unless you ask. **No secrets** in Agent chat.
+**Product mode:** skip Azure DevOps and the studio vault unless you ask. **No secrets** in Agent chat.
 
 **Ritual:** Base Camp → Route → Waypoint → Summit → proof.
 
 ### 3.1 Base Camp
 
 ```text
-Read .cursorrules and .github/skills/macroflow (and agents if present). Confirm the Luna Foundry pack is present. Report gaps only. Skip Azure DevOps and Gnomah vault. Do not implement product work.
+Read .cursorrules and .github/skills (and agents if present). Confirm the Luna Foundry pack is present. Report gaps only. Skip Azure DevOps and the studio vault. Do not implement product work.
 ```
 
 ### 3.2 Route
@@ -72,7 +72,7 @@ Read .cursorrules and .github/skills/macroflow (and agents if present). Confirm 
 **Smoke job:**
 
 ```text
-Job: produce docs/Analysis/outputs/macroflow-turn-smoke.md with machine name, date, extension version, and the exact line "product mode MacroFlow turn OK". Draft title, purpose, 3–5 ACs, out-of-scope (no ADO). Interview only if needed. Stop for my Go. Do not implement.
+Job: produce docs/Analysis/outputs/climb-smoke.md with machine name, date, extension version, and the exact line "climb OK". Draft title, purpose, 3–5 ACs, out-of-scope (no ADO). Interview only if needed. Stop for my Go. Do not implement.
 ```
 
 **Wish climb:**
@@ -98,7 +98,7 @@ Waypoint Check: phase position, kit, gaps. Report NAB event type or none. Produc
 **Smoke:**
 
 ```text
-For the approved smoke job only: create folders if needed and write docs/Analysis/outputs/macroflow-turn-smoke.md with machine, date, extension version, and exact line "product mode MacroFlow turn OK". Verify against ACs. No PR, no issue post. Summarize proof paths.
+For the approved smoke job only: create folders if needed and write docs/Analysis/outputs/climb-smoke.md with machine, date, extension version, and exact line "climb OK". Verify against ACs. No PR, no issue post. Summarize proof paths.
 ```
 
 **Wish:**

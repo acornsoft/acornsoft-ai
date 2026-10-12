@@ -15,7 +15,7 @@ import { clearSessionMemory } from "./session-memory";
  *
  * refetchOnWindowFocus is OFF. The live preview iframe loses/gains visibility
  * constantly; the default (true) re-ran /get-session and the header treated
- * that as sign-out — Voice, Method, Gnomah, chip, and gear blinked.
+ * that as sign-out — Voice, Method, the studio, chip, and gear blinked.
  */
 export const authClient = createAuthClient({
   plugins: [genericOAuthClient()],

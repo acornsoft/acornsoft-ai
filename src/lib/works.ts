@@ -98,8 +98,8 @@ export const WORKS: WorkEntry[] = [
     ],
   },
   {
-    id: "gnomah-golf",
-    title: "Gnomah Golf",
+    id: "tuesday-golf",
+    title: "Tuesday-night golf league",
     kicker: "League app",
     lede: "Voice-first live scoring for weekly golf leagues — course, group, board.",
     ridge: "Custom .NET",
@@ -138,7 +138,7 @@ export const WORKS: WorkEntry[] = [
     title: "Luna Contact Center",
     kicker: "Contact center",
     lede: "D365 contact center utilities — form field analysis, search ring, keyboard macros — for enterprise desks.",
-    ridge: "Luna MacroFlow",
+    ridge: "Desk utilities",
     visibility: "owner",
     story: [
       "Debugging helpers and shared web resources for Dynamics 365 Contact Center implementations.",

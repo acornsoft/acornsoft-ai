@@ -3,7 +3,7 @@
  *
  * SiteHeader lives inside each page (not the root layout), so every navigation
  * unmounts it. A React ref dies with that unmount and the chrome blinks:
- * Voice, Method, Gnomah, the account chip, the settings gear.
+ * Voice, Method, the studio, the account chip, the settings gear.
  *
  * Cleared only on explicit sign-out. A background get-session miss is not logout.
  */

@@ -2,7 +2,7 @@
 
 You have a **summit**—something worth arriving at. **Climb Notes** teach the same idea: mountain first, kit second. **Luna** is your **Sherpa**—guidelines, direction, tools, waypoints, and planning. You keep the compass.
 
-Along the route she walks you through **MacroFlow**:
+Along the route she walks you through **the climb**:
 
 - **Base Camp** — Fit to leave? Gear, weather, rules.  
 - **Route** — One objective and what “arrived” means.  
@@ -15,13 +15,13 @@ Along the route she walks you through **MacroFlow**:
 
 If you are already using **Grok Build**, **GitHub Copilot**, **Cursor**, or **Claude** as a serious day-to-day partner—not a free teaser account—you are the person this is for. Luna does not ask you to switch tribes. It puts the same Climb Notes rhythm on the partner you already trust.
 
-**Once for every climber:** install [Luna Foundry Multiagent](https://marketplace.visualstudio.com/items?itemName=acornsoft.luna-foundry-multiagent) → open the project that *is* this climb → **Luna: Setup** → **Set up** → optionally **Finish with Grok** → open a **new** terminal if needed.  
+**Once for every climber:** install [Luna Foundry Multiagent](https://marketplace.visualstudio.com/items?itemName=acornsoft.luna-foundry-multiagent) → open the project that *is* this climb → **Luna: Setup (Copilot / Cursor / Grok)** → **Set up** → optionally **Finish with Grok** → open a **new** terminal if needed.  
 **Then only your ridge** (about three steps):
 
 - **I work in Grok Build** (SuperGrok or X Premium+) — TUI plus a side shell for proof.  
   → **[Trail map: Grok Build](/luna/grok-build)**
 
-- **I work in GitHub Copilot** (Pro or your company’s seat) — Chat agents and editor handoffs.  
+- **I work in GitHub Copilot** (Pro or your company’s seat) — same extension, secondary to Grok Build. Chat agents and editor handoffs.  
   → **[Trail map: Copilot](/luna/copilot)**
 
 - **I work in Cursor** (Pro with Agent) — Agent / Composer and the shared pack.  
@@ -30,7 +30,7 @@ If you are already using **Grok Build**, **GitHub Copilot**, **Cursor**, or **Cl
 - **I work with Claude** (Pro) — same pack through project files and instructions.  
   → **[Trail map: Claude](/luna/claude)**
 
-**No paid partner yet?** Free chat will not carry a MacroFlow climb. **Strongly recommended:** **[SuperGrok](https://grok.com/supergrok)** (~**$30/month**) for **Grok Build**—our primary ridge—then the [Grok Build trail map](/luna/grok-build). X Premium+ also includes Grok Build if that is already your world.
+**No paid host yet?** Free chat will not carry a full climb. **Strongly recommended:** **[SuperGrok](https://grok.com/supergrok)** (~**$30/month**) for **Grok Build**—our primary ridge—then the [Grok Build trail map](/luna/grok-build). X Premium+ also includes Grok Build if that is already your world. Copilot, Cursor, and Claude are secondary hosts of this same extension.
 
 ---
 

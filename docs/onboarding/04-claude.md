@@ -1,6 +1,6 @@
 # Trail map: Claude
 
-For people who already think with **Claude** (Pro is the practical floor for a real climb). There is **no** dedicated “Install Luna for Claude” command in the multiagent extension. You use Claude as the engine; Multiagent still lays the **same pack on disk** so Claude Code or a Claude Project can read it. You run one **complete MacroFlow turn** (Base Camp → Route → Waypoint → Summit) with proof; an optional second climb files a skill/feature wish.
+For people who already think with **Claude** (Pro is the practical floor for a real climb). This ridge is secondary to **Grok Build** and uses the same **Luna Foundry Multiagent** extension. There is no dedicated “Install Luna for Claude” command. You use Claude as the engine; Multiagent still lays the **same pack on disk** so Claude Code or a Claude Project can read it. You run one **complete climb** (Base Camp → Route → Waypoint → Summit) with proof; an optional second climb files a skill/feature wish.
 
 **Multiagent on this ridge:** portable pack (`.github/agents` + skills) + your Claude instructions—not Grok TUI slash menus, not Copilot’s agent picker.
 
@@ -28,20 +28,20 @@ Confirm each line. If not, finish that item first.
 ![Establish camp — pack on the project](/images/luna/trail-set-camp-setup.jpg)
 
 1. Open the project in **VS Code or Cursor**. Run **Luna: Setup (Copilot / Cursor / Grok)** → **Set up**.  
-2. Confirm on disk: **`.github/skills/macroflow`**, **`.github/agents`** (Luna, BaseCamp, Route, Summit). Setup also writes **`.cursorrules`** and may install shell under **`$HOME/etc`**—fine to ignore for Claude-only work.  
+2. Confirm on disk: **`.github/skills`** (base-camp, route, summit), **`.github/agents`** (Luna, BaseCamp, Route, Summit). Setup also writes **`.cursorrules`** and may install shell under **`$HOME/etc`**—fine to ignore for Claude-only work.  
 3. Open that **same** folder in **Claude Code**, or attach it as a **Claude Project** with those paths as knowledge.  
 4. Add short project instructions (Project settings or a local instructions file). Paste:
 
 ```text
-You are working a Luna MacroFlow climb. Ritual in order:
-(1) Base Camp — readiness; no secrets in chat; skip ADO and Gnomah unless I ask.
+You are working a Luna climb. Ritual in order:
+(1) Base Camp — readiness; no secrets in chat; skip ADO and the studio vault unless I ask.
 (2) Route — one job + Given/When/Then ACs; wait for Go.
 (3) Waypoint Check — NAB event type or none; hold or go; no TaskingReady / RequirementsToAdoReady unless enterprise is on and criteria are met.
 (4) Summit — implement with proof; no drive-by refactors.
-Luna is the Sherpa. Read .github/skills/macroflow and .github/agents when unsure. Announce Phase · Skill before significant work.
+Luna is the Sherpa. Read .github/skills and .github/agents when unsure. Announce Phase · Skill before significant work.
 ```
 
-If you cannot run Setup, copy at least `macroflow` skills and the four agents into the project from a teammate—camp still needs those files.
+If you cannot run Setup, copy the climb skills (base-camp, route, summit) and the four agents into the project from a teammate—camp still needs those files.
 
 ---
 
@@ -53,17 +53,17 @@ Open **Claude Code** or your **Project** on the folder that has **`.github`**. C
 
 ---
 
-## Step 3 - Complete MacroFlow turn (product mode)
+## Step 3 - Complete the climb (product mode)
 
 Send each prompt in **Claude**. Terminal only for proof (3.5).  
-**Product mode:** skip Azure DevOps and Gnomah vault unless you ask.
+**Product mode:** skip Azure DevOps and the studio vault unless you ask.
 
 **Ritual:** Base Camp → Route → Waypoint → Summit → proof.
 
 ### 3.1 Base Camp
 
 ```text
-Read .github/skills/macroflow and .github/agents. Confirm the Luna Foundry pack is present. Report gaps only. Skip Azure DevOps and Gnomah vault. Do not implement product work.
+Read .github/skills and .github/agents. Confirm the Luna Foundry pack is present. Report gaps only. Skip Azure DevOps and the studio vault. Do not implement product work.
 ```
 
 ### 3.2 Route
@@ -71,7 +71,7 @@ Read .github/skills/macroflow and .github/agents. Confirm the Luna Foundry pack 
 **Smoke job:**
 
 ```text
-Job: produce docs/Analysis/outputs/macroflow-turn-smoke.md with machine name, date, extension version, and the exact line "product mode MacroFlow turn OK". Draft title, purpose, 3–5 ACs, out-of-scope (no ADO). Interview only if needed. Stop for my Go. Do not implement.
+Job: produce docs/Analysis/outputs/climb-smoke.md with machine name, date, extension version, and the exact line "climb OK". Draft title, purpose, 3–5 ACs, out-of-scope (no ADO). Interview only if needed. Stop for my Go. Do not implement.
 ```
 
 **Wish climb:**
@@ -97,7 +97,7 @@ Waypoint Check: phase position, kit, gaps. Report NAB event type or none. Produc
 **Smoke:**
 
 ```text
-For the approved smoke job only: create folders if needed and write docs/Analysis/outputs/macroflow-turn-smoke.md with machine, date, extension version, and exact line "product mode MacroFlow turn OK". Verify against ACs. No PR, no issue post. Summarize proof paths.
+For the approved smoke job only: create folders if needed and write docs/Analysis/outputs/climb-smoke.md with machine, date, extension version, and exact line "climb OK". Verify against ACs. No PR, no issue post. Summarize proof paths.
 ```
 
 **Wish:**

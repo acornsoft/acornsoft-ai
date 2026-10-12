@@ -49,7 +49,7 @@ npm run climb-notes:publish -- status cn-001
    ```
 5. Keep the site dev process running so Markdown reloads.
 
-## Vault layout (local Gnomah import)
+## Vault layout (local studio import)
 
 | Folder | Role |
 | --- | --- |
@@ -58,7 +58,7 @@ npm run climb-notes:publish -- status cn-001
 | `foundation/` | Consumer Base Camp pack + studio path notes |
 | `archive/` | Reserved |
 
-Current catalog: **45** notes (3 engagement + 32 product + 10 foundation). Nested `*.md` files load into Gnomah.
+Current catalog: **45** notes (3 engagement + 32 product + 10 foundation). Nested `*.md` files load into Studio.
 
 ### Foundation pack (consumer + studio)
 

@@ -528,7 +528,7 @@ export function CanopyPage() {
 
   return (
     <div className="template-color-1 spybody ac-inbio ac-canopy ac-hero-stage">
-      <SiteHeader loginRedirect="/gnomah" />
+      <SiteHeader loginRedirect="studio" />
 
       <main className="main-page-wrapper cn-page canopy-page">
         <section className="cn-canopy-shell ac-hero-stage-panel">

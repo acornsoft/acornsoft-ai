@@ -14,9 +14,12 @@ export const getVoiceAccess = createServerFn({ method: "GET" })
     );
     const { getSql } = await import("@/lib/db");
 
-    // Local auth-off: allow so owner tooling remains usable in preview without OAuth.
+    // Dev-only auth-off bypass. Production builds fail closed (authOffAllowsOwner).
     if (!authConfigured && context.userId === DEV_USER_ID) {
-      return { allowed: true, viaX: false };
+      const { authOffAllowsOwner } = await import("@/lib/auth/studio-path.mjs");
+      if (authOffAllowsOwner()) {
+        return { allowed: true, viaX: false };
+      }
     }
 
     const sql = await getSql();

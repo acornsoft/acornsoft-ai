@@ -1,7 +1,7 @@
 /**
- * Optional async pull of Climb Notes from the Gnomah GitHub vault.
- * Requires GITHUB_TOKEN / GH_TOKEN / GNOMAH_GITHUB_TOKEN for private repos
- * and higher rate limits. Public trees may work unauthenticated.
+ * Optional async pull of Climb Notes from the studio GitHub vault.
+ * Requires a GitHub token for private repos and higher rate limits.
+ * Public trees may work unauthenticated.
  *
  * Server-only.
  */

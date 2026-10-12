@@ -53,7 +53,7 @@ Long-form always lives on **acornsoft.ai**. X is a short cite with a link back. 
 | --- | --- | --- |
 | Anyone | **Read** public notes | `/climb-notes`, Canopy |
 | Anyone | **Request** a new note or update | Request form / mail / owner channel (studio reviews) |
-| Studio owner | **Draft / edit** | Gnomah editor |
+| Studio owner | **Draft / edit** | Studio editor |
 | Studio owner | **Publish / unpublish** | Publish registry (draft → pending → approved → published) |
 | Studio owner | **Canopy schedule** | `onCanopy` + `canopyAt` |
 | Studio owner | **X cite** | After published: short post linking to site |
@@ -64,7 +64,7 @@ Send: **are we fit to leave**, **who it helps**, **related service** (if any), *
 
 ### Update (studio)
 
-Edit vault markdown or Gnomah → same four headings → version bump in registry when material → re-publish if already public.
+Edit vault markdown or Studio → same four headings → version bump in registry when material → re-publish if already public.
 
 ### New note (studio)
 

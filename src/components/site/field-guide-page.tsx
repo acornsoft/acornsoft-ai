@@ -59,7 +59,7 @@ function RecipeCard({ recipe }: { recipe: FieldRecipe }) {
 
 export function FieldGuidePage() {
   return (
-    <SiteChrome loginRedirect="/gnomah">
+    <SiteChrome loginRedirect="studio">
       <div className="ac-service-page ac-field-guide ac-page-top">
         <div className="ac-service-stack">
           <header className="ac-service-head">

@@ -1,6 +1,6 @@
 # Trail map: GitHub Copilot
 
-For people who already work in **GitHub Copilot** day to day (Pro or a company seat). You do **not** need Grok for this ridge. Luna and MacroFlow join you in **Copilot Chat**—same climb language, familiar editor. You run one **complete MacroFlow turn** (Base Camp → Route → Waypoint → Summit) with proof; an optional second climb files a skill/feature wish.
+For people who already work in **GitHub Copilot** day to day (Pro or a company seat). This ridge is secondary to **Grok Build** and uses the same **Luna Foundry Multiagent** extension. Luna joins you in **Copilot Chat**—same climb language, familiar editor. You run one **complete climb** (Base Camp → Route → Waypoint → Summit) with proof; an optional second climb files a skill/feature wish.
 
 **Multiagent on this ridge:** the Luna **four custom agents** (Luna, BaseCamp, Route, Summit) after Setup—not Grok slash menus.
 
@@ -8,7 +8,7 @@ For people who already work in **GitHub Copilot** day to day (Pro or a company s
 
 Confirm each line. If not, finish that item first.
 
-- **Luna Foundry Multiagent** is installed and enabled in VS Code (or Cursor if that is your host)—prefer stamp **1.0.26243**
+- **Luna Foundry Multiagent** is installed and enabled in VS Code (or Cursor if that is your host)—prefer stamp **1.0.26250**
 - A **project folder** is open that *is* this climb
 - **GitHub Copilot** and **Copilot Chat** are signed in
 - Plan can run **sustained Chat / custom agents** (Pro or org seat—not free-only teaser limits)
@@ -37,7 +37,7 @@ Confirm each line. If not, finish that item first.
    - Agents on disk: **Luna**, **BaseCamp**, **Route**, **Summit**.  
    - Installs/refreshes shell under **`$HOME/etc`** (open a **new** terminal afterward).  
    - Sets workspace chat settings to prefer **`.github/agents`**.  
-4. Quiet check: Explorer shows **`.github/agents`** and **`.github/skills/macroflow`**.
+4. Quiet check: Explorer shows **`.github/agents`** and **`.github/skills`** (base-camp, route, summit).
 
 If `.github` is missing, re-run Setup on the real workspace root.
 
@@ -58,10 +58,10 @@ Copilot may not treat `/base-camp` as a Grok-style slash skill. Prefer: pick the
 
 ---
 
-## Step 3 - Complete MacroFlow turn (product mode)
+## Step 3 - Complete the climb (product mode)
 
 Send each prompt in **Copilot Chat**. Terminal only for proof (3.5).  
-**Product mode:** skip Azure DevOps and Gnomah vault unless you ask. **No secrets** in Chat.
+**Product mode:** skip Azure DevOps and the studio vault unless you ask. **No secrets** in Chat.
 
 **Ritual:** Base Camp → Route → Waypoint → Summit → proof.
 
@@ -70,7 +70,7 @@ Send each prompt in **Copilot Chat**. Terminal only for proof (3.5).
 With agent **Base Camp** (or **Luna**), send:
 
 ```text
-Confirm the Luna Foundry pack is present under .github (skills/macroflow and agents Luna, BaseCamp, Route, Summit). Report gaps only. Skip Azure DevOps and Gnomah vault. Do not implement product work.
+Confirm the Luna Foundry pack is present under .github (skills for base-camp, route, and summit, and agents Luna, BaseCamp, Route, Summit). Report gaps only. Skip Azure DevOps and the studio vault. Do not implement product work.
 ```
 
 ### 3.2 Route
@@ -80,7 +80,7 @@ Switch to agent **Route** if listed (or stay on Luna).
 **Smoke job (prove the turn):**
 
 ```text
-Job: produce docs/Analysis/outputs/macroflow-turn-smoke.md with machine name, date, extension version, and the exact line "product mode MacroFlow turn OK". Draft title, purpose, 3–5 ACs, out-of-scope (no ADO). Interview only if needed. Stop for my Go. Do not implement.
+Job: produce docs/Analysis/outputs/climb-smoke.md with machine name, date, extension version, and the exact line "climb OK". Draft title, purpose, 3–5 ACs, out-of-scope (no ADO). Interview only if needed. Stop for my Go. Do not implement.
 ```
 
 **Wish climb:**
@@ -110,7 +110,7 @@ Switch to agent **Summit** if listed.
 **Smoke:**
 
 ```text
-For the approved smoke job only: create folders if needed and write docs/Analysis/outputs/macroflow-turn-smoke.md with machine, date, extension version, and exact line "product mode MacroFlow turn OK". Verify against ACs. No PR, no issue post. Summarize proof paths.
+For the approved smoke job only: create folders if needed and write docs/Analysis/outputs/climb-smoke.md with machine, date, extension version, and exact line "climb OK". Verify against ACs. No PR, no issue post. Summarize proof paths.
 ```
 
 **Wish:**

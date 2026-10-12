@@ -16,7 +16,7 @@ Companion: [WRITING-STYLE.md](./WRITING-STYLE.md).
 | Public journal | **Required** |
 | Canopy Climb Notes lane | **Required** |
 | X post text (cite) | **Required** (even shorter) |
-| Studio / Gnomah drafts | Recommended |
+| Studio drafts | Recommended |
 | Internal process notes | Optional |
 
 ---
@@ -110,7 +110,7 @@ Add new verbs only when plain English cannot say the same thing. Log them in the
 
 ### Allowed product names (no expansion required)
 
-`Climb Notes` · `Acornsoft` · `Canopy` · `Gnomah` · `Luna` · `X` · `Luna Foundry Multiagent`
+`Climb Notes` · `Acornsoft` · `Canopy` · `Studio` · `Luna` · `X` · `Luna Foundry Multiagent`
 
 First mention of a rare product: one short plain phrase, then the name.
 
@@ -168,7 +168,7 @@ First mention of a rare product: one short plain phrase, then the name.
 1. License / adopt the official ASD-STE100 dictionary for your issue.  
 2. Replace this **starter** verb list with the official approved verbs.  
 3. Expand glossary with STE-approved alternatives for Acornsoft product terms.  
-4. Add automated lint (sentence length, banned list) in Gnomah publish gate.  
+4. Add automated lint (sentence length, banned list) in the Studio publish gate.  
 5. Train authors: one page STE + Climb Notes examples (000 as reference).  
 
 Until then: **this checklist + WRITING-STYLE.md** are the publish bar for public notes.

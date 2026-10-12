@@ -123,7 +123,7 @@ Beyond keybinds — what makes “Grok inside VS Code” feel first-class for re
 | Setup → shell `$HOME/etc` | Yes |
 | Profile heal on activation | Yes |
 
-### High value (status for 1.0.26243)
+### High value (status for 1.0.26250)
 
 | # | Convenience | Why | Status |
 |---|-------------|-----|--------|

@@ -131,7 +131,7 @@ export const contributeRows: ContributeRow[] = [
   {
     who: "Studio owner",
     action: "Draft / edit",
-    how: "Gnomah or vault markdown (four headings)",
+    how: "Studio vault markdown (four headings)",
   },
   {
     who: "Studio owner",
