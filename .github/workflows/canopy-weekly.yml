@@ -6,10 +6,12 @@
 #   X_BEARER_TOKEN  App-only Bearer from developer.x.com
 name: Canopy weekly Radar
 
+# PAUSED 2026-10-22: X_BEARER_TOKEN is not set and X posting for
+# @acornsoftai is shut down. Schedule removed; run by hand only.
+# To restore: add the secret, then put back
+#   schedule:
+#     - cron: "0 13 * * 1"   # Monday 09:00 America/New_York (EDT)
 on:
-  schedule:
-    # Monday 13:00 UTC = 09:00 America/New_York (EDT)
-    - cron: "0 13 * * 1"
   workflow_dispatch:
     inputs:
       force:
