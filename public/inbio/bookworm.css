@@ -85,7 +85,7 @@
 }
 
 .bw-study {
-  padding: 28px 28px 12px 0;
+  padding: 28px 28px 12px;
 }
 
 .bw-findings {
@@ -160,13 +160,6 @@
 .bw-tagline,
 .bw-soon {
   margin: 0;
-}
-
-/* The study border is 1px. Pull the column onto the panel's outer edge. */
-.bw-study > .bw-sample,
-.bw-study > .bw-study-meta,
-.bw-study > .bw-findings {
-  margin-left: -1px;
 }
 
 .bw-source {
@@ -319,6 +312,10 @@
 
   .bw-hero {
     padding: 28px;
+  }
+
+  .bw-study {
+    padding-left: 20px;
   }
 }
 
