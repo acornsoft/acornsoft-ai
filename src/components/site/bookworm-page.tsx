@@ -80,8 +80,8 @@ export function BookwormPage() {
               <ul className="bw-findings">
                 {STUDY_FINDINGS.map((item) => (
                   <li key={item.label} className="bw-finding">
-                    <span className="bw-finding-label">{item.label}</span>
                     <span className="bw-finding-figure">{item.figure}</span>
+                    <span className="bw-finding-label">{item.label}</span>
                   </li>
                 ))}
               </ul>

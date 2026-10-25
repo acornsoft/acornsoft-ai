@@ -12,6 +12,6 @@ export const Route = createFileRoute("/bookworm")({
           "Bookworm turns X bookmarks into a searchable, tagged library and a daily habit of revisiting what you saved.",
       },
     ],
-    links: [{ rel: "stylesheet", href: "/inbio/bookworm.css?v=2" }],
+    links: [{ rel: "stylesheet", href: "/inbio/bookworm.css?v=3" }],
   }),
 });

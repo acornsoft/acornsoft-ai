@@ -2,18 +2,21 @@
   Bookworm page tokens — adjust these.
   Maroon #4F2001 and gold #FF9900 are the page pair.
 
+  The site root font-size is 10px, so 1rem is 10px. Sizes on this page are px.
+
   Contrast: gold #FF9900 on a light fill fails WCAG (about 2.1:1 on white).
-  Use gold for text, rules, and marks only on the dark panels below
-  (about 9.6:1 on #1C0C04). Body text on those panels is #F4EFE8.
+  Gold is for text and rules only, never a fill behind text.
+  Gold #FF9900 on #1C0C04 is 8.9:1.
+  Body copy is #E4D8CC. Headings and labels are #F4EFE8.
   Do not set --bw-gold as a text color on a light background.
 */
 .bw {
   --bw-maroon: #4f2001;
-  --bw-maroon-deep: #1c0c04;
+  --bw-maroon-deep: #381702;
   --bw-gold: #ff9900;
   --bw-ink: #f4efe8;
   --bw-muted: #e4d8cc;
-  --bw-faint: rgba(244, 239, 232, 0.72);
+  --bw-faint: #b8ac9c;
   --bw-line: rgba(255, 153, 0, 0.42);
   --bw-panel: #1c0c04;
   --bw-radius: 18px;
@@ -21,15 +24,11 @@
   font-family: var(--font-ui), "Source Sans 3", sans-serif;
 }
 
-.ac-hero-stage .bw.ac-service-page {
-  color: var(--bw-ink);
-}
-
 .bw.ac-service-page .bw-stack {
-  max-width: 880px !important;
+  max-width: 1040px !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  gap: 28px !important;
+  gap: 72px !important;
 }
 
 .bw-panel {
@@ -45,168 +44,76 @@
   backdrop-filter: blur(10px);
 }
 
-.bw-kicker {
-  margin: 0;
-  font-family: var(--font-ui), "Source Sans 3", sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  line-height: 1.2;
-  text-transform: uppercase;
-  color: var(--bw-gold);
+.bw-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.bw-title {
+/* Heads sit on the page background. The panel is the block underneath. */
+.bw-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin: 0;
-  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
-  font-size: clamp(3rem, 2rem + 4vw, 5.25rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-  color: var(--bw-ink);
-}
-
-.bw-heading {
-  margin: 0;
-  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
-  font-size: clamp(1.7rem, 1.3rem + 1.4vw, 2.25rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--bw-ink);
-}
-
-.bw-rule {
-  display: block;
-  width: 6.5rem;
-  height: 3px;
-  margin: 4px 0;
-  border-radius: 999px;
-  background: var(--bw-gold);
-  transform-origin: left center;
-  animation: bw-draw 0.7s ease both;
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
 }
 
 .bw-hero {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: clamp(28px, 4vw, 48px);
+  padding: 64px;
 }
 
-.bw-lede {
-  margin: 0;
-  max-width: 38rem;
-  font-size: clamp(1.15rem, 1rem + 0.5vw, 1.4rem);
-  font-weight: 600;
-  line-height: 1.45;
-  color: var(--bw-ink);
-}
-
-.bw-tagline {
-  margin: 0;
-  max-width: 36rem;
-  font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.25rem);
-  font-style: italic;
-  font-weight: 600;
-  line-height: 1.45;
-  color: var(--bw-gold);
-}
-
-.bw-section {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.bw-section-head {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 18px 22px;
-  background-color: var(--bw-panel);
-  background-image: linear-gradient(
-    165deg,
-    rgba(79, 32, 1, 0.55) 0%,
-    rgba(28, 12, 4, 0.2) 100%
-  );
-  border: 1px solid rgba(255, 153, 0, 0.28);
-  border-radius: var(--bw-radius);
-}
-
-.bw-sample {
-  display: inline-flex;
-  align-items: center;
-  margin: 0 0 14px;
-  padding: 6px 12px;
+.bw-rule {
+  display: block;
+  width: 104px;
+  height: 3px;
+  margin: 4px 0;
+  border: 0;
   border-radius: 999px;
-  border: 1px solid var(--bw-line);
-  background: var(--bw-maroon);
-  color: var(--bw-ink);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1.3;
+  background: var(--bw-gold);
+  transform-origin: left center;
+  animation: bw-draw 0.7s ease both;
 }
 
 .bw-study {
-  padding: 22px 22px 8px;
-}
-
-.bw-get {
-  padding: 26px 22px 22px;
-}
-
-.bw-study-meta {
-  margin: 0 0 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--bw-muted);
-}
-
-.bw-dot {
-  margin: 0 0.45rem;
-  color: var(--bw-gold);
+  padding: 28px 28px 12px;
 }
 
 .bw-findings {
   list-style: none;
-  margin: 0;
-  padding: 0 0 10px;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .bw-finding {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 0;
-  border-top: 1px solid rgba(255, 153, 0, 0.22);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 153, 0, 0.22);
 }
 
-.bw-finding-label {
-  font-size: 1.05rem;
-  line-height: 1.35;
-  color: var(--bw-ink);
-}
-
-.bw-finding-figure {
-  flex: 0 0 auto;
-  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  color: var(--bw-gold);
+.bw-finding:last-child {
+  border-bottom: none;
 }
 
 .bw-capabilities {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
 
 .bw-capability {
@@ -214,7 +121,7 @@
   align-items: flex-start;
   gap: 16px;
   margin: 0;
-  padding: 18px 20px;
+  padding: 20px;
   transition:
     border-color 0.2s ease,
     transform 0.2s ease;
@@ -225,74 +132,54 @@
   transform: translateY(-2px);
 }
 
-.bw-capability-index {
-  flex: 0 0 auto;
-  width: 2rem;
-  height: 2rem;
+.bw-get {
+  padding: 32px;
+  border: 1px solid rgba(255, 153, 0, 0.55);
+}
+
+.bw-sample {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  width: fit-content;
+  margin: 0 0 14px;
+  padding: 6px 12px;
   border-radius: 999px;
-  background: var(--bw-maroon);
   border: 1px solid var(--bw-line);
-  color: var(--bw-gold);
-  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.bw-capability-title {
-  margin: 0 0 4px;
-  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  line-height: 1.25;
+  background: var(--bw-maroon);
   color: var(--bw-ink);
 }
 
-.bw-copy {
+.bw-study-meta,
+.bw-source,
+.bw-copy,
+.bw-lede,
+.bw-tagline,
+.bw-soon {
   margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.55;
-  color: var(--bw-muted);
-}
-
-.bw-copy-lead {
-  font-size: 1.125rem;
-  color: var(--bw-ink);
 }
 
 .bw-source {
-  margin: 16px 0 0;
-  font-size: 0.98rem;
-  line-height: 1.5;
-  color: var(--bw-muted);
+  margin-top: 16px;
 }
 
 .bw-source a {
-  color: var(--bw-gold);
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
 }
 
-.bw-source a:hover {
-  color: var(--bw-ink);
-}
-
-.bw-source a:focus-visible,
-.bw-capability:focus-within {
-  outline: 2px solid var(--bw-gold);
-  outline-offset: 3px;
-}
-
 .bw-soon {
-  margin: 18px 0 0;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.4;
-  color: var(--bw-faint);
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 20px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 153, 0, 0.42);
+  background: #381702;
+  cursor: default;
+  text-decoration: none;
 }
 
 .bw-rise {
@@ -331,55 +218,52 @@
   }
 }
 
-@media (max-width: 640px) {
-  .bw-hero {
-    padding: 24px 18px;
+@media (min-width: 768px) {
+  .bw-capabilities {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .bw-section .bw-panel,
-  .bw-get,
+  .bw-capability:first-child {
+    grid-column: 1 / -1;
+  }
+
   .bw-capability {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding: 24px;
+  }
+}
+
+@media (min-width: 900px) {
+  .bw-findings {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .bw-finding {
-    align-items: flex-start;
+    padding: 8px 22px 22px 0;
+    border-right: 1px solid rgba(255, 153, 0, 0.22);
+    border-bottom: 1px solid rgba(255, 153, 0, 0.22);
   }
 
-  .bw-finding-figure {
-    font-size: 1.15rem;
+  .bw-finding:nth-child(3n),
+  .bw-finding:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .bw-finding:nth-child(n + 4) {
+    border-bottom: none;
+    padding-bottom: 4px;
   }
 }
 
-/*
-  The shared hero stage forces .ac-hero-stage p/li to #f2f4f7 !important.
-  Re-apply gold only on dark panels. Do not use this gold on a light fill.
-*/
-.ac-hero-stage .bw .bw-kicker,
-.ac-hero-stage .bw .bw-tagline,
-.ac-hero-stage .bw .bw-finding-figure,
-.ac-hero-stage .bw .bw-capability-index,
-.ac-hero-stage .bw .bw-source a,
-.ac-hero-stage .bw .bw-dot {
-  color: var(--bw-gold) !important;
-  text-shadow: none !important;
-}
+@media (max-width: 640px) {
+  .bw.ac-service-page .bw-stack {
+    gap: 48px !important;
+  }
 
-.ac-hero-stage .bw .bw-source a:hover {
-  color: var(--bw-ink) !important;
-}
-
-.ac-hero-stage .bw .bw-title,
-.ac-hero-stage .bw .bw-heading,
-.ac-hero-stage .bw .bw-capability-title,
-.ac-hero-stage .bw .bw-lede,
-.ac-hero-stage .bw .bw-copy,
-.ac-hero-stage .bw .bw-finding-label,
-.ac-hero-stage .bw .bw-sample,
-.ac-hero-stage .bw .bw-study-meta,
-.ac-hero-stage .bw .bw-soon {
-  text-shadow: none !important;
+  .bw-hero {
+    padding: 28px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -392,5 +276,240 @@
 
   .bw-capability:hover {
     transform: none;
+  }
+}
+
+/*
+  Shared hero CSS forces .ac-hero-stage p/li to #F2F4F7 and body * to
+  Source Sans 3, both with !important. Re-apply this page's type and color here.
+  Gold stays text and rules. --bw-muted and --bw-faint are solid colors.
+*/
+.ac-hero-stage .bw .bw-kicker {
+  margin: 0;
+  font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase;
+  color: var(--bw-gold) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
+}
+
+.ac-hero-stage .bw .bw-title {
+  margin: 0;
+  font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
+  font-size: clamp(44px, 32px + 4vw, 80px) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1 !important;
+  color: var(--bw-ink) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-lede {
+  max-width: 34em;
+  font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  color: var(--bw-ink) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-tagline {
+  max-width: 34em;
+  font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
+  font-size: 18px !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+  line-height: 1.45 !important;
+  color: var(--bw-gold) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-heading {
+  margin: 0;
+  font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
+  font-size: 34px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.15 !important;
+  color: var(--bw-ink) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
+}
+
+.ac-hero-stage .bw .bw-sample {
+  font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1.3 !important;
+  color: var(--bw-ink) !important;
+  background: var(--bw-maroon) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-study-meta {
+  font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.45 !important;
+  color: var(--bw-faint) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-dot {
+  margin: 0 0.45em;
+  color: var(--bw-gold) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-finding-label {
+  font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  line-height: 1.45 !important;
+  color: var(--bw-ink) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-finding-figure {
+  font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em !important;
+  line-height: 1 !important;
+  color: var(--bw-gold) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-capability-index {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--bw-line);
+  background: var(--bw-maroon) !important;
+  font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  color: var(--bw-gold) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw h3.bw-capability-title {
+  margin: 0 0 4px;
+  font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.3 !important;
+  color: var(--bw-ink) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-copy {
+  max-width: 65ch;
+  font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+  color: var(--bw-muted) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-copy-lead {
+  max-width: 65ch;
+  font-size: 19px !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  color: var(--bw-ink) !important;
+}
+
+.ac-hero-stage .bw .bw-source {
+  font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--bw-muted) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-source a {
+  color: var(--bw-gold) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-source a:hover {
+  color: var(--bw-ink) !important;
+}
+
+.ac-hero-stage .bw .bw-source a:focus-visible,
+.ac-hero-stage .bw .bw-capability:focus-within {
+  outline: 2px solid var(--bw-gold);
+  outline-offset: 3px;
+}
+
+.ac-hero-stage .bw .bw-soon {
+  font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0 !important;
+  color: var(--bw-ink) !important;
+  background: #381702 !important;
+  text-shadow: none !important;
+  cursor: default !important;
+}
+
+@media (max-width: 640px) {
+  .ac-hero-stage .bw .bw-kicker {
+    font-size: 12px !important;
+  }
+
+  .ac-hero-stage .bw .bw-lede {
+    font-size: 18px !important;
+  }
+
+  .ac-hero-stage .bw .bw-tagline {
+    font-size: 16px !important;
+  }
+
+  .ac-hero-stage .bw .bw-heading {
+    font-size: 26px !important;
+  }
+
+  .ac-hero-stage .bw .bw-study-meta {
+    font-size: 14px !important;
+  }
+
+  .ac-hero-stage .bw .bw-finding-label {
+    font-size: 16px !important;
+  }
+
+  .ac-hero-stage .bw .bw-finding-figure {
+    font-size: 24px !important;
+  }
+
+  .ac-hero-stage .bw h3.bw-capability-title {
+    font-size: 18px !important;
+  }
+
+  .ac-hero-stage .bw .bw-copy {
+    font-size: 16px !important;
+  }
+
+  .ac-hero-stage .bw .bw-copy-lead {
+    font-size: 17px !important;
+  }
+
+  .ac-hero-stage .bw .bw-source {
+    font-size: 14px !important;
   }
 }
