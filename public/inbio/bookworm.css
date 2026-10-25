@@ -50,14 +50,16 @@
   gap: 20px;
 }
 
-/* Heads sit on the page background. The panel is the block underneath. */
+/* Heads sit on the hero. A scrim keeps the kicker at AA over the bright parts. */
 .bw-section-head {
   display: flex;
   flex-direction: column;
+  align-self: flex-start;
   gap: 8px;
+  max-width: 100%;
   margin: 0;
-  padding: 0;
-  background: none;
+  padding: 8px 12px;
+  background-color: rgba(26, 20, 16, 0.6);
   border: 0;
   box-shadow: none;
 }
@@ -99,7 +101,8 @@
   align-items: flex-start;
   gap: 6px;
   margin: 0;
-  padding: 16px 0;
+  padding: 20px 24px;
+  border: 0;
   border-bottom: 1px solid rgba(255, 153, 0, 0.22);
 }
 
@@ -232,27 +235,60 @@
   }
 }
 
-@media (min-width: 900px) {
+/* 640–1023: two columns. Item 5 fills the last row. Rules stay between cells. */
+@media (min-width: 640px) {
   .bw-findings {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .bw-finding {
-    padding: 8px 22px 22px 0;
+    padding: 20px 24px;
     border-right: 1px solid rgba(255, 153, 0, 0.22);
     border-bottom: 1px solid rgba(255, 153, 0, 0.22);
   }
 
-  .bw-finding:nth-child(3n),
-  .bw-finding:last-child {
+  .bw-finding:nth-child(2n) {
     border-right: none;
-    padding-right: 0;
+  }
+
+  .bw-finding:nth-child(5) {
+    grid-column: 1 / -1;
+    border-right: none;
+    border-bottom: none;
+  }
+}
+
+/* 1024+: six tracks. 2+2+2 on the first row, 3+3 on the second. */
+@media (min-width: 1024px) {
+  .bw-findings {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .bw-finding {
+    padding: 20px 24px;
+    border-right: 1px solid rgba(255, 153, 0, 0.22);
+    border-bottom: 1px solid rgba(255, 153, 0, 0.22);
+  }
+
+  .bw-finding:nth-child(-n + 3) {
+    grid-column: span 2;
   }
 
   .bw-finding:nth-child(n + 4) {
+    grid-column: span 3;
     border-bottom: none;
-    padding-bottom: 4px;
+  }
+
+  /* The 640px rule clears border-right on even items. Put those rules back. */
+  .bw-finding:nth-child(2),
+  .bw-finding:nth-child(4) {
+    border-right: 1px solid rgba(255, 153, 0, 0.22);
+  }
+
+  .bw-finding:nth-child(3),
+  .bw-finding:nth-child(5) {
+    border-right: none;
   }
 }
 
