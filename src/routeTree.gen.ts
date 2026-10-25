@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as BookwormRouteImport } from './routes/bookworm'
 import { Route as CanopyRouteImport } from './routes/canopy'
 import { Route as ClimbNotesRouteImport } from './routes/climb-notes'
 import { Route as CorporateRouteImport } from './routes/corporate'
@@ -43,6 +44,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookwormRoute = BookwormRouteImport.update({
+  id: '/bookworm',
+  path: '/bookworm',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CanopyRoute = CanopyRouteImport.update({
@@ -164,6 +170,7 @@ const DocsOnboardingSplatRoute = DocsOnboardingSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/bookworm': typeof BookwormRoute
   '/canopy': typeof CanopyRoute
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
@@ -191,6 +198,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/bookworm': typeof BookwormRoute
   '/canopy': typeof CanopyRoute
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
@@ -217,6 +225,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/bookworm': typeof BookwormRoute
   '/canopy': typeof CanopyRoute
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
@@ -246,6 +255,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/bookworm'
     | '/canopy'
     | '/climb-notes'
     | '/corporate'
@@ -273,6 +283,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/bookworm'
     | '/canopy'
     | '/climb-notes'
     | '/corporate'
@@ -298,6 +309,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/bookworm'
     | '/canopy'
     | '/climb-notes'
     | '/corporate'
@@ -326,6 +338,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BookwormRoute: typeof BookwormRoute
   CanopyRoute: typeof CanopyRoute
   ClimbNotesRoute: typeof ClimbNotesRoute
   CorporateRoute: typeof CorporateRoute
@@ -360,6 +373,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookworm': {
+      id: '/bookworm'
+      path: '/bookworm'
+      fullPath: '/bookworm'
+      preLoaderRoute: typeof BookwormRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/canopy': {
@@ -565,6 +585,7 @@ const DocsOnboardingRouteWithChildren = DocsOnboardingRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BookwormRoute: BookwormRoute,
   CanopyRoute: CanopyRoute,
   ClimbNotesRoute: ClimbNotesRoute,
   CorporateRoute: CorporateRoute,

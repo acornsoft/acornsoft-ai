@@ -1,0 +1,396 @@
+/*
+  Bookworm page tokens — adjust these.
+  Maroon #4F2001 and gold #FF9900 are the page pair.
+
+  Contrast: gold #FF9900 on a light fill fails WCAG (about 2.1:1 on white).
+  Use gold for text, rules, and marks only on the dark panels below
+  (about 9.6:1 on #1C0C04). Body text on those panels is #F4EFE8.
+  Do not set --bw-gold as a text color on a light background.
+*/
+.bw {
+  --bw-maroon: #4f2001;
+  --bw-maroon-deep: #1c0c04;
+  --bw-gold: #ff9900;
+  --bw-ink: #f4efe8;
+  --bw-muted: #e4d8cc;
+  --bw-faint: rgba(244, 239, 232, 0.72);
+  --bw-line: rgba(255, 153, 0, 0.42);
+  --bw-panel: #1c0c04;
+  --bw-radius: 18px;
+  color: var(--bw-ink);
+  font-family: var(--font-ui), "Source Sans 3", sans-serif;
+}
+
+.ac-hero-stage .bw.ac-service-page {
+  color: var(--bw-ink);
+}
+
+.bw.ac-service-page .bw-stack {
+  max-width: 880px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  gap: 28px !important;
+}
+
+.bw-panel {
+  background-color: var(--bw-panel);
+  background-image: linear-gradient(
+    165deg,
+    rgba(79, 32, 1, 0.55) 0%,
+    rgba(28, 12, 4, 0.2) 100%
+  );
+  border: 1px solid rgba(255, 153, 0, 0.28);
+  border-radius: var(--bw-radius);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(10px);
+}
+
+.bw-kicker {
+  margin: 0;
+  font-family: var(--font-ui), "Source Sans 3", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--bw-gold);
+}
+
+.bw-title {
+  margin: 0;
+  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
+  font-size: clamp(3rem, 2rem + 4vw, 5.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--bw-ink);
+}
+
+.bw-heading {
+  margin: 0;
+  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
+  font-size: clamp(1.7rem, 1.3rem + 1.4vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--bw-ink);
+}
+
+.bw-rule {
+  display: block;
+  width: 6.5rem;
+  height: 3px;
+  margin: 4px 0;
+  border-radius: 999px;
+  background: var(--bw-gold);
+  transform-origin: left center;
+  animation: bw-draw 0.7s ease both;
+}
+
+.bw-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(28px, 4vw, 48px);
+}
+
+.bw-lede {
+  margin: 0;
+  max-width: 38rem;
+  font-size: clamp(1.15rem, 1rem + 0.5vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--bw-ink);
+}
+
+.bw-tagline {
+  margin: 0;
+  max-width: 36rem;
+  font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.25rem);
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--bw-gold);
+}
+
+.bw-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bw-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 22px;
+  background-color: var(--bw-panel);
+  background-image: linear-gradient(
+    165deg,
+    rgba(79, 32, 1, 0.55) 0%,
+    rgba(28, 12, 4, 0.2) 100%
+  );
+  border: 1px solid rgba(255, 153, 0, 0.28);
+  border-radius: var(--bw-radius);
+}
+
+.bw-sample {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--bw-line);
+  background: var(--bw-maroon);
+  color: var(--bw-ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+}
+
+.bw-study {
+  padding: 22px 22px 8px;
+}
+
+.bw-get {
+  padding: 26px 22px 22px;
+}
+
+.bw-study-meta {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bw-muted);
+}
+
+.bw-dot {
+  margin: 0 0.45rem;
+  color: var(--bw-gold);
+}
+
+.bw-findings {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 10px;
+}
+
+.bw-finding {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 153, 0, 0.22);
+}
+
+.bw-finding-label {
+  font-size: 1.05rem;
+  line-height: 1.35;
+  color: var(--bw-ink);
+}
+
+.bw-finding-figure {
+  flex: 0 0 auto;
+  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--bw-gold);
+}
+
+.bw-capabilities {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bw-capability {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 0;
+  padding: 18px 20px;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.bw-capability:hover {
+  border-color: rgba(255, 153, 0, 0.55);
+  transform: translateY(-2px);
+}
+
+.bw-capability-index {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--bw-maroon);
+  border: 1px solid var(--bw-line);
+  color: var(--bw-gold);
+  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.bw-capability-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--bw-ink);
+}
+
+.bw-copy {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--bw-muted);
+}
+
+.bw-copy-lead {
+  font-size: 1.125rem;
+  color: var(--bw-ink);
+}
+
+.bw-source {
+  margin: 16px 0 0;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--bw-muted);
+}
+
+.bw-source a {
+  color: var(--bw-gold);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.bw-source a:hover {
+  color: var(--bw-ink);
+}
+
+.bw-source a:focus-visible,
+.bw-capability:focus-within {
+  outline: 2px solid var(--bw-gold);
+  outline-offset: 3px;
+}
+
+.bw-soon {
+  margin: 18px 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--bw-faint);
+}
+
+.bw-rise {
+  animation: bw-rise 0.6s ease both;
+}
+
+.bw-stack > .bw-rise:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.bw-stack > .bw-rise:nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.bw-stack > .bw-rise:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+@keyframes bw-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes bw-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .bw-hero {
+    padding: 24px 18px;
+  }
+
+  .bw-section .bw-panel,
+  .bw-get,
+  .bw-capability {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .bw-finding {
+    align-items: flex-start;
+  }
+
+  .bw-finding-figure {
+    font-size: 1.15rem;
+  }
+}
+
+/*
+  The shared hero stage forces .ac-hero-stage p/li to #f2f4f7 !important.
+  Re-apply gold only on dark panels. Do not use this gold on a light fill.
+*/
+.ac-hero-stage .bw .bw-kicker,
+.ac-hero-stage .bw .bw-tagline,
+.ac-hero-stage .bw .bw-finding-figure,
+.ac-hero-stage .bw .bw-capability-index,
+.ac-hero-stage .bw .bw-source a,
+.ac-hero-stage .bw .bw-dot {
+  color: var(--bw-gold) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-source a:hover {
+  color: var(--bw-ink) !important;
+}
+
+.ac-hero-stage .bw .bw-title,
+.ac-hero-stage .bw .bw-heading,
+.ac-hero-stage .bw .bw-capability-title,
+.ac-hero-stage .bw .bw-lede,
+.ac-hero-stage .bw .bw-copy,
+.ac-hero-stage .bw .bw-finding-label,
+.ac-hero-stage .bw .bw-sample,
+.ac-hero-stage .bw .bw-study-meta,
+.ac-hero-stage .bw .bw-soon {
+  text-shadow: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bw-rule,
+  .bw-rise,
+  .bw-capability {
+    animation: none;
+    transition: none;
+  }
+
+  .bw-capability:hover {
+    transform: none;
+  }
+}
