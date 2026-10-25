@@ -11,6 +11,9 @@ export const Route = createFileRoute("/bookshelf")({
         content: BOOKSHELF_COPY.whatItIs,
       },
     ],
-    links: [{ rel: "stylesheet", href: "/inbio/bookshelf.css?v=rework-1" }],
+    links: [
+      { rel: "stylesheet", href: "/inbio/bookworm.css?v=8" },
+      { rel: "stylesheet", href: "/inbio/bookshelf.css?v=2" },
+    ],
   }),
 });

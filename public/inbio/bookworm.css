@@ -1,15 +1,16 @@
 /*
-  Bookworm page tokens.
+  Bookworm page tokens — adjust these.
   Maroon #4F2001 and gold #FF9900 are the page pair.
 
-  The site root font-size is 10px, so 1rem is 10px. Sizes on this page are px,
-  scoped under .bw-page.
+  The site root font-size is 10px, so 1rem is 10px. Sizes on this page are px.
 
-  Contrast: gold #FF9900 on a light fill fails WCAG. Gold is for text and
-  rules only, never a fill behind text. Gold #FF9900 on #1C0C04 is 8.9:1.
+  Contrast: gold #FF9900 on a light fill fails WCAG (about 2.1:1 on white).
+  Gold is for text and rules only, never a fill behind text.
+  Gold #FF9900 on #1C0C04 is 8.9:1.
   Body copy is #E4D8CC. Headings and labels are #F4EFE8.
+  Do not set --bw-gold as a text color on a light background.
 */
-.bw-page {
+.bw {
   --bw-maroon: #4f2001;
   --bw-maroon-deep: #381702;
   --bw-gold: #ff9900;
@@ -21,30 +22,31 @@
   --bw-radius: 18px;
   color: var(--bw-ink);
   font-family: var(--font-ui), "Source Sans 3", sans-serif;
-  box-sizing: border-box;
-  max-width: 100%;
 }
 
 /*
-  The inBio template offsets .page-wrapper-two by 290px for a fixed left
-  header this page does not show. Reset that offset on this page only.
+  Page shell. The inBio template offsets .page-wrapper-two by 290px
+  for a fixed left header this page does not show. Center the stack
+  in the viewport and give it no leftover column or shift.
 */
-main.page-wrapper-two.bw-page,
-.ac-hero-stage:has(.bw-page) > main.page-wrapper-two {
+.ac-hero-stage:has(.bw) > main.page-wrapper-two {
   margin-left: 0 !important;
   margin-right: 0 !important;
   left: auto !important;
   right: auto !important;
   width: auto !important;
-  max-width: 100% !important;
+  max-width: none !important;
   grid-column: auto !important;
   transform: none !important;
   float: none !important;
-  box-sizing: border-box !important;
 }
 
-/* Fade the fixed hero into the page color over its last 200px. */
-body:has(.bw-page) .ac-global-hero {
+/*
+  The fixed hero is only as tall as the viewport, so a full-page view
+  ends in a hard edge. Fade the whole hero shell into the page color
+  over its last 200px. The mask follows the viewport at every width.
+*/
+body:has(.bw) .ac-global-hero {
   -webkit-mask-image: linear-gradient(
     to bottom,
     #000 0,
@@ -63,7 +65,7 @@ body:has(.bw-page) .ac-global-hero {
   mask-size: 100% 100%;
 }
 
-.bw-page .bw-stack {
+.bw.ac-service-page .bw-stack {
   width: 100%;
   max-width: 1040px !important;
   margin-inline: auto !important;
@@ -72,15 +74,12 @@ body:has(.bw-page) .ac-global-hero {
   left: auto !important;
   right: auto !important;
   float: none !important;
+  grid-column: auto !important;
   transform: none !important;
-  box-sizing: border-box;
-  padding: 0 32px 88px;
   gap: 72px !important;
-  display: flex;
-  flex-direction: column;
 }
 
-.bw-page .bw-panel {
+.bw-panel {
   background-color: var(--bw-panel);
   background-image: linear-gradient(
     165deg,
@@ -91,17 +90,16 @@ body:has(.bw-page) .ac-global-hero {
   border-radius: var(--bw-radius);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(10px);
-  min-width: 0;
 }
 
-.bw-page .bw-section {
+.bw-section {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  min-width: 0;
 }
 
-.bw-page .bw-section-head {
+/* Heads sit on the hero. A scrim keeps the kicker at AA over the bright parts. */
+.bw-section-head {
   display: flex;
   flex-direction: column;
   align-self: flex-start;
@@ -115,14 +113,14 @@ body:has(.bw-page) .ac-global-hero {
   box-shadow: none;
 }
 
-.bw-page .bw-hero {
+.bw-hero {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 64px;
 }
 
-.bw-page .bw-rule {
+.bw-rule {
   display: block;
   width: 104px;
   height: 3px;
@@ -134,74 +132,11 @@ body:has(.bw-page) .ac-global-hero {
   animation: bw-draw 0.7s ease both;
 }
 
-.bw-page .bw-explain {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  min-width: 0;
-}
-
-.bw-page .bw-part {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 0;
-  padding: 24px;
-  min-width: 0;
-}
-
-.bw-page .bw-does {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  counter-reset: bw-does;
-}
-
-.bw-page .bw-does li {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin: 0;
-  min-width: 0;
-  counter-increment: bw-does;
-}
-
-.bw-page .bw-does li::before {
-  content: counter(bw-does);
-  flex: 0 0 auto;
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  border: 1px solid var(--bw-line);
-  background: var(--bw-maroon);
-  font-family: "Bricolage Grotesque", var(--font-display), sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 36px;
-  text-align: center;
-  color: var(--bw-gold);
-}
-
-.bw-page .bw-does li .bw-copy {
-  margin: 0;
-  padding-top: 6px;
-}
-
-.bw-page .bw-get {
-  border: 1px solid rgba(255, 153, 0, 0.55);
-}
-
-.bw-page .bw-study {
+.bw-study {
   padding: 28px 28px 12px;
 }
 
-.bw-page .bw-findings {
+.bw-findings {
   list-style: none;
   margin: 8px 0 0;
   padding: 0;
@@ -209,7 +144,7 @@ body:has(.bw-page) .ac-global-hero {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.bw-page .bw-finding {
+.bw-finding {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -219,37 +154,66 @@ body:has(.bw-page) .ac-global-hero {
   border: 0;
   border-right: 1px solid rgba(255, 153, 0, 0.22);
   border-bottom: 1px solid rgba(255, 153, 0, 0.22);
-  min-width: 0;
 }
 
+/* Under 640: first item spans the row. Then two pairs. Rules stay inside. */
 @media (max-width: 639px) {
-  .bw-page .bw-finding:nth-child(1) {
+  .bw-finding:nth-child(1) {
     grid-column: 1 / -1;
     padding-left: 0;
     border-right: none;
   }
 
-  .bw-page .bw-finding:nth-child(2),
-  .bw-page .bw-finding:nth-child(4) {
+  .bw-finding:nth-child(2),
+  .bw-finding:nth-child(4) {
     padding-left: 0;
   }
 
-  .bw-page .bw-finding:nth-child(3),
-  .bw-page .bw-finding:nth-child(5) {
-    padding-left: 16px;
+  .bw-finding:nth-child(3),
+  .bw-finding:nth-child(5) {
+    padding-left: 24px;
     border-right: none;
   }
 
-  .bw-page .bw-finding:nth-child(n + 4) {
+  .bw-finding:nth-child(n + 4) {
     border-bottom: none;
   }
 }
 
-.bw-page .bw-sample {
+.bw-capabilities {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.bw-capability {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 0;
+  padding: 20px;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.bw-capability:hover {
+  border-color: rgba(255, 153, 0, 0.55);
+  transform: translateY(-2px);
+}
+
+.bw-get {
+  padding: 32px;
+  border: 1px solid rgba(255, 153, 0, 0.55);
+}
+
+.bw-sample {
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  max-width: 100%;
   margin: 0 0 14px;
   padding: 6px 12px;
   border-radius: 999px;
@@ -258,34 +222,31 @@ body:has(.bw-page) .ac-global-hero {
   color: var(--bw-ink);
 }
 
-.bw-page .bw-study-meta,
-.bw-page .bw-source,
-.bw-page .bw-copy,
-.bw-page .bw-lede,
-.bw-page .bw-tagline,
-.bw-page .bw-soon {
+.bw-study-meta,
+.bw-source,
+.bw-copy,
+.bw-lede,
+.bw-tagline,
+.bw-soon {
   margin: 0;
 }
 
-.bw-page .bw-source {
-  margin-top: 4px;
-  min-width: 0;
+.bw-source {
+  margin-top: 16px;
 }
 
-.bw-page .bw-source a {
+.bw-source a {
   font-weight: 700;
-  overflow-wrap: anywhere;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
 }
 
-.bw-page .bw-soon {
+.bw-soon {
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  max-width: 100%;
-  margin-top: 8px;
+  margin-top: 20px;
   padding: 6px 12px;
   border-radius: 999px;
   border: 1px solid rgba(255, 153, 0, 0.42);
@@ -294,16 +255,20 @@ body:has(.bw-page) .ac-global-hero {
   text-decoration: none;
 }
 
-.bw-page .bw-rise {
+.bw-rise {
   animation: bw-rise 0.6s ease both;
 }
 
-.bw-page .bw-stack > .bw-rise:nth-child(2) {
+.bw-stack > .bw-rise:nth-child(2) {
   animation-delay: 0.08s;
 }
 
-.bw-page .bw-stack > .bw-rise:nth-child(3) {
+.bw-stack > .bw-rise:nth-child(3) {
   animation-delay: 0.16s;
+}
+
+.bw-stack > .bw-rise:nth-child(4) {
+  animation-delay: 0.24s;
 }
 
 @keyframes bw-draw {
@@ -327,113 +292,121 @@ body:has(.bw-page) .ac-global-hero {
 }
 
 @media (min-width: 768px) {
-  .bw-page .bw-explain {
+  .bw-capabilities {
     grid-template-columns: 1fr 1fr;
   }
 
-  .bw-page .bw-part-wide {
+  .bw-capability:first-child {
     grid-column: 1 / -1;
+  }
+
+  .bw-capability {
+    padding: 24px;
   }
 }
 
+/* 640–1023: two columns. Item 5 fills the last row. Rules stay between cells. */
 @media (min-width: 640px) {
-  .bw-page .bw-findings {
+  .bw-findings {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .bw-page .bw-finding {
+  .bw-finding {
     padding: 20px 24px;
     border-right: 1px solid rgba(255, 153, 0, 0.22);
     border-bottom: 1px solid rgba(255, 153, 0, 0.22);
   }
 
-  .bw-page .bw-finding:nth-child(2n) {
+  .bw-finding:nth-child(2n) {
     border-right: none;
   }
 
-  .bw-page .bw-finding:nth-child(odd) {
+  /* Row starts: 1, 3, and 5. The cell after a rule keeps 24px. */
+  .bw-finding:nth-child(odd) {
     padding-left: 0;
   }
 
-  .bw-page .bw-finding:nth-child(5) {
+  .bw-finding:nth-child(5) {
     grid-column: 1 / -1;
     border-right: none;
     border-bottom: none;
   }
 }
 
+/* 1024+: six tracks. 2+2+2 on the first row, 3+3 on the second. */
 @media (min-width: 1024px) {
-  .bw-page .bw-findings {
+  .bw-findings {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
-  .bw-page .bw-finding {
+  .bw-finding {
     padding: 20px 24px;
     border-right: 1px solid rgba(255, 153, 0, 0.22);
     border-bottom: 1px solid rgba(255, 153, 0, 0.22);
   }
 
-  .bw-page .bw-finding:nth-child(-n + 3) {
+  .bw-finding:nth-child(-n + 3) {
     grid-column: span 2;
   }
 
-  .bw-page .bw-finding:nth-child(n + 4) {
+  .bw-finding:nth-child(n + 4) {
     grid-column: span 3;
     border-bottom: none;
   }
 
-  .bw-page .bw-finding:nth-child(2),
-  .bw-page .bw-finding:nth-child(4) {
+  /* The 640px rule clears border-right on even items. Put those rules back. */
+  .bw-finding:nth-child(2),
+  .bw-finding:nth-child(4) {
     border-right: 1px solid rgba(255, 153, 0, 0.22);
   }
 
-  .bw-page .bw-finding:nth-child(3),
-  .bw-page .bw-finding:nth-child(5) {
+  .bw-finding:nth-child(3),
+  .bw-finding:nth-child(5) {
     border-right: none;
     padding-left: 24px;
   }
 
-  .bw-page .bw-finding:nth-child(1),
-  .bw-page .bw-finding:nth-child(4) {
+  /* Row starts: 1 and 4. The 640px odd rule would also clear item 3 and 5. */
+  .bw-finding:nth-child(1),
+  .bw-finding:nth-child(4) {
     padding-left: 0;
   }
 }
 
 @media (max-width: 640px) {
-  .bw-page .bw-stack {
+  .bw.ac-service-page .bw-stack {
     gap: 48px !important;
-    padding-left: 16px;
-    padding-right: 16px;
   }
 
-  .bw-page .bw-hero {
+  .bw-hero {
     padding: 28px;
   }
 
-  .bw-page .bw-study {
+  .bw-study {
     padding-left: 20px;
-    padding-right: 12px;
-  }
-
-  .bw-page .bw-part {
-    padding: 20px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bw-page .bw-rule,
-  .bw-page .bw-rise {
+  .bw-rule,
+  .bw-rise,
+  .bw-capability {
     animation: none;
+    transition: none;
+  }
+
+  .bw-capability:hover {
+    transform: none;
   }
 }
 
 /*
   Shared hero CSS forces .ac-hero-stage p/li to #F2F4F7 and body * to
-  Source Sans 3, both with !important. Re-apply this page's type here.
+  Source Sans 3, both with !important. Re-apply this page's type and color here.
+  Gold stays text and rules. --bw-muted and --bw-faint are solid colors.
 */
-.ac-hero-stage .bw-page .bw-kicker,
-.ac-hero-stage .bw-page .bw-part-label {
+.ac-hero-stage .bw .bw-kicker {
   margin: 0;
   font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
   font-size: 13px !important;
@@ -445,21 +418,20 @@ body:has(.bw-page) .ac-global-hero {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
 }
 
-.ac-hero-stage .bw-page .bw-title {
+.ac-hero-stage .bw .bw-title {
   margin: 0;
   text-wrap: balance;
   font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
-  font-size: 72px !important;
+  font-size: clamp(44px, 32px + 4vw, 80px) !important;
   font-weight: 700 !important;
   letter-spacing: -0.03em !important;
   line-height: 1 !important;
   color: var(--bw-ink) !important;
   text-shadow: none !important;
-  overflow-wrap: anywhere;
 }
 
-.ac-hero-stage .bw-page .bw-lede {
-  max-width: 680px;
+.ac-hero-stage .bw .bw-lede {
+  max-width: 34em;
   text-wrap: pretty;
   font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
   font-size: 21px !important;
@@ -469,8 +441,8 @@ body:has(.bw-page) .ac-global-hero {
   text-shadow: none !important;
 }
 
-.ac-hero-stage .bw-page .bw-tagline {
-  max-width: 680px;
+.ac-hero-stage .bw .bw-tagline {
+  max-width: 34em;
   font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
   font-size: 18px !important;
   font-style: italic !important;
@@ -480,7 +452,7 @@ body:has(.bw-page) .ac-global-hero {
   text-shadow: none !important;
 }
 
-.ac-hero-stage .bw-page .bw-heading {
+.ac-hero-stage .bw .bw-heading {
   margin: 0;
   text-wrap: balance;
   font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
@@ -492,7 +464,7 @@ body:has(.bw-page) .ac-global-hero {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
 }
 
-.ac-hero-stage .bw-page .bw-sample {
+.ac-hero-stage .bw .bw-sample {
   font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
   font-size: 13px !important;
   font-weight: 700 !important;
@@ -503,7 +475,7 @@ body:has(.bw-page) .ac-global-hero {
   text-shadow: none !important;
 }
 
-.ac-hero-stage .bw-page .bw-study-meta {
+.ac-hero-stage .bw .bw-study-meta {
   font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
   font-size: 15px !important;
   font-weight: 600 !important;
@@ -512,13 +484,13 @@ body:has(.bw-page) .ac-global-hero {
   text-shadow: none !important;
 }
 
-.ac-hero-stage .bw-page .bw-dot {
-  margin: 0 8px;
+.ac-hero-stage .bw .bw-dot {
+  margin: 0 0.45em;
   color: var(--bw-gold) !important;
   text-shadow: none !important;
 }
 
-.ac-hero-stage .bw-page .bw-finding-label {
+.ac-hero-stage .bw .bw-finding-label {
   font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
   font-size: 17px !important;
   font-weight: 600 !important;
@@ -527,7 +499,7 @@ body:has(.bw-page) .ac-global-hero {
   text-shadow: none !important;
 }
 
-.ac-hero-stage .bw-page .bw-finding-figure {
+.ac-hero-stage .bw .bw-finding-figure {
   font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
   font-size: 32px !important;
   font-weight: 700 !important;
@@ -538,18 +510,37 @@ body:has(.bw-page) .ac-global-hero {
   text-shadow: none !important;
 }
 
-.ac-hero-stage .bw-page .bw-does li::before {
+.ac-hero-stage .bw .bw-capability-index {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--bw-line);
+  background: var(--bw-maroon) !important;
   font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
   font-size: 15px !important;
   font-weight: 700 !important;
-  line-height: 36px !important;
+  line-height: 1 !important;
   color: var(--bw-gold) !important;
-  background: var(--bw-maroon) !important;
   text-shadow: none !important;
 }
 
-.ac-hero-stage .bw-page .bw-copy {
-  max-width: 680px;
+.ac-hero-stage .bw h3.bw-capability-title {
+  margin: 0 0 4px;
+  font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.3 !important;
+  color: var(--bw-ink) !important;
+  text-shadow: none !important;
+}
+
+.ac-hero-stage .bw .bw-copy {
+  max-width: 65ch;
   text-wrap: pretty;
   font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
   font-size: 17px !important;
@@ -557,18 +548,17 @@ body:has(.bw-page) .ac-global-hero {
   line-height: 1.6 !important;
   color: var(--bw-muted) !important;
   text-shadow: none !important;
-  overflow-wrap: anywhere;
 }
 
-.ac-hero-stage .bw-page .bw-copy-lead {
-  max-width: 680px;
+.ac-hero-stage .bw .bw-copy-lead {
+  max-width: 65ch;
   font-size: 19px !important;
   font-weight: 500 !important;
   line-height: 1.45 !important;
   color: var(--bw-ink) !important;
 }
 
-.ac-hero-stage .bw-page .bw-source {
+.ac-hero-stage .bw .bw-source {
   font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
   font-size: 15px !important;
   font-weight: 400 !important;
@@ -577,21 +567,22 @@ body:has(.bw-page) .ac-global-hero {
   text-shadow: none !important;
 }
 
-.ac-hero-stage .bw-page .bw-source a {
+.ac-hero-stage .bw .bw-source a {
   color: var(--bw-gold) !important;
   text-shadow: none !important;
 }
 
-.ac-hero-stage .bw-page .bw-source a:hover {
+.ac-hero-stage .bw .bw-source a:hover {
   color: var(--bw-ink) !important;
 }
 
-.ac-hero-stage .bw-page .bw-source a:focus-visible {
+.ac-hero-stage .bw .bw-source a:focus-visible,
+.ac-hero-stage .bw .bw-capability:focus-within {
   outline: 2px solid var(--bw-gold);
   outline-offset: 3px;
 }
 
-.ac-hero-stage .bw-page .bw-soon {
+.ac-hero-stage .bw .bw-soon {
   font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
   font-size: 13px !important;
   font-weight: 600 !important;
@@ -603,95 +594,76 @@ body:has(.bw-page) .ac-global-hero {
   cursor: default !important;
 }
 
-@media (max-width: 1024px) {
-  .ac-hero-stage .bw-page .bw-title {
-    font-size: 56px !important;
-  }
-}
-
 @media (max-width: 640px) {
-  .ac-hero-stage .bw-page .bw-kicker,
-  .ac-hero-stage .bw-page .bw-part-label {
+  .ac-hero-stage .bw .bw-kicker {
     font-size: 12px !important;
   }
 
-  .ac-hero-stage .bw-page .bw-title {
-    font-size: 40px !important;
-  }
-
-  .ac-hero-stage .bw-page .bw-lede {
+  .ac-hero-stage .bw .bw-lede {
     font-size: 18px !important;
   }
 
-  .ac-hero-stage .bw-page .bw-tagline {
+  .ac-hero-stage .bw .bw-tagline {
     font-size: 16px !important;
   }
 
-  .ac-hero-stage .bw-page .bw-heading {
+  .ac-hero-stage .bw .bw-heading {
     font-size: 26px !important;
   }
 
-  .ac-hero-stage .bw-page .bw-study-meta {
+  .ac-hero-stage .bw .bw-study-meta {
     font-size: 14px !important;
   }
 
-  .ac-hero-stage .bw-page .bw-finding-label {
+  .ac-hero-stage .bw .bw-finding-label {
     font-size: 16px !important;
   }
 
-  .ac-hero-stage .bw-page .bw-finding-figure {
+  .ac-hero-stage .bw .bw-finding-figure {
     font-size: 24px !important;
   }
 
-  .ac-hero-stage .bw-page .bw-copy {
+  .ac-hero-stage .bw h3.bw-capability-title {
+    font-size: 18px !important;
+  }
+
+  .ac-hero-stage .bw .bw-copy {
     font-size: 16px !important;
   }
 
-  .ac-hero-stage .bw-page .bw-copy-lead {
+  .ac-hero-stage .bw .bw-copy-lead {
     font-size: 17px !important;
   }
 
-  .ac-hero-stage .bw-page .bw-source {
+  .ac-hero-stage .bw .bw-source {
     font-size: 14px !important;
-  }
-}
-
-/* Mobile page name on the dark header. */
-@media (max-width: 991px) {
-  body:has(.bw-page) .ac-site-mobile-wordmark {
-    color: #ff9900 !important;
-  }
-
-  body:has(.bw-page) .ac-site-mobile-page {
-    color: #f4efe8 !important;
   }
 }
 
 /*
-  Mobile hit areas, this page only. Filled controls keep their painted
-  size and grow the box around it. The pricing link uses padding with
-  a cancelling margin.
+  Mobile hit areas, this page only. Header controls stay inside the
+  existing bar. Filled controls keep their painted size and grow the
+  box around it. The pricing link uses padding with a cancelling margin.
 */
 @media (max-width: 991px) {
-  .ac-hero-stage:has(.bw-page) .ac-site-header .ac-site-mobile-brand,
-  .ac-hero-stage:has(.bw-page) .ac-site-header a.ac-auth-signin,
-  .ac-hero-stage:has(.bw-page) .ac-site-header .ac-start-cta,
-  .ac-hero-stage:has(.bw-page) .ac-site-header a.ac-site-logo {
+  .ac-hero-stage:has(.bw) .ac-site-header .ac-site-mobile-brand,
+  .ac-hero-stage:has(.bw) .ac-site-header a.ac-auth-signin,
+  .ac-hero-stage:has(.bw) .ac-site-header .ac-start-cta {
     box-sizing: border-box !important;
     min-width: 44px !important;
     min-height: 44px !important;
   }
 
-  .ac-hero-stage:has(.bw-page) .ac-site-header .ac-site-mobile-brand {
+  .ac-hero-stage:has(.bw) .ac-site-header .ac-site-mobile-brand {
     justify-content: center !important;
   }
 
-  .ac-hero-stage:has(.bw-page) .ac-site-header a.ac-auth-signin {
+  .ac-hero-stage:has(.bw) .ac-site-header a.ac-auth-signin {
     height: 44px !important;
     padding: 0 8px !important;
   }
 
-  .ac-hero-stage:has(.bw-page) .ac-site-header .ac-start-cta {
+  .ac-hero-stage:has(.bw) .ac-site-header .ac-start-cta {
     height: 44px !important;
     padding: 0 14px !important;
     background-color: transparent !important;
@@ -701,8 +673,8 @@ body:has(.bw-page) .ac-global-hero {
     background-position: center center !important;
   }
 
-  .ac-hero-stage:has(.bw-page) .ac-site-header .ac-start-cta:hover,
-  .ac-hero-stage:has(.bw-page) .ac-site-header .ac-start-cta:focus {
+  .ac-hero-stage:has(.bw) .ac-site-header .ac-start-cta:hover,
+  .ac-hero-stage:has(.bw) .ac-site-header .ac-start-cta:focus {
     background-color: transparent !important;
     background-image: linear-gradient(#a00028, #a00028) !important;
     background-repeat: no-repeat !important;
@@ -710,9 +682,8 @@ body:has(.bw-page) .ac-global-hero {
     background-position: center center !important;
   }
 
-  .bw-page .bw-source a {
-    display: inline-flex;
-    align-items: center;
+  .bw .bw-source a {
+    display: inline-block;
     box-sizing: border-box;
     min-width: 44px;
     min-height: 44px;
@@ -720,16 +691,6 @@ body:has(.bw-page) .ac-global-hero {
     padding-bottom: 12px;
     margin-top: -12px;
     margin-bottom: -12px;
-  }
-
-  body:has(.bw-page) footer.ac-site-footer a,
-  body:has(.bw-page) .ac-site-footer a {
-    box-sizing: border-box !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-    line-height: 1.2 !important;
+    line-height: 20px;
   }
 }

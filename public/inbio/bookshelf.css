@@ -1,135 +1,20 @@
 /*
-  Bookshelf page tokens.
-  Maroon #4F2001 and gold #FF9900 are the page pair.
+  Bookshelf-only pieces. The page uses the Bookworm design system
+  (.bw tokens, panels, type, shell, and hit areas) from bookworm.css.
+  This file adds the copy-slot boxes only.
 
-  The site root font-size is 10px, so 1rem is 10px. Sizes on this page are px,
-  scoped under .bs-page.
-
-  Gold is for text, rules, and the copy-slot outline. It is never a fill
-  behind text. Body text on the dark panel is #F4EFE8.
+  Root font-size is 10px. Sizes here are px.
+  Gold is the dashed outline, not a fill behind text.
 */
-.bs-page {
-  --bs-maroon: #4f2001;
-  --bs-gold: #ff9900;
-  --bs-ink: #f4efe8;
-  --bs-muted: #e4d8cc;
-  --bs-panel: #1c0c04;
-  --bs-radius: 18px;
-  color: var(--bs-ink);
-  font-family: var(--font-ui), "Source Sans 3", sans-serif;
-  box-sizing: border-box;
-  max-width: 100%;
-}
 
-/*
-  The inBio template offsets .page-wrapper-two by 290px for a fixed left
-  header this page does not show. Reset that offset on this page only.
-*/
-main.page-wrapper-two.bs-page,
-.ac-hero-stage:has(.bs-page) > main.page-wrapper-two {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  left: auto !important;
-  right: auto !important;
-  width: auto !important;
-  max-width: 100% !important;
-  grid-column: auto !important;
-  transform: none !important;
-  float: none !important;
-  box-sizing: border-box !important;
-}
-
-body:has(.bs-page) .ac-global-hero {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    #000 0,
-    #000 calc(100% - 200px),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    #000 0,
-    #000 calc(100% - 200px),
-    transparent 100%
-  );
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-}
-
-.bs-page .bs-stack {
-  width: 100%;
-  max-width: 1040px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  box-sizing: border-box;
-  padding: 0 32px 88px;
-  gap: 72px !important;
-  display: flex;
-  flex-direction: column;
-}
-
-.bs-page .bs-panel {
-  background-color: var(--bs-panel);
-  background-image: linear-gradient(
-    165deg,
-    rgba(79, 32, 1, 0.55) 0%,
-    rgba(28, 12, 4, 0.2) 100%
-  );
-  border: 1px solid rgba(255, 153, 0, 0.28);
-  border-radius: var(--bs-radius);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(10px);
-  min-width: 0;
-}
-
-.bs-page .bs-section {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0;
-}
-
-.bs-page .bs-section-head {
-  display: flex;
-  flex-direction: column;
-  align-self: flex-start;
-  gap: 8px;
-  max-width: 100%;
-  margin: 0;
-  margin-inline: -12px;
-  padding: 8px 12px;
-  background-color: rgba(26, 20, 16, 0.6);
-}
-
-.bs-page .bs-hero {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 64px;
-}
-
-.bs-page .bs-rule {
-  display: block;
-  width: 104px;
-  height: 3px;
-  margin: 4px 0;
-  border: 0;
-  border-radius: 999px;
-  background: var(--bs-gold);
-  transform-origin: left center;
-  animation: bs-draw 0.7s ease both;
-}
-
-.bs-page .bs-explain {
+.bw.bs-page .bs-explain {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
   min-width: 0;
 }
 
-.bs-page .bs-part {
+.bw.bs-page .bs-part {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -138,137 +23,38 @@ body:has(.bs-page) .ac-global-hero {
   min-width: 0;
 }
 
-.bs-page .bs-slot {
+.bw.bs-page .bs-slot {
   margin: 0;
   padding: 16px 18px;
-  border: 2px dashed var(--bs-gold);
+  border: 2px dashed var(--bw-gold);
   border-radius: 12px;
   background: transparent;
   overflow-wrap: anywhere;
 }
 
-.bs-page .bs-rise {
-  animation: bs-rise 0.6s ease both;
-}
-
-.bs-page .bs-stack > .bs-rise:nth-child(2) {
-  animation-delay: 0.08s;
-}
-
-@keyframes bs-draw {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes bs-rise {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 @media (min-width: 768px) {
-  .bs-page .bs-explain {
+  .bw.bs-page .bs-explain {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 640px) {
-  .bs-page .bs-stack {
-    gap: 48px !important;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .bs-page .bs-hero,
-  .bs-page .bs-part {
-    padding: 28px 20px;
+  .bw.bs-page .bs-part {
+    padding: 20px;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .bs-page .bs-rule,
-  .bs-page .bs-rise {
-    animation: none;
-  }
-}
-
-.ac-hero-stage .bs-page .bs-kicker,
-.ac-hero-stage .bs-page .bs-part-label {
-  margin: 0;
-  font-family: var(--font-ui), "Source Sans 3", sans-serif !important;
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.12em !important;
-  line-height: 1.2 !important;
-  text-transform: uppercase;
-  color: var(--bs-gold) !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
-}
-
-.ac-hero-stage .bs-page .bs-title {
-  margin: 0;
-  text-wrap: balance;
-  font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
-  font-size: 72px !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.03em !important;
-  line-height: 1 !important;
-  color: var(--bs-ink) !important;
-  text-shadow: none !important;
-  overflow-wrap: anywhere;
-}
-
-.ac-hero-stage .bs-page .bs-heading {
-  margin: 0;
-  text-wrap: balance;
-  font-family: "Bricolage Grotesque", var(--font-display), sans-serif !important;
-  font-size: 34px !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.02em !important;
-  line-height: 1.15 !important;
-  color: var(--bs-ink) !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
-}
-
-.ac-hero-stage .bs-page .bs-slot {
+.ac-hero-stage .bw.bs-page .bs-slot {
   font-family: ui-monospace, "Source Sans 3", sans-serif !important;
   font-size: 16px !important;
   font-weight: 600 !important;
   line-height: 1.5 !important;
-  color: var(--bs-ink) !important;
+  color: var(--bw-ink) !important;
   text-shadow: none !important;
 }
 
-@media (max-width: 1024px) {
-  .ac-hero-stage .bs-page .bs-title {
-    font-size: 56px !important;
-  }
-}
-
 @media (max-width: 640px) {
-  .ac-hero-stage .bs-page .bs-kicker,
-  .ac-hero-stage .bs-page .bs-part-label {
-    font-size: 12px !important;
-  }
-
-  .ac-hero-stage .bs-page .bs-title {
-    font-size: 40px !important;
-  }
-
-  .ac-hero-stage .bs-page .bs-heading {
-    font-size: 26px !important;
-  }
-
-  .ac-hero-stage .bs-page .bs-slot {
+  .ac-hero-stage .bw.bs-page .bs-slot {
     font-size: 15px !important;
   }
 }
@@ -280,53 +66,5 @@ body:has(.bs-page) .ac-global-hero {
 
   body:has(.bs-page) .ac-site-mobile-page {
     color: #f4efe8 !important;
-  }
-
-  .ac-hero-stage:has(.bs-page) .ac-site-header .ac-site-mobile-brand,
-  .ac-hero-stage:has(.bs-page) .ac-site-header a.ac-auth-signin,
-  .ac-hero-stage:has(.bs-page) .ac-site-header .ac-start-cta,
-  .ac-hero-stage:has(.bs-page) .ac-site-header a.ac-site-logo {
-    box-sizing: border-box !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-  }
-
-  .ac-hero-stage:has(.bs-page) .ac-site-header .ac-site-mobile-brand {
-    justify-content: center !important;
-  }
-
-  .ac-hero-stage:has(.bs-page) .ac-site-header a.ac-auth-signin {
-    height: 44px !important;
-    padding: 0 8px !important;
-  }
-
-  .ac-hero-stage:has(.bs-page) .ac-site-header .ac-start-cta {
-    height: 44px !important;
-    padding: 0 14px !important;
-    background-color: transparent !important;
-    background-image: linear-gradient(#800020, #800020) !important;
-    background-repeat: no-repeat !important;
-    background-size: 100% 34px !important;
-    background-position: center center !important;
-  }
-
-  .ac-hero-stage:has(.bs-page) .ac-site-header .ac-start-cta:hover,
-  .ac-hero-stage:has(.bs-page) .ac-site-header .ac-start-cta:focus {
-    background-color: transparent !important;
-    background-image: linear-gradient(#a00028, #a00028) !important;
-    background-repeat: no-repeat !important;
-    background-size: 100% 34px !important;
-    background-position: center center !important;
-  }
-
-  body:has(.bs-page) footer.ac-site-footer a,
-  body:has(.bs-page) .ac-site-footer a {
-    box-sizing: border-box !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-    line-height: 1.2 !important;
   }
 }
