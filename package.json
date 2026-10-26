@@ -15,6 +15,7 @@
     "preview:prod": "node scripts/serve-prod.mjs 8080",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
+    "test:bookworm-free-path": "node scripts/bookworm-free-path-test.mjs",
     "format": "prettier --write .",
     "climb-notes:sync": "node scripts/sync-climb-notes.mjs",
     "climb-notes:watch": "node scripts/sync-climb-notes.mjs --watch",
