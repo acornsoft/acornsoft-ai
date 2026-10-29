@@ -128,7 +128,6 @@ export function BookwormPage() {
                   docs.x.ai/x-subscription/pricing
                 </a>
               </p>
-              <p className="bw-soon">Template link coming soon</p>
             </div>
           </section>
         </div>
