@@ -15,6 +15,7 @@
     "preview:prod": "node scripts/serve-prod.mjs 8080",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
+    "test": "vitest run",
     "format": "prettier --write .",
     "climb-notes:sync": "node scripts/sync-climb-notes.mjs",
     "climb-notes:watch": "node scripts/sync-climb-notes.mjs --watch",
@@ -95,6 +96,7 @@
     "prettier": "^3.4.0",
     "typescript": "^5.7.0",
     "typescript-eslint": "^8.56.1",
-    "vite": "^8.1.0"
+    "vite": "^8.1.0",
+    "vitest": "^4.0.18"
   }
 }

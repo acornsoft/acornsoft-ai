@@ -1,0 +1,250 @@
+/* Root font-size is 10px (inBio). Sizes under this page are px, not rem.
+   The template pins .page-wrapper-two { margin-left: 290px }. Undo that here. */
+.ac-inbio.ac-hero-stage:has(.ac-canopy-notes-page) .page-wrapper-two,
+main.page-wrapper-two.ac-canopy-notes-page {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+.ac-canopy-notes-page {
+  box-sizing: border-box;
+  margin-left: 0 !important;
+  padding: 112px 28px 96px;
+}
+
+.ac-canopy-notes {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  color: #f6f1ea;
+  font-family: "Source Sans 3", "Source Sans Pro", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.ac-canopy-notes-kicker {
+  margin: 0 0 8px;
+  color: #ff9900;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ac-canopy-notes-kicker a {
+  color: #ff9900 !important;
+  text-decoration: none;
+}
+
+.ac-canopy-notes-title {
+  margin: 0;
+  color: #fff8ef !important;
+  font-family: "Bricolage Grotesque", "Source Sans 3", sans-serif !important;
+  font-size: 40px !important;
+  line-height: 1.1 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.ac-canopy-notes-mast {
+  padding-bottom: 8px;
+  border-bottom: 2px solid #4f2001;
+}
+
+.ac-canopy-notes-signin {
+  margin: 28px 0 0;
+  font-size: 15px;
+}
+
+.ac-canopy-notes-signin a {
+  color: #ff9900 !important;
+  font-size: 15px !important;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid #4f2001;
+}
+
+.ac-canopy-notes-sub {
+  margin: 28px 0 0;
+  color: #ff9900 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em;
+  text-transform: uppercase !important;
+}
+
+.ac-canopy-notes-list {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.ac-canopy-notes-card {
+  display: block;
+  padding: 18px 18px 16px;
+  background: rgba(28, 16, 8, 0.82);
+  border: 1px solid rgba(255, 153, 0, 0.28);
+  border-left: 4px solid #4f2001;
+  border-radius: 14px;
+  color: #fff8ef !important;
+  text-decoration: none !important;
+}
+
+.ac-canopy-notes-card:hover {
+  border-color: #ff9900;
+}
+
+.ac-canopy-notes-card-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.ac-canopy-notes-body {
+  margin-top: 22px;
+  white-space: pre-wrap;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #f3eadf;
+}
+
+.ac-canopy-notes-missing {
+  margin: 12px 0 0;
+  font-size: 18px;
+  color: #fff8ef;
+}
+
+.ac-canopy-notes-admin {
+  margin-top: 28px;
+  display: grid;
+  gap: 16px;
+}
+
+.ac-canopy-notes-form {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  background: rgba(28, 16, 8, 0.82);
+  border: 1px solid rgba(255, 153, 0, 0.28);
+  border-radius: 14px;
+}
+
+.ac-canopy-notes-form h2 {
+  margin: 0;
+  color: #ff9900 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase !important;
+}
+
+.ac-canopy-notes label {
+  display: grid;
+  gap: 4px;
+  color: #f6f1ea;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ac-canopy-notes input,
+.ac-canopy-notes select,
+.ac-canopy-notes textarea {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  color: #fff8ef;
+  background: rgba(20, 10, 4, 0.92);
+  border: 1px solid rgba(255, 153, 0, 0.4);
+  border-radius: 10px;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.ac-canopy-notes textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.ac-canopy-notes-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.ac-canopy-notes button {
+  justify-self: start;
+  margin: 0;
+  padding: 10px 16px;
+  color: #fff8ef;
+  background: #4f2001;
+  border: 0;
+  border-radius: 999px;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.ac-canopy-notes button:hover {
+  background: #6a320c;
+}
+
+.ac-canopy-notes-status {
+  margin: 0;
+  font-size: 14px;
+  color: #ff9900;
+}
+
+.ac-canopy-notes-audit {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.ac-canopy-notes-audit li {
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  background: rgba(28, 16, 8, 0.72);
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.ac-canopy-notes-audit time {
+  color: #ff9900;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ac-canopy-notes-audit-action {
+  color: #fff8ef;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
+@media (max-width: 720px) {
+  .ac-canopy-notes-page {
+    padding: 96px 16px 88px;
+  }
+
+  .ac-canopy-notes-title {
+    font-size: 32px !important;
+  }
+
+  .ac-canopy-notes-row {
+    grid-template-columns: 1fr;
+  }
+}

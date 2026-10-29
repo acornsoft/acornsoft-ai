@@ -26,6 +26,7 @@ import { Route as ServiceRouteImport } from './routes/service'
 import { Route as StartRouteImport } from './routes/start'
 import { Route as VoiceRouteImport } from './routes/voice'
 import { Route as WorkRouteImport } from './routes/work'
+import { Route as CanopyNotesRouteImport } from './routes/canopy.notes'
 import { Route as DocsOnboardingRouteImport } from './routes/docs/onboarding'
 import { Route as LunaIndexRouteImport } from './routes/luna/index'
 import { Route as LunaSlugRouteImport } from './routes/luna/$slug'
@@ -33,6 +34,8 @@ import { Route as WorkIndexRouteImport } from './routes/work/index'
 import { Route as WorkSlugRouteImport } from './routes/work/$slug'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiCanopyRefreshRouteImport } from './routes/api/canopy/refresh'
+import { Route as CanopyNotesNoteIdRouteImport } from './routes/canopy.notes.$noteId'
+import { Route as CanopyNotesAdminRouteImport } from './routes/canopy.notes.admin'
 import { Route as DocsOnboardingSplatRouteImport } from './routes/docs/onboarding/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -120,6 +123,11 @@ const WorkRoute = WorkRouteImport.update({
   path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CanopyNotesRoute = CanopyNotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => CanopyRoute,
+} as any)
 const DocsOnboardingRoute = DocsOnboardingRouteImport.update({
   id: '/docs/onboarding',
   path: '/docs/onboarding',
@@ -155,6 +163,16 @@ const ApiCanopyRefreshRoute = ApiCanopyRefreshRouteImport.update({
   path: '/api/canopy/refresh',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CanopyNotesNoteIdRoute = CanopyNotesNoteIdRouteImport.update({
+  id: '/$noteId',
+  path: '/$noteId',
+  getParentRoute: () => CanopyNotesRoute,
+} as any)
+const CanopyNotesAdminRoute = CanopyNotesAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => CanopyNotesRoute,
+} as any)
 const DocsOnboardingSplatRoute = DocsOnboardingSplatRouteImport.update({
   id: '/$',
   path: '/$',
@@ -164,7 +182,7 @@ const DocsOnboardingSplatRoute = DocsOnboardingSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/canopy': typeof CanopyRoute
+  '/canopy': typeof CanopyRouteWithChildren
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
   '/field-guide': typeof FieldGuideRoute
@@ -179,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
   '/work': typeof WorkRouteWithChildren
+  '/canopy/notes': typeof CanopyNotesRouteWithChildren
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
   '/luna/$slug': typeof LunaSlugRoute
   '/work/$slug': typeof WorkSlugRoute
@@ -186,12 +205,14 @@ export interface FileRoutesByFullPath {
   '/work/': typeof WorkIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
+  '/canopy/notes/$noteId': typeof CanopyNotesNoteIdRoute
+  '/canopy/notes/admin': typeof CanopyNotesAdminRoute
   '/docs/onboarding/$': typeof DocsOnboardingSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/canopy': typeof CanopyRoute
+  '/canopy': typeof CanopyRouteWithChildren
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
   '/field-guide': typeof FieldGuideRoute
@@ -204,6 +225,7 @@ export interface FileRoutesByTo {
   '/service': typeof ServiceRoute
   '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
+  '/canopy/notes': typeof CanopyNotesRouteWithChildren
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
   '/luna/$slug': typeof LunaSlugRoute
   '/work/$slug': typeof WorkSlugRoute
@@ -211,13 +233,15 @@ export interface FileRoutesByTo {
   '/work': typeof WorkIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
+  '/canopy/notes/$noteId': typeof CanopyNotesNoteIdRoute
+  '/canopy/notes/admin': typeof CanopyNotesAdminRoute
   '/docs/onboarding/$': typeof DocsOnboardingSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/canopy': typeof CanopyRoute
+  '/canopy': typeof CanopyRouteWithChildren
   '/climb-notes': typeof ClimbNotesRoute
   '/corporate': typeof CorporateRoute
   '/field-guide': typeof FieldGuideRoute
@@ -232,6 +256,7 @@ export interface FileRoutesById {
   '/start': typeof StartRoute
   '/voice': typeof VoiceRoute
   '/work': typeof WorkRouteWithChildren
+  '/canopy/notes': typeof CanopyNotesRouteWithChildren
   '/docs/onboarding': typeof DocsOnboardingRouteWithChildren
   '/luna/$slug': typeof LunaSlugRoute
   '/work/$slug': typeof WorkSlugRoute
@@ -239,6 +264,8 @@ export interface FileRoutesById {
   '/work/': typeof WorkIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/canopy/refresh': typeof ApiCanopyRefreshRoute
+  '/canopy/notes/$noteId': typeof CanopyNotesNoteIdRoute
+  '/canopy/notes/admin': typeof CanopyNotesAdminRoute
   '/docs/onboarding/$': typeof DocsOnboardingSplatRoute
 }
 export interface FileRouteTypes {
@@ -261,6 +288,7 @@ export interface FileRouteTypes {
     | '/start'
     | '/voice'
     | '/work'
+    | '/canopy/notes'
     | '/docs/onboarding'
     | '/luna/$slug'
     | '/work/$slug'
@@ -268,6 +296,8 @@ export interface FileRouteTypes {
     | '/work/'
     | '/api/auth/$'
     | '/api/canopy/refresh'
+    | '/canopy/notes/$noteId'
+    | '/canopy/notes/admin'
     | '/docs/onboarding/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -286,6 +316,7 @@ export interface FileRouteTypes {
     | '/service'
     | '/start'
     | '/voice'
+    | '/canopy/notes'
     | '/docs/onboarding'
     | '/luna/$slug'
     | '/work/$slug'
@@ -293,6 +324,8 @@ export interface FileRouteTypes {
     | '/work'
     | '/api/auth/$'
     | '/api/canopy/refresh'
+    | '/canopy/notes/$noteId'
+    | '/canopy/notes/admin'
     | '/docs/onboarding/$'
   id:
     | '__root__'
@@ -313,6 +346,7 @@ export interface FileRouteTypes {
     | '/start'
     | '/voice'
     | '/work'
+    | '/canopy/notes'
     | '/docs/onboarding'
     | '/luna/$slug'
     | '/work/$slug'
@@ -320,13 +354,15 @@ export interface FileRouteTypes {
     | '/work/'
     | '/api/auth/$'
     | '/api/canopy/refresh'
+    | '/canopy/notes/$noteId'
+    | '/canopy/notes/admin'
     | '/docs/onboarding/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  CanopyRoute: typeof CanopyRoute
+  CanopyRoute: typeof CanopyRouteWithChildren
   ClimbNotesRoute: typeof ClimbNotesRoute
   CorporateRoute: typeof CorporateRoute
   FieldGuideRoute: typeof FieldGuideRoute
@@ -467,6 +503,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/canopy/notes': {
+      id: '/canopy/notes'
+      path: '/notes'
+      fullPath: '/canopy/notes'
+      preLoaderRoute: typeof CanopyNotesRouteImport
+      parentRoute: typeof CanopyRoute
+    }
     '/docs/onboarding': {
       id: '/docs/onboarding'
       path: '/docs/onboarding'
@@ -516,6 +559,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCanopyRefreshRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/canopy/notes/$noteId': {
+      id: '/canopy/notes/$noteId'
+      path: '/$noteId'
+      fullPath: '/canopy/notes/$noteId'
+      preLoaderRoute: typeof CanopyNotesNoteIdRouteImport
+      parentRoute: typeof CanopyNotesRoute
+    }
+    '/canopy/notes/admin': {
+      id: '/canopy/notes/admin'
+      path: '/admin'
+      fullPath: '/canopy/notes/admin'
+      preLoaderRoute: typeof CanopyNotesAdminRouteImport
+      parentRoute: typeof CanopyNotesRoute
+    }
     '/docs/onboarding/$': {
       id: '/docs/onboarding/$'
       path: '/$'
@@ -525,6 +582,31 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface CanopyNotesRouteChildren {
+  CanopyNotesNoteIdRoute: typeof CanopyNotesNoteIdRoute
+  CanopyNotesAdminRoute: typeof CanopyNotesAdminRoute
+}
+
+const CanopyNotesRouteChildren: CanopyNotesRouteChildren = {
+  CanopyNotesNoteIdRoute: CanopyNotesNoteIdRoute,
+  CanopyNotesAdminRoute: CanopyNotesAdminRoute,
+}
+
+const CanopyNotesRouteWithChildren = CanopyNotesRoute._addFileChildren(
+  CanopyNotesRouteChildren,
+)
+
+interface CanopyRouteChildren {
+  CanopyNotesRoute: typeof CanopyNotesRouteWithChildren
+}
+
+const CanopyRouteChildren: CanopyRouteChildren = {
+  CanopyNotesRoute: CanopyNotesRouteWithChildren,
+}
+
+const CanopyRouteWithChildren =
+  CanopyRoute._addFileChildren(CanopyRouteChildren)
 
 interface LunaRouteChildren {
   LunaSlugRoute: typeof LunaSlugRoute
@@ -565,7 +647,7 @@ const DocsOnboardingRouteWithChildren = DocsOnboardingRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  CanopyRoute: CanopyRoute,
+  CanopyRoute: CanopyRouteWithChildren,
   ClimbNotesRoute: ClimbNotesRoute,
   CorporateRoute: CorporateRoute,
   FieldGuideRoute: FieldGuideRoute,
