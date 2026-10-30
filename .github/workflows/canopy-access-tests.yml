@@ -2,12 +2,11 @@
 #
 # Required status check before merges to acornsoft-ai (set in branch protection;
 # this file does not change that setting):
-#   Canopy access tests / canopy-access-tests
+#   canopy-access-tests
 #
-# Confirm the live name after a run:
-#   gh api repos/acornsoft/acornsoft-ai/commits/<sha>/check-runs --jq '.check_runs[].name'
-# Require the name that belongs to this job. Do not rename the workflow `name`
-# or the job `name` without updating that required check.
+# That is the check-run name GitHub reports (the job name), confirmed on
+# acornsoft/acornsoft-ai pull request 34. Do not rename the job `name`
+# without updating the required check.
 name: Canopy access tests
 
 on:

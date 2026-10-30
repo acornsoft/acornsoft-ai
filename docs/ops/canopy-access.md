@@ -10,15 +10,13 @@ Tests must pass before a merge to `acornsoft-ai` `main`. The workflow is
 Mark this check required in branch protection. Do not rename it without
 updating the protection rule:
 
-`Canopy access tests / canopy-access-tests`
+`canopy-access-tests`
 
-Confirm the name GitHub reports:
-
-```
-gh api repos/acornsoft/acornsoft-ai/commits/<sha>/check-runs --jq '.check_runs[].name'
-```
-
-Require the check run whose name is that job. A failing access test fails the check.
+That is the name returned by the check-runs API and by `gh pr checks`.
+It is the job name in `.github/workflows/canopy-access-tests.yml`.
+Confirmed on the failing run for commit `1e30a2d` (check conclusion `failure`).
+A failing access test fails this check. Do not rename the job without
+updating the required check.
 
 ## CANOPY_ADMIN_USER_IDS
 
