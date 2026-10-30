@@ -21,13 +21,27 @@ export class EngagementAllowlistError extends Error {
   }
 }
 
-/** Comma-separated Better Auth user ids. Empty or unset means nobody. */
-export function isCanopyAdmin(userId: string): boolean {
+/**
+ * Better Auth user ids from `CANOPY_ADMIN_USER_IDS` (comma-separated).
+ *
+ * Empty, blank, or unset means nobody is an admin. Admin calls are forbidden
+ * and write no audit row. That empty default is safe to ship.
+ *
+ * Production holds one id only: the site user id from David's X sign-in,
+ * copied after that first sign-in. Do not invent or hard-code a value here.
+ * See docs/ops/canopy-access.md.
+ */
+export function canopyAdminUserIds(): string[] {
   const raw = process.env.CANOPY_ADMIN_USER_IDS ?? "";
-  const ids = raw
+  return raw
     .split(",")
     .map((part) => part.trim())
     .filter((part) => part.length > 0);
+}
+
+/** True only when `userId` is one of the configured admin ids. */
+export function isCanopyAdmin(userId: string): boolean {
+  const ids = canopyAdminUserIds();
   if (ids.length === 0) return false;
   return ids.includes(userId);
 }

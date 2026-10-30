@@ -185,6 +185,12 @@ function noteSearchHay(n: ClimbNote): string {
     .toLowerCase();
 }
 
+function previewLine(note: ClimbNote): string {
+  const raw = note.problem.replace(/\s+/g, " ").trim();
+  if (raw.length <= 160) return raw;
+  return `${raw.slice(0, 157)}…`;
+}
+
 function searchScore(n: ClimbNote, q: string): number {
   const num = n.number.toLowerCase();
   const title = n.title.toLowerCase();
@@ -238,6 +244,7 @@ export function GnomahEditorPage() {
   const [lane, setLane] = useState<(typeof LANES)[number]["id"]>("all");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchHi, setSearchHi] = useState(0);
+  const [query, setQuery] = useState("");
 
   const [saveState, setSaveState] = useState<
     "idle" | "saving" | "saved" | "error"

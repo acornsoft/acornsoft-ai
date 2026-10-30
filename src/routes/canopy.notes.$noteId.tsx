@@ -1,12 +1,15 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { getCanopyNote } from "@/lib/canopy-notes/actions";
+import { canopyNoteHeaders } from "@/lib/canopy-notes/http-headers";
 import { CanopyNotesShell } from "@/lib/canopy-notes/shell";
 import { CanopyNoteDetail, CanopyNotFound } from "@/lib/canopy-notes/view";
 
 export const Route = createFileRoute("/canopy/notes/$noteId")({
+  staleTime: 0,
+  headers: () => canopyNoteHeaders(),
   loader: async ({ params }) => {
     const result = await getCanopyNote({ data: { noteId: params.noteId } });
-    if (result.status === 404) throw notFound();
+    if (result.status === 404) throw notFound({ headers: canopyNoteHeaders() });
     return result.note;
   },
   component: NoteDetailRoute,

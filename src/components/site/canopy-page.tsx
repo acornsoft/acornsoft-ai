@@ -33,6 +33,7 @@ import {
   pullIsDue,
   PULL_INTERVAL_MINUTES,
 } from "@/lib/canopy/cadence";
+import { listPublishedClimbNotes } from "@/lib/climb-notes/actions";
 
 
 const kindLabel: Record<TimelineKind, string> = {

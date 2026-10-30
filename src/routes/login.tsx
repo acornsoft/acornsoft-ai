@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { GROK_PROVIDERS, authEnabled, signIn, usesPreviewSignIn } from "@/lib/auth/client";
 import { Logo } from "@/components/site/logo";
+import { SignInActions } from "@/components/site/sign-in-actions";
 import { SiteHeader } from "@/components/site/site-chrome";
 
 type LoginSearch = { redirect?: string };
@@ -23,25 +24,6 @@ export const Route = createFileRoute("/login")({
   }),
 });
 
-/** Official X mark (white on dark button). */
-function XMarkIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      width="18"
-      height="18"
-      aria-hidden
-      focusable="false"
-    >
-      <path
-        fill="currentColor"
-        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-      />
-    </svg>
-  );
-}
-
 function LoginPage() {
   const { redirect } = Route.useSearch();
   const safeRedirect =
@@ -55,13 +37,6 @@ function LoginPage() {
   const previewSignIn = usesPreviewSignIn();
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const xProvider = GROK_PROVIDERS.find((p) => p.providerId === "grok-x");
-  // Site login is X-first. Google remains available only as a secondary path
-  // for general identity — it never unlocks Gnomah (server enforces X owner).
-  const googleProvider = GROK_PROVIDERS.find(
-    (p) => p.providerId === "grok-google",
-  );
 
   async function onSignIn(providerId: string) {
     setError(null);
@@ -114,37 +89,17 @@ function LoginPage() {
           </div>
 
           {authEnabled ? (
-            <div className="ac-login-actions">
-              {xProvider ? (
-                <button
-                  type="button"
-                  className="ac-login-btn ac-login-btn-x"
-                  disabled={busy !== null}
-                  onClick={() => void onSignIn(xProvider.providerId)}
-                >
-                  <span className="ac-login-btn-icon">
-                    <XMarkIcon />
-                  </span>
-                  <span className="ac-login-btn-label">
-                    {busy === xProvider.providerId
-                      ? previewSignIn
-                        ? "Waiting on the sign-in window…"
-                        : "Connecting to X…"
-                      : "Continue with X"}
-                  </span>
-                </button>
-              ) : (
-                <p className="ac-login-muted">
-                  X sign-in is not configured on this instance.
-                </p>
-              )}
-
+            <SignInActions
+              providers={GROK_PROVIDERS}
+              busy={busy}
+              previewSignIn={previewSignIn}
+              onSignIn={(providerId) => void onSignIn(providerId)}
+            >
               <div className="ac-login-gate-box" role="note">
                 <p className="ac-login-gate-title">How Gnomah access works</p>
                 <ul className="ac-login-gate-list">
                   <li>
-                    Choose <strong>Continue with X</strong> — OAuth only; we never
-                    store your X password.
+                    Choose <strong>Continue with X</strong>. Sign-in stays on X.
                   </li>
                   {previewSignIn ? (
                     <li>
@@ -172,23 +127,7 @@ function LoginPage() {
                   </li>
                 </ul>
               </div>
-
-              {googleProvider ? (
-                <div className="ac-login-alt">
-                  <p className="ac-login-alt-label">Other sign-in</p>
-                  <button
-                    type="button"
-                    className="ac-login-btn ac-login-btn-secondary"
-                    disabled={busy !== null}
-                    onClick={() => void onSignIn(googleProvider.providerId)}
-                  >
-                    {busy === googleProvider.providerId
-                      ? "Connecting…"
-                      : "Continue with Google"}
-                  </button>
-                </div>
-              ) : null}
-            </div>
+            </SignInActions>
           ) : (
             <p className="ac-login-muted">
               Sign-in is disabled on this instance. Local development uses a

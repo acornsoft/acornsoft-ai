@@ -15,6 +15,9 @@ export default tseslint.config(
       ".nitro/**",
       "node_modules/**",
       "src/routeTree.gen.ts",
+      // InBio vendor scripts are third-party. They stay out of lint.
+      "public/inbio/assets/js/vendor/**",
+      "public/inbio/assets/css/vendor/**",
     ],
   },
   js.configs.recommended,
@@ -44,4 +47,20 @@ export default tseslint.config(
   },
   // Disable rules that conflict with Prettier formatting.
   prettier,
+  {
+    // InBio theme entry. It calls vendor globals (jQuery, AOS, WOW, feather)
+    // and uses comma-operator assignments. Do not rewrite the theme file.
+    files: ["public/inbio/assets/js/main.js"],
+    languageOptions: {
+      globals: {
+        AOS: "readonly",
+        WOW: "readonly",
+        feather: "readonly",
+        jQuery: "readonly",
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-unused-expressions": "off",
+    },
+  },
 );
