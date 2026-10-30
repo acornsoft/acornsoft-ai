@@ -24,6 +24,7 @@ import {
   loadNoteForRoute,
   NOT_FOUND_RESPONSE,
 } from "./access.server";
+import { isNoteVisible, type VisibilityFacts } from "./visibility";
 import {
   allowlistAdd,
   allowlistRemove,
@@ -202,6 +203,67 @@ describe("canopy account view", () => {
     expect(await getVisibleNote(A, MINE)).toMatchObject({ noteId: MINE });
     const restored = (await listVisibleNotes(A)).map((note) => note.noteId).sort();
     expect(restored).toEqual([ALLOW, MINE].sort());
+  });
+
+  it("SQL visibility matches the pure predicate, including revoke, restore, and missing-id parity", async () => {
+    await seed(ALLOW, "product", "Shared note");
+    await seed(MINE, "other", "Assigned to A");
+    await seed(PRODUCT, "product", "Internal product");
+    await seed(ENGAGEMENT, "engagement", "Engagement only");
+    await allowlistAdd(ADMIN, ALLOW);
+    await assign(ADMIN, MINE, A);
+    await assign(ADMIN, PRODUCT, A);
+    await assign(ADMIN, ENGAGEMENT, A);
+
+    const catalog: Array<{
+      id: string;
+      kind: VisibilityFacts["kind"];
+      onAllowlist: boolean;
+      assignedToCaller: boolean;
+    }> = [
+      { id: ALLOW, kind: "product", onAllowlist: true, assignedToCaller: false },
+      { id: MINE, kind: "other", onAllowlist: false, assignedToCaller: true },
+      { id: PRODUCT, kind: "product", onAllowlist: false, assignedToCaller: true },
+      { id: ENGAGEMENT, kind: "engagement", onAllowlist: false, assignedToCaller: true },
+    ];
+
+    async function expectSqlMatches(revoked: boolean) {
+      const visible = new Set((await listVisibleNotes(A)).map((note) => note.noteId));
+      for (const row of catalog) {
+        const want = isNoteVisible({
+          kind: row.kind,
+          onAllowlist: row.onAllowlist,
+          assignedToCaller: row.assignedToCaller,
+          revoked,
+          signedIn: true,
+        });
+        expect(visible.has(row.id)).toBe(want);
+        expect((await getVisibleNote(A, row.id)) !== null).toBe(want);
+      }
+      const loggedOut = new Set((await listVisibleNotes(null)).map((note) => note.noteId));
+      for (const row of catalog) {
+        const want = isNoteVisible({
+          kind: row.kind,
+          onAllowlist: row.onAllowlist,
+          assignedToCaller: false,
+          revoked: false,
+          signedIn: false,
+        });
+        expect(loggedOut.has(row.id)).toBe(want);
+      }
+    }
+
+    await expectSqlMatches(false);
+    await revoke(ADMIN, A);
+    await expectSqlMatches(true);
+    const revokedNote = await loadNoteForRoute(A, MINE);
+    const missing = await loadNoteForRoute(A, MISSING);
+    expect(revokedNote).toEqual(NOT_FOUND_RESPONSE);
+    expect(missing).toEqual(NOT_FOUND_RESPONSE);
+    expect(revokedNote).toEqual(missing);
+    await restore(ADMIN, A);
+    await expectSqlMatches(false);
+    expect(await getVisibleNote(A, MINE)).toMatchObject({ noteId: MINE });
   });
 
   it("6. each assignment and removal writes one dated audit row", async () => {
