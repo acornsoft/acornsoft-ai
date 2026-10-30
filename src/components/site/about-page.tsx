@@ -98,7 +98,7 @@ export function AboutPage() {
     const ids = aboutSections;
     const onScroll = () => {
       const offset = 120;
-      let current = ids[0].id;
+      let current: (typeof ids)[number]["id"] = ids[0].id;
       for (const s of ids) {
         const el = document.getElementById(s.id);
         if (!el) continue;

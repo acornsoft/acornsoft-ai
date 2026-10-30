@@ -10,9 +10,9 @@
  * holds the real Google/X secrets. The app never sees them — it only knows its
  * own per-app client id/secret and which upstream to ask the broker for (`idp`).
  *
- * To add an upstream (e.g. GitHub) once the broker supports it: add one entry
- * here (`{ providerId: "grok-github", idp: "github", label: "GitHub" }`). The
- * `providerId` is this app's local id and the OAuth callback path segment
+ * Sign-in screen order is this array order: X first, Google second. Do not
+ * add a third provider or swap these two. `providerId` is this app's local id
+ * and the OAuth callback path segment
  * (`/api/auth/oauth2/callback/<providerId>`); `idp` is the hint the broker reads
  * to pick the upstream (Better Auth's id for X is still `twitter`).
  */
@@ -26,6 +26,6 @@ export type GrokProvider = {
 };
 
 export const GROK_PROVIDERS: readonly GrokProvider[] = [
-  { providerId: "grok-google", idp: "google", label: "Google" },
   { providerId: "grok-x", idp: "twitter", label: "X" },
+  { providerId: "grok-google", idp: "google", label: "Google" },
 ];

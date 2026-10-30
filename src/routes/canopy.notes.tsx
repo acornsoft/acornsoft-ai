@@ -1,9 +1,12 @@
 import { Outlet, createFileRoute, useRouterState } from "@tanstack/react-router";
 import { listCanopyNotes } from "@/lib/canopy-notes/actions";
+import { canopyNoteHeaders } from "@/lib/canopy-notes/http-headers";
 import { CanopyNotesShell } from "@/lib/canopy-notes/shell";
 import { CanopyNotesBody } from "@/lib/canopy-notes/view";
 
 export const Route = createFileRoute("/canopy/notes")({
+  staleTime: 0,
+  headers: () => canopyNoteHeaders(),
   loader: () => listCanopyNotes(),
   component: NotesLayout,
   head: () => ({

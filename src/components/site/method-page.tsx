@@ -11,6 +11,14 @@ import {
   type TrainingModule,
 } from "./method-data";
 
+type MethodWhere = (typeof methodObjects)[number]["where"];
+
+function isInPageAnchor(
+  where: MethodWhere,
+): where is Extract<MethodWhere, `#${string}`> {
+  return where.startsWith("#");
+}
+
 function TrackBadge({ track }: { track: TrainingModule["track"] }) {
   const label =
     track === "voice" ? "Voice" : track === "imagine" ? "Imagine" : "Build";
@@ -70,7 +78,7 @@ export function MethodPage() {
                 <article key={o.name} className="ac-method-object-card">
                   <h3>{o.name}</h3>
                   <p>{o.blurb}</p>
-                  {o.where.startsWith("#") ? (
+                  {isInPageAnchor(o.where) ? (
                     <a className="ac-method-link" href={o.where}>
                       Jump
                     </a>

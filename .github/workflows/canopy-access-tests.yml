@@ -1,0 +1,39 @@
+# Runs the canopy access tests on every pull request and every push to main.
+#
+# Required status check before merges to acornsoft-ai (set in branch protection;
+# this file does not change that setting):
+#   canopy-access-tests
+#
+# That is the check-run name GitHub reports (the job name), confirmed on
+# acornsoft/acornsoft-ai pull request 34. Do not rename the job `name`
+# without updating the required check.
+name: Canopy access tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: canopy-access-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  canopy-access-tests:
+    name: canopy-access-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Run canopy access tests
+        run: npx vitest run src/lib/canopy-notes/access.server.test.ts
+      - name: Run sign-in method and HTTP access tests
+        run: npx vitest run src/lib/auth/signin-method.test.ts src/lib/canopy-notes/admin-ids.test.ts src/lib/canopy-notes/access.http.test.ts

@@ -890,7 +890,7 @@ export async function saveClimbNote(
   let approvedBy = existing?.approvedBy ?? null;
   let publishedAt = existing?.publishedAt ?? null;
   let unpublishedAt = existing?.unpublishedAt ?? null;
-  let approvalNote = existing?.approvalNote ?? null;
+  const approvalNote = existing?.approvalNote ?? null;
 
   // Direct state jumps
   if (status === "pending" && prevStatus !== "pending") {
