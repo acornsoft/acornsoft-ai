@@ -115,7 +115,7 @@ describe("canopy account view", () => {
 
     const visible = await listVisibleNotes(A);
     const ids = visible.map((note) => note.noteId).sort();
-    expect(ids).toEqual([]);
+    expect(ids).toEqual([ALLOW, MINE].sort());
     expect(await getVisibleNote(A, ALLOW)).toMatchObject({ noteId: ALLOW });
     expect(await getVisibleNote(A, MINE)).toMatchObject({ noteId: MINE });
     expect(await getVisibleNote(A, THEIRS)).toBeNull();
