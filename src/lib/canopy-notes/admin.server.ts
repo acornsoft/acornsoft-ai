@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { getSql } from "@/lib/db";
+import { parseCanopyAdminUserIds } from "./admin-ids";
 import { assertCleanNoteText, NoteTextError } from "./text";
 import { isNoteKind, type AuditAction, type AuditRow, type NoteKind } from "./types";
 
@@ -32,11 +33,7 @@ export class EngagementAllowlistError extends Error {
  * See docs/ops/canopy-access.md.
  */
 export function canopyAdminUserIds(): string[] {
-  const raw = process.env.CANOPY_ADMIN_USER_IDS ?? "";
-  return raw
-    .split(",")
-    .map((part) => part.trim())
-    .filter((part) => part.length > 0);
+  return parseCanopyAdminUserIds(process.env.CANOPY_ADMIN_USER_IDS);
 }
 
 /** True only when `userId` is one of the configured admin ids. */

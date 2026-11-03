@@ -36,6 +36,28 @@ describe("sign-in method", () => {
     expect(() => assertSignInProviders(swapped, false)).toThrow(SignInMethodError);
   });
 
+  it("fails when the list is empty, only one provider, or the upstream id is wrong", () => {
+    expect(() => assertSignInProviders([], false)).toThrow(SignInMethodError);
+    expect(() => assertSignInProviders([GROK_PROVIDERS[0]], false)).toThrow(SignInMethodError);
+    expect(() =>
+      assertSignInProviders(
+        [
+          { providerId: "grok-x", idp: "google", label: "X" },
+          { providerId: "grok-google", idp: "twitter", label: "Google" },
+        ],
+        false,
+      ),
+    ).toThrow(SignInMethodError);
+  });
+
+  it("fails when email sign-in is on even if a third provider is also present", () => {
+    const withThird: GrokProvider[] = [
+      ...GROK_PROVIDERS,
+      { providerId: "grok-extra", idp: "extra", label: "Extra" },
+    ];
+    expect(() => assertSignInProviders(withThird, true)).toThrow(SignInMethodError);
+  });
+
   it("renders X before Google on the sign-in screen", () => {
     const html = renderToStaticMarkup(
       createElement(

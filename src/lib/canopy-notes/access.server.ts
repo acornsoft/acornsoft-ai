@@ -2,7 +2,8 @@ import { getSql } from "@/lib/db";
 import { isNoteKind, type CanopyNote, type NoteKind } from "./types";
 
 /**
- * Visibility lives only here.
+ * Visibility lives only here. The predicate is `isNoteVisible` in ./visibility.ts.
+ * The SQL below is that predicate. Tests fail if the two disagree.
  *
  * A note is visible when it is on the public allowlist, or when it is assigned
  * to the signed-in account and that account is not revoked.

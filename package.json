@@ -16,6 +16,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
+    "test:unit": "vitest run --exclude src/lib/canopy-notes/e2e-login.two-accounts.test.ts",
     "format": "prettier --write .",
     "climb-notes:sync": "node scripts/sync-climb-notes.mjs",
     "climb-notes:watch": "node scripts/sync-climb-notes.mjs --watch",

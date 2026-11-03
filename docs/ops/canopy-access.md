@@ -87,5 +87,5 @@ Run the browser test when the variables are present:
 npx vitest run src/lib/canopy-notes/e2e-login.two-accounts.test.ts
 ```
 
-It is not part of the required GitHub check. The check runs the access tests,
-the sign-in method check, and the HTTP access tests.
+It is not part of the required GitHub check. That check runs `npm run test:unit`,
+every Vitest file under `src` except this browser test.

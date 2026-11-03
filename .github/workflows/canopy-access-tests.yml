@@ -7,6 +7,8 @@
 # That is the check-run name GitHub reports (the job name), confirmed on
 # acornsoft/acornsoft-ai pull request 34. Do not rename the job `name`
 # without updating the required check.
+# The job runs `npm run test:unit` (every Vitest file under src except the
+# Google browser test).
 name: Canopy access tests
 
 on:
@@ -33,7 +35,5 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci
-      - name: Run canopy access tests
-        run: npx vitest run src/lib/canopy-notes/access.server.test.ts
-      - name: Run sign-in method and HTTP access tests
-        run: npx vitest run src/lib/auth/signin-method.test.ts src/lib/canopy-notes/admin-ids.test.ts src/lib/canopy-notes/access.http.test.ts
+      - name: Run unit tests
+        run: npm run test:unit
