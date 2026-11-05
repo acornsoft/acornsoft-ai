@@ -1,6 +1,6 @@
 # Weekly Canopy Radar pull — same GitHub repo Grok Build and Grok Bots use.
-# Writes public/canopy/live-feed.json so Vercel deploys a durable feed.
-# Vercel serverless cannot keep that file after the function exits.
+# Writes public/canopy/live-feed.json so the site can deploy a durable feed.
+# main is protected, so this job pushes branch canopy/live-feed and opens a pull request.
 #
 # GitHub secrets (acornsoft/acornsoft-ai → Settings → Secrets → Actions):
 #   X_BEARER_TOKEN  App-only Bearer from developer.x.com
@@ -19,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: canopy-weekly
@@ -49,7 +50,9 @@ jobs:
           else
             node scripts/fetch-canopy-feed.mjs
           fi
-      - name: Commit feed when it changed
+      - name: Open a pull request for the feed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "acornsoft-bot"
           git config user.email "acornsoft@users.noreply.github.com"
@@ -59,4 +62,15 @@ jobs:
             exit 0
           fi
           git commit -m "Canopy weekly Radar pull"
-          git push
+          git push --force origin HEAD:canopy/live-feed
+          existing=$(gh pr list --repo "$GITHUB_REPOSITORY" --head canopy/live-feed --base main --state open --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            echo "Updated pull request #$existing"
+            exit 0
+          fi
+          gh pr create \
+            --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --head canopy/live-feed \
+            --title "Canopy weekly Radar pull" \
+            --body "Weekly live feed for /canopy. The site reads public/canopy/live-feed.json."
