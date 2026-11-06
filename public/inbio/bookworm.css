@@ -271,6 +271,51 @@ body:has(.bw) .ac-global-hero {
   animation-delay: 0.24s;
 }
 
+.bw-stack > .bw-rise:nth-child(5) {
+  animation-delay: 0.32s;
+}
+
+/*
+  Beside the Grok Bot template panel only while .bw-free is in the
+  document. These rules do not match when that section is absent.
+*/
+@media (min-width: 1024px) {
+  .bw.ac-service-page .bw-stack:has(> .bw-free) {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 72px 32px !important;
+  }
+
+  .bw.ac-service-page .bw-stack:has(> .bw-free) > :not(.bw-free):not(:nth-last-child(2)) {
+    grid-column: 1 / -1;
+  }
+
+  .bw.ac-service-page .bw-stack:has(> .bw-free) > :nth-last-child(2),
+  .bw.ac-service-page .bw-stack:has(> .bw-free) > .bw-free {
+    min-width: 0;
+    height: 100%;
+  }
+
+  .bw.ac-service-page .bw-stack:has(> .bw-free) > :nth-last-child(2) .bw-section-head,
+  .bw-free .bw-section-head {
+    min-height: 118px;
+  }
+
+  .bw.ac-service-page .bw-stack:has(> .bw-free) > :nth-last-child(2) > .bw-get,
+  .bw-free > .bw-get {
+    flex: 1 1 auto;
+  }
+}
+
+.bw-free {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.bw-free .bw-source a {
+  overflow-wrap: anywhere;
+}
+
 @keyframes bw-draw {
   from {
     transform: scaleX(0);

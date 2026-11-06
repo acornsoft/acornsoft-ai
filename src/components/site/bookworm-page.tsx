@@ -1,3 +1,4 @@
+import { BookwormFreePath } from "./bookworm-free-path";
 import { SiteChrome } from "./site-chrome";
 
 const STUDY_DATE = "2026-10-25";
@@ -130,6 +131,8 @@ export function BookwormPage() {
               </p>
             </div>
           </section>
+
+          <BookwormFreePath />
         </div>
       </div>
     </SiteChrome>
