@@ -30,6 +30,7 @@ function pageTitle(pathname: string): string {
   if (pathname.startsWith("/start")) return "Send a note";
   if (pathname.startsWith("/canopy")) return "Canopy";
   if (pathname.startsWith("/bookworm")) return "Bookworm";
+  if (pathname.startsWith("/bookshelf")) return "Bookshelf";
   if (pathname.startsWith("/gnomah")) return "Gnomah";
   if (pathname.startsWith("/corporate")) return "Corporate";
   if (pathname.startsWith("/login")) return "Sign in";

@@ -1,0 +1,70 @@
+/*
+  Bookshelf-only pieces. The page uses the Bookworm design system
+  (.bw tokens, panels, type, shell, and hit areas) from bookworm.css.
+  This file adds the copy-slot boxes only.
+
+  Root font-size is 10px. Sizes here are px.
+  Gold is the dashed outline, not a fill behind text.
+*/
+
+.bw.bs-page .bs-explain {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  min-width: 0;
+}
+
+.bw.bs-page .bs-part {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 24px;
+  min-width: 0;
+}
+
+.bw.bs-page .bs-slot {
+  margin: 0;
+  padding: 16px 18px;
+  border: 2px dashed var(--bw-gold);
+  border-radius: 12px;
+  background: transparent;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 768px) {
+  .bw.bs-page .bs-explain {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .bw.bs-page .bs-part {
+    padding: 20px;
+  }
+}
+
+.ac-hero-stage .bw.bs-page .bs-slot {
+  font-family: ui-monospace, "Source Sans 3", sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+  color: var(--bw-ink) !important;
+  text-shadow: none !important;
+}
+
+@media (max-width: 640px) {
+  .ac-hero-stage .bw.bs-page .bs-slot {
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 991px) {
+  body:has(.bs-page) .ac-site-mobile-wordmark {
+    color: #ff9900 !important;
+  }
+
+  body:has(.bs-page) .ac-site-mobile-page {
+    color: #f4efe8 !important;
+  }
+}
