@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Logo } from "./logo";
 import { SiteAuthSlot } from "./site-auth-slot";
 
-import { primaryNav, SHOW_PRIMARY_NAV } from "./site-nav";
+import { primaryNav, publicNav } from "./site-nav";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { useOwnerAccess } from "@/lib/auth/use-owner-access";
 import { SiteFooter } from "./site-footer";
@@ -35,12 +35,21 @@ function pageTitle(pathname: string): string {
   return "Acornsoft";
 }
 
+type NavEntry = {
+  to: string;
+  label: string;
+  ownerOnly?: boolean;
+  authOnly?: boolean;
+};
+
 function NavLinks({
+  items,
   onNavigate,
   mobile = false,
   showStudio = false,
   showOwner = false,
 }: {
+  items: readonly NavEntry[];
   onNavigate?: () => void;
   mobile?: boolean;
   showStudio?: boolean;
@@ -48,9 +57,9 @@ function NavLinks({
 }) {
   const pathname = useActivePath();
 
-  const links = primaryNav.filter((item) => {
-    if ("ownerOnly" in item && item.ownerOnly) return showOwner;
-    if ("authOnly" in item && item.authOnly) return showStudio;
+  const links = items.filter((item) => {
+    if (item.ownerOnly) return showOwner;
+    if (item.authOnly) return showStudio;
     return true;
   });
 
@@ -78,38 +87,6 @@ function NavLinks({
           </li>
         );
       })}
-      {showOwner && mobile ? (
-        <>
-          <li className="ac-nav-item">
-            <Link
-              className={[
-                "ac-nav-link ac-nav-link--mobile",
-                isActivePath(pathname, "/gnomah") ? "is-active" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              to="/gnomah"
-              onClick={onNavigate}
-            >
-              Gnomah
-            </Link>
-          </li>
-          <li className="ac-nav-item">
-            <Link
-              className={[
-                "ac-nav-link ac-nav-link--mobile",
-                isActivePath(pathname, "/method") ? "is-active" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              to="/method"
-              onClick={onNavigate}
-            >
-              Method
-            </Link>
-          </li>
-        </>
-      ) : null}
     </>
   );
 }
@@ -126,9 +103,7 @@ function MenuIcon({ open }: { open: boolean }) {
 
 /**
  * Shared sticky header + mobile full-screen menu.
- * Primary links same on every page; Gnomah only when signed in.
- * Mobile: logo hidden — page title + Log in + menu control.
- * Public primary nav is gated by SHOW_PRIMARY_NAV (logo, Send a note, auth stay).
+ * Signed out: Canopy and About. Signed in as @acornsoftai: the full menu.
  */
 export function SiteHeader({
   loginRedirect = "/gnomah",
@@ -143,6 +118,7 @@ export function SiteHeader({
   const showStudio = !!user;
   const showOwner = isOwner;
   const title = pageTitle(pathname);
+  const navItems: readonly NavEntry[] = showOwner ? primaryNav : publicNav;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -158,7 +134,6 @@ export function SiteHeader({
     };
   }, [menuOpen]);
 
-  // Close menu on route change
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
@@ -166,7 +141,7 @@ export function SiteHeader({
   return (
     <>
       <header
-        className={`ac-site-header${scrolled || menuOpen ? " is-scrolled" : ""}${menuOpen ? " is-menu-open" : ""}${SHOW_PRIMARY_NAV ? "" : " ac-site-header--no-primary-nav"}`}
+        className={`ac-site-header${scrolled || menuOpen ? " is-scrolled" : ""}${menuOpen ? " is-menu-open" : ""}`}
       >
         <div className="ac-site-header-inner">
           <div className="ac-site-brand">
@@ -178,7 +153,6 @@ export function SiteHeader({
             >
               <Logo />
             </Link>
-            {/* Mobile: text brand / page context (logo hidden in CSS) */}
             <Link
               to="/"
               className="ac-site-mobile-brand"
@@ -190,13 +164,15 @@ export function SiteHeader({
             </Link>
           </div>
 
-          {SHOW_PRIMARY_NAV ? (
-            <nav className="ac-site-nav ac-site-nav--desktop" aria-label="Primary">
-              <ul className="ac-site-nav-list">
-                <NavLinks showStudio={showStudio} showOwner={showOwner} />
-              </ul>
-            </nav>
-          ) : null}
+          <nav className="ac-site-nav ac-site-nav--desktop" aria-label="Primary">
+            <ul className="ac-site-nav-list">
+              <NavLinks
+                items={navItems}
+                showStudio={showStudio}
+                showOwner={showOwner}
+              />
+            </ul>
+          </nav>
 
           <div className="ac-site-actions">
             <Link to="/start" className="ac-start-cta">
@@ -204,75 +180,72 @@ export function SiteHeader({
             </Link>
             <SiteAuthSlot loginRedirect={loginRedirect} />
 
-            {SHOW_PRIMARY_NAV ? (
-              <button
-                type="button"
-                className="ac-site-menu-btn"
-                aria-label={menuOpen ? "Close menu" : "Open menu"}
-                aria-expanded={menuOpen}
-                aria-controls="ac-mobile-panel"
-                onClick={() => setMenuOpen((v) => !v)}
-              >
-                <MenuIcon open={menuOpen} />
-                <span className="ac-site-menu-btn-label">
-                  {menuOpen ? "Close" : "Menu"}
-                </span>
-              </button>
-            ) : null}
+            <button
+              type="button"
+              className="ac-site-menu-btn"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              aria-controls="ac-mobile-panel"
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              <MenuIcon open={menuOpen} />
+              <span className="ac-site-menu-btn-label">
+                {menuOpen ? "Close" : "Menu"}
+              </span>
+            </button>
           </div>
         </div>
       </header>
 
-      {SHOW_PRIMARY_NAV ? (
-        <div
-          id="ac-mobile-panel"
-          className={`ac-mobile-panel${menuOpen ? " is-open" : ""}`}
-          aria-hidden={!menuOpen}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Site menu"
-        >
-          <button
-            type="button"
-            className="ac-mobile-panel-backdrop"
-            aria-label="Close menu"
-            tabIndex={menuOpen ? 0 : -1}
-            onClick={() => setMenuOpen(false)}
-          />
-          <div className="ac-mobile-panel-inner">
-            <div className="ac-mobile-panel-head">
-              <p className="ac-mobile-panel-kicker">Navigate</p>
-              <button
-                type="button"
-                className="ac-mobile-close"
-                onClick={() => setMenuOpen(false)}
-              >
-                Close
-              </button>
-            </div>
-            <nav aria-label="Mobile primary">
-              <ul className="ac-site-nav-list ac-site-nav-list--mobile">
-                <NavLinks
-                  mobile
-                  showStudio={showStudio}
-                  showOwner={showOwner}
-                  onNavigate={() => setMenuOpen(false)}
-                />
-              </ul>
-            </nav>
-            <div className="ac-mobile-panel-foot">
-              <Link
-                to="/start"
-                className="ac-start-cta ac-start-cta--mobile"
-                onClick={() => setMenuOpen(false)}
-              >
-                Send a Climb Note
-              </Link>
-              <SiteAuthSlot loginRedirect={loginRedirect} />
-            </div>
+      <div
+        id="ac-mobile-panel"
+        className={`ac-mobile-panel${menuOpen ? " is-open" : ""}`}
+        aria-hidden={!menuOpen}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+      >
+        <button
+          type="button"
+          className="ac-mobile-panel-backdrop"
+          aria-label="Close menu"
+          tabIndex={menuOpen ? 0 : -1}
+          onClick={() => setMenuOpen(false)}
+        />
+        <div className="ac-mobile-panel-inner">
+          <div className="ac-mobile-panel-head">
+            <p className="ac-mobile-panel-kicker">Navigate</p>
+            <button
+              type="button"
+              className="ac-mobile-close"
+              onClick={() => setMenuOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+          <nav aria-label="Mobile primary">
+            <ul className="ac-site-nav-list ac-site-nav-list--mobile">
+              <NavLinks
+                items={navItems}
+                mobile
+                showStudio={showStudio}
+                showOwner={showOwner}
+                onNavigate={() => setMenuOpen(false)}
+              />
+            </ul>
+          </nav>
+          <div className="ac-mobile-panel-foot">
+            <Link
+              to="/start"
+              className="ac-start-cta ac-start-cta--mobile"
+              onClick={() => setMenuOpen(false)}
+            >
+              Send a Climb Note
+            </Link>
+            <SiteAuthSlot loginRedirect={loginRedirect} />
           </div>
         </div>
-      ) : null}
+      </div>
     </>
   );
 }
