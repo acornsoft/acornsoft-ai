@@ -1,18 +1,21 @@
-/** Flip SHOW_PRIMARY_NAV when public nav should return. */
+/** Public header stays Canopy and About. The owner sees the full menu. */
 export const SHOW_PRIMARY_NAV: boolean = false;
 
-/** Top-level primary nav. Items with `authOnly` show only when signed in.
- *
- * Order is the climb, not the org chart:
- * Home (door) → journal → recipes → live radar → offer → who we are.
- * About sits last. Logo already returns Home.
- */
+/** What a signed-out visitor sees. */
+export const publicNav = [
+  { to: "/canopy", label: "Canopy" },
+  { to: "/about", label: "About" },
+] as const;
+
+/** Full menu. `ownerOnly` items appear only for @acornsoftai. */
 export const primaryNav = [
   { to: "/climb-notes", label: "Climb Notes" },
   { to: "/field-guide", label: "Field Guide" },
   { to: "/canopy", label: "Canopy" },
   { to: "/work", label: "Works", ownerOnly: true },
+  { to: "/gnomah", label: "Gnomah", ownerOnly: true },
   { to: "/service", label: "Services" },
+  { to: "/method", label: "Method", ownerOnly: true },
   { to: "/about", label: "About" },
 ] as const;
 
