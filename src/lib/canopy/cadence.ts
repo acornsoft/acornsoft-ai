@@ -1,5 +1,5 @@
-/** One Radar pull per week. Protects X API credits and stays inside rate limits. */
-export const PULL_INTERVAL_MINUTES = 7 * 24 * 60; // 10080
+/** Monday and Thursday mornings. 70 hours so both runs open. */
+export const PULL_INTERVAL_MINUTES = 70 * 60; // 4200
 
 export function nextPullIso(
   updatedAt: string | undefined,
