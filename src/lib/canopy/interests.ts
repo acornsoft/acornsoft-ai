@@ -1,10 +1,10 @@
 /**
  * Canopy Radar interests — pure TS module (no JSON) so Nitro always bundles it.
- * Cadence: one X API pull per week (scheduleMinutes = 10080).
+ * Cadence: Monday and Thursday mornings (scheduleMinutes = 4200).
  * Priority: @acornsoftai → @DataRepublican → Grok Build → Imagine → Voice → Elon orgs.
  */
 export const interestsConfig = {
-  scheduleMinutes: 10080,
+  scheduleMinutes: 4200,
   maxResultsPerQuery: 25,
   subscriptions: [
     {
