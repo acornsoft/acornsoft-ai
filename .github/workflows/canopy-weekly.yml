@@ -1,19 +1,19 @@
-# Weekly Canopy Radar pull — same GitHub repo Grok Build and Grok Bots use.
+# Canopy Radar pull — Monday and Thursday mornings.
 # Writes public/canopy/live-feed.json so the site can deploy a durable feed.
 # main is protected, so this job pushes branch canopy/live-feed and opens a pull request.
 #
 # GitHub secrets (acornsoft/acornsoft-ai → Settings → Secrets → Actions):
 #   X_BEARER_TOKEN  App-only Bearer from developer.x.com
-name: Canopy weekly Radar
+name: Canopy Radar
 
 on:
   schedule:
-    # Monday 13:00 UTC = 09:00 America/New_York (EDT)
-    - cron: "0 13 * * 1"
+    # 13:00 UTC = 8:00 AM Eastern standard / 9:00 AM Eastern daylight
+    - cron: "0 13 * * 1,4"
   workflow_dispatch:
     inputs:
       force:
-        description: "Bypass the 7-day window"
+        description: "Bypass the pull window"
         type: boolean
         default: false
 
@@ -61,7 +61,7 @@ jobs:
             echo "No feed change (window closed or identical pull)."
             exit 0
           fi
-          git commit -m "Canopy weekly Radar pull"
+          git commit -m "Canopy Radar pull"
           git push --force origin HEAD:canopy/live-feed
           existing=$(gh pr list --repo "$GITHUB_REPOSITORY" --head canopy/live-feed --base main --state open --json number --jq '.[0].number')
           if [ -n "$existing" ]; then
@@ -72,5 +72,5 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --base main \
             --head canopy/live-feed \
-            --title "Canopy weekly Radar pull" \
-            --body "Weekly live feed for /canopy. The site reads public/canopy/live-feed.json."
+            --title "Canopy Radar pull" \
+            --body "Live feed for /canopy. The site reads public/canopy/live-feed.json."
