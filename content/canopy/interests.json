@@ -1,7 +1,7 @@
 {
-  "scheduleMinutes": 10080,
+  "scheduleMinutes": 4200,
   "maxResultsPerQuery": 25,
-  "comment": "One X pull per week (scheduleMinutes 10080). Priority: (1) @acornsoftai, (2) @DataRepublican, (3) Grok Build, (4) Imagine, (5) Voice, (6) Elon orgs.",
+  "comment": "Monday and Thursday mornings (scheduleMinutes 4200, 70 hours). Priority: (1) @acornsoftai, (2) @DataRepublican, (3) Grok Build, (4) Imagine, (5) Voice, (6) Elon orgs.",
   "subscriptions": [
     {
       "id": "radar-acornsoftai",
