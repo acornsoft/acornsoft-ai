@@ -16,6 +16,7 @@ import { Route as ClimbNotesRouteImport } from './routes/climb-notes'
 import { Route as CorporateRouteImport } from './routes/corporate'
 import { Route as FieldGuideRouteImport } from './routes/field-guide'
 import { Route as GnomahRouteImport } from './routes/gnomah'
+import { Route as GrokRouteImport } from './routes/grok'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LunaRouteImport } from './routes/luna'
 import { Route as MethodRouteImport } from './routes/method'
@@ -71,6 +72,11 @@ const FieldGuideRoute = FieldGuideRouteImport.update({
 const GnomahRoute = GnomahRouteImport.update({
   id: '/gnomah',
   path: '/gnomah',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GrokRoute = GrokRouteImport.update({
+  id: '/grok',
+  path: '/grok',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -187,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/corporate': typeof CorporateRoute
   '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
+  '/grok': typeof GrokRoute
   '/login': typeof LoginRoute
   '/luna': typeof LunaRouteWithChildren
   '/method': typeof MethodRoute
@@ -217,6 +224,7 @@ export interface FileRoutesByTo {
   '/corporate': typeof CorporateRoute
   '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
+  '/grok': typeof GrokRoute
   '/login': typeof LoginRoute
   '/method': typeof MethodRoute
   '/policies': typeof PoliciesRoute
@@ -246,6 +254,7 @@ export interface FileRoutesById {
   '/corporate': typeof CorporateRoute
   '/field-guide': typeof FieldGuideRoute
   '/gnomah': typeof GnomahRoute
+  '/grok': typeof GrokRoute
   '/login': typeof LoginRoute
   '/luna': typeof LunaRouteWithChildren
   '/method': typeof MethodRoute
@@ -278,6 +287,7 @@ export interface FileRouteTypes {
     | '/corporate'
     | '/field-guide'
     | '/gnomah'
+    | '/grok'
     | '/login'
     | '/luna'
     | '/method'
@@ -308,6 +318,7 @@ export interface FileRouteTypes {
     | '/corporate'
     | '/field-guide'
     | '/gnomah'
+    | '/grok'
     | '/login'
     | '/method'
     | '/policies'
@@ -336,6 +347,7 @@ export interface FileRouteTypes {
     | '/corporate'
     | '/field-guide'
     | '/gnomah'
+    | '/grok'
     | '/login'
     | '/luna'
     | '/method'
@@ -367,6 +379,7 @@ export interface RootRouteChildren {
   CorporateRoute: typeof CorporateRoute
   FieldGuideRoute: typeof FieldGuideRoute
   GnomahRoute: typeof GnomahRoute
+  GrokRoute: typeof GrokRoute
   LoginRoute: typeof LoginRoute
   LunaRoute: typeof LunaRouteWithChildren
   MethodRoute: typeof MethodRoute
@@ -431,6 +444,13 @@ declare module '@tanstack/react-router' {
       path: '/gnomah'
       fullPath: '/gnomah'
       preLoaderRoute: typeof GnomahRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grok': {
+      id: '/grok'
+      path: '/grok'
+      fullPath: '/grok'
+      preLoaderRoute: typeof GrokRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -652,6 +672,7 @@ const rootRouteChildren: RootRouteChildren = {
   CorporateRoute: CorporateRoute,
   FieldGuideRoute: FieldGuideRoute,
   GnomahRoute: GnomahRoute,
+  GrokRoute: GrokRoute,
   LoginRoute: LoginRoute,
   LunaRoute: LunaRouteWithChildren,
   MethodRoute: MethodRoute,
