@@ -5,7 +5,7 @@
  * Radar subscriptions: user timelines (e.g. @acornsoftai) via X API user timeline.
  * Topic queries: recent search.
  *
- * Cadence: once a week. Do not cron this hourly.
+ * Cadence: once a week. Appends new posts to the existing feed (dedupe by post ID).
  * Env: X_BEARER_TOKEN (required), CANOPY_OUT optional
  */
 
@@ -100,13 +100,14 @@ async function userTimeline(bearer, userId, maxResults) {
   return xGet(bearer, url);
 }
 
-async function searchRecent(bearer, query, maxResults) {
+async function searchRecent(bearer, query, maxResults, startTime) {
   const url = new URL("https://api.x.com/2/tweets/search/recent");
   url.searchParams.set("query", `${query} -is:retweet lang:en`);
   url.searchParams.set(
     "max_results",
     String(Math.min(Math.max(maxResults, 10), 100)),
   );
+  if (startTime) url.searchParams.set("start_time", startTime);
   url.searchParams.set("tweet.fields", "created_at,author_id,lang");
   url.searchParams.set("expansions", "author_id");
   url.searchParams.set("user.fields", "username,name");
@@ -117,19 +118,24 @@ async function main() {
   const interests = loadInterests();
   const interval = interests.scheduleMinutes ?? 10080;
 
-  if (!FORCE && fs.existsSync(OUT)) {
+  // Load the existing feed so new pulls append instead of replacing it.
+  let prevEntries = [];
+  if (fs.existsSync(OUT)) {
     try {
       const prev = JSON.parse(fs.readFileSync(OUT, "utf8"));
-      const updated = Date.parse(prev.updatedAt);
-      if (Number.isFinite(updated) && Date.now() < updated + interval * 60_000) {
-        const next = new Date(updated + interval * 60_000).toISOString();
-        log("weekly window closed; next pull", next, "(pass --force to override)");
-        return;
-      }
+      if (Array.isArray(prev.entries)) prevEntries = prev.entries;
     } catch {
-      /* pull */
+      log("could not parse existing feed; starting fresh");
     }
   }
+
+  // The window only limits how far back topic searches look (X recent
+  // search allows at most 7 days); it never stops the script from running.
+  const MAX_LOOKBACK_MS = 7 * 24 * 60 * 60_000 - 60_000;
+  const lookbackMs = Math.min(interval * 60_000, MAX_LOOKBACK_MS);
+  const searchStart = new Date(Date.now() - lookbackMs).toISOString();
+  if (FORCE) log("--force is no longer needed; the script always pulls");
+  log("topic searches look back to", searchStart);
 
   const bearer =
     process.env.X_BEARER_TOKEN ||
@@ -198,6 +204,7 @@ async function main() {
         bearer,
         q.query,
         interests.maxResultsPerQuery ?? 25,
+        searchStart,
       );
       const users = new Map(
         (json.includes?.users || []).map((u) => [u.id, u]),
@@ -224,12 +231,22 @@ async function main() {
     }
   }
 
-  const entries = [...byId.values()].sort((a, b) =>
-    b.sortKey.localeCompare(a.sortKey),
+  // Append: keep every existing entry, add only posts not already present.
+  const merged = new Map();
+  for (const e of prevEntries) if (e && e.id) merged.set(e.id, e);
+  let added = 0;
+  for (const [id, e] of byId) {
+    if (!merged.has(id)) {
+      merged.set(id, e);
+      added++;
+    }
+  }
+  const entries = [...merged.values()].sort((a, b) =>
+    String(b.sortKey || "").localeCompare(String(a.sortKey || "")),
   );
   const payload = {
     updatedAt: new Date().toISOString(),
-    source: errors.length && !entries.length ? "error" : "x-api-v2",
+    source: errors.length && !byId.size ? "error" : "x-api-v2",
     scheduleMinutes: interests.scheduleMinutes ?? 10080,
     entryCount: entries.length,
     subscriptions: pulledSubs,
@@ -237,7 +254,7 @@ async function main() {
     entries,
   };
 
-  log(`entries ${entries.length} (radar: ${pulledSubs.join(", ") || "none"})`);
+  log(`pulled ${byId.size}, added ${added}, total ${entries.length} (radar: ${pulledSubs.join(", ") || "none"})`);
   if (DRY) {
     log("sample", JSON.stringify(entries.slice(0, 2), null, 2));
     return;
