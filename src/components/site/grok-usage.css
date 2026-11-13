@@ -1,0 +1,298 @@
+/* How Acornsoft AI uses Grok — dashboard at /grok */
+.ac-grok-usage {
+  --gu-maroon: #4f2001;
+  --gu-maroon-deep: #381800;
+  --gu-gold: #ff9900;
+  --gu-sand: #e8c49a;
+  --gu-ember: #c45c12;
+  --gu-ink: rgba(10, 8, 8, 0.88);
+  --gu-line: rgba(255, 255, 255, 0.1);
+  --gu-text: #c4cfde;
+  --gu-chats: #ff9900;
+  --gu-routines: #c45c12;
+  --gu-bot2bot: #e8c49a;
+  --gu-group: #6b1d08;
+  color: var(--gu-text);
+  padding-bottom: 88px;
+}
+
+.ac-grok-usage .ac-service-stack {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 20px 0;
+}
+
+.ac-grok-usage .ac-service-lede a,
+.ac-gu-caption a {
+  color: var(--gu-gold);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 153, 0, 0.4);
+}
+
+.ac-grok-usage .ac-service-lede a:hover,
+.ac-gu-caption a:hover {
+  border-bottom-color: var(--gu-gold);
+}
+
+.ac-gu-stats {
+  list-style: none;
+  margin: 0 0 36px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ac-gu-stat {
+  margin: 0;
+  padding: 18px 18px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--gu-line);
+  background: linear-gradient(
+    165deg,
+    rgba(79, 32, 1, 0.55) 0%,
+    rgba(16, 12, 12, 0.92) 60%,
+    rgba(12, 10, 10, 0.95) 100%
+  );
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.ac-gu-stat-value {
+  display: block;
+  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.15rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.ac-gu-stat-value--gold {
+  color: var(--gu-gold);
+}
+
+.ac-gu-stat-label {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9aa1a9;
+}
+
+.ac-gu-panel {
+  margin: 0 0 28px;
+  padding: 22px 22px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--gu-line);
+  background: linear-gradient(
+    165deg,
+    rgba(42, 18, 8, 0.88) 0%,
+    rgba(16, 12, 12, 0.92) 55%,
+    rgba(12, 10, 10, 0.95) 100%
+  );
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.ac-gu-panel h2 {
+  margin: 0 0 18px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff !important;
+}
+
+.ac-gu-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.ac-gu-bar-row {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, 28%) 1fr auto;
+  gap: 12px 14px;
+  align-items: center;
+}
+
+.ac-gu-bar-name {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.ac-gu-bar-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+}
+
+.ac-gu-bar-role {
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: #9aa1a9;
+  line-height: 1.3;
+}
+
+.ac-gu-bar-track {
+  position: relative;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.ac-gu-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gu-maroon) 0%, var(--gu-gold) 100%);
+  min-width: 2px;
+}
+
+.ac-gu-bar-share {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gu-gold);
+  font-variant-numeric: tabular-nums;
+  min-width: 3.2em;
+  text-align: right;
+}
+
+.ac-gu-chart-wrap {
+  position: relative;
+}
+
+.ac-gu-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.ac-gu-chart-bar {
+  cursor: pointer;
+}
+
+.ac-gu-chart-bar:focus-visible .ac-gu-seg,
+.ac-gu-chart-bar:hover .ac-gu-seg {
+  filter: brightness(1.15);
+}
+
+.ac-gu-axis {
+  fill: #9aa1a9;
+  font-size: 11px;
+}
+
+.ac-gu-grid {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.ac-gu-legend {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.ac-gu-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #c4cfde;
+}
+
+.ac-gu-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.ac-gu-swatch--chats {
+  background: var(--gu-chats);
+}
+.ac-gu-swatch--routines {
+  background: var(--gu-routines);
+}
+.ac-gu-swatch--botToBot {
+  background: var(--gu-bot2bot);
+}
+.ac-gu-swatch--group {
+  background: var(--gu-group);
+}
+
+.ac-gu-tip {
+  position: absolute;
+  z-index: 2;
+  min-width: 12rem;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--gu-line);
+  background: rgba(14, 12, 12, 0.96);
+  color: #e8edf4;
+  font-size: 12px;
+  line-height: 1.45;
+  pointer-events: none;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, calc(-100% - 10px));
+}
+
+.ac-gu-tip strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #fff;
+  font-size: 13px;
+}
+
+.ac-gu-caption {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #9aa1a9;
+  max-width: 46rem;
+}
+
+.ac-gu-status {
+  margin: 12px 0 24px;
+  color: #9aa1a9;
+}
+
+.ac-gu-status--error {
+  color: #ffb86c;
+}
+
+@media (max-width: 799px) {
+  .ac-gu-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ac-gu-bar-row {
+    grid-template-columns: 1fr auto;
+    gap: 6px 10px;
+  }
+  .ac-gu-bar-name {
+    grid-column: 1 / 2;
+  }
+  .ac-gu-bar-share {
+    grid-column: 2 / 3;
+  }
+  .ac-gu-bar-track {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ac-gu-bar-fill,
+  .ac-gu-chart-bar .ac-gu-seg {
+    transition: none;
+  }
+}

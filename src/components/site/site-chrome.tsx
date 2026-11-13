@@ -29,6 +29,7 @@ function pageTitle(pathname: string): string {
   if (pathname.startsWith("/work")) return "Works";
   if (pathname.startsWith("/start")) return "Send a note";
   if (pathname.startsWith("/canopy")) return "Canopy";
+  if (pathname.startsWith("/grok")) return "How Acornsoft AI uses Grok";
   if (pathname.startsWith("/gnomah")) return "Gnomah";
   if (pathname.startsWith("/corporate")) return "Corporate";
   if (pathname.startsWith("/login")) return "Sign in";

@@ -584,6 +584,13 @@ export function CanopyPage() {
                         ? "Weekly pull"
                         : `Next ${formatNextPull(liveMeta.nextPullAt)}`}
                   </button>
+                  <a
+                    href="/grok"
+                    className="cn-signal-total"
+                    style={{ color: "#FF9900", textDecoration: "none" }}
+                  >
+                    How we use Grok
+                  </a>
                 </div>
                 {liveMeta.error ? (
                   <p className="cn-live-error">{liveMeta.error}</p>
