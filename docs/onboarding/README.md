@@ -25,7 +25,7 @@ Install the extension that matches the laptop:
 Then: open the project that *is* this climb → **Luna: Setup** → **Set up**. Multiagent may offer **Finish with Grok**. Copilot SKU stops after agents/skills deploy.  
 **Then only your ridge** (about three steps):
 
-- **I work in Grok Build** (SuperGrok or X Premium+) — TUI plus a side shell for proof.  
+- **I work in Grok Build** (Premium, Super, or Ultra — or a SuperGrok or X Premium+ plan you already have) — TUI plus a side shell for proof.  
   → **[Trail map: Grok Build](/luna/grok-build)**
 
 - **I work in GitHub Copilot** (Pro or your company’s seat) — Chat agents and editor handoffs.  
@@ -37,7 +37,19 @@ Then: open the project that *is* this climb → **Luna: Setup** → **Set up**. 
 - **I work with Claude** (Pro) — same pack through project files and instructions.  
   → **[Trail map: Claude](/luna/claude)**
 
-**No paid partner yet?** Free chat will not carry a MacroFlow climb. **Strongly recommended:** **[SuperGrok](https://grok.com/supergrok)** (~**$30/month**) for **Grok Build**—our primary ridge—then the [Grok Build trail map](/luna/grok-build). X Premium+ also includes Grok Build if that is already your world.
+**New to Grok?** Open **[two weeks of Premium](https://grok.com/refer/bot?code=TQMG4SPCV849)**. That seat runs Grok Build for this climb. Premium is **$30 a month** or **$300 a year** after the two weeks. Bring a card and check out in the browser on grok.com. xAI reminds you seven days before the first charge. Cancel in account settings if you want to stop. Then open the [Grok Build trail map](/luna/grok-build).
+
+When you stay and pay, Acornsoft receives one usage reset. xAI adds it seven days after that payment. Each reset lasts six months. This link can be used ten times. [How the referral works](https://docs.x.ai/x-subscription/referral-program).
+
+| Plan | Price | For this climb |
+| --- | --- | --- |
+| Free | $0 | A short look |
+| Plus | $8/mo or $80/yr | A smaller weekly pool |
+| Premium | $30/mo or $300/yr | The two-week start. 4× usage. |
+| Super | $100/mo or $1,000/yr | 15× usage |
+| Ultra | $200/mo or $2,000/yr | 50× usage |
+
+List prices before tax. [Current prices](https://x.ai/pricing). A SuperGrok or X Premium+ plan you already pay for still opens Grok Build.
 
 ---
 

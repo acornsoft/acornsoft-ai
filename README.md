@@ -22,7 +22,7 @@ If you are already using **Grok Build**, **GitHub Copilot**, **Cursor**, or **Cl
 **Once for every climber:** install Multiagent → open the project that *is* this climb → **Luna: Setup** → **Set up** → optionally **Finish with Grok** → open a **new** terminal if needed.  
 **Then only your ridge** (about three steps):
 
-- **I work in Grok Build** (SuperGrok or X Premium+) — TUI plus a side shell for proof.  
+- **I work in Grok Build** (Premium, Super, or Ultra — or a SuperGrok or X Premium+ plan you already have) — TUI plus a side shell for proof.  
   → Open `docs/onboarding/01-grok-build.md` in this install
 
 - **I work in GitHub Copilot** (Pro or your company’s seat) — Chat agents and editor handoffs.  
@@ -34,7 +34,19 @@ If you are already using **Grok Build**, **GitHub Copilot**, **Cursor**, or **Cl
 - **I work with Claude** (Pro) — same pack through project files and instructions.  
   → Open `docs/onboarding/04-claude.md` in this install
 
-**No paid AI partner yet?** Free chat is not enough for a real MacroFlow climb. We **strongly recommend** starting with **[SuperGrok](https://grok.com/supergrok)** (about **$30/month**)—that is the cost-effective path into **Grok Build**, which is our primary ridge for Luna. X Premium+ also unlocks Grok Build if you already live in that world. Then open `docs/onboarding/01-grok-build.md`.
+**New to Grok?** Open **[two weeks of Premium](https://grok.com/refer/bot?code=TQMG4SPCV849)**. That seat runs Grok Build for this climb. Premium is **$30 a month** or **$300 a year** after the two weeks. Bring a card and check out in the browser on grok.com. xAI reminds you seven days before the first charge. Cancel in account settings if you want to stop. Then open the [Grok Build trail map](docs/onboarding/01-grok-build.md).
+
+When you stay and pay, Acornsoft receives one usage reset. xAI adds it seven days after that payment. Each reset lasts six months. This link can be used ten times. [How the referral works](https://docs.x.ai/x-subscription/referral-program).
+
+| Plan | Price | For this climb |
+| --- | --- | --- |
+| Free | $0 | A short look |
+| Plus | $8/mo or $80/yr | A smaller weekly pool |
+| Premium | $30/mo or $300/yr | The two-week start. 4× usage. |
+| Super | $100/mo or $1,000/yr | 15× usage |
+| Ultra | $200/mo or $2,000/yr | 50× usage |
+
+List prices before tax. [Current prices](https://x.ai/pricing). A SuperGrok or X Premium+ plan you already pay for still opens Grok Build.
 
 More trailheads in this install: `docs/onboarding/README.md` · `docs/onboarding/VISUAL-GUIDE.md` · `docs/onboarding/SECURITY-PRIVACY-ETHICS.md` · public [field guide](https://www.acornsoft.ai/field-guide) · [Start](https://www.acornsoft.ai/start).
 

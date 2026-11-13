@@ -18,7 +18,7 @@ Luna does **not** override host or vendor policy. Re-check vendor ToS when in do
 
 | Host | Before production work |
 |------|------------------------|
-| **Grok Build** | Paid plan (SuperGrok / X Premium+); correct `grok login`; no secrets in TUI |
+| **Grok Build** | Premium, Super, or Ultra, or the [two-week trial](https://grok.com/refer/bot?code=TQMG4SPCV849); correct `grok login`; no secrets in TUI |
 | **Copilot** | Pro or org seat; org allows custom agents if you need them; set AI spend budget; prefer Business for company confidential |
 | **Cursor** | Paid Agent plan; **privacy mode** on for non-public code |
 | **Claude** | Pro+; project instructions ban secrets; only attach needed pack paths |

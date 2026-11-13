@@ -14,12 +14,12 @@
 
 | Host | Usable minimum |
 |------|----------------|
-| Grok Build | SuperGrok (~$30) or X Premium+ |
+| Grok Build | Premium ($30/mo or $300/yr), including the [two-week trial](https://grok.com/refer/bot?code=TQMG4SPCV849). Super and Ultra for a larger pool. An existing SuperGrok or X Premium+ plan still counts. |
 | Copilot | Pro (~$10) |
 | Cursor | Pro with Agent |
 | Claude | Pro (~$20) |
 
-Free tiers: fine for reading. Not for agentic MacroFlow.
+A free tier covers a short look. A MacroFlow climb needs a paid host from the table above.
 
 ## After install (what the extension actually does)
 

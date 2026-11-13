@@ -1,6 +1,6 @@
 # Trail map: Grok Build
 
-For people who already use **Grok Build** (SuperGrok or X Premium+), or are about to. You establish camp with the **Luna Foundry Multiagent** extension, open a dual-pane layout, and run one **complete MacroFlow turn**—Base Camp → Route → Waypoint → Summit—with proof. An optional second climb files a skill/feature wish as product feedback.
+For people who already use **Grok Build** on **Premium**, **Super**, or **Ultra**, or who are starting the [two-week Premium trial](https://grok.com/refer/bot?code=TQMG4SPCV849). A SuperGrok or X Premium+ plan you already pay for still counts. You establish camp with the **Luna Foundry Multiagent** extension, open a dual-pane layout, and run one **complete MacroFlow turn**—Base Camp → Route → Waypoint → Summit—with proof. An optional second climb files a skill/feature wish as product feedback.
 
 **Host app:** Visual Studio Code or Cursor (both run the multiagent extension). The dual-pane picture is the same either way.  
 **Primary ridge:** this trail is the **first-class** multiagent path (plugin agents + slash skills + side shell for proof).
@@ -22,7 +22,7 @@ Confirm each line. If not, finish that item first.
 </tr>
 <tr>
 <td align="left">✓</td>
-<td align="left"><small><strong>SuperGrok</strong> or <strong>X Premium+</strong> is active (Grok Build—not free-only chat)</small></td>
+<td align="left"><small><strong>Premium</strong>, <strong>Super</strong>, or <strong>Ultra</strong> is active, or the <a href="https://grok.com/refer/bot?code=TQMG4SPCV849">two-week Premium trial</a>. A SuperGrok or X Premium+ plan you already have also counts.</small></td>
 </tr>
 <tr>
 <td align="left">✓</td>

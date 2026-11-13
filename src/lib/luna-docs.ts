@@ -16,7 +16,7 @@ export const LUNA_DOCS: LunaDoc[] = [
     file: "01-grok-build.md",
     title: "Trail map: Grok Build",
     kicker: "Primary ridge",
-    lede: "SuperGrok or X Premium+. Dual pane. One complete climb.",
+    lede: "Two weeks of Premium, then the climb. Dual pane. One complete turn.",
   },
   {
     slug: "copilot",
